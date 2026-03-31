@@ -436,7 +436,7 @@ export default function Home() {
 
             {/* Derecha: radar por temática */}
             <motion.div
-              className="hidden lg:flex flex-1 items-center justify-center"
+              className="flex w-full lg:flex-1 items-center justify-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.2 }}
