@@ -435,15 +435,9 @@ export default function Home() {
             </motion.div>
 
             {/* Derecha: radar por temática */}
-            <motion.div
-              className="flex w-full lg:flex-1 items-center justify-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              style={{ minWidth: 0, maxWidth: '500px' }}
-            >
+            <div className="w-full lg:flex-1 lg:max-w-[500px]">
               <RadarChart />
-            </motion.div>
+            </div>
 
           </div>
         </div>
