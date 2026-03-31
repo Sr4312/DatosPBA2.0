@@ -10,7 +10,7 @@ export default function EntryCard({ titulo, resumen, fecha, tema, municipio, ins
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.06, duration: 0.5 }}
-      className="bg-white rounded-2xl border border-slate-200/60 flex flex-col hover:shadow-md transition-shadow overflow-hidden"
+      className="bg-white rounded-xl border border-slate-200/60 flex flex-col hover:shadow-md transition-shadow overflow-hidden"
     >
       {imagen && (
         <img

@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \":*)",
+      "Bash(npx --version)",
+      "Bash(npm install:*)",
+      "Bash(cmd.exe /c \"npm install\")",
+      "Bash(cmd.exe /c \"npm install 2>&1\")",
+      "Bash(cmd.exe /c \"cd C:\\\\Users\\\\salva\\\\Desktop\\\\Claude && npm install\")",
+      "Bash(cmd.exe /c \"cd C:\\\\Users\\\\salva\\\\Desktop\\\\Claude && npm install > npm_install.log 2>&1 && type npm_install.log\")",
+      "Bash(export PATH=\"$PATH:/c/Program Files/nodejs\")",
+      "Bash(npm run:*)",
+      "Bash(cmd.exe /c \"npm --version && npm run build\")",
+      "Bash(cmd.exe /c \"cd C:\\\\Users\\\\salva\\\\Desktop\\\\Claude && npm run build\")",
+      "Bash(powershell.exe -Command \"cd ''C:\\\\Users\\\\salva\\\\Desktop\\\\Claude''; npm run build\")",
+      "Bash(ls c:/Users/salva/Desktop/Claude/*.html)",
+      "Bash(find C:/Users/salva/AppData/Local/Temp -name *.png -newer C:/Users/salva/AppData/Local/Temp/a7702f88-9fec-4b79-b445-062a187fbf38.tmp.png)",
+      "Bash(find C:/Users/salva -maxdepth 5 -name *logo* -o -name *dato* -o -name *pba*)",
+      "Bash(cp \"C:/Users/salva/Downloads/WhatsApp Image 2026-03-30 at 4.41.08 PM.jpeg\" \"C:/Users/salva/Desktop/Claude/public/logo.png\")",
+      "Bash(cp \"C:/Users/salva/Downloads/WhatsApp Image 2026-03-30 at 4.41.08 PM \\(1\\).jpeg\" \"C:/Users/salva/Desktop/Claude/public/logo-icon.png\")",
+      "Bash(magick --version)",
+      "Bash(convert --version)",
+      "Bash(python -c \"from PIL import Image; print\\(''ok''\\)\")",
+      "Bash(pip install:*)",
+      "Bash(where python:*)",
+      "Bash(where python3:*)",
+      "Bash(where node:*)",
+      "Bash(node -e \":*)",
+      "Bash(npm uninstall:*)",
+      "Bash(find C:/Users/salva/Desktop/ -name *.csv -o -name *.geojson)",
+      "WebFetch(domain:apis.datos.gob.ar)",
+      "WebFetch(domain:wms.ign.gob.ar)"
+    ]
+  }
+}

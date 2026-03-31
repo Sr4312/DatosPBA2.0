@@ -8,6 +8,7 @@ import Hilos from './pages/Hilos'
 import ReportesRapidos from './pages/ReportesRapidos'
 import Visualizaciones from './pages/Visualizaciones'
 import InformeDetalle from './pages/InformeDetalle'
+import Beta from './pages/Beta'
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="datos" element={<Datos />} />
           <Route path="hilos" element={<Hilos />} />
           <Route path="reportes" element={<ReportesRapidos />} />
+          <Route path="beta" element={<Beta />} />
           <Route path="visualizaciones" element={<Visualizaciones />} />
         </Route>
       </Routes>

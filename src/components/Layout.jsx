@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
-import { Menu, X, ArrowUp, Mail, Twitter, Linkedin } from 'lucide-react'
+import { Menu, X, ArrowUp, Mail, Twitter, Linkedin, Search } from 'lucide-react'
+import SearchOverlay from './SearchOverlay'
 
 const NAV = [
-  { to: '/reportes',        label: 'Reportes rápidos' },
   { to: '/informes',        label: 'Informes' },
   { to: '/hilos',           label: 'Publicaciones' },
   { to: '/visualizaciones', label: 'Visualizaciones' },
   { to: '/datos',           label: 'Datasets' },
+  { to: '/beta',            label: 'Beta', icon: true },
 ]
 
 export default function Layout() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [showTop, setShowTop] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setShowTop(window.scrollY > 400)
@@ -22,10 +24,11 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-slate-200/50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
-          <NavLink to="/" className="text-brand-600 font-bold text-base hover:text-brand-700 transition-colors no-underline tracking-tight">
-            Datos PBA
+      <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-24">
+          <NavLink to="/" className="flex items-center gap-2 no-underline">
+            <img src="/logo-bars.png" alt="DataPBA" style={{ height: '56px', width: 'auto' }} />
+            <span className="text-xl text-[#0a1628] tracking-tight">Data<span className="font-bold">PBA</span></span>
           </NavLink>
 
           {/* Desktop nav */}
@@ -35,17 +38,27 @@ export default function Layout() {
                 key={l.to}
                 to={l.to}
                 className={({ isActive }) =>
-                  `px-3 py-1.5 text-sm font-medium rounded-lg transition-colors no-underline ${
+                  `px-3 py-1.5 text-base font-medium rounded-lg transition-colors no-underline flex items-center gap-1.5 ${
                     isActive
                       ? 'bg-brand-100 text-brand-700'
                       : 'text-slate-500 hover:text-brand-600 hover:bg-brand-50'
                   }`
                 }
               >
+                {l.icon && <img src="/logo-bars.png" alt="" className="w-4 h-4 object-contain" />}
                 {l.label}
               </NavLink>
             ))}
           </nav>
+
+          {/* Search button */}
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="p-2 text-slate-500 hover:text-[#0a1628] transition-colors"
+            aria-label="Buscar"
+          >
+            <Search className="w-4 h-4" />
+          </button>
 
           {/* Mobile hamburger */}
           <button
@@ -80,16 +93,18 @@ export default function Layout() {
         )}
       </header>
 
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+
       <main>
         <Outlet />
       </main>
 
       {/* Contact section */}
-      <section className="bg-white border-t border-slate-200/60 mt-16">
+      <section className="bg-white border-t-2 border-[#0a1628] mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Brand */}
           <div className="md:col-span-1">
-            <p className="text-base font-bold text-brand-600 mb-2">Datos PBA</p>
+            <img src="/logo-bars.png" alt="DataPBA" className="h-10 w-auto mb-3" />
             <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
               Repositorio de análisis político y datos abiertos sobre la Provincia de Buenos Aires.
             </p>
@@ -144,7 +159,7 @@ export default function Layout() {
                   className="flex items-center gap-2 text-sm text-slate-600 hover:text-brand-600 transition-colors no-underline"
                 >
                   <Linkedin className="w-4 h-4 shrink-0 text-slate-400" />
-                  Datos PBA
+                  DataPBA
                 </a>
               </li>
             </ul>
@@ -152,9 +167,10 @@ export default function Layout() {
         </div>
       </section>
 
-      <footer className="bg-brand-50 border-t border-brand-100 py-5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center text-xs text-slate-400">
-          <span>© {new Date().getFullYear()} Datos PBA. Todos los derechos reservados.</span>
+      <footer className="bg-[#0a1628] py-5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center text-xs text-slate-500">
+          <span>© {new Date().getFullYear()} DataPBA</span>
+          <span className="text-brand-600 font-medium tracking-widest uppercase text-[10px]">Provincia de Buenos Aires</span>
         </div>
       </footer>
 

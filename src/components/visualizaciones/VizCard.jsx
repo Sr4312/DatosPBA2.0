@@ -114,7 +114,7 @@ export default function VizCard({ viz, index = 0 }) {
       viewport={{ once: true }}
       transition={{ delay: index * 0.08, duration: 0.5 }}
       id={viz.id}
-      className="bg-white rounded-2xl border border-slate-200/60 p-6"
+      className="bg-white rounded-xl border border-slate-200/60 p-6"
     >
       <div className="flex items-start justify-between mb-4 gap-4">
         <div>

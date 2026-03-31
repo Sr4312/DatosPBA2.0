@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #f0f8f9;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f7f6f2;
 }
 
 @keyframes ticker-h {
@@ -13,7 +13,7 @@ body {
 }
 
 .ticker-track {
-  animation: ticker-h 28s linear infinite;
+  animation: ticker-h 50s linear infinite;
 }
 
 .ticker-track:hover {
