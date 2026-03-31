@@ -76,9 +76,18 @@ export default function MedidorMunicipal() {
         const L = (await import('leaflet')).default
         if (!mounted || !mapRef.current) return
 
+        const bounds = L.latLngBounds(
+          L.latLng(-43.5, -65.5),
+          L.latLng(-32.5, -55.5)
+        )
+
         map = L.map(mapRef.current, {
           center: [-37.5, -61],
           zoom: 6,
+          minZoom: 6,
+          maxZoom: 9,
+          maxBounds: bounds,
+          maxBoundsViscosity: 1.0,
           zoomControl: true,
           attributionControl: false,
         })

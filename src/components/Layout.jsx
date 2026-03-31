@@ -27,8 +27,11 @@ export default function Layout() {
       <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-24">
           <NavLink to="/" className="flex items-center gap-2 no-underline">
-            <img src="/logo-bars.png" alt="DataPBA" style={{ height: '56px', width: 'auto' }} />
-            <span className="text-xl text-[#0a1628] tracking-tight">Data<span className="font-bold">PBA</span></span>
+            <img src="/logo-bars.svg" alt="DataPBA" style={{ height: '56px', width: 'auto' }} />
+            <div className="flex flex-col leading-tight">
+              <span className="text-xl text-[#0a1628] tracking-tight">Data<span className="font-bold">PBA</span></span>
+              <span className="text-[10px] text-slate-400 hidden sm:block leading-snug">Análisis basado en evidencia<br />para la Provincia de Buenos Aires.</span>
+            </div>
           </NavLink>
 
           {/* Desktop nav */}
@@ -45,7 +48,7 @@ export default function Layout() {
                   }`
                 }
               >
-                {l.icon && <img src="/logo-bars.png" alt="" className="w-4 h-4 object-contain" />}
+                {l.icon && <img src="/logo-bars.svg" alt="" className="w-4 h-4 object-contain" />}
                 {l.label}
               </NavLink>
             ))}
@@ -54,10 +57,11 @@ export default function Layout() {
           {/* Search button */}
           <button
             onClick={() => setSearchOpen(true)}
-            className="p-2 text-slate-500 hover:text-[#0a1628] transition-colors"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-lg border border-slate-200 text-slate-500 hover:text-[#0a1628] hover:border-slate-300 hover:bg-slate-50 transition-all"
             aria-label="Buscar"
           >
             <Search className="w-4 h-4" />
+            <span className="text-sm hidden sm:inline">Buscar</span>
           </button>
 
           {/* Mobile hamburger */}
@@ -104,7 +108,7 @@ export default function Layout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Brand */}
           <div className="md:col-span-1">
-            <img src="/logo-bars.png" alt="DataPBA" className="h-10 w-auto mb-3" />
+            <img src="/logo-bars.svg" alt="DataPBA" className="h-10 w-auto mb-3" />
             <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
               Repositorio de análisis político y datos abiertos sobre la Provincia de Buenos Aires.
             </p>

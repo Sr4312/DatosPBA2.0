@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { BarChart2, Table2 } from 'lucide-react'
+import { BarChart2, Table2, TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import { informes, datasets, hilos, reportesRapidos, visualizaciones } from '@/components/data/mockData'
 import EntryCard from '@/components/shared/EntryCard'
 import MedidorMunicipal from '@/components/MedidorMunicipal'
@@ -46,49 +46,40 @@ function SectionHeader({ title, href }) {
   )
 }
 
-/* ── Reportes: título a la izquierda + ticker horizontal a la derecha ───── */
+/* ── Reportes: stock-style ticker bar ───────────────────────────────────── */
 function ReportesTicker({ reportes }) {
   const doubled = [...reportes, ...reportes, ...reportes, ...reportes]
   return (
-    <section className="mb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-
-        <div className="flex justify-end mb-3">
-          <Link to="/reportes" className="text-sm font-medium text-slate-400 hover:text-[#0a1628] no-underline transition-colors">
-            Ver todos →
-          </Link>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-8 items-center">
-
-          <div className="sm:w-2/5 shrink-0 flex items-center justify-start">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#0a1628] leading-none tracking-tight">
-              Reportes rápidos
-            </h2>
-          </div>
-
-          <div className="flex-1 overflow-hidden">
-            <div className="flex gap-4 ticker-track" style={{ width: 'max-content' }}>
-              {doubled.map((r, i) => (
-                <div
-                  key={i}
-                  className="w-44 shrink-0 bg-white rounded-xl border border-slate-200/60 p-4 flex flex-col gap-2 shadow-sm"
-                >
-                  {r.tema && (
-                    <Badge variant="secondary" className="w-fit text-[10px] py-0">{r.tema}</Badge>
-                  )}
-                  <div className="text-2xl font-bold text-[#0a1628] leading-none">{r.dato}</div>
-                  <p className="text-xs font-medium text-slate-700 leading-snug line-clamp-2">{r.titulo}</p>
-                  <p className="text-[10px] text-slate-400 mt-auto">{r.fuente}</p>
+    <div className="bg-white border-b border-slate-200 overflow-hidden">
+      <div className="flex ticker-track" style={{ width: 'max-content' }}>
+        {doubled.map((r, i) => {
+          const isUp = r.tendencia === 'sube'
+          const isDown = r.tendencia === 'baja'
+          return (
+            <div
+              key={i}
+              className="flex items-center gap-3 px-5 py-3 border-r border-slate-100 shrink-0"
+            >
+              <div className={`w-8 h-8 rounded flex items-center justify-center shrink-0 ${isUp ? 'bg-green-50' : isDown ? 'bg-red-50' : 'bg-slate-50'}`}>
+                {isUp ? <TrendingUp className="w-4 h-4 text-green-600" /> : isDown ? <TrendingDown className="w-4 h-4 text-red-500" /> : <Minus className="w-4 h-4 text-slate-400" />}
+              </div>
+              <div className="flex flex-col leading-tight">
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-semibold text-slate-800 whitespace-nowrap">{r.titulo}</span>
+                  <span className="text-[10px] text-slate-400">{r.fecha}</span>
                 </div>
-              ))}
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-[#0a1628]">{r.dato}</span>
+                  {r.variacion && (
+                    <span className={`text-xs font-medium ${isUp ? 'text-green-600' : isDown ? 'text-red-500' : 'text-slate-400'}`}>{r.variacion}</span>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-
-        </div>
-
+          )
+        })}
       </div>
-    </section>
+    </div>
   )
 }
 
@@ -131,7 +122,7 @@ function PublicacionesTicker({ hilos }) {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <img src="/logo-icon.png" alt="DataPBA" className="w-8 h-8 rounded-full shrink-0 object-cover" />
+                      <img src="/logo-icon.svg" alt="DataPBA" className="w-8 h-8 rounded-full shrink-0 object-cover" />
                       <div className="leading-tight">
                         <p className="text-xs font-bold text-slate-900">DataPBA</p>
                         <p className="text-[10px] text-slate-400">@datospba</p>
@@ -218,12 +209,14 @@ function VizMiniGrid({ vizs }) {
 
 /* ── Datasets: row design with stats ──────────────────────────────────────── */
 function DatasetsSection({ dsets }) {
+  const visible = dsets.slice(0, 5)
+  const hasMore = dsets.length > 5
   return (
     <section className="mb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <SectionHeader title="Datasets" href="/datos" />
         <div className="flex flex-col gap-2">
-          {dsets.map((ds, i) => (
+          {visible.map((ds, i) => (
             <motion.div
               key={ds.id}
               initial={{ opacity: 0, x: -12 }}
@@ -257,152 +250,141 @@ function DatasetsSection({ dsets }) {
             </motion.div>
           ))}
         </div>
+        {hasMore && (
+          <div className="mt-4 flex justify-center">
+            <Link
+              to="/datos"
+              className="px-6 py-2.5 rounded-full border border-slate-200 text-sm font-medium text-slate-600 hover:text-brand-600 hover:border-brand-300 hover:bg-brand-50 transition-all no-underline"
+            >
+              Ver más →
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   )
 }
 
-const BUBBLES = [
-  { id: 'Economía',                     lines: ['Economía'],                        r: 75, cx: 195, cy: 170, color: '#93c5fd', anim: 'drift-a', dur: '7s',  delay: '0s'   },
-  { id: 'Pobreza y desigualdad',        lines: ['Pobreza y', 'desigualdad'],        r: 58, cx: 340, cy: 80,  color: '#cbd5e1', anim: 'drift-b', dur: '8.5s',delay: '0.8s' },
-  { id: 'Educación',                    lines: ['Educación'],                       r: 52, cx: 68,  cy: 252, color: '#7dd3fc', anim: 'drift-c', dur: '9s',  delay: '1.4s' },
-  { id: 'Instituciones y gobernanza',   lines: ['Instituciones', 'y gobernanza'],   r: 44, cx: 348, cy: 258, color: '#c4b5fd', anim: 'drift-d', dur: '7.8s',delay: '0.4s' },
-  { id: 'Demografía',                   lines: ['Demografía'],                      r: 35, cx: 220, cy: 42,  color: '#e2e8f0', anim: 'drift-e', dur: '6.5s',delay: '2s'   },
-  { id: 'Territorio e infraestructura', lines: ['Territorio e', 'infraestructura'], r: 35, cx: 52,  cy: 110, color: '#a5f3fc', anim: 'drift-f', dur: '10s', delay: '0.2s' },
+const RADAR_THEMES = [
+  { id: 'Economía',                     lines: ['Economía'],                        deg: 0   },
+  { id: 'Demografía',                   lines: ['Demografía'],                      deg: 60  },
+  { id: 'Educación',                    lines: ['Educación'],                       deg: 120 },
+  { id: 'Pobreza y desigualdad',        lines: ['Pobreza y', 'desigualdad'],        deg: 180 },
+  { id: 'Territorio e infraestructura', lines: ['Territorio e', 'infraestructura'], deg: 240 },
+  { id: 'Instituciones y gobernanza',   lines: ['Instituciones y', 'gobernanza'],   deg: 300 },
 ]
 
-function BubbleChart() {
+// counts[i]: aesthetic values per theme (Economía, Demografía, Educación, Pobreza, Territorio, Instituciones)
+const RADAR_SERIES = [
+  { id: 'informes',        label: 'Informes',        color: '#60a5fa', counts: [4, 1, 2, 3, 1, 1] },
+  { id: 'publicaciones',   label: 'Publicaciones',   color: '#c084fc', counts: [3, 2, 2, 2, 1, 3] },
+  { id: 'visualizaciones', label: 'Visualizaciones', color: '#2dd4bf', counts: [2, 3, 1, 2, 2, 4] },
+  { id: 'datasets',        label: 'Datasets',        color: '#fbbf24', counts: [4, 2, 3, 1, 3, 1] },
+]
+
+function RadarChart() {
   const navigate = useNavigate()
   const [hovered, setHovered] = useState(null)
 
+  const MAX = 4
+  const cx = 260, cy = 220, R = 130
+  const toRad = deg => (deg - 90) * Math.PI / 180
+  const pt = (deg, scale = 1) => {
+    const a = toRad(deg)
+    return [cx + R * scale * Math.cos(a), cy + R * scale * Math.sin(a)]
+  }
+  const hexPath = scale => {
+    const pts = RADAR_THEMES.map(t => pt(t.deg, scale))
+    return pts.map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`).join(' ') + ' Z'
+  }
+  const seriesPath = counts => {
+    const pts = RADAR_THEMES.map((t, i) => pt(t.deg, counts[i] / MAX))
+    return pts.map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`).join(' ') + ' Z'
+  }
+
   return (
-    <svg viewBox="0 0 420 310" className="w-full h-full" style={{ overflow: 'visible' }}>
-      <defs>
-        <style>{`
-          @keyframes drift-a {
-            0%   { transform: translate(0px,   0px); }
-            20%  { transform: translate(5px,  -8px); }
-            45%  { transform: translate(-4px, -5px); }
-            70%  { transform: translate(3px,  -12px); }
-            100% { transform: translate(0px,   0px); }
-          }
-          @keyframes drift-b {
-            0%   { transform: translate(0px,   0px); }
-            25%  { transform: translate(-6px, -7px); }
-            55%  { transform: translate(4px,  -10px); }
-            80%  { transform: translate(-3px, -3px); }
-            100% { transform: translate(0px,   0px); }
-          }
-          @keyframes drift-c {
-            0%   { transform: translate(0px,   0px); }
-            30%  { transform: translate(6px,  -6px); }
-            60%  { transform: translate(-5px, -9px); }
-            85%  { transform: translate(3px,  -4px); }
-            100% { transform: translate(0px,   0px); }
-          }
-          @keyframes drift-d {
-            0%   { transform: translate(0px,   0px); }
-            35%  { transform: translate(-4px, -10px); }
-            65%  { transform: translate(6px,  -6px); }
-            100% { transform: translate(0px,   0px); }
-          }
-          @keyframes drift-e {
-            0%   { transform: translate(0px,   0px); }
-            40%  { transform: translate(5px,  -9px); }
-            70%  { transform: translate(-6px, -5px); }
-            100% { transform: translate(0px,   0px); }
-          }
-          @keyframes drift-f {
-            0%   { transform: translate(0px,   0px); }
-            20%  { transform: translate(-5px, -7px); }
-            50%  { transform: translate(4px,  -11px); }
-            75%  { transform: translate(-3px, -4px); }
-            100% { transform: translate(0px,   0px); }
-          }
-        `}</style>
-        {BUBBLES.map(b => {
-          const gid = `grad-${b.id.replace(/[\s&]/g, '-')}`
-          return (
-            <radialGradient key={gid} id={gid} cx="40%" cy="35%" r="70%">
-              <stop offset="0%"   stopColor="#ffffff" stopOpacity="0.12" />
-              <stop offset="50%"  stopColor={b.color}  stopOpacity="0.18" />
-              <stop offset="100%" stopColor={b.color}  stopOpacity="0.06" />
-            </radialGradient>
-          )
+    <div className="flex flex-col items-center gap-4 w-full">
+      <svg viewBox="0 0 520 455" className="w-full" style={{ maxHeight: '400px' }}>
+        {[0.25, 0.5, 0.75, 1.0].map(v => (
+          <path key={v} d={hexPath(v)} fill="none"
+            stroke={v === 1.0 ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.07)'}
+            strokeWidth={v === 1.0 ? 1.2 : 0.7} />
+        ))}
+        {RADAR_THEMES.map(t => {
+          const [x, y] = pt(t.deg)
+          return <line key={t.id} x1={cx} y1={cy} x2={x.toFixed(1)} y2={y.toFixed(1)}
+            stroke="rgba(255,255,255,0.12)" strokeWidth="0.8" />
         })}
-      </defs>
-
-      {BUBBLES.map(b => {
-        const isHov = hovered === b.id
-        const gradId = `grad-${b.id.replace(/[\s&]/g, '-')}`
-        const lineH = b.r < 42 ? 11 : b.r < 55 ? 12 : 13
-        const fontSize = b.r < 42 ? 9.5 : b.r < 55 ? 10.5 : b.r < 65 ? 11.5 : 13
-        const totalH = (b.lines.length - 1) * lineH
-
-        return (
-          <g
-            key={b.id}
-            style={{
-              animation: `${b.anim} ${b.dur} ease-in-out infinite`,
-              animationDelay: b.delay,
-              animationPlayState: isHov ? 'paused' : 'running',
-            }}
-          >
-            <g
-              style={{
-                cursor: 'pointer',
-                transformOrigin: `${b.cx}px ${b.cy}px`,
-                transform: isHov ? 'scale(1.14)' : 'scale(1)',
-                transition: 'transform 0.25s ease',
-              }}
-              onMouseEnter={() => setHovered(b.id)}
-              onMouseLeave={() => setHovered(null)}
-              onClick={() => navigate(`/beta?theme=${encodeURIComponent(b.id)}`)}
-            >
-              {/* Outer dashed ring */}
-              <circle
-                cx={b.cx} cy={b.cy} r={b.r + 7}
-                fill="none"
-                stroke={b.color}
-                strokeWidth="0.5"
-                strokeOpacity={isHov ? 0.3 : 0}
-                strokeDasharray="3 5"
-                style={{ transition: 'stroke-opacity 0.3s' }}
-              />
-              {/* Main bubble — ghost style */}
-              <circle
-                cx={b.cx} cy={b.cy} r={b.r}
-                fill={`url(#${gradId})`}
-                stroke={b.color}
-                strokeWidth="0.8"
-                strokeOpacity={isHov ? 0.7 : 0.3}
-                style={{
-                  transition: 'stroke-opacity 0.25s',
-                  filter: isHov ? `drop-shadow(0 0 8px ${b.color}55)` : 'none',
-                }}
-              />
-              {/* Labels */}
-              {b.lines.map((line, i) => (
-                <text
-                  key={i}
-                  x={b.cx}
-                  y={b.cy - totalH / 2 + i * lineH + fontSize * 0.35}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  fontSize={fontSize}
-                  fill={isHov ? '#ffffff' : 'rgba(255,255,255,0.82)'}
-                  fontFamily="inherit"
-                  fontWeight={isHov ? '600' : '400'}
-                  style={{ transition: 'fill 0.2s', userSelect: 'none' }}
-                >
+        {[...RADAR_SERIES]
+          .sort((a, b) => (hovered === a.id ? 1 : 0) - (hovered === b.id ? 1 : 0))
+          .map(s => {
+            const isHov = hovered === s.id
+            const dimmed = hovered !== null && !isHov
+            return (
+              <path key={s.id} d={seriesPath(s.counts)}
+                fill={s.color + (isHov ? '44' : '1e')}
+                stroke={s.color}
+                strokeWidth={isHov ? 2.5 : 1.5}
+                opacity={dimmed ? 0.25 : 1}
+                style={{ transition: 'all 0.2s' }} />
+            )
+          })}
+        {RADAR_SERIES.flatMap(s =>
+          RADAR_THEMES.map((t, i) => {
+            if (s.counts[i] === 0) return null
+            const isHov = hovered === s.id
+            const dimmed = hovered !== null && !isHov
+            const [x, y] = pt(t.deg, s.counts[i] / MAX)
+            return (
+              <circle key={`${s.id}-${t.id}`}
+                cx={x.toFixed(1)} cy={y.toFixed(1)}
+                r={isHov ? 5 : 3.5} fill={s.color}
+                opacity={dimmed ? 0.25 : isHov ? 1 : 0.85}
+                style={{ transition: 'all 0.2s' }} />
+            )
+          })
+        )}
+        {RADAR_THEMES.map(t => {
+          const [lx, ly] = pt(t.deg, 1.5)
+          const anchor = (t.deg < 30 || t.deg > 330) ? 'middle'
+            : (t.deg > 150 && t.deg < 210) ? 'middle'
+            : t.deg < 180 ? 'start' : 'end'
+          return (
+            <g key={t.id} style={{ cursor: 'pointer' }}
+              onClick={() => navigate(`/beta?theme=${encodeURIComponent(t.id)}`)}>
+              {t.lines.map((line, j) => (
+                <text key={j}
+                  x={lx.toFixed(1)}
+                  y={(ly + j * 13 - (t.lines.length - 1) * 6.5).toFixed(1)}
+                  textAnchor={anchor} fontSize="16"
+                  fill="rgba(255,255,255,0.7)"
+                  fontFamily="inherit" fontWeight="600"
+                  style={{ userSelect: 'none' }}>
                   {line}
                 </text>
               ))}
             </g>
-          </g>
-        )
-      })}
-    </svg>
+          )
+        })}
+      </svg>
+      <div className="flex flex-wrap gap-2 justify-center">
+        {RADAR_SERIES.map(s => (
+          <button key={s.id}
+            onMouseEnter={() => setHovered(s.id)}
+            onMouseLeave={() => setHovered(null)}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full transition-all"
+            style={{
+              fontSize: '12px', fontWeight: 500,
+              background: hovered === s.id ? s.color + '28' : 'rgba(255,255,255,0.06)',
+              color: hovered === s.id ? s.color : 'rgba(255,255,255,0.55)',
+              border: `1px solid ${hovered === s.id ? s.color + '55' : 'rgba(255,255,255,0.1)'}`,
+            }}>
+            <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: s.color }} />
+            {s.label}
+          </button>
+        ))}
+      </div>
+    </div>
   )
 }
 
@@ -415,8 +397,11 @@ export default function Home() {
 
   return (
     <div>
+      {/* Reportes rápidos — ticker */}
+      <ReportesTicker reportes={allReportes} />
+
       {/* Hero */}
-      <section className="bg-[#0a1628] py-12 sm:py-16 overflow-hidden">
+      <section className="bg-[#0a1628] bg-pattern-dark py-12 sm:py-16 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between gap-12">
 
@@ -433,10 +418,7 @@ export default function Home() {
               <h1 className="text-5xl sm:text-7xl font-normal text-white tracking-tight leading-none mb-6">
                 Data<span className="text-brand-400 font-bold">PBA</span>
               </h1>
-              <p className="text-base text-slate-400 max-w-md leading-relaxed mb-10">
-                Análisis político basado en evidencia para la Provincia de Buenos Aires.
-              </p>
-              <div className="flex gap-10 pt-8 border-t border-white/10">
+              <div className="flex gap-10 pt-8">
                 <div>
                   <p className="text-2xl font-bold text-white">135</p>
                   <p className="text-xs text-slate-500 mt-1 uppercase tracking-wide">municipios</p>
@@ -452,7 +434,7 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* Derecha: burbujas por temática */}
+            {/* Derecha: radar por temática */}
             <motion.div
               className="hidden lg:flex flex-1 items-center justify-center"
               initial={{ opacity: 0 }}
@@ -460,7 +442,7 @@ export default function Home() {
               transition={{ duration: 0.7, delay: 0.2 }}
               style={{ minWidth: 0, maxWidth: '500px' }}
             >
-              <BubbleChart />
+              <RadarChart />
             </motion.div>
 
           </div>
@@ -468,10 +450,7 @@ export default function Home() {
       </section>
 
       <div className="py-16">
-        {/* 1. Reportes rápidos */}
-        <ReportesTicker reportes={allReportes} />
-
-        {/* 2. Medidor Municipal */}
+        {/* 1. Medidor Municipal */}
         <MedidorMunicipal />
 
         {/* Informes — full width grid */}
