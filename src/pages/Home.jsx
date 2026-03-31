@@ -110,7 +110,7 @@ function PublicacionesTicker({ hilos }) {
             </h2>
           </div>
 
-          <div className="flex-1 overflow-hidden">
+          <div className="w-full flex-1 overflow-hidden">
             <div className="flex gap-4 ticker-track" style={{ width: 'max-content' }}>
               {doubled.map((h, i) => (
                 <a
@@ -152,7 +152,7 @@ function VizMiniGrid({ vizs }) {
     <section className="mb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <SectionHeader title="Visualizaciones" href="/visualizaciones" />
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {vizs.map((viz, i) => {
             const Icon = TIPO_ICON[viz.tipo] ?? BarChart2
             const ChartComponent = viz.tipo !== 'tabla' ? CHART_COMPONENTS[viz.tipo] ?? Bar : null
@@ -403,7 +403,7 @@ export default function Home() {
       {/* Hero */}
       <section className="bg-[#0a1628] bg-pattern-dark py-12 sm:py-16 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between gap-12">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center lg:justify-between gap-8 lg:gap-12">
 
             {/* Izquierda: texto */}
             <motion.div
@@ -418,7 +418,7 @@ export default function Home() {
               <h1 className="text-5xl sm:text-7xl font-normal text-white tracking-tight leading-none mb-6">
                 Data<span className="text-brand-400 font-bold">PBA</span>
               </h1>
-              <div className="flex gap-10 pt-8">
+              <div className="flex gap-6 sm:gap-10 pt-8">
                 <div>
                   <p className="text-2xl font-bold text-white">135</p>
                   <p className="text-xs text-slate-500 mt-1 uppercase tracking-wide">municipios</p>
