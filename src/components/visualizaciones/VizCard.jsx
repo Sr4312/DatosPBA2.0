@@ -1,6 +1,9 @@
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Badge } from '@/components/ui/badge'
+import { Download } from 'lucide-react'
+import html2canvas from 'html2canvas'
 import {
   Chart as ChartJS,
   CategoryScale, LinearScale,
@@ -34,6 +37,62 @@ const BASE_OPTIONS = {
       grid:  { color: 'rgba(0,0,0,0.04)' },
     },
   },
+}
+
+// Twitter optimal: 1200x675 (16:9)
+const TW_W = 1200
+const TW_H = 675
+const PADDING = 60
+const FOOTER_H = 56
+
+function drawBrandedCanvas(sourceCanvas, title, fuente) {
+  const out = document.createElement('canvas')
+  out.width = TW_W
+  out.height = TW_H
+  const ctx = out.getContext('2d')
+
+  // Background
+  ctx.fillStyle = '#ffffff'
+  ctx.fillRect(0, 0, TW_W, TW_H)
+
+  // Title
+  ctx.fillStyle = '#0a1628'
+  ctx.font = 'bold 26px Roboto, system-ui, sans-serif'
+  ctx.fillText(title, PADDING, 52, TW_W - PADDING * 2)
+
+  // Source
+  if (fuente) {
+    ctx.fillStyle = '#94a3b8'
+    ctx.font = '18px Roboto, system-ui, sans-serif'
+    ctx.fillText(`Fuente: ${fuente}`, PADDING, 80)
+  }
+
+  // Chart area
+  const chartY = fuente ? 100 : 80
+  const chartH = TW_H - chartY - FOOTER_H - 16
+  ctx.drawImage(sourceCanvas, PADDING, chartY, TW_W - PADDING * 2, chartH)
+
+  // Footer bar
+  const footerY = TW_H - FOOTER_H
+  ctx.fillStyle = '#0a1628'
+  ctx.fillRect(0, footerY, TW_W, FOOTER_H)
+  ctx.fillStyle = '#ffffff'
+  ctx.font = 'bold 22px Roboto, system-ui, sans-serif'
+  ctx.fillText('Datos', PADDING, footerY + 36)
+  ctx.fillStyle = '#60a5fa'
+  ctx.fillText('PBA', PADDING + 72, footerY + 36)
+  ctx.fillStyle = '#94a3b8'
+  ctx.font = '16px Roboto, system-ui, sans-serif'
+  ctx.fillText('datospba.com', TW_W - PADDING - 130, footerY + 36)
+
+  return out
+}
+
+function triggerDownload(canvas, filename) {
+  const a = document.createElement('a')
+  a.download = filename.replace(/[^a-zA-Z0-9\-_áéíóúñ ]/g, '').trim() + '.png'
+  a.href = canvas.toDataURL('image/png')
+  a.click()
 }
 
 function TableContent({ tableData }) {
@@ -106,9 +165,53 @@ function TableContent({ tableData }) {
 
 export default function VizCard({ viz, index = 0 }) {
   const ChartComponent = CHART_COMPONENTS[viz.tipo] ?? Bar
+  const chartRef = useRef(null)
+  const cardRef = useRef(null)
+
+  async function handleDownload() {
+    const filename = viz.titulo || 'visualizacion'
+
+    if (viz.tipo === 'tabla') {
+      const captured = await html2canvas(cardRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+      })
+      // Scale captured to Twitter dimensions
+      const out = document.createElement('canvas')
+      out.width = TW_W
+      out.height = TW_H
+      const ctx = out.getContext('2d')
+      ctx.fillStyle = '#ffffff'
+      ctx.fillRect(0, 0, TW_W, TW_H)
+      const scale = Math.min(TW_W / captured.width, (TW_H - FOOTER_H) / captured.height)
+      const dw = captured.width * scale
+      const dh = captured.height * scale
+      ctx.drawImage(captured, (TW_W - dw) / 2, 0, dw, dh)
+      // Footer
+      const footerY = TW_H - FOOTER_H
+      ctx.fillStyle = '#0a1628'
+      ctx.fillRect(0, footerY, TW_W, FOOTER_H)
+      ctx.fillStyle = '#ffffff'
+      ctx.font = 'bold 22px Roboto, system-ui, sans-serif'
+      ctx.fillText('Datos', PADDING, footerY + 36)
+      ctx.fillStyle = '#60a5fa'
+      ctx.fillText('PBA', PADDING + 72, footerY + 36)
+      ctx.fillStyle = '#94a3b8'
+      ctx.font = '16px Roboto, system-ui, sans-serif'
+      ctx.fillText('datospba.com', TW_W - PADDING - 130, footerY + 36)
+      triggerDownload(out, filename)
+    } else {
+      const chartCanvas = chartRef.current?.canvas
+      if (!chartCanvas) return
+      const out = drawBrandedCanvas(chartCanvas, viz.titulo, viz.fuente)
+      triggerDownload(out, filename)
+    }
+  }
 
   return (
     <motion.div
+      ref={cardRef}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -123,14 +226,23 @@ export default function VizCard({ viz, index = 0 }) {
             <p className="text-xs text-slate-400 mt-0.5">Fuente: {viz.fuente}</p>
           )}
         </div>
-        {viz.tema && <Badge variant="secondary" className="shrink-0">{viz.tema}</Badge>}
+        <div className="flex items-center gap-2 shrink-0">
+          {viz.tema && <Badge variant="secondary">{viz.tema}</Badge>}
+          <button
+            onClick={handleDownload}
+            title="Descargar PNG para Twitter"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-colors"
+          >
+            <Download className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {viz.tipo === 'tabla' ? (
         <TableContent tableData={viz.tableData} />
       ) : (
         <div className="h-64">
-          <ChartComponent data={viz.chartData} options={BASE_OPTIONS} />
+          <ChartComponent ref={chartRef} data={viz.chartData} options={BASE_OPTIONS} />
         </div>
       )}
 
