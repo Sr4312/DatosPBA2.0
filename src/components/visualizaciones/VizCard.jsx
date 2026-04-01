@@ -39,51 +39,57 @@ const BASE_OPTIONS = {
   },
 }
 
-// Twitter optimal: 1200x675 (16:9)
-const TW_W = 1200
-const TW_H = 675
 const PADDING = 60
 const FOOTER_H = 56
+const MIN_W = 1200
+
+function drawFooter(ctx, y, w) {
+  ctx.fillStyle = '#0a1628'
+  ctx.fillRect(0, y, w, FOOTER_H)
+  ctx.fillStyle = '#ffffff'
+  ctx.font = `bold ${Math.round(w * 0.018)}px Roboto, system-ui, sans-serif`
+  ctx.fillText('Datos', PADDING, y + FOOTER_H * 0.65)
+  ctx.fillStyle = '#60a5fa'
+  ctx.fillText('PBA', PADDING + Math.round(w * 0.06), y + FOOTER_H * 0.65)
+  ctx.fillStyle = '#94a3b8'
+  ctx.font = `${Math.round(w * 0.013)}px Roboto, system-ui, sans-serif`
+  ctx.fillText('datospba.com', w - PADDING - Math.round(w * 0.11), y + FOOTER_H * 0.65)
+}
 
 function drawBrandedCanvas(sourceCanvas, title, fuente) {
+  // Scale source up to at least MIN_W, preserving its natural proportions
+  const scale = Math.max(1, MIN_W / (sourceCanvas.width + PADDING * 2))
+  const W = Math.round((sourceCanvas.width + PADDING * 2) * scale)
+  const titleH = fuente ? 96 : 72
+  const H = Math.round(sourceCanvas.height * scale) + titleH + FOOTER_H + 16
+
   const out = document.createElement('canvas')
-  out.width = TW_W
-  out.height = TW_H
+  out.width = W
+  out.height = H
   const ctx = out.getContext('2d')
 
-  // Background
   ctx.fillStyle = '#ffffff'
-  ctx.fillRect(0, 0, TW_W, TW_H)
+  ctx.fillRect(0, 0, W, H)
 
   // Title
   ctx.fillStyle = '#0a1628'
-  ctx.font = 'bold 26px Roboto, system-ui, sans-serif'
-  ctx.fillText(title, PADDING, 52, TW_W - PADDING * 2)
+  ctx.font = `bold ${Math.round(W * 0.022)}px Roboto, system-ui, sans-serif`
+  ctx.fillText(title, PADDING, Math.round(titleH * 0.52), W - PADDING * 2)
 
-  // Source
   if (fuente) {
     ctx.fillStyle = '#94a3b8'
-    ctx.font = '18px Roboto, system-ui, sans-serif'
-    ctx.fillText(`Fuente: ${fuente}`, PADDING, 80)
+    ctx.font = `${Math.round(W * 0.015)}px Roboto, system-ui, sans-serif`
+    ctx.fillText(`Fuente: ${fuente}`, PADDING, Math.round(titleH * 0.82))
   }
 
-  // Chart area
-  const chartY = fuente ? 100 : 80
-  const chartH = TW_H - chartY - FOOTER_H - 16
-  ctx.drawImage(sourceCanvas, PADDING, chartY, TW_W - PADDING * 2, chartH)
+  // Chart
+  ctx.drawImage(
+    sourceCanvas,
+    PADDING, titleH,
+    sourceCanvas.width * scale, sourceCanvas.height * scale
+  )
 
-  // Footer bar
-  const footerY = TW_H - FOOTER_H
-  ctx.fillStyle = '#0a1628'
-  ctx.fillRect(0, footerY, TW_W, FOOTER_H)
-  ctx.fillStyle = '#ffffff'
-  ctx.font = 'bold 22px Roboto, system-ui, sans-serif'
-  ctx.fillText('Datos', PADDING, footerY + 36)
-  ctx.fillStyle = '#60a5fa'
-  ctx.fillText('PBA', PADDING + 72, footerY + 36)
-  ctx.fillStyle = '#94a3b8'
-  ctx.font = '16px Roboto, system-ui, sans-serif'
-  ctx.fillText('datospba.com', TW_W - PADDING - 130, footerY + 36)
+  drawFooter(ctx, H - FOOTER_H, W)
 
   return out
 }
@@ -177,29 +183,19 @@ export default function VizCard({ viz, index = 0 }) {
         useCORS: true,
         backgroundColor: '#ffffff',
       })
-      // Scale captured to Twitter dimensions
+      // Keep natural proportions, scale up to at least MIN_W
+      const upscale = Math.max(1, MIN_W / captured.width)
+      const W = Math.round(captured.width * upscale)
+      const H = Math.round(captured.height * upscale) + FOOTER_H
+
       const out = document.createElement('canvas')
-      out.width = TW_W
-      out.height = TW_H
+      out.width = W
+      out.height = H
       const ctx = out.getContext('2d')
       ctx.fillStyle = '#ffffff'
-      ctx.fillRect(0, 0, TW_W, TW_H)
-      const scale = Math.min(TW_W / captured.width, (TW_H - FOOTER_H) / captured.height)
-      const dw = captured.width * scale
-      const dh = captured.height * scale
-      ctx.drawImage(captured, (TW_W - dw) / 2, 0, dw, dh)
-      // Footer
-      const footerY = TW_H - FOOTER_H
-      ctx.fillStyle = '#0a1628'
-      ctx.fillRect(0, footerY, TW_W, FOOTER_H)
-      ctx.fillStyle = '#ffffff'
-      ctx.font = 'bold 22px Roboto, system-ui, sans-serif'
-      ctx.fillText('Datos', PADDING, footerY + 36)
-      ctx.fillStyle = '#60a5fa'
-      ctx.fillText('PBA', PADDING + 72, footerY + 36)
-      ctx.fillStyle = '#94a3b8'
-      ctx.font = '16px Roboto, system-ui, sans-serif'
-      ctx.fillText('datospba.com', TW_W - PADDING - 130, footerY + 36)
+      ctx.fillRect(0, 0, W, H)
+      ctx.drawImage(captured, 0, 0, W, H - FOOTER_H)
+      drawFooter(ctx, H - FOOTER_H, W)
       triggerDownload(out, filename)
     } else {
       const chartCanvas = chartRef.current?.canvas
