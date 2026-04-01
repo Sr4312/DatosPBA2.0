@@ -27,9 +27,9 @@ export default function Layout() {
       <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-24">
           <NavLink to="/" className="flex items-center gap-2 no-underline">
-            <img src="/logo-bars.svg" alt="DataPBA" style={{ height: '56px', width: 'auto' }} />
+            <img src="/logo-bars.svg" alt="DatosPBA" style={{ height: '56px', width: 'auto' }} />
             <div className="flex flex-col leading-tight">
-              <span className="text-xl text-[#0a1628] tracking-tight">Data<span className="font-bold">PBA</span></span>
+              <span className="text-xl text-[#0a1628] tracking-tight">Datos<span className="font-bold">PBA</span></span>
               <span className="text-[10px] text-slate-400 hidden sm:block leading-snug">Análisis basado en evidencia<br />para la Provincia de Buenos Aires.</span>
             </div>
           </NavLink>
@@ -108,7 +108,7 @@ export default function Layout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Brand */}
           <div className="md:col-span-1">
-            <img src="/logo-bars.svg" alt="DataPBA" className="h-10 w-auto mb-3" />
+            <img src="/logo-bars.svg" alt="DatosPBA" className="h-10 w-auto mb-3" />
             <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
               Repositorio de análisis político y datos abiertos sobre la Provincia de Buenos Aires.
             </p>
@@ -163,7 +163,7 @@ export default function Layout() {
                   className="flex items-center gap-2 text-sm text-slate-600 hover:text-brand-600 transition-colors no-underline"
                 >
                   <Linkedin className="w-4 h-4 shrink-0 text-slate-400" />
-                  DataPBA
+                  DatosPBA
                 </a>
               </li>
             </ul>
@@ -173,7 +173,7 @@ export default function Layout() {
 
       <footer className="bg-[#0a1628] py-5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center text-xs text-slate-500">
-          <span>© {new Date().getFullYear()} DataPBA</span>
+          <span>© {new Date().getFullYear()} DatosPBA</span>
           <span className="text-brand-600 font-medium tracking-widest uppercase text-[10px]">Provincia de Buenos Aires</span>
         </div>
       </footer>

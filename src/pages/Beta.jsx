@@ -133,11 +133,11 @@ export default function Beta() {
       <div className="bg-[#0a1628] py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-2">
-            <img src="/logo-bars.svg" alt="DataPBA" className="h-8 w-8 object-contain" />
+            <img src="/logo-bars.svg" alt="DatosPBA" className="h-8 w-8 object-contain" />
             <span className="text-xs font-semibold text-brand-400 uppercase tracking-[0.2em]">Beta</span>
           </div>
           <h1 className="text-3xl font-bold text-white mb-1">Explorador de contenido</h1>
-          <p className="text-slate-400 text-sm">Todo el contenido de DataPBA en un solo lugar.</p>
+          <p className="text-slate-400 text-sm">Todo el contenido de DatosPBA en un solo lugar.</p>
         </div>
       </div>
 

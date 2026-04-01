@@ -101,7 +101,7 @@ export default function SearchOverlay({ open, onClose }) {
             type="text"
             value={query}
             onChange={e => setQuery(e.target.value)}
-            placeholder="Buscar en DataPBA..."
+            placeholder="Buscar en DatosPBA..."
             className="flex-1 text-sm text-slate-800 placeholder:text-slate-400 outline-none bg-transparent"
           />
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">

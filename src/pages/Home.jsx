@@ -122,9 +122,9 @@ function PublicacionesTicker({ hilos }) {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <img src="/logo-icon.svg" alt="DataPBA" className="w-8 h-8 rounded-full shrink-0 object-cover" />
+                      <img src="/logo-icon.svg" alt="DatosPBA" className="w-8 h-8 rounded-full shrink-0 object-cover" />
                       <div className="leading-tight">
-                        <p className="text-xs font-bold text-slate-900">DataPBA</p>
+                        <p className="text-xs font-bold text-slate-900">DatosPBA</p>
                         <p className="text-[10px] text-slate-400">@datospba</p>
                       </div>
                     </div>
@@ -401,7 +401,7 @@ export default function Home() {
       <ReportesTicker reportes={allReportes} />
 
       {/* Hero */}
-      <section className="bg-[#0a1628] bg-pattern-dark py-12 sm:py-16 overflow-hidden">
+      <section className="bg-[#0a1628] bg-pattern-dark py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col lg:flex-row items-start lg:items-center lg:justify-between gap-8 lg:gap-12">
 
@@ -416,7 +416,7 @@ export default function Home() {
                 Provincia de Buenos Aires
               </p>
               <h1 className="text-5xl sm:text-7xl font-normal text-white tracking-tight leading-none mb-6">
-                Data<span className="text-brand-400 font-bold">PBA</span>
+                Datos<span className="text-brand-400 font-bold">PBA</span>
               </h1>
               <div className="flex gap-6 sm:gap-10 pt-8">
                 <div>
