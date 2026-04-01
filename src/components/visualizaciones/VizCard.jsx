@@ -173,11 +173,13 @@ export default function VizCard({ viz, index = 0 }) {
   const ChartComponent = CHART_COMPONENTS[viz.tipo] ?? Bar
   const chartRef = useRef(null)
   const cardRef = useRef(null)
+  const actionsRef = useRef(null)
 
   async function handleDownload() {
     const filename = viz.titulo || 'visualizacion'
 
     if (viz.tipo === 'tabla') {
+      actionsRef.current.style.visibility = 'hidden'
       const captured = await html2canvas(cardRef.current, {
         scale: 2,
         useCORS: true,
@@ -196,6 +198,7 @@ export default function VizCard({ viz, index = 0 }) {
       ctx.fillRect(0, 0, W, H)
       ctx.drawImage(captured, 0, 0, W, H - FOOTER_H)
       drawFooter(ctx, H - FOOTER_H, W)
+      actionsRef.current.style.visibility = ''
       triggerDownload(out, filename)
     } else {
       const chartCanvas = chartRef.current?.canvas
@@ -222,7 +225,7 @@ export default function VizCard({ viz, index = 0 }) {
             <p className="text-xs text-slate-400 mt-0.5">Fuente: {viz.fuente}</p>
           )}
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+        <div ref={actionsRef} className="flex items-center gap-2 shrink-0">
           {viz.tema && <Badge variant="secondary">{viz.tema}</Badge>}
           <button
             onClick={handleDownload}
