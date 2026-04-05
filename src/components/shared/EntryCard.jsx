@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Calendar, MapPin, ChevronRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 
 export default function EntryCard({ titulo, resumen, fecha, tema, municipio, insights, url, imagen, index = 0 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -57,6 +57,6 @@ export default function EntryCard({ titulo, resumen, fecha, tema, municipio, ins
           </Link>
         )}
       </div>
-    </motion.div>
+    </m.div>
   )
 }

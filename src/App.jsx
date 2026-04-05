@@ -1,31 +1,36 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { LazyMotion, domAnimation } from 'framer-motion'
 import Layout from './components/Layout'
 import ScrollToTop from './components/ScrollToTop'
-import Home from './pages/Home'
-import Informes from './pages/Informes'
-import Datos from './pages/Datos'
-import Hilos from './pages/Hilos'
-import ReportesRapidos from './pages/ReportesRapidos'
-import Visualizaciones from './pages/Visualizaciones'
-import InformeDetalle from './pages/InformeDetalle'
-import Beta from './pages/Beta'
+
+const Home            = lazy(() => import('./pages/Home'))
+const Informes        = lazy(() => import('./pages/Informes'))
+const Datos           = lazy(() => import('./pages/Datos'))
+const Hilos           = lazy(() => import('./pages/Hilos'))
+const ReportesRapidos = lazy(() => import('./pages/ReportesRapidos'))
+const Visualizaciones = lazy(() => import('./pages/Visualizaciones'))
+const InformeDetalle  = lazy(() => import('./pages/InformeDetalle'))
+const Beta            = lazy(() => import('./pages/Beta'))
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="informes" element={<Informes />} />
-          <Route path="informes/:id" element={<InformeDetalle />} />
-          <Route path="datos" element={<Datos />} />
-          <Route path="hilos" element={<Hilos />} />
-          <Route path="reportes" element={<ReportesRapidos />} />
-          <Route path="beta" element={<Beta />} />
-          <Route path="visualizaciones" element={<Visualizaciones />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <LazyMotion features={domAnimation}>
+      <BrowserRouter>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Suspense fallback={null}><Home /></Suspense>} />
+            <Route path="informes" element={<Suspense fallback={null}><Informes /></Suspense>} />
+            <Route path="informes/:id" element={<Suspense fallback={null}><InformeDetalle /></Suspense>} />
+            <Route path="datos" element={<Suspense fallback={null}><Datos /></Suspense>} />
+            <Route path="hilos" element={<Suspense fallback={null}><Hilos /></Suspense>} />
+            <Route path="reportes" element={<Suspense fallback={null}><ReportesRapidos /></Suspense>} />
+            <Route path="beta" element={<Suspense fallback={null}><Beta /></Suspense>} />
+            <Route path="visualizaciones" element={<Suspense fallback={null}><Visualizaciones /></Suspense>} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </LazyMotion>
   )
 }

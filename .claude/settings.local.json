@@ -29,7 +29,9 @@
       "Bash(npm uninstall:*)",
       "Bash(find C:/Users/salva/Desktop/ -name *.csv -o -name *.geojson)",
       "WebFetch(domain:apis.datos.gob.ar)",
-      "WebFetch(domain:wms.ign.gob.ar)"
+      "WebFetch(domain:wms.ign.gob.ar)",
+      "Bash(npx vite:*)",
+      "Bash(node update_municipios.mjs)"
     ]
   }
 }

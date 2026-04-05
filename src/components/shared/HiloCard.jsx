@@ -1,10 +1,10 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Calendar, ExternalLink } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 
 export default function HiloCard({ hilo, index = 0 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -45,6 +45,6 @@ export default function HiloCard({ hilo, index = 0 }) {
           )}
         </div>
       </div>
-    </motion.div>
+    </m.div>
   )
 }

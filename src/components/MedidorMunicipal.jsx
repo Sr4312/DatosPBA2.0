@@ -214,7 +214,7 @@ export default function MedidorMunicipal() {
                 {/* Header */}
                 <div className="px-5 pt-5 pb-4 border-b border-slate-100 shrink-0">
                   <h3 className="text-lg font-bold text-[#0a1628] leading-tight">{selected.nombre}</h3>
-                  <div className="flex gap-5 mt-3">
+                  <div className="flex flex-wrap gap-4 mt-3">
                     <div>
                       <p className="text-xl font-bold text-brand-600 leading-none">
                         {selected.poblacion?.toLocaleString('es-AR') ?? 'N/D'}
@@ -227,6 +227,24 @@ export default function MedidorMunicipal() {
                       </p>
                       <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Hogares</p>
                     </div>
+                    {selected.superficie_km2 != null && (
+                      <div>
+                        <p className="text-xl font-bold text-brand-600 leading-none">
+                          {selected.superficie_km2.toLocaleString('es-AR')}
+                        </p>
+                        <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">km²</p>
+                      </div>
+                    )}
+                    {selected.densidad_pobl != null && (
+                      <div>
+                        <p className="text-xl font-bold text-brand-600 leading-none">
+                          {selected.densidad_pobl < 10
+                            ? selected.densidad_pobl.toFixed(1)
+                            : Math.round(selected.densidad_pobl).toLocaleString('es-AR')}
+                        </p>
+                        <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">hab/km²</p>
+                      </div>
+                    )}
                   </div>
                 </div>
 

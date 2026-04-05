@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
 
 function TendenciaIcon({ tendencia }) {
@@ -27,7 +27,7 @@ export default function ReporteCard({ reporte, index = 0 }) {
     : 'text-slate-400'
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -51,6 +51,6 @@ export default function ReporteCard({ reporte, index = 0 }) {
       </div>
 
       <span className="text-[10px] text-slate-300 shrink-0 hidden sm:block">{reporte.fecha}</span>
-    </motion.div>
+    </m.div>
   )
 }

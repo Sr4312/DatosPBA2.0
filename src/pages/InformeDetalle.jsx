@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { Calendar, MapPin, ArrowLeft } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { informes, visualizaciones } from '@/components/data/mockData'
@@ -25,7 +25,7 @@ export default function InformeDetalle() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+      <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
 
         <Link
           to="/informes"
@@ -87,7 +87,7 @@ export default function InformeDetalle() {
           </div>
         )}
 
-      </motion.div>
+      </m.div>
     </div>
   )
 }

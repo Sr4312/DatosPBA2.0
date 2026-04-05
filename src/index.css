@@ -6,13 +6,11 @@ body {
   font-family: 'Poppins', sans-serif;
   overflow-x: hidden;
   background-color: #f7f6f2;
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(10,22,40,0.035) 0px,
-    rgba(10,22,40,0.035) 1px,
-    transparent 1px,
-    transparent 64px
-  );
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900'><polygon points='0,0 230,0 470,900 0,900' fill='%231e3a8a' opacity='0.048'/><polygon points='185,0 370,0 610,900 425,900' fill='%231d4ed8' opacity='0.036'/><polygon points='330,0 500,0 740,900 570,900' fill='%232563eb' opacity='0.038'/><polygon points='470,0 635,0 875,900 710,900' fill='%233b82f6' opacity='0.032'/><polygon points='605,0 770,0 1010,900 845,900' fill='%2360a5fa' opacity='0.028'/><polygon points='740,0 910,0 1150,900 980,900' fill='%2393c5fd' opacity='0.036'/><polygon points='875,0 1055,0 1295,900 1115,900' fill='%23bfdbfe' opacity='0.042'/><polygon points='1010,0 1230,0 1440,840 1255,900' fill='%23dbeafe' opacity='0.048'/></svg>");
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
 }
 
 .bg-pattern-dark {

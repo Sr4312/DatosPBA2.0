@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { BarChart2, Table2, TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import { informes, datasets, hilos, reportesRapidos, visualizaciones } from '@/components/data/mockData'
 import EntryCard from '@/components/shared/EntryCard'
@@ -157,7 +157,7 @@ function VizMiniGrid({ vizs }) {
             const Icon = TIPO_ICON[viz.tipo] ?? BarChart2
             const ChartComponent = viz.tipo !== 'tabla' ? CHART_COMPONENTS[viz.tipo] ?? Bar : null
             return (
-              <motion.div
+              <m.div
                 key={viz.id}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -198,7 +198,7 @@ function VizMiniGrid({ vizs }) {
                     </a>
                   )}
                 </div>
-              </motion.div>
+              </m.div>
             )
           })}
         </div>
@@ -217,7 +217,7 @@ function DatasetsSection({ dsets }) {
         <SectionHeader title="Datasets" href="/datos" />
         <div className="flex flex-col gap-2">
           {visible.map((ds, i) => (
-            <motion.div
+            <m.div
               key={ds.id}
               initial={{ opacity: 0, x: -12 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -247,7 +247,7 @@ function DatasetsSection({ dsets }) {
                 </div>
                 <p className="text-slate-300 text-[11px]">{ds.fechaActualizacion}</p>
               </div>
-            </motion.div>
+            </m.div>
           ))}
         </div>
         {hasMore && (
@@ -406,7 +406,7 @@ export default function Home() {
           <div className="flex flex-col lg:flex-row items-start lg:items-center lg:justify-between gap-8 lg:gap-12">
 
             {/* Izquierda: texto */}
-            <motion.div
+            <m.div
               className="flex-1"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -432,7 +432,7 @@ export default function Home() {
                   <p className="text-xs text-slate-500 mt-1 uppercase tracking-wide">datos actualizados</p>
                 </div>
               </div>
-            </motion.div>
+            </m.div>
 
             {/* Derecha: radar por temática */}
             <div className="w-full lg:flex-1 lg:max-w-[500px]">
