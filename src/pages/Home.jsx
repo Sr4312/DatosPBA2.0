@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { m } from 'framer-motion'
 import { BarChart2, Table2, TrendingUp, TrendingDown, Minus } from 'lucide-react'
@@ -285,6 +285,21 @@ const RADAR_SERIES = [
 function RadarChart() {
   const navigate = useNavigate()
   const [hovered, setHovered] = useState(null)
+  const [progress, setProgress] = useState(0)
+
+  useEffect(() => {
+    let id
+    let start = null
+    const duration = 1400
+    function step(ts) {
+      if (!start) start = ts
+      const p = Math.min((ts - start) / duration, 1)
+      setProgress(1 - Math.pow(1 - p, 3)) // ease-out cubic
+      if (p < 1) id = requestAnimationFrame(step)
+    }
+    id = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(id)
+  }, [])
 
   const MAX = 4
   const cx = 260, cy = 220, R = 130
@@ -298,9 +313,13 @@ function RadarChart() {
     return pts.map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`).join(' ') + ' Z'
   }
   const seriesPath = counts => {
-    const pts = RADAR_THEMES.map((t, i) => pt(t.deg, counts[i] / MAX))
+    const pts = RADAR_THEMES.map((t, i) => pt(t.deg, counts[i] / MAX * progress))
     return pts.map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`).join(' ') + ' Z'
   }
+
+  const gridOpacity  = Math.min(progress * 3, 1)
+  const labelOpacity = Math.max(0, (progress - 0.4) / 0.6)
+  const legendOpacity = Math.max(0, (progress - 0.7) / 0.3)
 
   return (
     <div className="flex flex-col items-center gap-4 w-full">
@@ -308,12 +327,14 @@ function RadarChart() {
         {[0.25, 0.5, 0.75, 1.0].map(v => (
           <path key={v} d={hexPath(v)} fill="none"
             stroke={v === 1.0 ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.07)'}
-            strokeWidth={v === 1.0 ? 1.2 : 0.7} />
+            strokeWidth={v === 1.0 ? 1.2 : 0.7}
+            opacity={gridOpacity} />
         ))}
         {RADAR_THEMES.map(t => {
           const [x, y] = pt(t.deg)
           return <line key={t.id} x1={cx} y1={cy} x2={x.toFixed(1)} y2={y.toFixed(1)}
-            stroke="rgba(255,255,255,0.12)" strokeWidth="0.8" />
+            stroke="rgba(255,255,255,0.12)" strokeWidth="0.8"
+            opacity={gridOpacity} />
         })}
         {[...RADAR_SERIES]
           .sort((a, b) => (hovered === a.id ? 1 : 0) - (hovered === b.id ? 1 : 0))
@@ -326,7 +347,7 @@ function RadarChart() {
                 stroke={s.color}
                 strokeWidth={isHov ? 2.5 : 1.5}
                 opacity={dimmed ? 0.25 : 1}
-                style={{ transition: 'all 0.2s' }} />
+                style={{ transition: 'opacity 0.2s, stroke-width 0.2s, fill 0.2s' }} />
             )
           })}
         {RADAR_SERIES.flatMap(s =>
@@ -334,13 +355,13 @@ function RadarChart() {
             if (s.counts[i] === 0) return null
             const isHov = hovered === s.id
             const dimmed = hovered !== null && !isHov
-            const [x, y] = pt(t.deg, s.counts[i] / MAX)
+            const [x, y] = pt(t.deg, s.counts[i] / MAX * progress)
             return (
               <circle key={`${s.id}-${t.id}`}
                 cx={x.toFixed(1)} cy={y.toFixed(1)}
                 r={isHov ? 5 : 3.5} fill={s.color}
                 opacity={dimmed ? 0.25 : isHov ? 1 : 0.85}
-                style={{ transition: 'all 0.2s' }} />
+                style={{ transition: 'r 0.2s, opacity 0.2s' }} />
             )
           })
         )}
@@ -350,7 +371,7 @@ function RadarChart() {
             : (t.deg > 150 && t.deg < 210) ? 'middle'
             : t.deg < 180 ? 'start' : 'end'
           return (
-            <g key={t.id} style={{ cursor: 'pointer' }}
+            <g key={t.id} style={{ cursor: 'pointer', opacity: labelOpacity }}
               onClick={() => navigate(`/beta?theme=${encodeURIComponent(t.id)}`)}>
               {t.lines.map((line, j) => (
                 <text key={j}
@@ -367,7 +388,7 @@ function RadarChart() {
           )
         })}
       </svg>
-      <div className="flex flex-wrap gap-2 justify-center">
+      <div className="flex flex-wrap gap-2 justify-center" style={{ opacity: legendOpacity }}>
         {RADAR_SERIES.map(s => (
           <button key={s.id}
             onMouseEnter={() => setHovered(s.id)}

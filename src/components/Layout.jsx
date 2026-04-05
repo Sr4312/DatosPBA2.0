@@ -15,27 +15,31 @@ export default function Layout() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [showTop, setShowTop] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setShowTop(window.scrollY > 400)
+    const onScroll = () => {
+      setShowTop(window.scrollY > 400)
+      setScrolled(window.scrollY > 60)
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-24">
-          <NavLink to="/" className="flex items-center gap-2 no-underline">
-            <img src="/logo-bars.svg" alt="DatosPBA" style={{ height: '56px', width: 'auto' }} />
-            <div className="flex flex-col leading-tight">
+      <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm transition-all duration-300">
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-14' : 'h-24'}`}>
+          <NavLink to="/" className="flex items-center gap-2 no-underline shrink-0">
+            <img src="/logo-bars.svg" alt="DatosPBA" style={{ height: scrolled ? '36px' : '56px', width: 'auto', transition: 'height 0.3s' }} />
+            <div className="flex flex-col leading-tight overflow-hidden">
               <span className="text-xl text-[#0a1628] tracking-tight">Datos<span className="font-bold">PBA</span></span>
-              <span className="text-[10px] text-slate-400 hidden sm:block leading-snug">Análisis basado en evidencia<br />para la Provincia de Buenos Aires.</span>
+              <span className={`text-[10px] text-slate-400 hidden sm:block leading-snug transition-all duration-300 ${scrolled ? 'max-h-0 opacity-0' : 'max-h-10 opacity-100'}`}>Análisis basado en evidencia<br />para la Provincia de Buenos Aires.</span>
             </div>
           </NavLink>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-0.5">
+          <nav className="hidden lg:flex items-center gap-0.5">
             {NAV.map(l => (
               <NavLink
                 key={l.to}
@@ -66,7 +70,7 @@ export default function Layout() {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden p-2 text-slate-500 hover:text-brand-600 transition-colors"
+            className="lg:hidden p-2 text-slate-500 hover:text-brand-600 transition-colors"
             onClick={() => setMenuOpen(o => !o)}
             aria-label="Menú"
           >
@@ -76,7 +80,7 @@ export default function Layout() {
 
         {/* Mobile menu drawer */}
         {menuOpen && (
-          <nav className="md:hidden bg-white border-t border-slate-100 px-4 pb-4 flex flex-col gap-1">
+          <nav className="lg:hidden bg-white border-t border-slate-100 px-4 pb-4 flex flex-col gap-1">
             {NAV.map(l => (
               <NavLink
                 key={l.to}

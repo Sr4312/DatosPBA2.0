@@ -1,0 +1,885 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "DatosPBA DatosPBA Análisis basado en evidencia para la Provincia de Buenos Aires." [ref=e6] [cursor=pointer]:
+        - /url: /
+        - img "DatosPBA" [ref=e7]
+        - generic [ref=e8]:
+          - generic [ref=e9]: DatosPBA
+          - generic:
+            - text: Análisis basado en evidencia
+            - text: para la Provincia de Buenos Aires.
+      - navigation [ref=e11]:
+        - link "Informes" [ref=e12] [cursor=pointer]:
+          - /url: /informes
+        - link "Publicaciones" [ref=e13] [cursor=pointer]:
+          - /url: /hilos
+        - link "Visualizaciones" [ref=e14] [cursor=pointer]:
+          - /url: /visualizaciones
+        - link "Datasets" [ref=e15] [cursor=pointer]:
+          - /url: /datos
+        - link "Beta" [ref=e16] [cursor=pointer]:
+          - /url: /beta
+      - button "Buscar" [ref=e17] [cursor=pointer]:
+        - img [ref=e18]
+        - generic [ref=e21]: Buscar
+  - main [ref=e62]:
+    - generic [ref=e63]:
+      - generic [ref=e65]:
+        - generic [ref=e66]:
+          - img [ref=e68]
+          - generic [ref=e71]:
+            - generic [ref=e72]:
+              - generic [ref=e73]: Desempleo GBA — 3er trim. 2025
+              - generic [ref=e74]: Nov. 2025
+            - generic [ref=e75]:
+              - generic [ref=e76]: 11,1%
+              - generic [ref=e77]: +1,5 pp
+        - generic [ref=e78]:
+          - img [ref=e80]
+          - generic [ref=e83]:
+            - generic [ref=e84]:
+              - generic [ref=e85]: Empleo informal — Conurbano
+              - generic [ref=e86]: Nov. 2025
+            - generic [ref=e87]:
+              - generic [ref=e88]: 42,3%
+              - generic [ref=e89]: +1,2 pp
+        - generic [ref=e90]:
+          - img [ref=e92]
+          - generic [ref=e95]:
+            - generic [ref=e96]:
+              - generic [ref=e97]: Gasto en seguridad — Presupuesto 2026
+              - generic [ref=e98]: Nov. 2025
+            - generic [ref=e99]:
+              - generic [ref=e100]: +28%
+              - generic [ref=e101]: +28% real
+        - generic [ref=e102]:
+          - img [ref=e104]
+          - generic [ref=e107]:
+            - generic [ref=e108]:
+              - generic [ref=e109]: Sin cobertura de salud — Tercer cordón
+              - generic [ref=e110]: Oct. 2025
+            - generic [ref=e111]:
+              - generic [ref=e112]: 29,4%
+              - generic [ref=e113]: +1,8 pp
+        - generic [ref=e114]:
+          - img [ref=e116]
+          - generic [ref=e119]:
+            - generic [ref=e120]:
+              - generic [ref=e121]: Caída de matrícula secundaria
+              - generic [ref=e122]: Sep. 2025
+            - generic [ref=e123]:
+              - generic [ref=e124]: −4,2%
+              - generic [ref=e125]: −4,2% vs. 2019
+        - generic [ref=e126]:
+          - img [ref=e128]
+          - generic [ref=e131]:
+            - generic [ref=e132]:
+              - generic [ref=e133]: Deuda municipal per cápita promedio
+              - generic [ref=e134]: Sep. 2025
+            - generic [ref=e135]:
+              - generic [ref=e136]: $48.200
+              - generic [ref=e137]: +$4.200
+        - generic [ref=e138]:
+          - img [ref=e140]
+          - generic [ref=e143]:
+            - generic [ref=e144]:
+              - generic [ref=e145]: Desempleo GBA — 3er trim. 2025
+              - generic [ref=e146]: Nov. 2025
+            - generic [ref=e147]:
+              - generic [ref=e148]: 11,1%
+              - generic [ref=e149]: +1,5 pp
+        - generic [ref=e150]:
+          - img [ref=e152]
+          - generic [ref=e155]:
+            - generic [ref=e156]:
+              - generic [ref=e157]: Empleo informal — Conurbano
+              - generic [ref=e158]: Nov. 2025
+            - generic [ref=e159]:
+              - generic [ref=e160]: 42,3%
+              - generic [ref=e161]: +1,2 pp
+        - generic [ref=e162]:
+          - img [ref=e164]
+          - generic [ref=e167]:
+            - generic [ref=e168]:
+              - generic [ref=e169]: Gasto en seguridad — Presupuesto 2026
+              - generic [ref=e170]: Nov. 2025
+            - generic [ref=e171]:
+              - generic [ref=e172]: +28%
+              - generic [ref=e173]: +28% real
+        - generic [ref=e174]:
+          - img [ref=e176]
+          - generic [ref=e179]:
+            - generic [ref=e180]:
+              - generic [ref=e181]: Sin cobertura de salud — Tercer cordón
+              - generic [ref=e182]: Oct. 2025
+            - generic [ref=e183]:
+              - generic [ref=e184]: 29,4%
+              - generic [ref=e185]: +1,8 pp
+        - generic [ref=e186]:
+          - img [ref=e188]
+          - generic [ref=e191]:
+            - generic [ref=e192]:
+              - generic [ref=e193]: Caída de matrícula secundaria
+              - generic [ref=e194]: Sep. 2025
+            - generic [ref=e195]:
+              - generic [ref=e196]: −4,2%
+              - generic [ref=e197]: −4,2% vs. 2019
+        - generic [ref=e198]:
+          - img [ref=e200]
+          - generic [ref=e203]:
+            - generic [ref=e204]:
+              - generic [ref=e205]: Deuda municipal per cápita promedio
+              - generic [ref=e206]: Sep. 2025
+            - generic [ref=e207]:
+              - generic [ref=e208]: $48.200
+              - generic [ref=e209]: +$4.200
+        - generic [ref=e210]:
+          - img [ref=e212]
+          - generic [ref=e215]:
+            - generic [ref=e216]:
+              - generic [ref=e217]: Desempleo GBA — 3er trim. 2025
+              - generic [ref=e218]: Nov. 2025
+            - generic [ref=e219]:
+              - generic [ref=e220]: 11,1%
+              - generic [ref=e221]: +1,5 pp
+        - generic [ref=e222]:
+          - img [ref=e224]
+          - generic [ref=e227]:
+            - generic [ref=e228]:
+              - generic [ref=e229]: Empleo informal — Conurbano
+              - generic [ref=e230]: Nov. 2025
+            - generic [ref=e231]:
+              - generic [ref=e232]: 42,3%
+              - generic [ref=e233]: +1,2 pp
+        - generic [ref=e234]:
+          - img [ref=e236]
+          - generic [ref=e239]:
+            - generic [ref=e240]:
+              - generic [ref=e241]: Gasto en seguridad — Presupuesto 2026
+              - generic [ref=e242]: Nov. 2025
+            - generic [ref=e243]:
+              - generic [ref=e244]: +28%
+              - generic [ref=e245]: +28% real
+        - generic [ref=e246]:
+          - img [ref=e248]
+          - generic [ref=e251]:
+            - generic [ref=e252]:
+              - generic [ref=e253]: Sin cobertura de salud — Tercer cordón
+              - generic [ref=e254]: Oct. 2025
+            - generic [ref=e255]:
+              - generic [ref=e256]: 29,4%
+              - generic [ref=e257]: +1,8 pp
+        - generic [ref=e258]:
+          - img [ref=e260]
+          - generic [ref=e263]:
+            - generic [ref=e264]:
+              - generic [ref=e265]: Caída de matrícula secundaria
+              - generic [ref=e266]: Sep. 2025
+            - generic [ref=e267]:
+              - generic [ref=e268]: −4,2%
+              - generic [ref=e269]: −4,2% vs. 2019
+        - generic [ref=e270]:
+          - img [ref=e272]
+          - generic [ref=e275]:
+            - generic [ref=e276]:
+              - generic [ref=e277]: Deuda municipal per cápita promedio
+              - generic [ref=e278]: Sep. 2025
+            - generic [ref=e279]:
+              - generic [ref=e280]: $48.200
+              - generic [ref=e281]: +$4.200
+        - generic [ref=e282]:
+          - img [ref=e284]
+          - generic [ref=e287]:
+            - generic [ref=e288]:
+              - generic [ref=e289]: Desempleo GBA — 3er trim. 2025
+              - generic [ref=e290]: Nov. 2025
+            - generic [ref=e291]:
+              - generic [ref=e292]: 11,1%
+              - generic [ref=e293]: +1,5 pp
+        - generic [ref=e294]:
+          - img [ref=e296]
+          - generic [ref=e299]:
+            - generic [ref=e300]:
+              - generic [ref=e301]: Empleo informal — Conurbano
+              - generic [ref=e302]: Nov. 2025
+            - generic [ref=e303]:
+              - generic [ref=e304]: 42,3%
+              - generic [ref=e305]: +1,2 pp
+        - generic [ref=e306]:
+          - img [ref=e308]
+          - generic [ref=e311]:
+            - generic [ref=e312]:
+              - generic [ref=e313]: Gasto en seguridad — Presupuesto 2026
+              - generic [ref=e314]: Nov. 2025
+            - generic [ref=e315]:
+              - generic [ref=e316]: +28%
+              - generic [ref=e317]: +28% real
+        - generic [ref=e318]:
+          - img [ref=e320]
+          - generic [ref=e323]:
+            - generic [ref=e324]:
+              - generic [ref=e325]: Sin cobertura de salud — Tercer cordón
+              - generic [ref=e326]: Oct. 2025
+            - generic [ref=e327]:
+              - generic [ref=e328]: 29,4%
+              - generic [ref=e329]: +1,8 pp
+        - generic [ref=e330]:
+          - img [ref=e332]
+          - generic [ref=e335]:
+            - generic [ref=e336]:
+              - generic [ref=e337]: Caída de matrícula secundaria
+              - generic [ref=e338]: Sep. 2025
+            - generic [ref=e339]:
+              - generic [ref=e340]: −4,2%
+              - generic [ref=e341]: −4,2% vs. 2019
+        - generic [ref=e342]:
+          - img [ref=e344]
+          - generic [ref=e347]:
+            - generic [ref=e348]:
+              - generic [ref=e349]: Deuda municipal per cápita promedio
+              - generic [ref=e350]: Sep. 2025
+            - generic [ref=e351]:
+              - generic [ref=e352]: $48.200
+              - generic [ref=e353]: +$4.200
+      - generic [ref=e356]:
+        - generic [ref=e357]:
+          - paragraph [ref=e358]: Provincia de Buenos Aires
+          - heading "DatosPBA" [level=1] [ref=e359]
+          - generic [ref=e360]:
+            - generic [ref=e361]:
+              - paragraph [ref=e362]: "135"
+              - paragraph [ref=e363]: municipios
+            - generic [ref=e364]:
+              - paragraph [ref=e365]: 17M+
+              - paragraph [ref=e366]: habitantes
+            - generic [ref=e367]:
+              - paragraph [ref=e368]: "2025"
+              - paragraph [ref=e369]: datos actualizados
+        - generic [ref=e371]:
+          - img [ref=e372]:
+            - generic [ref=e410] [cursor=pointer]: Economía
+            - generic [ref=e412] [cursor=pointer]: Demografía
+            - generic [ref=e414] [cursor=pointer]: Educación
+            - generic [ref=e415] [cursor=pointer]:
+              - generic [ref=e416]: Pobreza y
+              - generic [ref=e417]: desigualdad
+            - generic [ref=e418] [cursor=pointer]:
+              - generic [ref=e419]: Territorio e
+              - generic [ref=e420]: infraestructura
+            - generic [ref=e421] [cursor=pointer]:
+              - generic [ref=e422]: Instituciones y
+              - generic [ref=e423]: gobernanza
+          - generic [ref=e424]:
+            - button "Informes" [ref=e425] [cursor=pointer]: Informes
+            - button "Publicaciones" [ref=e427] [cursor=pointer]: Publicaciones
+            - button "Visualizaciones" [ref=e429] [cursor=pointer]: Visualizaciones
+            - button "Datasets" [ref=e431] [cursor=pointer]: Datasets
+      - generic [ref=e433]:
+        - generic [ref=e435]:
+          - heading "Medidor Municipal" [level=2] [ref=e437]
+          - generic [ref=e438]:
+            - generic [ref=e440]:
+              - generic:
+                - generic:
+                  - img
+              - generic [ref=e584]:
+                - button "Zoom in" [ref=e585] [cursor=pointer]: +
+                - button "Zoom out" [disabled] [ref=e586]: −
+            - generic [ref=e588]:
+              - img [ref=e590]
+              - paragraph [ref=e592]: Seleccioná un municipio
+              - paragraph [ref=e593]: Hacé clic sobre cualquier partido del mapa para ver sus indicadores.
+        - generic [ref=e595]:
+          - generic [ref=e596]:
+            - heading "Informes" [level=2] [ref=e597]
+            - link "Ver todos →" [ref=e598] [cursor=pointer]:
+              - /url: /informes
+          - generic [ref=e599]:
+            - generic [ref=e601]:
+              - generic [ref=e602]:
+                - generic [ref=e603]: Economía
+                - generic [ref=e604]:
+                  - img [ref=e605]
+                  - text: 15 nov. 2025
+              - heading "Tasa de desempleo por partido del Conurbano Bonaerense — 3er trim. 2025" [level=3] [ref=e607]
+              - paragraph [ref=e608]: Análisis de los niveles de desempleo en ocho partidos del Gran Buenos Aires. Florencio Varela y La Matanza lideran el ranking con tasas de 14,2% y 12,3% respectivamente.
+              - generic [ref=e609]:
+                - img [ref=e610]
+                - text: La Matanza, Quilmes, Florencio Varela, Almirante Brown
+              - list [ref=e613]:
+                - listitem [ref=e614]: Florencio Varela supera en 3,1 pp el promedio del Conurbano.
+                - listitem [ref=e616]: La brecha entre el mejor y peor partido es de 5,1 puntos porcentuales.
+              - link "Ver informe" [ref=e618] [cursor=pointer]:
+                - /url: /informes/desempleo-conurbano-2025
+                - text: Ver informe
+                - img [ref=e619]
+            - generic [ref=e622]:
+              - generic [ref=e623]:
+                - generic [ref=e624]: Economía
+                - generic [ref=e625]:
+                  - img [ref=e626]
+                  - text: 8 nov. 2025
+              - 'heading "Análisis del Presupuesto Provincial 2026: estructura y prioridades del gasto" [level=3] [ref=e628]'
+              - paragraph [ref=e629]: El presupuesto 2026 crece 112% nominal respecto a 2025. Seguridad y servicio de deuda crecen por encima de la inflación proyectada; educación y salud pierden participación.
+              - list [ref=e630]:
+                - listitem [ref=e631]: Seguridad creció 28% en términos reales respecto al presupuesto 2025.
+                - listitem [ref=e633]: La participación de Educación cayó del 34% al 29% del gasto total.
+              - link "Ver informe" [ref=e635] [cursor=pointer]:
+                - /url: /informes/presupuesto-pba-2026
+                - text: Ver informe
+                - img [ref=e636]
+            - generic [ref=e639]:
+              - generic [ref=e640]:
+                - generic [ref=e641]: Pobreza y desigualdad
+                - generic [ref=e642]:
+                  - img [ref=e643]
+                  - text: 20 oct. 2025
+              - 'heading "Cobertura de salud en el Conurbano: mapa de la desigualdad según Censo 2022" [level=3] [ref=e645]'
+              - paragraph [ref=e646]: El 29,4% de los habitantes del tercer cordón del Conurbano depende exclusivamente del sistema de salud público. La brecha con el promedio provincial es de 12 puntos.
+              - generic [ref=e647]:
+                - img [ref=e648]
+                - text: Florencio Varela, Berazategui, Presidente Perón, Merlo
+              - list [ref=e651]:
+                - listitem [ref=e652]: Los cuatro partidos con menor cobertura están todos en el tercer cordón.
+                - listitem [ref=e654]: La correlación entre informalidad laboral y falta de cobertura es de 0.87.
+              - link "Ver informe" [ref=e656] [cursor=pointer]:
+                - /url: /informes/cobertura-salud-2022
+                - text: Ver informe
+                - img [ref=e657]
+            - generic [ref=e660]:
+              - generic [ref=e661]:
+                - generic [ref=e662]: Economía
+                - generic [ref=e663]:
+                  - img [ref=e664]
+                  - text: 5 oct. 2025
+              - 'heading "Radiografía de la deuda municipal bonaerense: stock, acreedores y riesgo fiscal" [level=3] [ref=e666]'
+              - paragraph [ref=e667]: Cinco municipios concentran el 60% del stock de deuda pública municipal. La provincia es el principal acreedor en 73 de los 135 distritos. Análisis de sostenibilidad fiscal.
+              - generic [ref=e668]:
+                - img [ref=e669]
+                - text: La Matanza, Mar del Plata, Quilmes, Lanús, Lomas de Zamora
+              - list [ref=e672]:
+                - listitem [ref=e673]: La deuda municipal per cápita promedio es de $48.200 (precios de oct. 2025).
+                - listitem [ref=e675]: Mar del Plata lidera el ranking con una deuda equivalente al 42% de sus ingresos anuales.
+              - link "Ver informe" [ref=e677] [cursor=pointer]:
+                - /url: /informes/deuda-municipal-2025
+                - text: Ver informe
+                - img [ref=e678]
+        - generic [ref=e681]:
+          - link "Ver todos →" [ref=e683] [cursor=pointer]:
+            - /url: /hilos
+          - generic [ref=e684]:
+            - heading "Publicaciones" [level=2] [ref=e686]
+            - generic [ref=e688]:
+              - link "DatosPBA DatosPBA @datospba La tasa de desempleo en el GBA lleva cuatro trimestres consecutivos por encima del promedio nacional. Analizamos los datos del EPH para entender qué partidos lideran el problema y por qué. 20 nov. 2025 Economía" [ref=e689] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e690]:
+                  - generic [ref=e691]:
+                    - img "DatosPBA" [ref=e692]
+                    - generic [ref=e693]:
+                      - paragraph [ref=e694]: DatosPBA
+                      - paragraph [ref=e695]: "@datospba"
+                  - img [ref=e697]
+                - paragraph [ref=e699]: La tasa de desempleo en el GBA lleva cuatro trimestres consecutivos por encima del promedio nacional. Analizamos los datos del EPH para entender qué partidos lideran el problema y por qué.
+                - generic [ref=e700]:
+                  - generic [ref=e701]: 20 nov. 2025
+                  - generic [ref=e702]: Economía
+              - link "DatosPBA DatosPBA @datospba Desglose del presupuesto provincial 2026. Seguridad y deuda crecieron por encima de la inflación proyectada; salud y educación perdieron participación relativa. 5 nov. 2025 Economía" [ref=e703] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e704]:
+                  - generic [ref=e705]:
+                    - img "DatosPBA" [ref=e706]
+                    - generic [ref=e707]:
+                      - paragraph [ref=e708]: DatosPBA
+                      - paragraph [ref=e709]: "@datospba"
+                  - img [ref=e711]
+                - paragraph [ref=e713]: Desglose del presupuesto provincial 2026. Seguridad y deuda crecieron por encima de la inflación proyectada; salud y educación perdieron participación relativa.
+                - generic [ref=e714]:
+                  - generic [ref=e715]: 5 nov. 2025
+                  - generic [ref=e716]: Economía
+              - link "DatosPBA DatosPBA @datospba 3 de cada 10 habitantes del tercer cordón del Conurbano dependen exclusivamente del sistema de salud público. Los datos del Censo 2022 muestran una brecha creciente respecto al promedio provincial. 14 oct. 2025 Pobreza y desigualdad" [ref=e717] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e718]:
+                  - generic [ref=e719]:
+                    - img "DatosPBA" [ref=e720]
+                    - generic [ref=e721]:
+                      - paragraph [ref=e722]: DatosPBA
+                      - paragraph [ref=e723]: "@datospba"
+                  - img [ref=e725]
+                - paragraph [ref=e727]: 3 de cada 10 habitantes del tercer cordón del Conurbano dependen exclusivamente del sistema de salud público. Los datos del Censo 2022 muestran una brecha creciente respecto al promedio provincial.
+                - generic [ref=e728]:
+                  - generic [ref=e729]: 14 oct. 2025
+                  - generic [ref=e730]: Pobreza y desigualdad
+              - link "DatosPBA DatosPBA @datospba Ranking de deuda municipal per cápita en la PBA. Cinco municipios concentran el 60% del stock total. El principal acreedor es la propia provincia, no la banca privada. 1 oct. 2025 Economía" [ref=e731] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e732]:
+                  - generic [ref=e733]:
+                    - img "DatosPBA" [ref=e734]
+                    - generic [ref=e735]:
+                      - paragraph [ref=e736]: DatosPBA
+                      - paragraph [ref=e737]: "@datospba"
+                  - img [ref=e739]
+                - paragraph [ref=e741]: Ranking de deuda municipal per cápita en la PBA. Cinco municipios concentran el 60% del stock total. El principal acreedor es la propia provincia, no la banca privada.
+                - generic [ref=e742]:
+                  - generic [ref=e743]: 1 oct. 2025
+                  - generic [ref=e744]: Economía
+              - 'link "DatosPBA DatosPBA @datospba La matrícula en el nivel secundario cayó 4,2% en 2024 respecto a 2019. No es un fenómeno homogéneo: los distritos del tercer cordón explican el 70% de la caída. 22 sep. 2025 Educación" [ref=e745] [cursor=pointer]':
+                - /url: https://x.com/
+                - generic [ref=e746]:
+                  - generic [ref=e747]:
+                    - img "DatosPBA" [ref=e748]
+                    - generic [ref=e749]:
+                      - paragraph [ref=e750]: DatosPBA
+                      - paragraph [ref=e751]: "@datospba"
+                  - img [ref=e753]
+                - paragraph [ref=e755]: "La matrícula en el nivel secundario cayó 4,2% en 2024 respecto a 2019. No es un fenómeno homogéneo: los distritos del tercer cordón explican el 70% de la caída."
+                - generic [ref=e756]:
+                  - generic [ref=e757]: 22 sep. 2025
+                  - generic [ref=e758]: Educación
+              - link "DatosPBA DatosPBA @datospba 4 de cada 10 trabajadores del GBA son informales. El dato no mejora desde 2019 a pesar de la recuperación del empleo formal. Analizamos qué sectores y partidos concentran la informalidad. 10 sep. 2025 Economía" [ref=e759] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e760]:
+                  - generic [ref=e761]:
+                    - img "DatosPBA" [ref=e762]
+                    - generic [ref=e763]:
+                      - paragraph [ref=e764]: DatosPBA
+                      - paragraph [ref=e765]: "@datospba"
+                  - img [ref=e767]
+                - paragraph [ref=e769]: 4 de cada 10 trabajadores del GBA son informales. El dato no mejora desde 2019 a pesar de la recuperación del empleo formal. Analizamos qué sectores y partidos concentran la informalidad.
+                - generic [ref=e770]:
+                  - generic [ref=e771]: 10 sep. 2025
+                  - generic [ref=e772]: Economía
+              - link "DatosPBA DatosPBA @datospba La tasa de desempleo en el GBA lleva cuatro trimestres consecutivos por encima del promedio nacional. Analizamos los datos del EPH para entender qué partidos lideran el problema y por qué. 20 nov. 2025 Economía" [ref=e773] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e774]:
+                  - generic [ref=e775]:
+                    - img "DatosPBA" [ref=e776]
+                    - generic [ref=e777]:
+                      - paragraph [ref=e778]: DatosPBA
+                      - paragraph [ref=e779]: "@datospba"
+                  - img [ref=e781]
+                - paragraph [ref=e783]: La tasa de desempleo en el GBA lleva cuatro trimestres consecutivos por encima del promedio nacional. Analizamos los datos del EPH para entender qué partidos lideran el problema y por qué.
+                - generic [ref=e784]:
+                  - generic [ref=e785]: 20 nov. 2025
+                  - generic [ref=e786]: Economía
+              - link "DatosPBA DatosPBA @datospba Desglose del presupuesto provincial 2026. Seguridad y deuda crecieron por encima de la inflación proyectada; salud y educación perdieron participación relativa. 5 nov. 2025 Economía" [ref=e787] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e788]:
+                  - generic [ref=e789]:
+                    - img "DatosPBA" [ref=e790]
+                    - generic [ref=e791]:
+                      - paragraph [ref=e792]: DatosPBA
+                      - paragraph [ref=e793]: "@datospba"
+                  - img [ref=e795]
+                - paragraph [ref=e797]: Desglose del presupuesto provincial 2026. Seguridad y deuda crecieron por encima de la inflación proyectada; salud y educación perdieron participación relativa.
+                - generic [ref=e798]:
+                  - generic [ref=e799]: 5 nov. 2025
+                  - generic [ref=e800]: Economía
+              - link "DatosPBA DatosPBA @datospba 3 de cada 10 habitantes del tercer cordón del Conurbano dependen exclusivamente del sistema de salud público. Los datos del Censo 2022 muestran una brecha creciente respecto al promedio provincial. 14 oct. 2025 Pobreza y desigualdad" [ref=e801] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e802]:
+                  - generic [ref=e803]:
+                    - img "DatosPBA" [ref=e804]
+                    - generic [ref=e805]:
+                      - paragraph [ref=e806]: DatosPBA
+                      - paragraph [ref=e807]: "@datospba"
+                  - img [ref=e809]
+                - paragraph [ref=e811]: 3 de cada 10 habitantes del tercer cordón del Conurbano dependen exclusivamente del sistema de salud público. Los datos del Censo 2022 muestran una brecha creciente respecto al promedio provincial.
+                - generic [ref=e812]:
+                  - generic [ref=e813]: 14 oct. 2025
+                  - generic [ref=e814]: Pobreza y desigualdad
+              - link "DatosPBA DatosPBA @datospba Ranking de deuda municipal per cápita en la PBA. Cinco municipios concentran el 60% del stock total. El principal acreedor es la propia provincia, no la banca privada. 1 oct. 2025 Economía" [ref=e815] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e816]:
+                  - generic [ref=e817]:
+                    - img "DatosPBA" [ref=e818]
+                    - generic [ref=e819]:
+                      - paragraph [ref=e820]: DatosPBA
+                      - paragraph [ref=e821]: "@datospba"
+                  - img [ref=e823]
+                - paragraph [ref=e825]: Ranking de deuda municipal per cápita en la PBA. Cinco municipios concentran el 60% del stock total. El principal acreedor es la propia provincia, no la banca privada.
+                - generic [ref=e826]:
+                  - generic [ref=e827]: 1 oct. 2025
+                  - generic [ref=e828]: Economía
+              - 'link "DatosPBA DatosPBA @datospba La matrícula en el nivel secundario cayó 4,2% en 2024 respecto a 2019. No es un fenómeno homogéneo: los distritos del tercer cordón explican el 70% de la caída. 22 sep. 2025 Educación" [ref=e829] [cursor=pointer]':
+                - /url: https://x.com/
+                - generic [ref=e830]:
+                  - generic [ref=e831]:
+                    - img "DatosPBA" [ref=e832]
+                    - generic [ref=e833]:
+                      - paragraph [ref=e834]: DatosPBA
+                      - paragraph [ref=e835]: "@datospba"
+                  - img [ref=e837]
+                - paragraph [ref=e839]: "La matrícula en el nivel secundario cayó 4,2% en 2024 respecto a 2019. No es un fenómeno homogéneo: los distritos del tercer cordón explican el 70% de la caída."
+                - generic [ref=e840]:
+                  - generic [ref=e841]: 22 sep. 2025
+                  - generic [ref=e842]: Educación
+              - link "DatosPBA DatosPBA @datospba 4 de cada 10 trabajadores del GBA son informales. El dato no mejora desde 2019 a pesar de la recuperación del empleo formal. Analizamos qué sectores y partidos concentran la informalidad. 10 sep. 2025 Economía" [ref=e843] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e844]:
+                  - generic [ref=e845]:
+                    - img "DatosPBA" [ref=e846]
+                    - generic [ref=e847]:
+                      - paragraph [ref=e848]: DatosPBA
+                      - paragraph [ref=e849]: "@datospba"
+                  - img [ref=e851]
+                - paragraph [ref=e853]: 4 de cada 10 trabajadores del GBA son informales. El dato no mejora desde 2019 a pesar de la recuperación del empleo formal. Analizamos qué sectores y partidos concentran la informalidad.
+                - generic [ref=e854]:
+                  - generic [ref=e855]: 10 sep. 2025
+                  - generic [ref=e856]: Economía
+              - link "DatosPBA DatosPBA @datospba La tasa de desempleo en el GBA lleva cuatro trimestres consecutivos por encima del promedio nacional. Analizamos los datos del EPH para entender qué partidos lideran el problema y por qué. 20 nov. 2025 Economía" [ref=e857] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e858]:
+                  - generic [ref=e859]:
+                    - img "DatosPBA" [ref=e860]
+                    - generic [ref=e861]:
+                      - paragraph [ref=e862]: DatosPBA
+                      - paragraph [ref=e863]: "@datospba"
+                  - img [ref=e865]
+                - paragraph [ref=e867]: La tasa de desempleo en el GBA lleva cuatro trimestres consecutivos por encima del promedio nacional. Analizamos los datos del EPH para entender qué partidos lideran el problema y por qué.
+                - generic [ref=e868]:
+                  - generic [ref=e869]: 20 nov. 2025
+                  - generic [ref=e870]: Economía
+              - link "DatosPBA DatosPBA @datospba Desglose del presupuesto provincial 2026. Seguridad y deuda crecieron por encima de la inflación proyectada; salud y educación perdieron participación relativa. 5 nov. 2025 Economía" [ref=e871] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e872]:
+                  - generic [ref=e873]:
+                    - img "DatosPBA" [ref=e874]
+                    - generic [ref=e875]:
+                      - paragraph [ref=e876]: DatosPBA
+                      - paragraph [ref=e877]: "@datospba"
+                  - img [ref=e879]
+                - paragraph [ref=e881]: Desglose del presupuesto provincial 2026. Seguridad y deuda crecieron por encima de la inflación proyectada; salud y educación perdieron participación relativa.
+                - generic [ref=e882]:
+                  - generic [ref=e883]: 5 nov. 2025
+                  - generic [ref=e884]: Economía
+              - link "DatosPBA DatosPBA @datospba 3 de cada 10 habitantes del tercer cordón del Conurbano dependen exclusivamente del sistema de salud público. Los datos del Censo 2022 muestran una brecha creciente respecto al promedio provincial. 14 oct. 2025 Pobreza y desigualdad" [ref=e885] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e886]:
+                  - generic [ref=e887]:
+                    - img "DatosPBA" [ref=e888]
+                    - generic [ref=e889]:
+                      - paragraph [ref=e890]: DatosPBA
+                      - paragraph [ref=e891]: "@datospba"
+                  - img [ref=e893]
+                - paragraph [ref=e895]: 3 de cada 10 habitantes del tercer cordón del Conurbano dependen exclusivamente del sistema de salud público. Los datos del Censo 2022 muestran una brecha creciente respecto al promedio provincial.
+                - generic [ref=e896]:
+                  - generic [ref=e897]: 14 oct. 2025
+                  - generic [ref=e898]: Pobreza y desigualdad
+              - link "DatosPBA DatosPBA @datospba Ranking de deuda municipal per cápita en la PBA. Cinco municipios concentran el 60% del stock total. El principal acreedor es la propia provincia, no la banca privada. 1 oct. 2025 Economía" [ref=e899] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e900]:
+                  - generic [ref=e901]:
+                    - img "DatosPBA" [ref=e902]
+                    - generic [ref=e903]:
+                      - paragraph [ref=e904]: DatosPBA
+                      - paragraph [ref=e905]: "@datospba"
+                  - img [ref=e907]
+                - paragraph [ref=e909]: Ranking de deuda municipal per cápita en la PBA. Cinco municipios concentran el 60% del stock total. El principal acreedor es la propia provincia, no la banca privada.
+                - generic [ref=e910]:
+                  - generic [ref=e911]: 1 oct. 2025
+                  - generic [ref=e912]: Economía
+              - 'link "DatosPBA DatosPBA @datospba La matrícula en el nivel secundario cayó 4,2% en 2024 respecto a 2019. No es un fenómeno homogéneo: los distritos del tercer cordón explican el 70% de la caída. 22 sep. 2025 Educación" [ref=e913] [cursor=pointer]':
+                - /url: https://x.com/
+                - generic [ref=e914]:
+                  - generic [ref=e915]:
+                    - img "DatosPBA" [ref=e916]
+                    - generic [ref=e917]:
+                      - paragraph [ref=e918]: DatosPBA
+                      - paragraph [ref=e919]: "@datospba"
+                  - img [ref=e921]
+                - paragraph [ref=e923]: "La matrícula en el nivel secundario cayó 4,2% en 2024 respecto a 2019. No es un fenómeno homogéneo: los distritos del tercer cordón explican el 70% de la caída."
+                - generic [ref=e924]:
+                  - generic [ref=e925]: 22 sep. 2025
+                  - generic [ref=e926]: Educación
+              - link "DatosPBA DatosPBA @datospba 4 de cada 10 trabajadores del GBA son informales. El dato no mejora desde 2019 a pesar de la recuperación del empleo formal. Analizamos qué sectores y partidos concentran la informalidad. 10 sep. 2025 Economía" [ref=e927] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e928]:
+                  - generic [ref=e929]:
+                    - img "DatosPBA" [ref=e930]
+                    - generic [ref=e931]:
+                      - paragraph [ref=e932]: DatosPBA
+                      - paragraph [ref=e933]: "@datospba"
+                  - img [ref=e935]
+                - paragraph [ref=e937]: 4 de cada 10 trabajadores del GBA son informales. El dato no mejora desde 2019 a pesar de la recuperación del empleo formal. Analizamos qué sectores y partidos concentran la informalidad.
+                - generic [ref=e938]:
+                  - generic [ref=e939]: 10 sep. 2025
+                  - generic [ref=e940]: Economía
+              - link "DatosPBA DatosPBA @datospba La tasa de desempleo en el GBA lleva cuatro trimestres consecutivos por encima del promedio nacional. Analizamos los datos del EPH para entender qué partidos lideran el problema y por qué. 20 nov. 2025 Economía" [ref=e941] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e942]:
+                  - generic [ref=e943]:
+                    - img "DatosPBA" [ref=e944]
+                    - generic [ref=e945]:
+                      - paragraph [ref=e946]: DatosPBA
+                      - paragraph [ref=e947]: "@datospba"
+                  - img [ref=e949]
+                - paragraph [ref=e951]: La tasa de desempleo en el GBA lleva cuatro trimestres consecutivos por encima del promedio nacional. Analizamos los datos del EPH para entender qué partidos lideran el problema y por qué.
+                - generic [ref=e952]:
+                  - generic [ref=e953]: 20 nov. 2025
+                  - generic [ref=e954]: Economía
+              - link "DatosPBA DatosPBA @datospba Desglose del presupuesto provincial 2026. Seguridad y deuda crecieron por encima de la inflación proyectada; salud y educación perdieron participación relativa. 5 nov. 2025 Economía" [ref=e955] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e956]:
+                  - generic [ref=e957]:
+                    - img "DatosPBA" [ref=e958]
+                    - generic [ref=e959]:
+                      - paragraph [ref=e960]: DatosPBA
+                      - paragraph [ref=e961]: "@datospba"
+                  - img [ref=e963]
+                - paragraph [ref=e965]: Desglose del presupuesto provincial 2026. Seguridad y deuda crecieron por encima de la inflación proyectada; salud y educación perdieron participación relativa.
+                - generic [ref=e966]:
+                  - generic [ref=e967]: 5 nov. 2025
+                  - generic [ref=e968]: Economía
+              - link "DatosPBA DatosPBA @datospba 3 de cada 10 habitantes del tercer cordón del Conurbano dependen exclusivamente del sistema de salud público. Los datos del Censo 2022 muestran una brecha creciente respecto al promedio provincial. 14 oct. 2025 Pobreza y desigualdad" [ref=e969] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e970]:
+                  - generic [ref=e971]:
+                    - img "DatosPBA" [ref=e972]
+                    - generic [ref=e973]:
+                      - paragraph [ref=e974]: DatosPBA
+                      - paragraph [ref=e975]: "@datospba"
+                  - img [ref=e977]
+                - paragraph [ref=e979]: 3 de cada 10 habitantes del tercer cordón del Conurbano dependen exclusivamente del sistema de salud público. Los datos del Censo 2022 muestran una brecha creciente respecto al promedio provincial.
+                - generic [ref=e980]:
+                  - generic [ref=e981]: 14 oct. 2025
+                  - generic [ref=e982]: Pobreza y desigualdad
+              - link "DatosPBA DatosPBA @datospba Ranking de deuda municipal per cápita en la PBA. Cinco municipios concentran el 60% del stock total. El principal acreedor es la propia provincia, no la banca privada. 1 oct. 2025 Economía" [ref=e983] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e984]:
+                  - generic [ref=e985]:
+                    - img "DatosPBA" [ref=e986]
+                    - generic [ref=e987]:
+                      - paragraph [ref=e988]: DatosPBA
+                      - paragraph [ref=e989]: "@datospba"
+                  - img [ref=e991]
+                - paragraph [ref=e993]: Ranking de deuda municipal per cápita en la PBA. Cinco municipios concentran el 60% del stock total. El principal acreedor es la propia provincia, no la banca privada.
+                - generic [ref=e994]:
+                  - generic [ref=e995]: 1 oct. 2025
+                  - generic [ref=e996]: Economía
+              - 'link "DatosPBA DatosPBA @datospba La matrícula en el nivel secundario cayó 4,2% en 2024 respecto a 2019. No es un fenómeno homogéneo: los distritos del tercer cordón explican el 70% de la caída. 22 sep. 2025 Educación" [ref=e997] [cursor=pointer]':
+                - /url: https://x.com/
+                - generic [ref=e998]:
+                  - generic [ref=e999]:
+                    - img "DatosPBA" [ref=e1000]
+                    - generic [ref=e1001]:
+                      - paragraph [ref=e1002]: DatosPBA
+                      - paragraph [ref=e1003]: "@datospba"
+                  - img [ref=e1005]
+                - paragraph [ref=e1007]: "La matrícula en el nivel secundario cayó 4,2% en 2024 respecto a 2019. No es un fenómeno homogéneo: los distritos del tercer cordón explican el 70% de la caída."
+                - generic [ref=e1008]:
+                  - generic [ref=e1009]: 22 sep. 2025
+                  - generic [ref=e1010]: Educación
+              - link "DatosPBA DatosPBA @datospba 4 de cada 10 trabajadores del GBA son informales. El dato no mejora desde 2019 a pesar de la recuperación del empleo formal. Analizamos qué sectores y partidos concentran la informalidad. 10 sep. 2025 Economía" [ref=e1011] [cursor=pointer]:
+                - /url: https://x.com/
+                - generic [ref=e1012]:
+                  - generic [ref=e1013]:
+                    - img "DatosPBA" [ref=e1014]
+                    - generic [ref=e1015]:
+                      - paragraph [ref=e1016]: DatosPBA
+                      - paragraph [ref=e1017]: "@datospba"
+                  - img [ref=e1019]
+                - paragraph [ref=e1021]: 4 de cada 10 trabajadores del GBA son informales. El dato no mejora desde 2019 a pesar de la recuperación del empleo formal. Analizamos qué sectores y partidos concentran la informalidad.
+                - generic [ref=e1022]:
+                  - generic [ref=e1023]: 10 sep. 2025
+                  - generic [ref=e1024]: Economía
+        - generic [ref=e1026]:
+          - generic [ref=e1027]:
+            - heading "Visualizaciones" [level=2] [ref=e1028]
+            - link "Ver todos →" [ref=e1029] [cursor=pointer]:
+              - /url: /visualizaciones
+          - generic [ref=e1030]:
+            - generic [ref=e1031]:
+              - generic [ref=e1032]:
+                - generic [ref=e1033]:
+                  - img [ref=e1034]
+                  - generic [ref=e1036]: Tabla
+                - generic [ref=e1037]: Instituciones y gobernanza
+              - heading "Representación en Cámara de Diputados — Ley 22.847 vs. propuesta 180.000 hab./dip." [level=3] [ref=e1038]
+              - img [ref=e1040]
+              - link "Ver completo →" [ref=e1043] [cursor=pointer]:
+                - /url: /visualizaciones#v-representacion-diputados
+            - generic [ref=e1044]:
+              - generic [ref=e1045]:
+                - generic [ref=e1046]:
+                  - img [ref=e1047]
+                  - generic [ref=e1048]: Gráfico de barras
+                - generic [ref=e1049]: Economía
+              - heading "Tasa de desempleo por partido del Conurbano — 3er trim. 2025 (%)" [level=3] [ref=e1050]
+              - img [ref=e1052]
+              - generic [ref=e1053]:
+                - link "Ver completo →" [ref=e1054] [cursor=pointer]:
+                  - /url: /visualizaciones#v-desempleo-conurbano
+                - link "Ver informe →" [ref=e1055] [cursor=pointer]:
+                  - /url: /informes/desempleo-conurbano-2025
+            - generic [ref=e1056]:
+              - generic [ref=e1057]:
+                - generic [ref=e1058]:
+                  - img [ref=e1059]
+                  - generic [ref=e1060]: Serie temporal
+                - generic [ref=e1061]: Economía
+              - heading "Evolución de la tasa de desempleo — GBA (2020–2025)" [level=3] [ref=e1062]
+              - img [ref=e1064]
+              - generic [ref=e1065]:
+                - link "Ver completo →" [ref=e1066] [cursor=pointer]:
+                  - /url: /visualizaciones#v-evolucion-desempleo
+                - link "Ver informe →" [ref=e1067] [cursor=pointer]:
+                  - /url: /informes/desempleo-conurbano-2025
+            - generic [ref=e1068]:
+              - generic [ref=e1069]:
+                - generic [ref=e1070]:
+                  - img [ref=e1071]
+                  - generic [ref=e1072]: Gráfico de barras
+                - generic [ref=e1073]: Economía
+              - heading "Composición del gasto provincial por función — Presupuesto 2026 (%)" [level=3] [ref=e1074]
+              - img [ref=e1076]
+              - generic [ref=e1077]:
+                - link "Ver completo →" [ref=e1078] [cursor=pointer]:
+                  - /url: /visualizaciones#v-gasto-funcional
+                - link "Ver informe →" [ref=e1079] [cursor=pointer]:
+                  - /url: /informes/presupuesto-pba-2026
+            - generic [ref=e1080]:
+              - generic [ref=e1081]:
+                - generic [ref=e1082]:
+                  - img [ref=e1083]
+                  - generic [ref=e1084]: Gráfico de barras
+                - generic [ref=e1085]: Pobreza y desigualdad
+              - heading "Población sin cobertura de salud — Top 10 partidos con mayor déficit (%)" [level=3] [ref=e1086]
+              - img [ref=e1088]
+              - generic [ref=e1089]:
+                - link "Ver completo →" [ref=e1090] [cursor=pointer]:
+                  - /url: /visualizaciones#v-cobertura-salud-partido
+                - link "Ver informe →" [ref=e1091] [cursor=pointer]:
+                  - /url: /informes/cobertura-salud-2022
+        - generic [ref=e1093]:
+          - generic [ref=e1094]:
+            - heading "Datasets" [level=2] [ref=e1095]
+            - link "Ver todos →" [ref=e1096] [cursor=pointer]:
+              - /url: /datos
+          - generic [ref=e1097]:
+            - generic [ref=e1098]:
+              - generic [ref=e1100]: CSV
+              - generic [ref=e1101]:
+                - paragraph [ref=e1102]: EPH — Mercado laboral PBA
+                - paragraph [ref=e1103]: Tasas de empleo, desempleo y actividad por aglomerado urbano de la Provincia de Buenos Aires.
+              - generic [ref=e1104]:
+                - generic [ref=e1105]:
+                  - paragraph [ref=e1106]: "48.320"
+                  - paragraph [ref=e1107]: registros
+                - generic [ref=e1108]:
+                  - paragraph [ref=e1109]: "24"
+                  - paragraph [ref=e1110]: variables
+                - generic [ref=e1111]:
+                  - paragraph [ref=e1112]: Conurbano y grandes ciudades
+                  - paragraph [ref=e1113]: cobertura
+                - paragraph [ref=e1114]: Dic. 2025
+            - generic [ref=e1115]:
+              - generic [ref=e1117]: XLSX
+              - generic [ref=e1118]:
+                - paragraph [ref=e1119]: Presupuesto ejecutado — Municipios PBA
+                - paragraph [ref=e1120]: Ejecución presupuestaria mensual de los 135 municipios de la Provincia de Buenos Aires.
+              - generic [ref=e1121]:
+                - generic [ref=e1122]:
+                  - paragraph [ref=e1123]: "12.150"
+                  - paragraph [ref=e1124]: registros
+                - generic [ref=e1125]:
+                  - paragraph [ref=e1126]: "18"
+                  - paragraph [ref=e1127]: variables
+                - generic [ref=e1128]:
+                  - paragraph [ref=e1129]: 135 municipios
+                  - paragraph [ref=e1130]: cobertura
+                - paragraph [ref=e1131]: Nov. 2025
+            - generic [ref=e1132]:
+              - generic [ref=e1134]: CSV
+              - generic [ref=e1135]:
+                - paragraph [ref=e1136]: Cobertura de salud por partido
+                - paragraph [ref=e1137]: Población sin cobertura de salud (solo pública) por partido según EPH y Censo 2022.
+              - generic [ref=e1138]:
+                - generic [ref=e1139]:
+                  - paragraph [ref=e1140]: "8.900"
+                  - paragraph [ref=e1141]: registros
+                - generic [ref=e1142]:
+                  - paragraph [ref=e1143]: "12"
+                  - paragraph [ref=e1144]: variables
+                - generic [ref=e1145]:
+                  - paragraph [ref=e1146]: 135 partidos
+                  - paragraph [ref=e1147]: cobertura
+                - paragraph [ref=e1148]: Oct. 2025
+            - generic [ref=e1149]:
+              - generic [ref=e1151]: JSON
+              - generic [ref=e1152]:
+                - paragraph [ref=e1153]: Deuda pública municipal — PBA
+                - paragraph [ref=e1154]: Stock de deuda pública de los municipios bonaerenses con desagregación por acreedor.
+              - generic [ref=e1155]:
+                - generic [ref=e1156]:
+                  - paragraph [ref=e1157]: "3.240"
+                  - paragraph [ref=e1158]: registros
+                - generic [ref=e1159]:
+                  - paragraph [ref=e1160]: "9"
+                  - paragraph [ref=e1161]: variables
+                - generic [ref=e1162]:
+                  - paragraph [ref=e1163]: 135 municipios
+                  - paragraph [ref=e1164]: cobertura
+                - paragraph [ref=e1165]: Sep. 2025
+            - generic [ref=e1166]:
+              - generic [ref=e1168]: CSV
+              - generic [ref=e1169]:
+                - paragraph [ref=e1170]: Matrícula educativa — Nivel inicial y primario
+                - paragraph [ref=e1171]: Matrícula por establecimiento, nivel, sector y localidad para la PBA.
+              - generic [ref=e1172]:
+                - generic [ref=e1173]:
+                  - paragraph [ref=e1174]: "124.800"
+                  - paragraph [ref=e1175]: registros
+                - generic [ref=e1176]:
+                  - paragraph [ref=e1177]: "31"
+                  - paragraph [ref=e1178]: variables
+                - generic [ref=e1179]:
+                  - paragraph [ref=e1180]: PBA completa
+                  - paragraph [ref=e1181]: cobertura
+                - paragraph [ref=e1182]: Mar. 2025
+  - generic [ref=e23]:
+    - generic [ref=e24]:
+      - img "DatosPBA" [ref=e25]
+      - paragraph [ref=e26]: Repositorio de análisis político y datos abiertos sobre la Provincia de Buenos Aires.
+    - generic [ref=e27]:
+      - paragraph [ref=e28]: Contenido
+      - list [ref=e29]:
+        - listitem [ref=e30]:
+          - link "Informes" [ref=e31] [cursor=pointer]:
+            - /url: /informes
+        - listitem [ref=e32]:
+          - link "Publicaciones" [ref=e33] [cursor=pointer]:
+            - /url: /hilos
+        - listitem [ref=e34]:
+          - link "Visualizaciones" [ref=e35] [cursor=pointer]:
+            - /url: /visualizaciones
+        - listitem [ref=e36]:
+          - link "Datasets" [ref=e37] [cursor=pointer]:
+            - /url: /datos
+        - listitem [ref=e38]:
+          - link "Beta" [ref=e39] [cursor=pointer]:
+            - /url: /beta
+    - generic [ref=e40]:
+      - paragraph [ref=e41]: Contacto
+      - list [ref=e42]:
+        - listitem [ref=e43]:
+          - link "contacto@datospba.com" [ref=e44] [cursor=pointer]:
+            - /url: mailto:contacto@datospba.com
+            - img [ref=e45]
+            - text: contacto@datospba.com
+        - listitem [ref=e48]:
+          - link "@datospba" [ref=e49] [cursor=pointer]:
+            - /url: https://twitter.com/datospba
+            - img [ref=e50]
+            - text: "@datospba"
+        - listitem [ref=e52]:
+          - link "DatosPBA" [ref=e53] [cursor=pointer]:
+            - /url: https://linkedin.com/in/datospba
+            - img [ref=e54]
+            - text: DatosPBA
+  - contentinfo [ref=e58]:
+    - generic [ref=e59]:
+      - generic [ref=e60]: © 2026 DatosPBA
+      - generic [ref=e61]: Provincia de Buenos Aires
+  - button "Volver arriba" [ref=e1183] [cursor=pointer]:
+    - img [ref=e1184]

@@ -1,0 +1,70 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "DatosPBA DatosPBA Análisis basado en evidencia para la Provincia de Buenos Aires." [ref=e6] [cursor=pointer]:
+        - /url: /
+        - img "DatosPBA"
+        - generic [ref=e7]:
+          - generic [ref=e8]: DatosPBA
+          - generic [ref=e9]:
+            - text: Análisis basado en evidencia
+            - text: para la Provincia de Buenos Aires.
+      - navigation [ref=e10]:
+        - link "Informes" [ref=e11] [cursor=pointer]:
+          - /url: /informes
+        - link "Publicaciones" [ref=e12] [cursor=pointer]:
+          - /url: /hilos
+        - link "Visualizaciones" [ref=e13] [cursor=pointer]:
+          - /url: /visualizaciones
+        - link "Datasets" [ref=e14] [cursor=pointer]:
+          - /url: /datos
+        - link "Beta" [ref=e15] [cursor=pointer]:
+          - /url: /beta
+      - button "Buscar" [ref=e16] [cursor=pointer]:
+        - img [ref=e17]
+        - generic [ref=e20]: Buscar
+  - main
+  - generic [ref=e22]:
+    - generic [ref=e23]:
+      - img "DatosPBA"
+      - paragraph [ref=e24]: Repositorio de análisis político y datos abiertos sobre la Provincia de Buenos Aires.
+    - generic [ref=e25]:
+      - paragraph [ref=e26]: Contenido
+      - list [ref=e27]:
+        - listitem [ref=e28]:
+          - link "Informes" [ref=e29] [cursor=pointer]:
+            - /url: /informes
+        - listitem [ref=e30]:
+          - link "Publicaciones" [ref=e31] [cursor=pointer]:
+            - /url: /hilos
+        - listitem [ref=e32]:
+          - link "Visualizaciones" [ref=e33] [cursor=pointer]:
+            - /url: /visualizaciones
+        - listitem [ref=e34]:
+          - link "Datasets" [ref=e35] [cursor=pointer]:
+            - /url: /datos
+        - listitem [ref=e36]:
+          - link "Beta" [ref=e37] [cursor=pointer]:
+            - /url: /beta
+    - generic [ref=e38]:
+      - paragraph [ref=e39]: Contacto
+      - list [ref=e40]:
+        - listitem [ref=e41]:
+          - link "contacto@datospba.com" [ref=e42] [cursor=pointer]:
+            - /url: mailto:contacto@datospba.com
+            - img [ref=e43]
+            - text: contacto@datospba.com
+        - listitem [ref=e46]:
+          - link "@datospba" [ref=e47] [cursor=pointer]:
+            - /url: https://twitter.com/datospba
+            - img [ref=e48]
+            - text: "@datospba"
+        - listitem [ref=e50]:
+          - link "DatosPBA" [ref=e51] [cursor=pointer]:
+            - /url: https://linkedin.com/in/datospba
+            - img [ref=e52]
+            - text: DatosPBA
+  - contentinfo [ref=e56]:
+    - generic [ref=e57]:
+      - generic [ref=e58]: © 2026 DatosPBA
+      - generic [ref=e59]: Provincia de Buenos Aires

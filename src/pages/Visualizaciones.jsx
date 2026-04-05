@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { visualizaciones } from "../components/data/mockData";
 import FilterBar from "../components/shared/FilterBar";
 import VizCard from "../components/visualizaciones/VizCard";
@@ -17,10 +17,10 @@ export default function Visualizaciones() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-10">
+      <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-10">
         <h1 className="text-4xl font-bold text-[#0a1628] tracking-tight mb-3">Visualizaciones interactivas</h1>
         <p className="text-lg text-slate-600">Gráficos, rankings, series y comparativos para explorar los datos</p>
-      </motion.div>
+      </m.div>
 
       <FilterBar
         className="mb-8"

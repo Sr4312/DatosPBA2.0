@@ -31,7 +31,21 @@
       "WebFetch(domain:apis.datos.gob.ar)",
       "WebFetch(domain:wms.ign.gob.ar)",
       "Bash(npx vite:*)",
-      "Bash(node update_municipios.mjs)"
+      "Bash(node update_municipios.mjs)",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_console_messages",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "mcp__plugin_playwright_playwright__browser_network_requests",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:geodata.ucdavis.edu)",
+      "WebFetch(domain:infra.datos.gob.ar)",
+      "WebFetch(domain:overpass-api.de)",
+      "WebFetch(domain:overpass.kumi.systems)",
+      "WebFetch(domain:datos.gob.ar)",
+      "WebFetch(domain:github.com)",
+      "mcp__plugin_playwright_playwright__browser_wait_for",
+      "mcp__plugin_playwright_playwright__browser_evaluate",
+      "mcp__plugin_playwright_playwright__browser_resize"
     ]
   }
 }

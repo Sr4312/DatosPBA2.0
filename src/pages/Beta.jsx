@@ -142,7 +142,7 @@ export default function Beta() {
       </div>
 
       {/* Controls */}
-      <div className="sticky top-24 z-40 bg-white border-b border-slate-200 shadow-sm">
+      <div className="sticky top-14 z-40 bg-white border-b border-slate-200 shadow-sm transition-[top] duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
           {/* Search */}
           <div className="relative w-full sm:w-80">

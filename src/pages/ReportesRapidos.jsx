@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { reportesRapidos } from "../components/data/mockData";
 import ReporteCard from "../components/shared/ReporteCard";
@@ -76,7 +76,7 @@ export default function ReportesRapidos() {
       <TickerBar reportes={sorted} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -88,7 +88,7 @@ export default function ReportesRapidos() {
           <p className="text-lg text-slate-600">
             Datos puntuales, comparativas y hallazgos concisos
           </p>
-        </motion.div>
+        </m.div>
 
         <div className="flex flex-col gap-3">
           {sorted.map((r, i) => (

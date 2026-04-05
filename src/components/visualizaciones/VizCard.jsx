@@ -115,7 +115,7 @@ function TableContent({ tableData }) {
 
       <div className="border border-red-200 bg-red-50/50 rounded-lg p-3">
         <p className="text-xs font-bold text-red-700 mb-2">{tableData.highlight.label}</p>
-        <div className="grid grid-cols-5 gap-2">
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
           {tableData.highlight.stats.map((s, i) => (
             <div key={i} className="text-center">
               <div className={`text-lg font-bold ${s.color === 'blue' ? 'text-brand-700' : s.color === 'red' ? 'text-red-600' : 'text-slate-900'}`}>{s.value}</div>

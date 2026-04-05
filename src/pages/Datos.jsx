@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { datasets } from "../components/data/mockData";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -12,15 +12,15 @@ const sortedDatasets = [...datasets].sort((a, b) => (b.fechaOrden || '').localeC
 export default function Datos() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-10">
+      <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-10">
         <h1 className="text-4xl font-bold text-[#0a1628] tracking-tight mb-3">Base de datos y descargas</h1>
         <p className="text-lg text-slate-600">Datasets abiertos para análisis independiente</p>
-      </motion.div>
+      </m.div>
 
       {/* Cards para mobile */}
       <div className="sm:hidden space-y-4">
         {sortedDatasets.map((ds, i) => (
-          <motion.div
+          <m.div
             key={ds.id}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -46,12 +46,12 @@ export default function Datos() {
                 </Link>
               )}
             </div>
-          </motion.div>
+          </m.div>
         ))}
       </div>
 
       {/* Tabla para desktop */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
@@ -69,7 +69,7 @@ export default function Datos() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {datasets.map(ds => (
+            {sortedDatasets.map(ds => (
               <TableRow key={ds.id}>
                 <TableCell>
                   <div>
@@ -95,7 +95,7 @@ export default function Datos() {
             ))}
           </TableBody>
         </Table>
-      </motion.div>
+      </m.div>
     </div>
   );
 }

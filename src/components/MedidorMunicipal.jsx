@@ -100,10 +100,7 @@ export default function MedidorMunicipal() {
         ).addTo(map)
 
         const res = await fetch(
-          'https://wms.ign.gob.ar/geoserver/ows?service=WFS&version=1.0.0' +
-          '&request=GetFeature&typeName=ign:departamento' +
-          '&outputFormat=application/json' +
-          '&CQL_FILTER=in1+LIKE+%2706%25%27&maxFeatures=200'
+          'https://raw.githubusercontent.com/agburgos83/partidosBA/main/partidos.geojson'
         )
         const geojson = await res.json()
         if (!mounted) return
@@ -112,7 +109,7 @@ export default function MedidorMunicipal() {
           style: () => ({ ...STYLE_DEFAULT }),
 
           onEachFeature(feature, layer) {
-            const in1    = feature.properties.in1
+            const in1    = feature.properties.cde
             const codigo = in1ToCode(in1)
             const data   = dataByCode[codigo]
             const name   = feature.properties.nam
@@ -165,12 +162,11 @@ export default function MedidorMunicipal() {
           </h2>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-5" style={{ minHeight: '520px' }}>
+        <div className="flex flex-col lg:flex-row gap-5 min-h-[400px] lg:min-h-[520px]">
 
           {/* ── Map ────────────────────────────────────────────── */}
           <div
-            className="flex-1 relative rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-50"
-            style={{ minHeight: '500px' }}
+            className="flex-1 relative rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-50 min-h-[320px] sm:min-h-[500px]"
           >
             {loading && !error && (
               <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
@@ -182,7 +178,7 @@ export default function MedidorMunicipal() {
                 <span className="text-sm text-slate-400">No se pudo cargar el mapa.</span>
               </div>
             )}
-            <div ref={mapRef} className="w-full h-full" style={{ minHeight: '500px' }} />
+            <div ref={mapRef} className="w-full h-full min-h-[320px] sm:min-h-[500px]" />
           </div>
 
           {/* ── Panel ──────────────────────────────────────────── */}
