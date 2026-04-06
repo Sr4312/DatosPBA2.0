@@ -45,7 +45,18 @@
       "WebFetch(domain:github.com)",
       "mcp__plugin_playwright_playwright__browser_wait_for",
       "mcp__plugin_playwright_playwright__browser_evaluate",
-      "mcp__plugin_playwright_playwright__browser_resize"
+      "mcp__plugin_playwright_playwright__browser_resize",
+      "Bash(node -e ':*)",
+      "Bash(where inkscape:*)",
+      "Bash(where magick:*)",
+      "Bash(where convert:*)",
+      "Bash(where rsvg-convert:*)",
+      "Bash(python3 -c \"import cairosvg\")",
+      "Bash(where npx:*)",
+      "Bash(npx --yes @resvg/resvg-js)",
+      "Bash(python -c \"import cairosvg; cairosvg.svg2png\\(url='c:/Users/salva/Desktop/Claude/public/logo-icon.svg', write_to='c:/Users/salva/Desktop/Claude/public/logo-icon.png', output_width=512, output_height=512\\); print\\('done'\\)\")",
+      "Bash(python -m pip install cairosvg)",
+      "Bash(python -c \"import cairosvg; cairosvg.svg2png\\(url='c:/Users/salva/Desktop/Claude/public/logo-icon.svg', write_to='c:/Users/salva/Desktop/logo-icon.png', output_width=512, output_height=512\\); print\\('done'\\)\")"
     ]
   }
 }

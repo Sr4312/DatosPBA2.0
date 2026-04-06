@@ -1,71 +1,219 @@
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { MUNICIPIOS_DATA } from '@/lib/municipiosData'
 import 'leaflet/dist/leaflet.css'
 
-const INDICATORS = [
-  { key: 'urbano',                   label: 'Urbanización',           good: 'high' },
-  { key: 'electricidad',             label: 'Electricidad',           good: 'high' },
-  { key: 'agua_mejorada',            label: 'Agua mejorada',          good: 'high' },
-  { key: 'saneamiento_mejorado',     label: 'Saneamiento',            good: 'high' },
-  { key: 'fin_secundaria_adultos',   label: 'Secundaria (adultos)',   good: 'high' },
-  { key: 'fin_secundaria_inmediata', label: 'Secundaria (inmediata)', good: 'high' },
-  { key: 'participacion_mujeres',    label: 'Participación mujeres',  good: 'high' },
-  { key: 'tics_celular',             label: 'Acceso celular',         good: 'high' },
-  { key: 'tics_internet',            label: 'Acceso internet',        good: 'high' },
-  { key: 'analfabetismo',            label: 'Analfabetismo',          good: 'low'  },
-  { key: 'desempleo_adulto',         label: 'Desempleo adulto',       good: 'low'  },
-  { key: 'desempleo_joven',          label: 'Desempleo joven',        good: 'low'  },
+/* ── Concejales data ────────────────────────────────────────────────────── */
+const CONCEJALES_RAW = [
+  { municipio: 'General Pueyrredón',  concejales: 24, presupuesto: 7268781224, por_concejal: 302865884, pct_total: 1.98, por_habitante: 10896 },
+  { municipio: 'Lomas de Zamora',     concejales: 24, presupuesto: 5951667942, por_concejal: 247986164, pct_total: 1.59, por_habitante: 8622  },
+  { municipio: 'Tigre',               concejales: 24, presupuesto: 5905089478, por_concejal: 246045395, pct_total: 1.43, por_habitante: 13212 },
+  { municipio: 'San Martín',          concejales: 24, presupuesto: 5538000000, por_concejal: 230750000, pct_total: 1.92, por_habitante: 12291 },
+  { municipio: 'San Isidro',          concejales: 24, presupuesto: 5354210655, por_concejal: 223092111, pct_total: 2.00, por_habitante: 18011 },
+  { municipio: 'Moreno',              concejales: 24, presupuesto: 5299731798, por_concejal: 220822158, pct_total: 1.61, por_habitante: 9191  },
+  { municipio: 'La Matanza',          concejales: 24, presupuesto: 5239562383, por_concejal: 218315099, pct_total: 1.76, por_habitante: 2846  },
+  { municipio: 'Vicente López',       concejales: 24, presupuesto: 4920032203, por_concejal: 205001342, pct_total: 1.65, por_habitante: 17430 },
+  { municipio: 'Avellaneda',          concejales: 24, presupuesto: 4321775857, por_concejal: 180073994, pct_total: 1.56, por_habitante: 11758 },
+  { municipio: 'La Plata',            concejales: 24, presupuesto: 3996257439, por_concejal: 166510727, pct_total: 1.32, por_habitante: 5200  },
+  { municipio: 'Bahía Blanca',        concejales: 24, presupuesto: 3793142327, por_concejal: 158047597, pct_total: 1.69, por_habitante: 11270 },
+  { municipio: 'Escobar',             concejales: 24, presupuesto: 3590787917, por_concejal: 149616163, pct_total: 1.66, por_habitante: 14002 },
+  { municipio: 'Malvinas Argentinas', concejales: 24, presupuesto: 3550000000, por_concejal: 147916667, pct_total: 1.31, por_habitante: 10123 },
+  { municipio: 'Quilmes',             concejales: 24, presupuesto: 3468913906, por_concejal: 144538079, pct_total: 1.33, por_habitante: 5477  },
+  { municipio: 'Almirante Brown',     concejales: 24, presupuesto: 3215060000, por_concejal: 133960833, pct_total: 1.35, por_habitante: 5497  },
+  { municipio: 'Tres de Febrero',     concejales: 24, presupuesto: 2384395484, por_concejal: 99349812,  pct_total: 1.96, por_habitante: 6547  },
+  { municipio: 'José Clemente Paz',   concejales: 24, presupuesto: 2730000000, por_concejal: 113750000, pct_total: 1.89, por_habitante: 8349  },
+  { municipio: 'Lanús',               concejales: 24, presupuesto: 2112134332, por_concejal: 113005597, pct_total: 1.46, por_habitante: 5880  },
+  { municipio: 'Florencio Varela',    concejales: 24, presupuesto: 1877888982, por_concejal: 78245374,  pct_total: 1.73, por_habitante: 3783  },
+  { municipio: 'San Miguel',          concejales: 24, presupuesto: 1895749944, por_concejal: 78989581,  pct_total: 1.04, por_habitante: 5765  },
+  { municipio: 'Berazategui',         concejales: 24, presupuesto: 1638114921, por_concejal: 68254788,  pct_total: 1.60, por_habitante: 4567  },
+  { municipio: 'Morón',               concejales: 24, presupuesto: 1272287898, por_concejal: 53011996,  pct_total: 1.34, por_habitante: 3842  },
+  { municipio: 'General Rodríguez',   concejales: 20, presupuesto: 2311000000, por_concejal: 115550000, pct_total: 2.66, por_habitante: 16106 },
+  { municipio: 'Luján',               concejales: 20, presupuesto: 1713576000, por_concejal: 85678800,  pct_total: 1.96, por_habitante: 15437 },
+  { municipio: 'Tandil',              concejales: 20, presupuesto: 1608910349, por_concejal: 80445517,  pct_total: 1.61, por_habitante: 11052 },
+  { municipio: 'Berisso',             concejales: 20, presupuesto: 1495441711, por_concejal: 74772086,  pct_total: 2.58, por_habitante: 14817 },
+  { municipio: 'Necochea',            concejales: 20, presupuesto: 1232144548, por_concejal: 61607227,  pct_total: 1.56, por_habitante: 12067 },
+  { municipio: 'Ituzaingó',           concejales: 20, presupuesto: 1157010458, por_concejal: 57850523,  pct_total: 1.77, por_habitante: 6420  },
+  { municipio: 'Olavarría',           concejales: 20, presupuesto: 1103050000, por_concejal: 55152500,  pct_total: 1.07, por_habitante: 8772  },
+  { municipio: 'San Nicolás',         concejales: 20, presupuesto: 742741567,  por_concejal: 37137078,  pct_total: 0.76, por_habitante: 4426  },
+  { municipio: 'Junín',               concejales: 20, presupuesto: 580007769,  por_concejal: 29000388,  pct_total: 1.21, por_habitante: 5588  },
+  { municipio: 'Maipú',               concejales: 12, presupuesto: 880515000,  por_concejal: 73376250,  pct_total: 1.09, por_habitante: 4013  },
 ]
+
+function normName(str) {
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim()
+}
+
+const CONCEJALES_DATA = {}
+CONCEJALES_RAW.forEach(d => { CONCEJALES_DATA[normName(d.municipio)] = d })
+
+const CONC_MIN = Math.min(...CONCEJALES_RAW.map(d => d.por_habitante))
+const CONC_MAX = Math.max(...CONCEJALES_RAW.map(d => d.por_habitante))
+
+function concejalesStyle(porHabitante, state) {
+  const t = (porHabitante - CONC_MIN) / (CONC_MAX - CONC_MIN)
+  const fillOpacity = state === 'hover' ? 0.15 + t * 0.55 + 0.15 : 0.08 + t * 0.62
+  return {
+    fillColor: '#7b2d00',
+    fillOpacity: Math.min(fillOpacity, 0.85),
+    color: '#5c2000',
+    weight: state === 'hover' ? 1.2 : 0.8,
+    opacity: 0.8,
+  }
+}
+
+const HIDDEN_STYLE = { fillOpacity: 0, color: 'transparent', weight: 0, opacity: 0 }
+
+/* ── Theme configs ──────────────────────────────────────────────────────── */
+const THEMES = {
+  general: {
+    default:  { fillColor: '#1f4795', fillOpacity: 0.15, color: '#1a3d7c', weight: 0.8, opacity: 0.7 },
+    hover:    { fillColor: '#1f4795', fillOpacity: 0.38, color: '#1a3d7c', weight: 1.2, opacity: 1   },
+    selected: { fillColor: '#0a1628', fillOpacity: 0.65, color: '#93c5fd', weight: 2,   opacity: 1   },
+  },
+  produccion: {
+    default:  { fillColor: '#0e6e55', fillOpacity: 0.15, color: '#0a5240', weight: 0.8, opacity: 0.7 },
+    hover:    { fillColor: '#0e6e55', fillOpacity: 0.38, color: '#0a5240', weight: 1.2, opacity: 1   },
+    selected: { fillColor: '#063d2f', fillOpacity: 0.65, color: '#6ee7b7', weight: 2,   opacity: 1   },
+  },
+  tasas: {
+    default:  { fillColor: '#7c3aed', fillOpacity: 0.15, color: '#6d28d9', weight: 0.8, opacity: 0.7 },
+    hover:    { fillColor: '#7c3aed', fillOpacity: 0.38, color: '#6d28d9', weight: 1.2, opacity: 1   },
+    selected: { fillColor: '#4c1d95', fillOpacity: 0.65, color: '#c4b5fd', weight: 2,   opacity: 1   },
+  },
+  concejales: {
+    selected: { fillColor: '#5c2000', fillOpacity: 0.80, color: '#f97316', weight: 2, opacity: 1 },
+  },
+}
+
+/* ── Temáticas ──────────────────────────────────────────────────────────── */
+const TEMAS = [
+  { id: 'general',    label: 'Información general' },
+  { id: 'produccion', label: 'Índice de producción' },
+  { id: 'tasas',      label: 'Tasas municipales'   },
+  { id: 'concejales', label: 'Gasto concejales'    },
+]
+
+/* ── Indicators per theme ───────────────────────────────────────────────── */
+const INDICATORS = {
+  general: [
+    { key: 'urbano',                   label: 'Urbanización',           good: 'high' },
+    { key: 'electricidad',             label: 'Electricidad',           good: 'high' },
+    { key: 'agua_mejorada',            label: 'Agua mejorada',          good: 'high' },
+    { key: 'saneamiento_mejorado',     label: 'Saneamiento',            good: 'high' },
+    { key: 'fin_secundaria_adultos',   label: 'Secundaria (adultos)',   good: 'high' },
+    { key: 'fin_secundaria_inmediata', label: 'Secundaria (inmediata)', good: 'high' },
+    { key: 'participacion_mujeres',    label: 'Participación mujeres',  good: 'high' },
+    { key: 'tics_celular',             label: 'Acceso celular',         good: 'high' },
+    { key: 'tics_internet',            label: 'Acceso internet',        good: 'high' },
+    { key: 'analfabetismo',            label: 'Analfabetismo',          good: 'low'  },
+    { key: 'desempleo_adulto',         label: 'Desempleo adulto',       good: 'low'  },
+    { key: 'desempleo_joven',          label: 'Desempleo joven',        good: 'low'  },
+  ],
+  produccion: [
+    { key: '_empleo_adulto',  label: 'Tasa de empleo adulto',        good: 'high', derive: d => d.desempleo_adulto != null ? 1 - d.desempleo_adulto : null },
+    { key: '_empleo_joven',   label: 'Tasa de empleo joven',         good: 'high', derive: d => d.desempleo_joven  != null ? 1 - d.desempleo_joven  : null },
+    { key: 'fin_secundaria_adultos', label: 'Capital humano (secundaria)', good: 'high' },
+    { key: 'tics_internet',   label: 'Conectividad productiva',      good: 'high' },
+    { key: 'tics_celular',    label: 'Penetración móvil',            good: 'high' },
+    { key: 'urbano',          label: 'Urbanización',                 good: 'high' },
+    { key: 'participacion_mujeres', label: 'Participación laboral fem.', good: 'high' },
+  ],
+  tasas: null,
+  concejales: 'custom',
+}
 
 // in1 "06441" → MUNICIPIOS_DATA codigo "ARG064410441"
 function in1ToCode(in1) {
-  const tail = in1.slice(2)                                 // "06441" → "441"
-  const id4  = parseInt(tail).toString().padStart(4, '0')  // "441" → "0441"
-  return `ARG06${tail}${id4}`                              // "ARG064410441"
+  const tail = in1.slice(2)
+  const id4  = parseInt(tail).toString().padStart(4, '0')
+  return `ARG06${tail}${id4}`
 }
 
-function IndicatorBar({ label, value, good }) {
+function IndicatorBar({ ind, data }) {
+  const value = ind.derive ? ind.derive(data) : data[ind.key]
   if (value == null) return null
   const pct    = value * 100
   const barPct = Math.min(pct, 100)
   const color  =
-    good === 'high'
+    ind.good === 'high'
       ? pct > 70 ? '#1a3d7c' : pct > 40 ? '#3d65b2' : '#94a3b8'
       : pct < 10 ? '#1a3d7c' : pct < 25 ? '#f59e0b' : '#ef4444'
-
   return (
     <div className="flex flex-col gap-1">
       <div className="flex justify-between items-center">
-        <span className="text-xs text-slate-500">{label}</span>
+        <span className="text-xs text-slate-500">{ind.label}</span>
         <span className="text-xs font-semibold text-slate-900">{pct.toFixed(1)}%</span>
       </div>
       <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-        <div
-          className="h-full rounded-full transition-all duration-500"
-          style={{ width: `${barPct}%`, backgroundColor: color }}
-        />
+        <div className="h-full rounded-full transition-all duration-500" style={{ width: `${barPct}%`, backgroundColor: color }} />
       </div>
     </div>
   )
 }
 
-const STYLE_DEFAULT  = { fillColor: '#1f4795', fillOpacity: 0.15, color: '#1a3d7c', weight: 0.8,  opacity: 0.7 }
-const STYLE_HOVER    = { fillColor: '#1f4795', fillOpacity: 0.35, color: '#1a3d7c', weight: 1.2,  opacity: 1   }
-const STYLE_SELECTED = { fillColor: '#0a1628', fillOpacity: 0.65, color: '#93c5fd', weight: 2,    opacity: 1   }
+/* ── Concejales legend ──────────────────────────────────────────────────── */
+function ConcejalesLegend() {
+  return (
+    <div className="flex items-center gap-2 mt-3">
+      <span className="text-[10px] text-slate-400">Menos gasto</span>
+      <div className="flex-1 h-2 rounded-full" style={{ background: 'linear-gradient(to right, rgba(123,45,0,0.1), rgba(123,45,0,0.85))' }} />
+      <span className="text-[10px] text-slate-400">Más gasto</span>
+    </div>
+  )
+}
 
-export default function MedidorMunicipal() {
-  const mapRef        = useRef(null)
-  const mapInstRef    = useRef(null)
-  const selectedRef   = useRef(null)
-  const [selected,   setSelected]  = useState(null)
-  const [loading,    setLoading]   = useState(true)
-  const [error,      setError]     = useState(false)
+/* ── Main component ─────────────────────────────────────────────────────── */
+export default function AtlasMunicipal() {
+  const mapRef      = useRef(null)
+  const mapInstRef  = useRef(null)
+  const selectedRef = useRef(null)
+  const geoLayerRef = useRef(null)
+  const temaRef     = useRef('general')
+
+  const [selected, setSelected] = useState(null)
+  const [loading,  setLoading]  = useState(true)
+  const [error,    setError]    = useState(false)
+  const [tema,     setTema]     = useState('general')
 
   const dataByCode = useMemo(() => {
     const m = {}
     MUNICIPIOS_DATA.forEach(d => { m[d.codigo] = d })
     return m
   }, [])
+
+  /* Restyle all layers when tema changes */
+  const updateStyles = useCallback(() => {
+    if (!geoLayerRef.current) return
+    const t = temaRef.current
+    geoLayerRef.current.eachLayer(layer => {
+      if (layer === selectedRef.current) {
+        layer.setStyle(THEMES[t]?.selected || THEMES.general.selected)
+        return
+      }
+      if (t === 'concejales') {
+        const cd = layer._concejalesData
+        layer.setStyle(cd ? concejalesStyle(cd.por_habitante, 'default') : HIDDEN_STYLE)
+      } else {
+        layer.setStyle(THEMES[t]?.default || THEMES.general.default)
+      }
+    })
+  }, [])
+
+  useEffect(() => {
+    temaRef.current = tema
+    // clear selection on tab switch
+    if (selectedRef.current) {
+      const t = tema
+      if (t === 'concejales') {
+        const cd = selectedRef.current._concejalesData
+        selectedRef.current.setStyle(cd ? concejalesStyle(cd.por_habitante, 'default') : HIDDEN_STYLE)
+      } else {
+        selectedRef.current.setStyle(THEMES[t]?.default || THEMES.general.default)
+      }
+      selectedRef.current = null
+    }
+    setSelected(null)
+    updateStyles()
+  }, [tema, updateStyles])
 
   useEffect(() => {
     let mounted = true
@@ -76,69 +224,101 @@ export default function MedidorMunicipal() {
         const L = (await import('leaflet')).default
         if (!mounted || !mapRef.current) return
 
-        const bounds = L.latLngBounds(
-          L.latLng(-43.5, -65.5),
-          L.latLng(-32.5, -55.5)
-        )
-
+        const bounds = L.latLngBounds(L.latLng(-43.5, -65.5), L.latLng(-32.5, -55.5))
         map = L.map(mapRef.current, {
-          center: [-37.5, -61],
-          zoom: 6,
-          minZoom: 6,
-          maxZoom: 9,
-          maxBounds: bounds,
-          maxBoundsViscosity: 1.0,
-          zoomControl: true,
-          attributionControl: false,
+          center: [-37.5, -61], zoom: 6, minZoom: 6, maxZoom: 9,
+          maxBounds: bounds, maxBoundsViscosity: 1.0,
+          zoomControl: true, attributionControl: false,
         })
         mapInstRef.current = map
 
-        // Minimal tile layer — clean backdrop for shapes
-        L.tileLayer(
-          'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
-          { maxZoom: 15, opacity: 0.65 }
-        ).addTo(map)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', { maxZoom: 15, opacity: 0.65 }).addTo(map)
 
-        const res = await fetch(
-          'https://raw.githubusercontent.com/agburgos83/partidosBA/main/partidos.geojson'
-        )
-        const geojson = await res.json()
+        const IGN_URL =
+          'https://wfs.ign.gob.ar/geoserver/ign/ows?service=WFS&version=2.0.0&request=GetFeature' +
+          '&typeName=ign:departamento&CQL_FILTER=provincia_id%3D%2706%27' +
+          '&outputFormat=application/json&srsName=EPSG:4326'
+        const FALLBACK_URL = 'https://raw.githubusercontent.com/agburgos83/partidosBA/main/partidos.geojson'
+
+        let geojson = null
+        try {
+          const res = await fetch(IGN_URL)
+          if (!res.ok) throw new Error('IGN down')
+          geojson = await res.json()
+        } catch {
+          const res = await fetch(FALLBACK_URL)
+          geojson = await res.json()
+        }
         if (!mounted) return
 
-        L.geoJSON(geojson, {
-          style: () => ({ ...STYLE_DEFAULT }),
+        const geoLayer = L.geoJSON(geojson, {
+          style: () => ({ ...THEMES.general.default }),
 
           onEachFeature(feature, layer) {
-            const in1    = feature.properties.cde
-            const codigo = in1ToCode(in1)
-            const data   = dataByCode[codigo]
-            const name   = feature.properties.nam
+            const p      = feature.properties
+            const in1    = p.in1 || p.cde
+            const name   = p.nombre || p.nam || ''
+            const codigo = in1 ? in1ToCode(in1) : null
 
-            layer.bindTooltip(name, {
-              sticky:    true,
-              direction: 'auto',
-              className: 'muni-tooltip',
-            })
+            layer._municipiosData   = codigo ? dataByCode[codigo] : null
+            layer._concejalesData   = CONCEJALES_DATA[normName(name)] || null
+            layer._featureName      = name
+
+            layer.bindTooltip(name, { sticky: true, direction: 'auto', className: 'muni-tooltip' })
 
             layer.on('mouseover', e => {
-              if (e.target !== selectedRef.current) e.target.setStyle(STYLE_HOVER)
+              if (e.target === selectedRef.current) return
+              const t = temaRef.current
+              if (t === 'concejales') {
+                const cd = e.target._concejalesData
+                if (cd) e.target.setStyle(concejalesStyle(cd.por_habitante, 'hover'))
+              } else {
+                e.target.setStyle(THEMES[t]?.hover || THEMES.general.hover)
+              }
             })
 
             layer.on('mouseout', e => {
-              if (e.target !== selectedRef.current) e.target.setStyle(STYLE_DEFAULT)
+              if (e.target === selectedRef.current) return
+              const t = temaRef.current
+              if (t === 'concejales') {
+                const cd = e.target._concejalesData
+                e.target.setStyle(cd ? concejalesStyle(cd.por_habitante, 'default') : HIDDEN_STYLE)
+              } else {
+                e.target.setStyle(THEMES[t]?.default || THEMES.general.default)
+              }
             })
 
             layer.on('click', () => {
+              const t  = temaRef.current
+              const cd = layer._concejalesData
+              // In concejales mode, ignore clicks on hidden municipalities
+              if (t === 'concejales' && !cd) return
+
               if (selectedRef.current && selectedRef.current !== layer) {
-                selectedRef.current.setStyle(STYLE_DEFAULT)
+                const prev = selectedRef.current
+                const prevCd = prev._concejalesData
+                if (t === 'concejales') {
+                  prev.setStyle(prevCd ? concejalesStyle(prevCd.por_habitante, 'default') : HIDDEN_STYLE)
+                } else {
+                  prev.setStyle(THEMES[t]?.default || THEMES.general.default)
+                }
               }
-              layer.setStyle(STYLE_SELECTED)
+
+              layer.setStyle(THEMES[t]?.selected || THEMES.general.selected)
               selectedRef.current = layer
-              setSelected(data ? { ...data, nombre: name } : { nombre: name, _noData: true })
+
+              const muniData = layer._municipiosData
+              setSelected({
+                nombre: name,
+                ...(muniData || {}),
+                _concejales: cd || null,
+                _noData: !muniData && !cd,
+              })
             })
           },
         }).addTo(map)
 
+        geoLayerRef.current = geoLayer
         setLoading(false)
       } catch {
         if (mounted) setError(true)
@@ -146,28 +326,186 @@ export default function MedidorMunicipal() {
     }
 
     init()
-    return () => {
-      mounted = false
-      if (map) map.remove()
-    }
+    return () => { mounted = false; if (map) map.remove() }
   }, [dataByCode])
+
+  const indicators = INDICATORS[tema]
+
+  /* Panel content */
+  function PanelContent() {
+    if (!selected) {
+      return (
+        <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 p-6">
+          <div className="w-12 h-12 rounded-full bg-brand-50 flex items-center justify-center">
+            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#3d65b2" strokeWidth="1.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+            </svg>
+          </div>
+          <p className="text-sm font-medium text-slate-600">Seleccioná un municipio</p>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            {tema === 'concejales'
+              ? 'Solo los municipios coloreados tienen datos. Hacé clic para ver el detalle.'
+              : 'Hacé clic sobre cualquier partido del mapa para ver sus indicadores.'}
+          </p>
+        </div>
+      )
+    }
+
+    if (selected._noData) {
+      return (
+        <div className="flex-1 flex flex-col items-center justify-center text-center gap-2 p-6">
+          <p className="text-base font-bold text-[#0a1628]">{selected.nombre}</p>
+          <p className="text-xs text-slate-400">Sin datos disponibles para este partido.</p>
+        </div>
+      )
+    }
+
+    return (
+      <div className="flex flex-col h-full overflow-hidden">
+        {/* Header */}
+        <div className="px-5 pt-5 pb-4 border-b border-slate-100 shrink-0">
+          <h3 className="text-lg font-bold text-[#0a1628] leading-tight">{selected.nombre}</h3>
+          {tema !== 'concejales' && (
+            <div className="flex flex-wrap gap-4 mt-3">
+              {selected.poblacion && (
+                <div>
+                  <p className="text-xl font-bold text-brand-600 leading-none">{selected.poblacion.toLocaleString('es-AR')}</p>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Habitantes</p>
+                </div>
+              )}
+              {selected.hogares && (
+                <div>
+                  <p className="text-xl font-bold text-brand-600 leading-none">{selected.hogares.toLocaleString('es-AR')}</p>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Hogares</p>
+                </div>
+              )}
+              {selected.superficie_km2 != null && (
+                <div>
+                  <p className="text-xl font-bold text-brand-600 leading-none">{selected.superficie_km2.toLocaleString('es-AR')}</p>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">km²</p>
+                </div>
+              )}
+            </div>
+          )}
+          {tema === 'concejales' && selected._concejales && (
+            <div className="flex flex-wrap gap-4 mt-3">
+              <div>
+                <p className="text-xl font-bold text-orange-600 leading-none">{selected._concejales.concejales}</p>
+                <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Concejales</p>
+              </div>
+              <div>
+                <p className="text-xl font-bold text-orange-600 leading-none">{selected._concejales.pct_total}%</p>
+                <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Del presupuesto</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Tema label */}
+        <div className="px-5 pt-3 pb-1 shrink-0">
+          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
+            {TEMAS.find(t => t.id === tema)?.label}
+          </p>
+        </div>
+
+        {/* Body */}
+        {indicators === null ? (
+          <div className="flex-1 flex flex-col items-center justify-center text-center gap-2 px-6 pb-6">
+            <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center mb-1">
+              <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#94a3b8" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <p className="text-sm font-medium text-slate-600">Próximamente</p>
+            <p className="text-xs text-slate-400 leading-relaxed">Estamos procesando datos de tasas e ingresos municipales.</p>
+          </div>
+        ) : indicators === 'custom' ? (
+          /* Concejales detail */
+          <div className="flex-1 overflow-y-auto px-5 py-4">
+            {selected._concejales ? (() => {
+              const cd = selected._concejales
+              const rows = [
+                { label: 'Presupuesto total concejo',  value: `$\u00A0${cd.presupuesto.toLocaleString('es-AR')}` },
+                { label: 'Gasto por concejal',         value: `$\u00A0${cd.por_concejal.toLocaleString('es-AR')}` },
+                { label: 'Gasto por habitante',        value: `$\u00A0${cd.por_habitante.toLocaleString('es-AR')}` },
+                { label: '% sobre presupuesto total',  value: `${cd.pct_total}%` },
+              ]
+              const t = (cd.por_habitante - CONC_MIN) / (CONC_MAX - CONC_MIN)
+              return (
+                <div className="flex flex-col gap-4">
+                  {rows.map(r => (
+                    <div key={r.label}>
+                      <p className="text-xs text-slate-400 mb-0.5">{r.label}</p>
+                      <p className="text-sm font-semibold text-slate-900">{r.value}</p>
+                    </div>
+                  ))}
+                  <div className="pt-2 border-t border-slate-100">
+                    <p className="text-xs text-slate-400 mb-2">Gasto por habitante vs. provincia</p>
+                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-500" style={{ width: `${t * 100}%`, background: 'linear-gradient(to right, rgba(123,45,0,0.4), rgba(123,45,0,0.9))' }} />
+                    </div>
+                    <div className="flex justify-between mt-1">
+                      <span className="text-[10px] text-slate-400">${CONC_MIN.toLocaleString('es-AR')}</span>
+                      <span className="text-[10px] text-slate-400">${CONC_MAX.toLocaleString('es-AR')}</span>
+                    </div>
+                  </div>
+                </div>
+              )
+            })() : (
+              <p className="text-xs text-slate-400">Sin datos de concejales para este partido.</p>
+            )}
+          </div>
+        ) : (
+          <div className="flex-1 overflow-y-auto px-5 py-3 flex flex-col gap-3">
+            {indicators.map(ind => <IndicatorBar key={ind.key} ind={ind} data={selected} />)}
+          </div>
+        )}
+      </div>
+    )
+  }
 
   return (
     <section className="mb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-        <div className="mb-8 flex items-center border-b-2 border-[#0a1628] pb-3">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#0a1628] leading-none tracking-tight">
-            Medidor Municipal
-          </h2>
+        {/* Header + tabs */}
+        <div className="mb-6">
+          <div className="flex items-center border-b-2 border-[#0a1628] pb-3 mb-5">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#0a1628] leading-none tracking-tight">
+              Atlas Municipal
+            </h2>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {TEMAS.map(t => {
+              const colors = {
+                general:    tema === t.id ? 'bg-[#0a1628] text-white border-[#0a1628]'                       : 'bg-white text-slate-500 border-slate-200 hover:border-[#1a3d7c] hover:text-[#1a3d7c]',
+                produccion: tema === t.id ? 'bg-[#063d2f] text-white border-[#063d2f]'                       : 'bg-white text-slate-500 border-slate-200 hover:border-[#0a5240] hover:text-[#0a5240]',
+                tasas:      tema === t.id ? 'bg-[#4c1d95] text-white border-[#4c1d95]'                       : 'bg-white text-slate-500 border-slate-200 hover:border-[#6d28d9] hover:text-[#6d28d9]',
+                concejales: tema === t.id ? 'bg-[#7b2d00] text-white border-[#7b2d00]'                       : 'bg-white text-slate-500 border-slate-200 hover:border-[#5c2000] hover:text-[#5c2000]',
+              }
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => setTema(t.id)}
+                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${colors[t.id]}`}
+                >
+                  {t.label}
+                  {t.id === 'tasas' && (
+                    <span className="ml-2 text-[10px] font-semibold uppercase tracking-wider opacity-60">próx.</span>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+
+          {tema === 'concejales' && <ConcejalesLegend />}
         </div>
 
         <div className="flex flex-col lg:flex-row gap-5 min-h-[400px] lg:min-h-[520px]">
 
-          {/* ── Map ────────────────────────────────────────────── */}
-          <div
-            className="flex-1 relative rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-50 min-h-[320px] sm:min-h-[500px]"
-          >
+          {/* Map */}
+          <div className="flex-1 relative rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-50 min-h-[320px] sm:min-h-[500px]">
             {loading && !error && (
               <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
                 <span className="text-sm text-slate-400">Cargando mapa...</span>
@@ -181,83 +519,9 @@ export default function MedidorMunicipal() {
             <div ref={mapRef} className="w-full h-full min-h-[320px] sm:min-h-[500px]" />
           </div>
 
-          {/* ── Panel ──────────────────────────────────────────── */}
+          {/* Panel */}
           <div className="lg:w-80 shrink-0 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
-
-            {!selected ? (
-              <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 p-6">
-                <div className="w-12 h-12 rounded-full bg-brand-50 flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#3d65b2" strokeWidth="1.5">
-                    <path strokeLinecap="round" strokeLinejoin="round"
-                      d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
-                  </svg>
-                </div>
-                <p className="text-sm font-medium text-slate-600">Seleccioná un municipio</p>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Hacé clic sobre cualquier partido del mapa para ver sus indicadores.
-                </p>
-              </div>
-
-            ) : selected._noData ? (
-              <div className="flex-1 flex flex-col items-center justify-center text-center gap-2 p-6">
-                <p className="text-base font-bold text-[#0a1628]">{selected.nombre}</p>
-                <p className="text-xs text-slate-400">Sin datos disponibles para este partido.</p>
-              </div>
-
-            ) : (
-              <div className="flex flex-col h-full overflow-hidden">
-
-                {/* Header */}
-                <div className="px-5 pt-5 pb-4 border-b border-slate-100 shrink-0">
-                  <h3 className="text-lg font-bold text-[#0a1628] leading-tight">{selected.nombre}</h3>
-                  <div className="flex flex-wrap gap-4 mt-3">
-                    <div>
-                      <p className="text-xl font-bold text-brand-600 leading-none">
-                        {selected.poblacion?.toLocaleString('es-AR') ?? 'N/D'}
-                      </p>
-                      <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Habitantes</p>
-                    </div>
-                    <div>
-                      <p className="text-xl font-bold text-brand-600 leading-none">
-                        {selected.hogares?.toLocaleString('es-AR') ?? 'N/D'}
-                      </p>
-                      <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Hogares</p>
-                    </div>
-                    {selected.superficie_km2 != null && (
-                      <div>
-                        <p className="text-xl font-bold text-brand-600 leading-none">
-                          {selected.superficie_km2.toLocaleString('es-AR')}
-                        </p>
-                        <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">km²</p>
-                      </div>
-                    )}
-                    {selected.densidad_pobl != null && (
-                      <div>
-                        <p className="text-xl font-bold text-brand-600 leading-none">
-                          {selected.densidad_pobl < 10
-                            ? selected.densidad_pobl.toFixed(1)
-                            : Math.round(selected.densidad_pobl).toLocaleString('es-AR')}
-                        </p>
-                        <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">hab/km²</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Indicators */}
-                <div className="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-3">
-                  {INDICATORS.map(ind => (
-                    <IndicatorBar
-                      key={ind.key}
-                      label={ind.label}
-                      value={selected[ind.key]}
-                      good={ind.good}
-                    />
-                  ))}
-                </div>
-
-              </div>
-            )}
+            <PanelContent />
           </div>
 
         </div>

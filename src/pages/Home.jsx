@@ -1,37 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { m } from 'framer-motion'
-import { BarChart2, Table2, TrendingUp, TrendingDown, Minus } from 'lucide-react'
-import { informes, datasets, hilos, reportesRapidos, visualizaciones } from '@/components/data/mockData'
+import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
+import { informes, hilos, reportesRapidos } from '@/components/data/mockData'
 import EntryCard from '@/components/shared/EntryCard'
 import MedidorMunicipal from '@/components/MedidorMunicipal'
 import { Badge } from '@/components/ui/badge'
-import {
-  Chart as ChartJS,
-  CategoryScale, LinearScale,
-  BarElement, LineElement, PointElement,
-  Title, Tooltip, Legend, Filler,
-} from 'chart.js'
-import { Bar, Line } from 'react-chartjs-2'
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend, Filler)
 
 const byDate = arr => [...arr].sort((a, b) => (b.fechaOrden || '').localeCompare(a.fechaOrden || ''))
-
-const TIPO_ICON  = { bar: BarChart2, line: BarChart2, tabla: Table2 }
-const TIPO_LABEL = { bar: 'Gráfico de barras', line: 'Serie temporal', tabla: 'Tabla' }
-const CHART_COMPONENTS = { bar: Bar, line: Line }
-
-const MINI_OPTIONS = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: { legend: { display: false }, tooltip: { enabled: false } },
-  scales: {
-    x: { ticks: { display: false }, grid: { display: false }, border: { display: false } },
-    y: { ticks: { display: false }, grid: { display: false }, border: { display: false } },
-  },
-  animation: false,
-}
 
 function SectionHeader({ title, href }) {
   return (
@@ -146,124 +122,6 @@ function PublicacionesTicker({ hilos }) {
   )
 }
 
-/* ── Visualizaciones: compact multi-card grid ──────────────────────────── */
-function VizMiniGrid({ vizs }) {
-  return (
-    <section className="mb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <SectionHeader title="Visualizaciones" href="/visualizaciones" />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {vizs.map((viz, i) => {
-            const Icon = TIPO_ICON[viz.tipo] ?? BarChart2
-            const ChartComponent = viz.tipo !== 'tabla' ? CHART_COMPONENTS[viz.tipo] ?? Bar : null
-            return (
-              <m.div
-                key={viz.id}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.06, duration: 0.45 }}
-                className="bg-white rounded-xl border border-slate-200/60 p-4 flex flex-col gap-2 hover:shadow-md transition-shadow shadow-sm"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-1.5 text-slate-400">
-                    <Icon className="w-3.5 h-3.5 shrink-0" />
-                    <span className="text-[10px]">{TIPO_LABEL[viz.tipo]}</span>
-                  </div>
-                  {viz.tema && <Badge variant="secondary" className="text-[10px] py-0 shrink-0">{viz.tema}</Badge>}
-                </div>
-                <h3 className="text-xs font-semibold text-slate-900 leading-snug line-clamp-2">{viz.titulo}</h3>
-                {ChartComponent && viz.chartData ? (
-                  <div className="h-20 mt-1">
-                    <ChartComponent data={viz.chartData} options={MINI_OPTIONS} />
-                  </div>
-                ) : (
-                  <div className="h-20 mt-1 bg-brand-50 rounded-lg flex items-center justify-center">
-                    <Table2 className="w-5 h-5 text-brand-200" />
-                  </div>
-                )}
-                <div className="mt-auto flex flex-col gap-1">
-                  <Link
-                    to={`/visualizaciones#${viz.id}`}
-                    className="text-[11px] text-brand-600 hover:text-brand-700 font-medium no-underline"
-                  >
-                    Ver completo →
-                  </Link>
-                  {viz.informeUrl && (
-                    <a
-                      href={viz.informeUrl}
-                      className="text-[11px] text-slate-500 hover:text-slate-700 font-medium no-underline"
-                    >
-                      Ver informe →
-                    </a>
-                  )}
-                </div>
-              </m.div>
-            )
-          })}
-        </div>
-      </div>
-    </section>
-  )
-}
-
-/* ── Datasets: row design with stats ──────────────────────────────────────── */
-function DatasetsSection({ dsets }) {
-  const visible = dsets.slice(0, 5)
-  const hasMore = dsets.length > 5
-  return (
-    <section className="mb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <SectionHeader title="Datasets" href="/datos" />
-        <div className="flex flex-col gap-2">
-          {visible.map((ds, i) => (
-            <m.div
-              key={ds.id}
-              initial={{ opacity: 0, x: -12 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05, duration: 0.4 }}
-              className="bg-white rounded-xl border border-slate-200/60 px-5 py-3.5 flex items-center gap-4 hover:shadow-sm hover:border-brand-200 transition-all shadow-sm"
-            >
-              <div className="shrink-0">
-                <Badge variant="secondary" className="font-mono text-[11px]">{ds.formato}</Badge>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-slate-900 truncate">{ds.nombre}</p>
-                <p className="text-xs text-slate-400 line-clamp-1 mt-0.5">{ds.descripcion}</p>
-              </div>
-              <div className="hidden sm:flex items-center gap-6 shrink-0 text-xs text-slate-500">
-                <div className="text-center">
-                  <p className="font-semibold text-slate-800">{ds.registros?.toLocaleString('es-AR')}</p>
-                  <p className="text-slate-400">registros</p>
-                </div>
-                <div className="text-center">
-                  <p className="font-semibold text-slate-800">{ds.variables}</p>
-                  <p className="text-slate-400">variables</p>
-                </div>
-                <div className="text-center hidden lg:block">
-                  <p className="font-semibold text-slate-800 text-xs">{ds.cobertura}</p>
-                  <p className="text-slate-400">cobertura</p>
-                </div>
-                <p className="text-slate-300 text-[11px]">{ds.fechaActualizacion}</p>
-              </div>
-            </m.div>
-          ))}
-        </div>
-        {hasMore && (
-          <div className="mt-4 flex justify-center">
-            <Link
-              to="/datos"
-              className="px-6 py-2.5 rounded-full border border-slate-200 text-sm font-medium text-slate-600 hover:text-brand-600 hover:border-brand-300 hover:bg-brand-50 transition-all no-underline"
-            >
-              Ver más →
-            </Link>
-          </div>
-        )}
-      </div>
-    </section>
-  )
-}
 
 const RADAR_THEMES = [
   { id: 'Economía',                     lines: ['Economía'],                        deg: 0   },
@@ -413,8 +271,6 @@ export default function Home() {
   const allInformes = byDate(informes)
   const allReportes = byDate(reportesRapidos)
   const allHilos    = byDate(hilos)
-  const allViz      = byDate(visualizaciones)
-  const allDatasets = byDate(datasets)
 
   return (
     <div>
@@ -494,11 +350,6 @@ export default function Home() {
         {/* 3. Publicaciones — vertical auto-scroll */}
         <PublicacionesTicker hilos={allHilos} />
 
-        {/* 4. Visualizaciones — compact multi-card grid */}
-        <VizMiniGrid vizs={allViz} />
-
-        {/* 5. Datasets — row design */}
-        <DatasetsSection dsets={allDatasets} />
       </div>
     </div>
   )

@@ -12,6 +12,7 @@ const ReportesRapidos = lazy(() => import('./pages/ReportesRapidos'))
 const Visualizaciones = lazy(() => import('./pages/Visualizaciones'))
 const InformeDetalle  = lazy(() => import('./pages/InformeDetalle'))
 const Beta            = lazy(() => import('./pages/Beta'))
+const QuienesSomos    = lazy(() => import('./pages/QuienesSomos'))
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="reportes" element={<Suspense fallback={null}><ReportesRapidos /></Suspense>} />
             <Route path="beta" element={<Suspense fallback={null}><Beta /></Suspense>} />
             <Route path="visualizaciones" element={<Suspense fallback={null}><Visualizaciones /></Suspense>} />
+            <Route path="quienes-somos" element={<Suspense fallback={null}><QuienesSomos /></Suspense>} />
           </Route>
         </Routes>
       </BrowserRouter>

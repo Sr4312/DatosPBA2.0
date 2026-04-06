@@ -6,7 +6,7 @@ import SearchOverlay from './SearchOverlay'
 const NAV = [
   { to: '/informes',        label: 'Informes' },
   { to: '/hilos',           label: 'Publicaciones' },
-  { to: '/visualizaciones', label: 'Visualizaciones' },
+  { to: '/quienes-somos',   label: '¿Quiénes somos?' },
   { to: '/datos',           label: 'Datasets' },
   { to: '/beta',            label: 'Beta', icon: true },
 ]
