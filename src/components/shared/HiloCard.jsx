@@ -9,7 +9,7 @@ export default function HiloCard({ hilo, index = 0 }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.06, duration: 0.5 }}
-      className="bg-white rounded-2xl border border-slate-200/60 flex flex-col hover:shadow-md transition-shadow overflow-hidden"
+      className="bg-white rounded-xl border border-slate-200/60 border-l-4 border-l-purple-400 flex flex-col hover:shadow-md hover:border-l-purple-500 transition-all overflow-hidden"
     >
       {hilo.imagen && (
         <img

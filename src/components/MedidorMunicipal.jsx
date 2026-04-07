@@ -499,7 +499,19 @@ export default function AtlasMunicipal() {
             })}
           </div>
 
-          {tema === 'concejales' && <ConcejalesLegend />}
+          {(tema === 'general' || tema === 'produccion') && (
+            <p className="text-[11px] text-slate-400 mt-2">
+              Fuente: CAF — Banco de Desarrollo de América Latina y el Caribe
+            </p>
+          )}
+          {tema === 'concejales' && (
+            <>
+              <ConcejalesLegend />
+              <p className="text-[11px] text-slate-400 mt-2">
+                Fuente: Fundación Libertad
+              </p>
+            </>
+          )}
         </div>
 
         <div className="flex flex-col lg:flex-row gap-5 min-h-[400px] lg:min-h-[520px]">

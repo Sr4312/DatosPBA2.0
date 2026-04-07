@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from "react";
-import { m } from "framer-motion";
-import { hilos } from "../components/data/mockData";
-import HiloCard from "../components/shared/HiloCard";
-import FilterBar from "../components/shared/FilterBar";
+import { useState, useMemo } from 'react'
+import { m } from 'framer-motion'
+import { hilos } from '@/components/data/mockData'
+import HiloCard from '@/components/shared/HiloCard'
+import FilterBar from '@/components/shared/FilterBar'
 
 export default function Hilos() {
   const [search, setSearch] = useState("");
@@ -23,7 +23,7 @@ export default function Hilos() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
       <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mb-10">
-        <h1 className="text-4xl font-bold text-[#0a1628] tracking-tight mb-3">Hilos y publicaciones destacadas</h1>
+        <h1 className="font-display text-4xl font-bold text-[#0a1628] tracking-tight mb-3">Hilos y publicaciones destacadas</h1>
         <p className="text-lg text-slate-600">Análisis en formato hilo para redes sociales</p>
       </m.div>
 

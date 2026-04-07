@@ -9,7 +9,6 @@ const Informes        = lazy(() => import('./pages/Informes'))
 const Datos           = lazy(() => import('./pages/Datos'))
 const Hilos           = lazy(() => import('./pages/Hilos'))
 const ReportesRapidos = lazy(() => import('./pages/ReportesRapidos'))
-const Visualizaciones = lazy(() => import('./pages/Visualizaciones'))
 const InformeDetalle  = lazy(() => import('./pages/InformeDetalle'))
 const Beta            = lazy(() => import('./pages/Beta'))
 const QuienesSomos    = lazy(() => import('./pages/QuienesSomos'))
@@ -28,7 +27,6 @@ export default function App() {
             <Route path="hilos" element={<Suspense fallback={null}><Hilos /></Suspense>} />
             <Route path="reportes" element={<Suspense fallback={null}><ReportesRapidos /></Suspense>} />
             <Route path="beta" element={<Suspense fallback={null}><Beta /></Suspense>} />
-            <Route path="visualizaciones" element={<Suspense fallback={null}><Visualizaciones /></Suspense>} />
             <Route path="quienes-somos" element={<Suspense fallback={null}><QuienesSomos /></Suspense>} />
           </Route>
         </Routes>

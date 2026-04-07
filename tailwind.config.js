@@ -5,6 +5,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
+        display: ['"Playfair Display"', 'serif'],
       },
       fontSize: {
         'xs':   ['0.78rem',  { lineHeight: '1.15rem' }],

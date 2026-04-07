@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: #d0daf0;
+  color: #152952;
+}
+
 body {
   font-family: 'Poppins', sans-serif;
   overflow-x: hidden;
@@ -14,13 +23,8 @@ body {
 }
 
 .bg-pattern-dark {
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(255,255,255,0.04) 0px,
-    rgba(255,255,255,0.04) 1px,
-    transparent 1px,
-    transparent 64px
-  );
+  background-image: radial-gradient(circle, rgba(255,255,255,0.09) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
 @keyframes ticker-h {

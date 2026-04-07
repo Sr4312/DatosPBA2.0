@@ -3,17 +3,17 @@ import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
 
 function TendenciaIcon({ tendencia }) {
   if (tendencia === 'sube') return (
-    <div className="w-8 h-8 rounded bg-green-50 flex items-center justify-center shrink-0">
+    <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center shrink-0">
       <TrendingUp className="w-4 h-4 text-green-600" />
     </div>
   )
   if (tendencia === 'baja') return (
-    <div className="w-8 h-8 rounded bg-red-50 flex items-center justify-center shrink-0">
+    <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center shrink-0">
       <TrendingDown className="w-4 h-4 text-red-500" />
     </div>
   )
   return (
-    <div className="w-8 h-8 rounded bg-slate-50 flex items-center justify-center shrink-0">
+    <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center shrink-0">
       <Minus className="w-4 h-4 text-slate-400" />
     </div>
   )
@@ -26,13 +26,19 @@ export default function ReporteCard({ reporte, index = 0 }) {
     ? 'text-red-500'
     : 'text-slate-400'
 
+  const borderAccent = reporte.tendencia === 'sube'
+    ? 'border-l-green-400'
+    : reporte.tendencia === 'baja'
+    ? 'border-l-red-400'
+    : 'border-l-slate-300'
+
   return (
     <m.div
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05, duration: 0.45 }}
-      className="bg-white rounded-xl border border-slate-200/60 px-5 py-4 flex items-center gap-4 hover:shadow-md transition-shadow"
+      className={`bg-white rounded-xl border border-slate-200/60 border-l-4 ${borderAccent} px-5 py-4 flex items-center gap-4 hover:shadow-md transition-shadow`}
     >
       <TendenciaIcon tendencia={reporte.tendencia} />
 

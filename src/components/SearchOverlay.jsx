@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, X } from 'lucide-react'
-import { informes, hilos, reportesRapidos, visualizaciones, datasets } from '@/components/data/mockData'
+import { informes, hilos, reportesRapidos, datasets } from '@/components/data/mockData'
 
 const INDEX = [
   ...informes.map(x => ({
@@ -29,14 +29,6 @@ const INDEX = [
     url: '/reportes',
     tema: x.tema,
   })),
-  ...visualizaciones.map(x => ({
-    id: x.id,
-    tipo: 'Visualización',
-    titulo: x.titulo,
-    subtitulo: x.fuente,
-    url: `/visualizaciones#${x.id}`,
-    tema: x.tema,
-  })),
   ...datasets.map(x => ({
     id: x.id,
     tipo: 'Dataset',
@@ -60,7 +52,6 @@ const TIPO_COLOR = {
   'Informe':        'bg-brand-100 text-brand-700',
   'Publicación':    'bg-purple-100 text-purple-700',
   'Reporte rápido': 'bg-amber-100 text-amber-700',
-  'Visualización':  'bg-sky-100 text-sky-700',
   'Dataset':        'bg-slate-100 text-slate-600',
 }
 

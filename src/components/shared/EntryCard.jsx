@@ -10,13 +10,13 @@ export default function EntryCard({ titulo, resumen, fecha, tema, municipio, ins
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.06, duration: 0.5 }}
-      className="bg-white rounded-xl border border-slate-200/60 flex flex-col hover:shadow-md transition-shadow overflow-hidden"
+      className="bg-white rounded-xl border border-slate-200/60 border-l-4 border-l-brand-400 flex flex-col hover:shadow-md hover:border-l-brand-500 transition-all overflow-hidden"
     >
       {imagen && (
         <img
           src={imagen}
           alt={titulo}
-          className="w-full h-40 object-cover"
+          className="w-full h-44 object-cover"
         />
       )}
 
@@ -32,7 +32,7 @@ export default function EntryCard({ titulo, resumen, fecha, tema, municipio, ins
 
         <h3 className="text-base font-semibold text-slate-900 leading-snug">{titulo}</h3>
 
-        {resumen && <p className="text-sm text-slate-500 line-clamp-2">{resumen}</p>}
+        {resumen && <p className="text-sm text-slate-500 line-clamp-3">{resumen}</p>}
 
         {municipio && (
           <span className="flex items-center gap-1 text-xs text-slate-400">
@@ -52,8 +52,9 @@ export default function EntryCard({ titulo, resumen, fecha, tema, municipio, ins
         )}
 
         {url && (
-          <Link to={url} className="mt-auto flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700 no-underline">
-            Ver informe <ChevronRight className="w-3 h-3" />
+          <Link to={url} className="mt-auto inline-flex items-center gap-1 text-xs font-semibold text-brand-600 hover:text-brand-700 no-underline group">
+            Ver informe
+            <ChevronRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
           </Link>
         )}
       </div>

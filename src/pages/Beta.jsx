@@ -1,72 +1,44 @@
 import { useState, useMemo } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Search, ExternalLink } from 'lucide-react'
-import { informes, hilos, reportesRapidos, visualizaciones, datasets } from '../components/data/mockData'
+import { informes, hilos, reportesRapidos, datasets } from '@/components/data/mockData'
 
 const TYPE_STYLES = {
-  'Informe':       { bg: 'bg-brand-100',  text: 'text-brand-700',  border: 'border-brand-400' },
-  'Publicación':   { bg: 'bg-purple-100', text: 'text-purple-700', border: 'border-purple-400' },
-  'Reporte':       { bg: 'bg-amber-100',  text: 'text-amber-700',  border: 'border-amber-400' },
-  'Visualización': { bg: 'bg-sky-100',    text: 'text-sky-700',    border: 'border-sky-400' },
-  'Dataset':       { bg: 'bg-slate-100',  text: 'text-slate-700',  border: 'border-slate-400' },
+  'Informe':     { bg: 'bg-brand-100',  text: 'text-brand-700',  border: 'border-brand-400' },
+  'Publicación': { bg: 'bg-purple-100', text: 'text-purple-700', border: 'border-purple-400' },
+  'Reporte':     { bg: 'bg-amber-100',  text: 'text-amber-700',  border: 'border-amber-400' },
+  'Dataset':     { bg: 'bg-slate-100',  text: 'text-slate-700',  border: 'border-slate-400' },
 }
 
 function buildItems() {
   const items = []
 
   informes.forEach(i => items.push({
-    id: i.id,
-    type: 'Informe',
-    title: i.titulo,
-    description: i.bajada,
-    theme: i.tema,
-    date: i.fecha,
-    href: i.url,
-    external: false,
+    id: i.id, type: 'Informe',
+    title: i.titulo, description: i.bajada,
+    theme: i.tema, date: i.fecha,
+    href: i.url, external: false,
   }))
 
   hilos.forEach(h => items.push({
-    id: h.id,
-    type: 'Publicación',
-    title: h.titulo,
-    description: h.resumen,
-    theme: h.tema,
-    date: h.fecha,
-    href: h.url,
-    external: true,
+    id: h.id, type: 'Publicación',
+    title: h.titulo, description: h.resumen,
+    theme: h.tema, date: h.fecha,
+    href: h.url, external: true,
   }))
 
   reportesRapidos.forEach(r => items.push({
-    id: r.id,
-    type: 'Reporte',
-    title: r.titulo,
-    description: `${r.dato} — ${r.descripcion}`,
-    theme: r.tema,
-    date: r.fecha,
-    href: '/reportes',
-    external: false,
-  }))
-
-  visualizaciones.forEach(v => items.push({
-    id: v.id,
-    type: 'Visualización',
-    title: v.titulo,
-    description: `Fuente: ${v.fuente}`,
-    theme: v.tema,
-    date: v.fecha,
-    href: '/visualizaciones',
-    external: false,
+    id: r.id, type: 'Reporte',
+    title: r.titulo, description: `${r.dato} — ${r.descripcion}`,
+    theme: r.tema, date: r.fecha,
+    href: '/reportes', external: false,
   }))
 
   datasets.forEach(d => items.push({
-    id: d.id,
-    type: 'Dataset',
-    title: d.nombre,
-    description: d.descripcion,
-    theme: d.tema || 'Datos',
-    date: d.fechaActualizacion,
-    href: '/datos',
-    external: false,
+    id: d.id, type: 'Dataset',
+    title: d.nombre, description: d.descripcion,
+    theme: d.tema || 'Datos', date: d.fechaActualizacion,
+    href: '/datos', external: false,
   }))
 
   return items
@@ -142,7 +114,7 @@ export default function Beta() {
       </div>
 
       {/* Controls */}
-      <div className="sticky top-14 z-40 bg-white border-b border-slate-200 shadow-sm transition-[top] duration-300">
+      <div className="sticky top-14 z-40 bg-white border-b border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
           {/* Search */}
           <div className="relative w-full sm:w-80">

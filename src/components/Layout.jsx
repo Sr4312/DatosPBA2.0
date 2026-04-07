@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
 import { Menu, X, ArrowUp, Mail, Twitter, Linkedin, Search } from 'lucide-react'
 import SearchOverlay from './SearchOverlay'
@@ -15,6 +15,7 @@ export default function Layout() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [showTop, setShowTop] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const closeSearch = useCallback(() => setSearchOpen(false), [])
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -28,80 +29,82 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm transition-all duration-300">
-        <div className={`max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-14' : 'h-24'}`}>
-          <NavLink to="/" className="flex items-center gap-2 no-underline shrink-0">
-            <img src="/logo-bars.svg" alt="DatosPBA" style={{ height: scrolled ? '36px' : '56px', width: 'auto', transition: 'height 0.3s' }} />
-            <div className="flex flex-col leading-tight overflow-hidden">
-              <span className="text-xl text-[#0a1628] tracking-tight">Datos<span className="font-bold">PBA</span></span>
-              <span className={`text-[10px] text-slate-400 hidden sm:block leading-snug transition-all duration-300 ${scrolled ? 'max-h-0 opacity-0' : 'max-h-10 opacity-100'}`}>Análisis basado en evidencia<br />para la Provincia de Buenos Aires.</span>
-            </div>
-          </NavLink>
+      <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'py-2.5 px-3 sm:px-8 lg:px-16' : ''}`}>
+        <div className={`transition-all duration-300 ${scrolled ? 'max-w-7xl mx-auto rounded-2xl shadow-lg border border-slate-200/60 backdrop-blur-md bg-white/85 overflow-hidden' : 'bg-white border-b border-slate-200 shadow-sm'}`}>
+          <div className={`px-4 sm:px-6 flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-14' : 'h-24'}`}>
+            <NavLink to="/" className="flex items-center gap-2 no-underline shrink-0">
+              <img src="/logo-bars.svg" alt="DatosPBA" style={{ height: scrolled ? '36px' : '56px', width: 'auto', transition: 'height 0.3s' }} />
+              <div className="flex flex-col leading-tight overflow-hidden">
+                <span className="text-xl text-[#0a1628] tracking-tight">Datos<span className="font-bold">PBA</span></span>
+                <span className={`text-[10px] text-slate-400 hidden sm:block leading-snug transition-all duration-300 ${scrolled ? 'max-h-0 opacity-0' : 'max-h-10 opacity-100'}`}>Análisis basado en evidencia<br />para la Provincia de Buenos Aires.</span>
+              </div>
+            </NavLink>
 
-          {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-0.5">
-            {NAV.map(l => (
-              <NavLink
-                key={l.to}
-                to={l.to}
-                className={({ isActive }) =>
-                  `px-3 py-1.5 text-base font-medium rounded-lg transition-colors no-underline flex items-center gap-1.5 ${
-                    isActive
-                      ? 'bg-brand-100 text-brand-700'
-                      : 'text-slate-500 hover:text-brand-600 hover:bg-brand-50'
-                  }`
-                }
-              >
-                {l.icon && <img src="/logo-bars.svg" alt="" className="w-4 h-4 object-contain" />}
-                {l.label}
-              </NavLink>
-            ))}
-          </nav>
+            {/* Desktop nav */}
+            <nav className="hidden lg:flex items-center gap-0.5">
+              {NAV.map(l => (
+                <NavLink
+                  key={l.to}
+                  to={l.to}
+                  className={({ isActive }) =>
+                    `px-3 py-1.5 text-base font-medium rounded-lg transition-colors no-underline flex items-center gap-1.5 ${
+                      isActive
+                        ? 'bg-brand-100 text-brand-700'
+                        : 'text-slate-500 hover:text-brand-600 hover:bg-brand-50'
+                    }`
+                  }
+                >
+                  {l.icon && <img src="/logo-bars.svg" alt="" className="w-4 h-4 object-contain" />}
+                  {l.label}
+                </NavLink>
+              ))}
+            </nav>
 
-          {/* Search button */}
-          <button
-            onClick={() => setSearchOpen(true)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-lg border border-slate-200 text-slate-500 hover:text-[#0a1628] hover:border-slate-300 hover:bg-slate-50 transition-all"
-            aria-label="Buscar"
-          >
-            <Search className="w-4 h-4" />
-            <span className="text-sm hidden sm:inline">Buscar</span>
-          </button>
+            {/* Search button */}
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-lg border border-slate-200 text-slate-500 hover:text-[#0a1628] hover:border-slate-300 hover:bg-slate-50 transition-all"
+              aria-label="Buscar"
+            >
+              <Search className="w-4 h-4" />
+              <span className="text-sm hidden sm:inline">Buscar</span>
+            </button>
 
-          {/* Mobile hamburger */}
-          <button
-            className="lg:hidden p-2 text-slate-500 hover:text-brand-600 transition-colors"
-            onClick={() => setMenuOpen(o => !o)}
-            aria-label="Menú"
-          >
-            {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+            {/* Mobile hamburger */}
+            <button
+              className="lg:hidden p-2 text-slate-500 hover:text-brand-600 transition-colors"
+              onClick={() => setMenuOpen(o => !o)}
+              aria-label="Menú"
+            >
+              {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+
+          {/* Mobile menu drawer */}
+          {menuOpen && (
+            <nav className="lg:hidden border-t border-slate-100 px-4 pb-4 flex flex-col gap-1">
+              {NAV.map(l => (
+                <NavLink
+                  key={l.to}
+                  to={l.to}
+                  onClick={() => setMenuOpen(false)}
+                  className={({ isActive }) =>
+                    `px-3 py-2.5 text-sm font-medium rounded-lg transition-colors no-underline ${
+                      isActive
+                        ? 'bg-brand-100 text-brand-700'
+                        : 'text-slate-500 hover:text-brand-600 hover:bg-brand-50'
+                    }`
+                  }
+                >
+                  {l.label}
+                </NavLink>
+              ))}
+            </nav>
+          )}
         </div>
-
-        {/* Mobile menu drawer */}
-        {menuOpen && (
-          <nav className="lg:hidden bg-white border-t border-slate-100 px-4 pb-4 flex flex-col gap-1">
-            {NAV.map(l => (
-              <NavLink
-                key={l.to}
-                to={l.to}
-                onClick={() => setMenuOpen(false)}
-                className={({ isActive }) =>
-                  `px-3 py-2.5 text-sm font-medium rounded-lg transition-colors no-underline ${
-                    isActive
-                      ? 'bg-brand-100 text-brand-700'
-                      : 'text-slate-500 hover:text-brand-600 hover:bg-brand-50'
-                  }`
-                }
-              >
-                {l.label}
-              </NavLink>
-            ))}
-          </nav>
-        )}
       </header>
 
-      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <SearchOverlay open={searchOpen} onClose={closeSearch} />
 
       <main>
         <Outlet />
@@ -112,9 +115,12 @@ export default function Layout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Brand */}
           <div className="md:col-span-1">
-            <img src="/logo-bars.svg" alt="DatosPBA" className="h-10 w-auto mb-3" />
+            <img src="/logo-bars.svg" alt="DatosPBA" className="h-10 w-auto mb-4" />
             <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
               Repositorio de análisis político y datos abiertos sobre la Provincia de Buenos Aires.
+            </p>
+            <p className="text-[11px] text-slate-300 uppercase tracking-widest mt-6 font-medium">
+              Análisis basado en evidencia
             </p>
           </div>
 
@@ -186,7 +192,7 @@ export default function Layout() {
       {showTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-6 right-6 z-50 w-10 h-10 rounded-full bg-white border border-brand-200 shadow-md flex items-center justify-center text-brand-500 hover:text-brand-700 hover:shadow-lg transition-all"
+          className="fixed bottom-6 right-6 z-50 w-10 h-10 rounded-full bg-[#0a1628] shadow-lg flex items-center justify-center text-white hover:bg-brand-600 hover:shadow-xl transition-all"
           aria-label="Volver arriba"
         >
           <ArrowUp className="w-4 h-4" />

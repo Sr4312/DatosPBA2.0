@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { m } from 'framer-motion'
-import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import { informes, hilos, reportesRapidos } from '@/components/data/mockData'
 import EntryCard from '@/components/shared/EntryCard'
+import TickerBar from '@/components/shared/TickerBar'
 import MedidorMunicipal from '@/components/MedidorMunicipal'
 import { Badge } from '@/components/ui/badge'
 
@@ -12,49 +12,12 @@ const byDate = arr => [...arr].sort((a, b) => (b.fechaOrden || '').localeCompare
 function SectionHeader({ title, href }) {
   return (
     <div className="mb-8 flex items-center justify-between border-b-2 border-[#0a1628] pb-3">
-      <h2 className="text-3xl sm:text-4xl font-bold text-[#0a1628] leading-none tracking-tight">
+      <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#0a1628] leading-none tracking-tight">
         {title}
       </h2>
       <Link to={href} className="text-sm font-medium text-slate-400 hover:text-[#0a1628] no-underline shrink-0 transition-colors">
         Ver todos →
       </Link>
-    </div>
-  )
-}
-
-/* ── Reportes: stock-style ticker bar ───────────────────────────────────── */
-function ReportesTicker({ reportes }) {
-  const doubled = [...reportes, ...reportes, ...reportes, ...reportes]
-  return (
-    <div className="bg-white border-b border-slate-200 overflow-hidden">
-      <div className="flex ticker-track" style={{ width: 'max-content' }}>
-        {doubled.map((r, i) => {
-          const isUp = r.tendencia === 'sube'
-          const isDown = r.tendencia === 'baja'
-          return (
-            <div
-              key={i}
-              className="flex items-center gap-3 px-5 py-3 border-r border-slate-100 shrink-0"
-            >
-              <div className={`w-8 h-8 rounded flex items-center justify-center shrink-0 ${isUp ? 'bg-green-50' : isDown ? 'bg-red-50' : 'bg-slate-50'}`}>
-                {isUp ? <TrendingUp className="w-4 h-4 text-green-600" /> : isDown ? <TrendingDown className="w-4 h-4 text-red-500" /> : <Minus className="w-4 h-4 text-slate-400" />}
-              </div>
-              <div className="flex flex-col leading-tight">
-                <div className="flex items-center gap-3">
-                  <span className="text-xs font-semibold text-slate-800 whitespace-nowrap">{r.titulo}</span>
-                  <span className="text-[10px] text-slate-400">{r.fecha}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-[#0a1628]">{r.dato}</span>
-                  {r.variacion && (
-                    <span className={`text-xs font-medium ${isUp ? 'text-green-600' : isDown ? 'text-red-500' : 'text-slate-400'}`}>{r.variacion}</span>
-                  )}
-                </div>
-              </div>
-            </div>
-          )
-        })}
-      </div>
     </div>
   )
 }
@@ -65,57 +28,41 @@ const XLogo = () => (
   </svg>
 )
 
-/* ── Publicaciones: título a la izquierda + ticker de tweets a la derecha ── */
+/* ── Publicaciones: header estándar + ticker de tweets ── */
 function PublicacionesTicker({ hilos }) {
   const doubled = [...hilos, ...hilos, ...hilos, ...hilos]
   return (
     <section className="mb-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-
-        <div className="flex justify-end mb-3">
-          <Link to="/hilos" className="text-sm font-medium text-slate-400 hover:text-[#0a1628] no-underline transition-colors">
-            Ver todos →
-          </Link>
-        </div>
-
-        <div className="flex flex-col sm:flex-row gap-8 items-center">
-
-          <div className="sm:w-2/5 shrink-0 flex items-center justify-start">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#0a1628] leading-none tracking-tight">
-              Publicaciones
-            </h2>
-          </div>
-
-          <div className="w-full flex-1 overflow-hidden">
-            <div className="flex gap-4 ticker-track" style={{ width: 'max-content' }}>
-              {doubled.map((h, i) => (
-                <a
-                  key={i}
-                  href={h.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-64 shrink-0 bg-white rounded-xl border border-slate-200/60 p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow no-underline"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <img src="/logo-icon.svg" alt="DatosPBA" className="w-8 h-8 rounded-full shrink-0 object-cover" />
-                      <div className="leading-tight">
-                        <p className="text-xs font-bold text-slate-900">DatosPBA</p>
-                        <p className="text-[10px] text-slate-400">@datospba</p>
-                      </div>
-                    </div>
-                    <span className="text-slate-900"><XLogo /></span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-6">
+        <SectionHeader title="Publicaciones" href="/hilos" />
+      </div>
+      <div className="overflow-hidden">
+        <div className="flex gap-4 ticker-track" style={{ width: 'max-content' }}>
+          {doubled.map((h, i) => (
+            <a
+              key={i}
+              href={h.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-64 shrink-0 bg-white rounded-xl border border-slate-200/60 border-l-4 border-l-purple-400 p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow no-underline"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <img src="/logo-icon.svg" alt="DatosPBA" className="w-8 h-8 rounded-full shrink-0 object-cover" />
+                  <div className="leading-tight">
+                    <p className="text-xs font-bold text-slate-900">DatosPBA</p>
+                    <p className="text-[10px] text-slate-400">@datospba</p>
                   </div>
-                  <p className="text-xs text-slate-800 leading-relaxed line-clamp-4 flex-1">{h.resumen}</p>
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-100">
-                    <span className="text-[10px] text-slate-400">{h.fecha}</span>
-                    {h.tema && <Badge variant="secondary" className="text-[10px] py-0">{h.tema}</Badge>}
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-
+                </div>
+                <span className="text-slate-900"><XLogo /></span>
+              </div>
+              <p className="text-xs text-slate-800 leading-relaxed line-clamp-4 flex-1">{h.resumen}</p>
+              <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+                <span className="text-[10px] text-slate-400">{h.fecha}</span>
+                {h.tema && <Badge variant="secondary" className="text-[10px] py-0">{h.tema}</Badge>}
+              </div>
+            </a>
+          ))}
         </div>
       </div>
     </section>
@@ -267,20 +214,21 @@ function RadarChart() {
   )
 }
 
+const allInformes = byDate(informes)
+const allReportes = byDate(reportesRapidos)
+const allHilos    = byDate(hilos)
+
 export default function Home() {
-  const allInformes = byDate(informes)
-  const allReportes = byDate(reportesRapidos)
-  const allHilos    = byDate(hilos)
 
   return (
     <div>
       {/* Reportes rápidos — ticker */}
-      <ReportesTicker reportes={allReportes} />
+      <TickerBar reportes={allReportes} />
 
       {/* Hero */}
-      <section className="bg-[#0a1628] bg-pattern-dark py-12 sm:py-16">
+      <section className="bg-[#0a1628] bg-pattern-dark py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center lg:justify-between gap-8 lg:gap-12">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center lg:justify-between gap-10 lg:gap-16">
 
             {/* Izquierda: texto */}
             <m.div
@@ -289,24 +237,27 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <p className="text-brand-400 text-xs font-semibold tracking-[0.2em] uppercase mb-8">
+              <p className="text-brand-400 text-xs font-semibold tracking-[0.2em] uppercase mb-6">
                 Provincia de Buenos Aires
               </p>
-              <h1 className="text-5xl sm:text-7xl font-normal text-white tracking-tight leading-none mb-6">
+              <h1 className="font-display text-5xl sm:text-7xl font-normal text-white tracking-tight leading-none">
                 Datos<span className="text-brand-400 font-bold">PBA</span>
               </h1>
-              <div className="flex gap-6 sm:gap-10 pt-8">
+              <p className="text-slate-400 text-sm sm:text-base leading-relaxed mt-5 max-w-sm">
+                Datos, análisis e informes sobre política, economía y territorio bonaerense.
+              </p>
+              <div className="flex gap-8 sm:gap-12 mt-10 pt-8 border-t border-white/10">
                 <div>
-                  <p className="text-2xl font-bold text-white">135</p>
-                  <p className="text-xs text-slate-500 mt-1 uppercase tracking-wide">municipios</p>
+                  <p className="text-3xl font-bold text-white tabular-nums leading-none">135</p>
+                  <p className="text-[11px] text-slate-500 mt-2 uppercase tracking-widest">municipios</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-white">17M+</p>
-                  <p className="text-xs text-slate-500 mt-1 uppercase tracking-wide">habitantes</p>
+                  <p className="text-3xl font-bold text-white tabular-nums leading-none">17M+</p>
+                  <p className="text-[11px] text-slate-500 mt-2 uppercase tracking-widest">habitantes</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-white">2025</p>
-                  <p className="text-xs text-slate-500 mt-1 uppercase tracking-wide">datos actualizados</p>
+                  <p className="text-3xl font-bold text-white tabular-nums leading-none">2025</p>
+                  <p className="text-[11px] text-slate-500 mt-2 uppercase tracking-widest">actualizado</p>
                 </div>
               </div>
             </m.div>

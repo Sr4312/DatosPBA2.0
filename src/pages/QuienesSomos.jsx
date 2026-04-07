@@ -74,7 +74,7 @@ export default function QuienesSomos() {
         transition={{ duration: 0.5 }}
         className="mb-16"
       >
-        <h1 className="text-4xl sm:text-5xl font-bold text-[#0a1628] tracking-tight mb-5 leading-tight">
+        <h1 className="font-display text-4xl sm:text-5xl font-bold text-[#0a1628] tracking-tight mb-5 leading-tight">
           Análisis político y datos abiertos<br className="hidden sm:block" />
           <span className="text-brand-600"> para Buenos Aires</span>
         </h1>
@@ -116,7 +116,7 @@ export default function QuienesSomos() {
           transition={{ duration: 0.6 }}
         >
           <div className="border-b-2 border-[#0a1628] pb-3 mb-6">
-            <h2 className="text-3xl font-bold text-[#0a1628] tracking-tight">Nuestra misión</h2>
+            <h2 className="font-display text-3xl font-bold text-[#0a1628] tracking-tight">Nuestra misión</h2>
           </div>
           <div className="space-y-4 text-slate-600 leading-relaxed">
             <p>
@@ -228,7 +228,7 @@ export default function QuienesSomos() {
         transition={{ duration: 0.5 }}
         className="bg-[#0a1628] rounded-2xl p-8 sm:p-12 text-white"
       >
-        <h2 className="text-2xl sm:text-3xl font-bold mb-4 tracking-tight">¿Qué producimos?</h2>
+        <h2 className="font-display text-2xl sm:text-3xl font-bold mb-4 tracking-tight">¿Qué producimos?</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-8">
           <div>
             <p className="text-brand-300 font-semibold text-sm uppercase tracking-widest mb-3">Informes</p>

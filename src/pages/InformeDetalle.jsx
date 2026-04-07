@@ -75,6 +75,15 @@ export default function InformeDetalle() {
           </div>
         )}
 
+        {/* Cuerpo */}
+        {informe.cuerpo?.length > 0 && (
+          <div className="prose prose-slate max-w-none mb-10 space-y-4">
+            {informe.cuerpo.map((parrafo, i) => (
+              <p key={i} className="text-base text-slate-700 leading-relaxed">{parrafo}</p>
+            ))}
+          </div>
+        )}
+
         {/* Visualizaciones relacionadas */}
         {vizRelacionadas.length > 0 && (
           <div>
