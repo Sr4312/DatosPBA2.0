@@ -501,7 +501,7 @@ export default function AtlasMunicipal() {
 
           {(tema === 'general' || tema === 'produccion') && (
             <p className="text-[11px] text-slate-400 mt-2">
-              Fuente: CAF — Banco de Desarrollo de América Latina y el Caribe
+              Fuente: CAF - Banco de Desarrollo de América Latina y el Caribe
             </p>
           )}
           {tema === 'concejales' && (

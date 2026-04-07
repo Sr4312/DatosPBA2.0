@@ -29,7 +29,7 @@ function buildItems() {
 
   reportesRapidos.forEach(r => items.push({
     id: r.id, type: 'Reporte',
-    title: r.titulo, description: `${r.dato} — ${r.descripcion}`,
+    title: r.titulo, description: `${r.dato} - ${r.descripcion}`,
     theme: r.tema, date: r.fecha,
     href: '/reportes', external: false,
   }))

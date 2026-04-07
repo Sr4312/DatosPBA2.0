@@ -17,7 +17,7 @@ const PILARES = [
   {
     icon: Target,
     title: 'Precisión',
-    desc: 'Usamos microdatos oficiales — EPH, Censo 2022, presupuesto ejecutado — procesados con criterios estadísticos rigurosos.',
+    desc: 'Usamos microdatos oficiales - EPH, Censo 2022, presupuesto ejecutado - procesados con criterios estadísticos rigurosos.',
   },
   {
     icon: TrendingUp,

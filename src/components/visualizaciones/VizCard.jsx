@@ -29,12 +29,14 @@ const BASE_OPTIONS = {
   },
   scales: {
     x: {
-      ticks: { font: { family: 'Roboto', size: 11 }, color: '#64748b' },
+      ticks: { font: { family: 'Poppins', size: 11 }, color: '#64748b' },
       grid:  { color: 'rgba(0,0,0,0.04)' },
+      title: { display: true, font: { family: 'Poppins', size: 11 }, color: '#94a3b8' },
     },
     y: {
-      ticks: { font: { family: 'Roboto', size: 11 }, color: '#64748b' },
+      ticks: { font: { family: 'Poppins', size: 11 }, color: '#64748b' },
       grid:  { color: 'rgba(0,0,0,0.04)' },
+      title: { display: true, font: { family: 'Poppins', size: 11 }, color: '#94a3b8' },
     },
   },
 }
@@ -158,7 +160,7 @@ function TableContent({ tableData }) {
               <td className="py-2 px-3 text-right font-semibold text-slate-700">{tableData.total.dip}</td>
               <td className="py-2 px-3 text-right font-semibold text-slate-700">{tableData.total.habDip.toLocaleString('es-AR')}</td>
               <td className="py-2 px-3 text-right font-semibold text-brand-700">{tableData.total.ideal}</td>
-              <td className="py-2 px-3 text-right text-slate-500">—</td>
+              <td className="py-2 px-3 text-right text-slate-500">-</td>
             </tr>
           </tbody>
         </table>
@@ -241,7 +243,7 @@ export default function VizCard({ viz, index = 0 }) {
         <TableContent tableData={viz.tableData} />
       ) : (
         <div className="h-64">
-          <ChartComponent ref={chartRef} data={viz.chartData} options={BASE_OPTIONS} />
+          <ChartComponent ref={chartRef} data={viz.chartData} options={viz.chartOptions ? { ...BASE_OPTIONS, ...viz.chartOptions, scales: { ...BASE_OPTIONS.scales, ...viz.chartOptions.scales }, plugins: { ...BASE_OPTIONS.plugins, ...viz.chartOptions.plugins } } : BASE_OPTIONS} />
         </div>
       )}
 

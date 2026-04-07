@@ -10,6 +10,8 @@ const Datos           = lazy(() => import('./pages/Datos'))
 const Hilos           = lazy(() => import('./pages/Hilos'))
 const ReportesRapidos = lazy(() => import('./pages/ReportesRapidos'))
 const InformeDetalle  = lazy(() => import('./pages/InformeDetalle'))
+const InformeKPMGIIBB         = lazy(() => import('./pages/InformeKPMGIIBB'))
+const InformeCAFEstadoMunicipal = lazy(() => import('./pages/InformeCAFEstadoMunicipal'))
 const Beta            = lazy(() => import('./pages/Beta'))
 const QuienesSomos    = lazy(() => import('./pages/QuienesSomos'))
 
@@ -22,6 +24,8 @@ export default function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Suspense fallback={null}><Home /></Suspense>} />
             <Route path="informes" element={<Suspense fallback={null}><Informes /></Suspense>} />
+            <Route path="informes/kpmg-iibb-2025" element={<Suspense fallback={null}><InformeKPMGIIBB /></Suspense>} />
+            <Route path="informes/caf-estado-municipal-pba" element={<Suspense fallback={null}><InformeCAFEstadoMunicipal /></Suspense>} />
             <Route path="informes/:id" element={<Suspense fallback={null}><InformeDetalle /></Suspense>} />
             <Route path="datos" element={<Suspense fallback={null}><Datos /></Suspense>} />
             <Route path="hilos" element={<Suspense fallback={null}><Hilos /></Suspense>} />

@@ -1,7 +1,7 @@
 export const datasets = [
   {
     id: 'eph-pba',
-    nombre: 'EPH — Mercado laboral PBA',
+    nombre: 'EPH - Mercado laboral PBA',
     descripcion: 'Tasas de empleo, desempleo y actividad por aglomerado urbano de la Provincia de Buenos Aires.',
     formato: 'CSV',
     cobertura: 'Conurbano y grandes ciudades',
@@ -24,7 +24,7 @@ export const datasets = [
   },
   {
     id: 'presupuesto-municipios',
-    nombre: 'Presupuesto ejecutado — Municipios PBA',
+    nombre: 'Presupuesto ejecutado - Municipios PBA',
     descripcion: 'Ejecución presupuestaria mensual de los 135 municipios de la Provincia de Buenos Aires.',
     formato: 'XLSX',
     cobertura: '135 municipios',
@@ -70,7 +70,7 @@ export const datasets = [
   },
   {
     id: 'deuda-municipal',
-    nombre: 'Deuda pública municipal — PBA',
+    nombre: 'Deuda pública municipal - PBA',
     descripcion: 'Stock de deuda pública de los municipios bonaerenses con desagregación por acreedor.',
     formato: 'JSON',
     cobertura: '135 municipios',
@@ -93,7 +93,7 @@ export const datasets = [
   },
   {
     id: 'matricula-educativa',
-    nombre: 'Matrícula educativa — Nivel inicial y primario',
+    nombre: 'Matrícula educativa - Nivel inicial y primario',
     descripcion: 'Matrícula por establecimiento, nivel, sector y localidad para la PBA.',
     formato: 'CSV',
     cobertura: 'PBA completa',
@@ -133,6 +133,75 @@ export const hilos = [
 
 export const informes = [
   {
+    id: 'caf-estado-municipal-pba',
+    titulo: 'Dos Buenos Aires: el estado que trabaja y el estado que pesa',
+    bajada: 'El Atlas de CAF revela una brecha de hasta 9 veces en empleo público entre municipios bonaerenses. Vicente López (4,4%) y Tres de Febrero (4,8%) frente a Alberti (38%) y Chaves (36,5%). Más estado no es mejor estado.',
+    fecha: '7 abr. 2026',
+    fechaOrden: '2026-04-07',
+    tema: 'Fiscal',
+    municipios: ['Vicente López', 'Tres de Febrero', 'Berazategui', 'Almirante Brown', 'Ayacucho', 'Chaves', 'Alberti'],
+    cuerpo: [
+      'El Atlas de Gobiernos Locales de CAF permite, por primera vez, comparar de forma sistemática el tamaño del Estado municipal en la Provincia de Buenos Aires. El indicador clave: el porcentaje de la fuerza laboral de cada municipio que trabaja en la administración pública local.',
+      'Los datos revelan dos modelos radicalmente distintos dentro de la misma provincia. En Vicente López, solo el 4,4% de los empleados trabaja en el estado municipal; en Tres de Febrero, el 4,8%. En el otro extremo, Alberti alcanza el 38%, Chaves el 36,5% y Ayacucho el 35,7%.',
+      'La correlación es directa: más empleo en la administración pública implica mayor carga tributaria sobre los vecinos y menor espacio para el sector privado. El modelo de Estado es una decisión política, pero sus consecuencias fiscales las pagan los ciudadanos.',
+    ],
+    insights: [
+      'Brecha de 9x: Vicente López 4,4% vs. Alberti 38% de empleo en administración pública.',
+      'Los municipios con estado liviano muestran mayor dinamismo del sector privado.',
+      'La Provincia de Buenos Aires alberga los dos extremos del modelo de gobierno local argentino.',
+    ],
+    url: '/informes/caf-estado-municipal-pba',
+    imagen: null,
+    custom: true,
+  },
+  {
+    id: 'kpmg-iibb-2025',
+    titulo: 'El peso fiscal que encarece cada precio: IIBB, provincias y el consumidor que paga la cuenta',
+    bajada: 'El Ingresos Brutos consolida su liderazgo como el impuesto que más encarece los precios en la Argentina. El 84% de las empresas acumula saldos a favor inmovilizados y el 91% de la opinión pública confirma que el gravamen lo paga el consumidor final.',
+    fecha: '7 abr. 2026',
+    fechaOrden: '2026-04-07',
+    tema: 'Fiscal',
+    municipios: [],
+    cuerpo: [
+      'En la edición 2025 de la encuesta de KPMG a empresas medianas y grandes, el Impuesto sobre los Ingresos Brutos volvió a dominar el podio de los gravámenes que más encarecen los precios, superando el 60% de las menciones por primera vez. La brecha respecto a los demás impuestos es elocuente y persistente en el tiempo.',
+      'Si una empresa pudiera diferenciar sus precios por provincia según la carga fiscal, la Provincia de Buenos Aires encabezaría el ranking de jurisdicciones más gravosas, posición que mantiene en todas las ediciones de la encuesta. Misiones, CABA, Córdoba y Tucumán completan el podio, con alternancia frecuente de Santa Fe.',
+      'El 84% de los consultados posee saldos a favor de impuestos provinciales - un 2% más que el año anterior y un 4% más que en 2023. La multiplicidad de regímenes de recaudación, muchas veces duplicados entre transacciones y acreditaciones bancarias, ha generalizado una inmovilización financiera que es altamente perjudicial y hasta confiscatoria para las empresas privadas.',
+      'En una consulta abierta realizada en LinkedIn, el 91% de la opinión pública confirmó que el Ingresos Brutos no lo paga "la empresa": se traslada acumulativamente al consumidor final. Es un impuesto en cascada que encarece todo, castiga el trabajo y complica la producción.',
+    ],
+    insights: [
+      'IIBB suma el 61% de las menciones al impuesto que más encarece precios, vs. 54% el año anterior.',
+      'Provincia de Buenos Aires: #1 en voracidad fiscal en todas las ediciones de la encuesta.',
+      '84% de las empresas acumula saldos a favor de IIBB provincial - inmovilización financiera generalizada.',
+      '91% de la opinión pública confirma que el IIBB se traslada al consumidor final.',
+    ],
+    url: '/informes/kpmg-iibb-2025',
+    imagen: null,
+    custom: true,
+  },
+  {
+    id: 'uipba-presion-tributaria-2024',
+    titulo: 'Buenos Aires castiga al que produce: la presión tributaria más alta entre las grandes provincias',
+    bajada: 'Un informe de la Unión Industrial de la Provincia de Buenos Aires muestra que la carga fiscal bonaerense supera a Córdoba y Santa Fe en casi todos los sectores. El efecto cascada del Ingresos Brutos lo explica.',
+    fecha: '7 abr. 2026',
+    fechaOrden: '2026-04-07',
+    tema: 'Fiscal',
+    municipios: [],
+    cuerpo: [
+      'La presión tributaria teórica mide la recaudación en relación al Valor Agregado Bruto generado por cada sector. Cuando ese ratio es alto, el fisco se queda con una porción desproporcionada del valor creado. El informe de la UIPBA construyó este indicador para Buenos Aires, Santa Fe y Córdoba en 2024, y el resultado es contundente: Buenos Aires encabeza con un promedio de 10,3%, contra 9,0% de Córdoba y 8,7% de Santa Fe.',
+      'La diferencia no es marginal. En la industria manufacturera, la presión en PBA (4,7%) prácticamente duplica a la de Santa Fe (3,6%) y Córdoba (3,5%). En el sector eléctrico y de gas (EGA), la brecha es aún más pronunciada: PBA carga 10,1% contra 6,7% en ambas vecinas. En intermediación financiera, PBA llega a 24,6% versus 14,3% de Córdoba, una diferencia de más de 10 puntos porcentuales.',
+      'El principal responsable de esta carga diferencial es el Ingresos Brutos. A diferencia del IVA -que es un impuesto al valor agregado y no se acumula en la cadena-, el IIBB grava cada transacción en cada eslabón del proceso productivo. Este efecto cascada hace que el mismo bien tribute múltiples veces antes de llegar al consumidor final, generando una presión que se multiplica con la longitud del proceso.',
+      'Más IIBB no solo significa más costo para la empresa: significa precios más altos para los consumidores, menor competitividad exportadora y una señal nítida de que producir en Buenos Aires es más caro que hacerlo en las provincias vecinas. El dato no es ideológico: es una medición objetiva de cuánto le extrae el fisco a cada peso de valor que genera la economía bonaerense. Menos IIBB, más libertad y más trabajo.',
+    ],
+    insights: [
+      'PBA tiene la mayor presión tributaria promedio: 10,3% vs. 9,0% de Córdoba y 8,7% de Santa Fe.',
+      'En industria, PBA cobra 4,7%: 34% más que Córdoba (3,5%) y 31% más que Santa Fe (3,6%).',
+      'En EGA (electricidad, gas y agua), PBA duplica a sus vecinas: 10,1% vs. 6,7%.',
+      'El efecto cascada del IIBB es el principal driver: grava cada eslabón de la cadena productiva.',
+    ],
+    url: '/informes/uipba-presion-tributaria-2024',
+    imagen: null,
+  },
+  {
     id: 'exportaciones-pba-2025',
     titulo: 'Buenos Aires exportó USD 31.684 millones en 2025: 1 de cada 3 dólares del país sale de la Provincia',
     bajada: 'Las exportaciones bonaerenses crecieron 7,3% interanual, impulsadas por la industria y el agro, consolidando a la Provincia como el principal motor del comercio exterior argentino.',
@@ -161,17 +230,17 @@ export const informes = [
 export const reportesRapidos = [
   {
     id: 'rr-desempleo-q3',
-    titulo: 'Desempleo GBA — 3er trim. 2025',
-    dato: '11,1%',
-    descripcion: 'Tasa de desempleo del Gran Buenos Aires en el tercer trimestre de 2025, 1,5 pp por encima del mismo período de 2024.',
-    fecha: 'Nov. 2025',
-    fechaOrden: '2025-11-01',
+    titulo: 'Desempleo GBA - 4to trim. 2025',
+    dato: '8,6%',
+    descripcion: 'Tasa de desocupación del Gran Buenos Aires en el cuarto trimestre de 2025, 1,5 pp por encima del mismo período de 2024. Los Partidos del GBA registraron 9,5%.',
+    fecha: 'Mar. 2026',
+    fechaOrden: '2026-03-18',
     tendencia: 'sube',
     variacion: '+1,5 pp',
   },
   {
     id: 'rr-informalidad',
-    titulo: 'Empleo informal — Conurbano',
+    titulo: 'Empleo informal - Conurbano',
     dato: '42,3%',
     descripcion: 'Porcentaje de trabajadores informales en el Conurbano Bonaerense según EPH T3 2025. Sin mejora significativa respecto a 2019.',
     fecha: 'Nov. 2025',
@@ -181,7 +250,7 @@ export const reportesRapidos = [
   },
   {
     id: 'rr-gasto-seguridad',
-    titulo: 'Gasto en seguridad — Presupuesto 2026',
+    titulo: 'Gasto en seguridad - Presupuesto 2026',
     dato: '+28%',
     descripcion: 'Variación real del gasto en seguridad en el presupuesto provincial 2026 respecto al ejecutado 2025.',
     fecha: 'Nov. 2025',
@@ -191,7 +260,7 @@ export const reportesRapidos = [
   },
   {
     id: 'rr-cobertura-salud',
-    titulo: 'Sin cobertura de salud — Tercer cordón',
+    titulo: 'Sin cobertura de salud - Tercer cordón',
     dato: '29,4%',
     descripcion: 'Proporción de residentes del tercer cordón del Conurbano que dependen exclusivamente del sistema de salud público.',
     fecha: 'Oct. 2025',
@@ -230,7 +299,7 @@ const PALETTE_BG = PALETTE.map(c => c + 'bb')
 export const visualizaciones = [
   {
     id: 'v-representacion-diputados',
-    titulo: 'Representación en Cámara de Diputados — Ley 22.847 vs. propuesta 180.000 hab./dip.',
+    titulo: 'Representación en Cámara de Diputados - Ley 22.847 vs. propuesta 180.000 hab./dip.',
     tema: 'Instituciones y gobernanza',
     tipo: 'tabla',
     fuente: 'INDEC Censo 2022',
@@ -286,10 +355,10 @@ export const visualizaciones = [
   },
   {
     id: 'v-desempleo-conurbano',
-    titulo: 'Tasa de desempleo por partido del Conurbano — 3er trim. 2025 (%)',
+    titulo: 'Tasa de desempleo por partido del Conurbano - 3er trim. 2025 (%)',
     tema: 'Economía',
     tipo: 'bar',
-    fuente: 'EPH — INDEC',
+    fuente: 'EPH - INDEC',
     fecha: 'Nov. 2025',
     fechaOrden: '2025-11-15',
     informeUrl: '/informes/desempleo-conurbano-2025',
@@ -307,10 +376,10 @@ export const visualizaciones = [
   },
   {
     id: 'v-evolucion-desempleo',
-    titulo: 'Evolución de la tasa de desempleo — GBA (2020–2025)',
+    titulo: 'Evolución de la tasa de desempleo - GBA (2020–2025)',
     tema: 'Economía',
     tipo: 'line',
-    fuente: 'EPH — INDEC',
+    fuente: 'EPH - INDEC',
     fecha: 'Nov. 2025',
     fechaOrden: '2025-11-08',
     informeUrl: '/informes/desempleo-conurbano-2025',
@@ -329,7 +398,7 @@ export const visualizaciones = [
   },
   {
     id: 'v-gasto-funcional',
-    titulo: 'Composición del gasto provincial por función — Presupuesto 2026 (%)',
+    titulo: 'Composición del gasto provincial por función - Presupuesto 2026 (%)',
     tema: 'Economía',
     tipo: 'bar',
     fuente: 'Ministerio de Economía PBA',
@@ -350,10 +419,10 @@ export const visualizaciones = [
   },
   {
     id: 'v-cobertura-salud-partido',
-    titulo: 'Población sin cobertura de salud — Top 10 partidos con mayor déficit (%)',
+    titulo: 'Población sin cobertura de salud - Top 10 partidos con mayor déficit (%)',
     tema: 'Pobreza y desigualdad',
     tipo: 'bar',
-    fuente: 'Censo 2022 — INDEC',
+    fuente: 'Censo 2022 - INDEC',
     fecha: 'Oct. 2025',
     fechaOrden: '2025-10-20',
     informeUrl: '/informes/cobertura-salud-2022',
@@ -374,7 +443,7 @@ export const visualizaciones = [
     titulo: 'Provincia de Buenos Aires, exportaciones totales (2015–2025)',
     tema: 'Economía',
     tipo: 'bar',
-    fuente: 'INDEC — Dirección Nacional de Estadísticas del Sector Externo y Cuentas Internacionales',
+    fuente: 'INDEC - Dirección Nacional de Estadísticas del Sector Externo y Cuentas Internacionales',
     fecha: 'Abr. 2026',
     fechaOrden: '2026-04-07',
     informeUrl: '/informes/exportaciones-pba-2025',
@@ -383,7 +452,7 @@ export const visualizaciones = [
       datasets: [
         {
           type: 'bar',
-          label: 'Anual (millones USD)',
+          label: 'Anual',
           data: [19100, 18000, 19200, 21500, 22500, 19700, 28000, 33000, 26500, 29500, 31684],
           backgroundColor: '#1ab8b8bb',
           borderColor: '#1ab8b8',
@@ -393,7 +462,7 @@ export const visualizaciones = [
         },
         {
           type: 'line',
-          label: 'Primer semestre (millones USD)',
+          label: 'Primer semestre',
           data: [10000, 9500, 10500, 10600, 10700, 10100, 15500, 16000, 12000, 14500, 15000],
           borderColor: '#0a1628',
           backgroundColor: '#0a1628',
@@ -403,6 +472,122 @@ export const visualizaciones = [
           order: 1,
         },
       ],
+    },
+    chartOptions: {
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: { font: { family: 'Poppins', size: 11 }, color: '#64748b', boxWidth: 12 },
+        },
+      },
+      scales: {
+        x: {
+          ticks: { font: { family: 'Poppins', size: 11 }, color: '#64748b' },
+          grid: { color: 'rgba(0,0,0,0.04)' },
+          title: { display: true, text: 'Año', font: { family: 'Poppins', size: 11 }, color: '#94a3b8' },
+        },
+        y: {
+          ticks: { font: { family: 'Poppins', size: 11 }, color: '#64748b' },
+          grid: { color: 'rgba(0,0,0,0.04)' },
+          title: { display: true, text: 'Millones de USD', font: { family: 'Poppins', size: 11 }, color: '#94a3b8' },
+        },
+      },
+    },
+  },
+  {
+    id: 'v-presion-tributaria-promedio',
+    titulo: 'Presión tributaria promedio (Recaudación / VAB) - PBA, Santa Fe y Córdoba. Año 2024',
+    tema: 'Fiscal',
+    tipo: 'bar',
+    fuente: 'UIPBA - en base a INDEC y Leyes impositivas locales',
+    fecha: 'Abr. 2026',
+    fechaOrden: '2026-04-07',
+    informeUrl: '/informes/uipba-presion-tributaria-2024',
+    chartData: {
+      labels: ['Buenos Aires', 'Santa Fe', 'Córdoba'],
+      datasets: [{
+        label: 'Presión tributaria promedio (%)',
+        data: [10.3, 8.7, 9.0],
+        backgroundColor: ['#0369a1bb', '#0d9488bb', '#b45309bb'],
+        borderColor: ['#0369a1', '#0d9488', '#b45309'],
+        borderWidth: 1,
+        borderRadius: 6,
+      }],
+    },
+    chartOptions: {
+      scales: {
+        y: {
+          min: 0,
+          max: 13,
+          ticks: { callback: (v) => v + '%', font: { family: 'Poppins', size: 11 }, color: '#64748b' },
+          grid: { color: 'rgba(0,0,0,0.04)' },
+          title: { display: true, text: '% sobre VAB', font: { family: 'Poppins', size: 11 }, color: '#94a3b8' },
+        },
+        x: {
+          ticks: { font: { family: 'Poppins', size: 11 }, color: '#64748b' },
+          grid: { color: 'rgba(0,0,0,0.04)' },
+        },
+      },
+    },
+  },
+  {
+    id: 'v-presion-tributaria-sectores',
+    titulo: 'Presión tributaria por sector (Recaudación / VAB) - PBA, Santa Fe y Córdoba. Año 2024',
+    tema: 'Fiscal',
+    tipo: 'bar',
+    fuente: 'UIPBA - en base a INDEC y Leyes impositivas locales',
+    fecha: 'Abr. 2026',
+    fechaOrden: '2026-04-07',
+    informeUrl: '/informes/uipba-presion-tributaria-2024',
+    chartData: {
+      labels: ['Industria', 'EGA', 'Construcción', 'Transporte', 'Serv. empresariales', 'Serv. personales', 'Interm. financiera'],
+      datasets: [
+        {
+          label: 'Buenos Aires',
+          data: [4.7, 10.1, 4.8, 9.6, 9.8, 18.4, 24.6],
+          backgroundColor: '#0369a1bb',
+          borderColor: '#0369a1',
+          borderWidth: 1,
+          borderRadius: 4,
+        },
+        {
+          label: 'Santa Fe',
+          data: [3.6, 6.7, 3.8, 8.2, 12.5, 15.2, 22.0],
+          backgroundColor: '#0d9488bb',
+          borderColor: '#0d9488',
+          borderWidth: 1,
+          borderRadius: 4,
+        },
+        {
+          label: 'Córdoba',
+          data: [3.5, 6.7, 4.8, 10.1, 11.4, 14.1, 14.3],
+          backgroundColor: '#b45309bb',
+          borderColor: '#b45309',
+          borderWidth: 1,
+          borderRadius: 4,
+        },
+      ],
+    },
+    chartOptions: {
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: { font: { family: 'Poppins', size: 11 }, color: '#64748b', boxWidth: 12 },
+        },
+      },
+      scales: {
+        x: {
+          ticks: { font: { family: 'Poppins', size: 11 }, color: '#64748b' },
+          grid: { color: 'rgba(0,0,0,0.04)' },
+        },
+        y: {
+          ticks: { callback: (v) => v + '%', font: { family: 'Poppins', size: 11 }, color: '#64748b' },
+          grid: { color: 'rgba(0,0,0,0.04)' },
+          title: { display: true, text: '% sobre VAB', font: { family: 'Poppins', size: 11 }, color: '#94a3b8' },
+        },
+      },
     },
   },
 ]

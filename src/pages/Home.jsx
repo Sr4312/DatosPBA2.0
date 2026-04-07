@@ -1,11 +1,20 @@
-import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { m } from 'framer-motion'
-import { informes, hilos, reportesRapidos } from '@/components/data/mockData'
+import {
+  Chart as ChartJS,
+  CategoryScale, LinearScale,
+  BarElement, LineElement, PointElement,
+  Tooltip, Legend, Filler,
+} from 'chart.js'
+import { Bar, Line } from 'react-chartjs-2'
+import { informes, hilos, reportesRapidos, visualizaciones } from '@/components/data/mockData'
 import EntryCard from '@/components/shared/EntryCard'
 import TickerBar from '@/components/shared/TickerBar'
 import MedidorMunicipal from '@/components/MedidorMunicipal'
 import { Badge } from '@/components/ui/badge'
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Tooltip, Legend, Filler)
 
 const byDate = arr => [...arr].sort((a, b) => (b.fechaOrden || '').localeCompare(a.fechaOrden || ''))
 
@@ -70,163 +79,109 @@ function PublicacionesTicker({ hilos }) {
 }
 
 
-const RADAR_THEMES = [
-  { id: 'Economía',                     lines: ['Economía'],                        deg: 0   },
-  { id: 'Demografía',                   lines: ['Demografía'],                      deg: 60  },
-  { id: 'Educación',                    lines: ['Educación'],                       deg: 120 },
-  { id: 'Pobreza y desigualdad',        lines: ['Pobreza y', 'desigualdad'],        deg: 180 },
-  { id: 'Territorio e infraestructura', lines: ['Territorio e', 'infraestructura'], deg: 240 },
-  { id: 'Instituciones y gobernanza',   lines: ['Instituciones y', 'gobernanza'],   deg: 300 },
-]
+const CHART_COMPONENTS = { bar: Bar, line: Line }
 
-// counts[i]: aesthetic values per theme (Economía, Demografía, Educación, Pobreza, Territorio, Instituciones)
-const RADAR_SERIES = [
-  { id: 'informes',        label: 'Informes',        color: '#60a5fa', counts: [4, 1, 2, 3, 1, 1] },
-  { id: 'publicaciones',   label: 'Publicaciones',   color: '#c084fc', counts: [3, 2, 2, 2, 1, 3] },
-  { id: 'visualizaciones', label: 'Visualizaciones', color: '#2dd4bf', counts: [2, 3, 1, 2, 2, 4] },
-  { id: 'datasets',        label: 'Datasets',        color: '#fbbf24', counts: [4, 2, 3, 1, 3, 1] },
-]
-
-function RadarChart() {
-  const navigate = useNavigate()
-  const [hovered, setHovered] = useState(null)
-  const [progress, setProgress] = useState(0)
-
-  useEffect(() => {
-    let id
-    let start = null
-    const duration = 1400
-    function step(ts) {
-      if (!start) start = ts
-      const p = Math.min((ts - start) / duration, 1)
-      setProgress(1 - Math.pow(1 - p, 3)) // ease-out cubic
-      if (p < 1) id = requestAnimationFrame(step)
+// Finds the latest informe that has a linked visualization (non-tabla)
+function getHeroViz(sortedInformes) {
+  for (const inf of sortedInformes) {
+    const linked = visualizaciones.filter(v => v.informeUrl === inf.url && v.tipo !== 'tabla')
+    if (linked.length > 0) {
+      const viz = linked.find(v => (v.chartData?.datasets?.length ?? 0) > 1) ?? linked[0]
+      return { viz, informe: inf }
     }
-    id = requestAnimationFrame(step)
-    return () => cancelAnimationFrame(id)
-  }, [])
+  }
+  return null
+}
 
-  const MAX = 4
-  const cx = 260, cy = 220, R = 130
-  const toRad = deg => (deg - 90) * Math.PI / 180
-  const pt = (deg, scale = 1) => {
-    const a = toRad(deg)
-    return [cx + R * scale * Math.cos(a), cy + R * scale * Math.sin(a)]
-  }
-  const hexPath = scale => {
-    const pts = RADAR_THEMES.map(t => pt(t.deg, scale))
-    return pts.map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`).join(' ') + ' Z'
-  }
-  const seriesPath = counts => {
-    const pts = RADAR_THEMES.map((t, i) => pt(t.deg, counts[i] / MAX * progress))
-    return pts.map(([x, y], i) => `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`).join(' ') + ' Z'
-  }
+function HeroVizPanel({ informe, viz }) {
+  const chartRef = useRef(null)
+  const ChartComponent = CHART_COMPONENTS[viz.tipo] ?? Bar
 
-  const gridOpacity  = Math.min(progress * 3, 1)
-  const labelOpacity = Math.max(0, (progress - 0.4) / 0.6)
-  const legendOpacity = Math.max(0, (progress - 0.7) / 0.3)
+  const darkTicks = { color: 'rgba(255,255,255,0.45)', font: { family: 'Poppins', size: 10 } }
+  const darkGrid  = { color: 'rgba(255,255,255,0.07)' }
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: (viz.chartData?.datasets?.length ?? 0) > 1,
+        position: 'bottom',
+        labels: { font: { family: 'Poppins', size: 10 }, color: 'rgba(255,255,255,0.55)', boxWidth: 10, padding: 10 },
+      },
+      tooltip: { enabled: true },
+    },
+    scales: {
+      x: {
+        ...(viz.chartOptions?.scales?.x ?? {}),
+        ticks: { ...(viz.chartOptions?.scales?.x?.ticks ?? {}), ...darkTicks },
+        grid: darkGrid,
+        title: { ...(viz.chartOptions?.scales?.x?.title ?? {}), color: 'rgba(255,255,255,0.3)' },
+      },
+      y: {
+        ...(viz.chartOptions?.scales?.y ?? {}),
+        ticks: { ...(viz.chartOptions?.scales?.y?.ticks ?? {}), ...darkTicks },
+        grid: darkGrid,
+        title: { ...(viz.chartOptions?.scales?.y?.title ?? {}), color: 'rgba(255,255,255,0.3)' },
+      },
+    },
+  }
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full">
-      <svg viewBox="0 0 520 455" className="w-full" style={{ maxHeight: '400px' }}>
-        {[0.25, 0.5, 0.75, 1.0].map(v => (
-          <path key={v} d={hexPath(v)} fill="none"
-            stroke={v === 1.0 ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.07)'}
-            strokeWidth={v === 1.0 ? 1.2 : 0.7}
-            opacity={gridOpacity} />
-        ))}
-        {RADAR_THEMES.map(t => {
-          const [x, y] = pt(t.deg)
-          return <line key={t.id} x1={cx} y1={cy} x2={x.toFixed(1)} y2={y.toFixed(1)}
-            stroke="rgba(255,255,255,0.12)" strokeWidth="0.8"
-            opacity={gridOpacity} />
-        })}
-        {[...RADAR_SERIES]
-          .sort((a, b) => (hovered === a.id ? 1 : 0) - (hovered === b.id ? 1 : 0))
-          .map(s => {
-            const isHov = hovered === s.id
-            const dimmed = hovered !== null && !isHov
-            return (
-              <path key={s.id} d={seriesPath(s.counts)}
-                fill={s.color + (isHov ? '44' : '1e')}
-                stroke={s.color}
-                strokeWidth={isHov ? 2.5 : 1.5}
-                opacity={dimmed ? 0.25 : 1}
-                style={{ transition: 'opacity 0.2s, stroke-width 0.2s, fill 0.2s' }} />
-            )
-          })}
-        {RADAR_SERIES.flatMap(s =>
-          RADAR_THEMES.map((t, i) => {
-            if (s.counts[i] === 0) return null
-            const isHov = hovered === s.id
-            const dimmed = hovered !== null && !isHov
-            const [x, y] = pt(t.deg, s.counts[i] / MAX * progress)
-            return (
-              <circle key={`${s.id}-${t.id}`}
-                cx={x.toFixed(1)} cy={y.toFixed(1)}
-                r={isHov ? 5 : 3.5} fill={s.color}
-                opacity={dimmed ? 0.25 : isHov ? 1 : 0.85}
-                style={{ transition: 'r 0.2s, opacity 0.2s' }} />
-            )
-          })
-        )}
-        {RADAR_THEMES.map(t => {
-          const [lx, ly] = pt(t.deg, 1.5)
-          const anchor = (t.deg < 30 || t.deg > 330) ? 'middle'
-            : (t.deg > 150 && t.deg < 210) ? 'middle'
-            : t.deg < 180 ? 'start' : 'end'
-          return (
-            <g key={t.id} style={{ cursor: 'pointer', opacity: labelOpacity }}
-              onClick={() => navigate(`/beta?theme=${encodeURIComponent(t.id)}`)}>
-              {t.lines.map((line, j) => (
-                <text key={j}
-                  x={lx.toFixed(1)}
-                  y={(ly + j * 13 - (t.lines.length - 1) * 6.5).toFixed(1)}
-                  textAnchor={anchor} fontSize="16"
-                  fill="rgba(255,255,255,0.7)"
-                  fontFamily="inherit" fontWeight="600"
-                  style={{ userSelect: 'none' }}>
-                  {line}
-                </text>
-              ))}
-            </g>
-          )
-        })}
-      </svg>
-      <div className="flex flex-wrap gap-2 justify-center" style={{ opacity: legendOpacity }}>
-        {RADAR_SERIES.map(s => (
-          <button key={s.id}
-            onMouseEnter={() => setHovered(s.id)}
-            onMouseLeave={() => setHovered(null)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full transition-all"
-            style={{
-              fontSize: '12px', fontWeight: 500,
-              background: hovered === s.id ? s.color + '28' : 'rgba(255,255,255,0.06)',
-              color: hovered === s.id ? s.color : 'rgba(255,255,255,0.55)',
-              border: `1px solid ${hovered === s.id ? s.color + '55' : 'rgba(255,255,255,0.1)'}`,
-            }}>
-            <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: s.color }} />
-            {s.label}
-          </button>
-        ))}
+    <m.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.25 }}
+      className="w-full flex flex-col"
+    >
+      {/* eyebrow */}
+      <div className="flex items-center gap-2 mb-3">
+        <span className="w-1.5 h-1.5 rounded-full bg-brand-400" />
+        <span className="text-[10px] font-semibold text-brand-400 uppercase tracking-[0.18em]">
+          Último informe
+        </span>
       </div>
-    </div>
+
+      {/* informe title */}
+      <p className="text-base font-semibold text-white leading-snug mb-4 line-clamp-2">
+        {informe.titulo}
+      </p>
+
+      {/* chart */}
+      <div style={{ height: 260 }}>
+        <ChartComponent ref={chartRef} data={viz.chartData} options={options} />
+      </div>
+
+      {/* description + link */}
+      <div className="mt-4 pt-4 border-t border-white/10">
+        <p className="text-xs text-slate-400 leading-relaxed line-clamp-4">
+          {informe.bajada}
+        </p>
+        <Link
+          to={informe.url}
+          className="inline-block mt-2 text-xs font-semibold text-brand-400 hover:text-brand-300 no-underline transition-colors"
+        >
+          Ver informe completo →
+        </Link>
+      </div>
+    </m.div>
   )
 }
 
 const allInformes = byDate(informes)
 const allReportes = byDate(reportesRapidos)
 const allHilos    = byDate(hilos)
+const heroData    = getHeroViz(allInformes)
 
 export default function Home() {
 
   return (
     <div>
-      {/* Reportes rápidos — ticker */}
+      {/* Reportes rápidos - ticker */}
       <TickerBar reportes={allReportes} />
 
       {/* Hero */}
-      <section className="bg-[#0a1628] bg-pattern-dark py-16 sm:py-24">
+      <section className="bg-[#0a1628] bg-pattern-dark py-10 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col lg:flex-row items-start lg:items-center lg:justify-between gap-10 lg:gap-16">
 
@@ -256,16 +211,18 @@ export default function Home() {
                   <p className="text-[11px] text-slate-500 mt-2 uppercase tracking-widest">habitantes</p>
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-white tabular-nums leading-none">2025</p>
+                  <p className="text-3xl font-bold text-white tabular-nums leading-none">2026</p>
                   <p className="text-[11px] text-slate-500 mt-2 uppercase tracking-widest">actualizado</p>
                 </div>
               </div>
             </m.div>
 
-            {/* Derecha: radar por temática */}
-            <div className="w-full lg:flex-1 lg:max-w-[500px]">
-              <RadarChart />
-            </div>
+            {/* Derecha: viz del último informe */}
+            {heroData && (
+              <div className="w-full lg:flex-1 lg:max-w-[500px]">
+                <HeroVizPanel viz={heroData.viz} informe={heroData.informe} />
+              </div>
+            )}
 
           </div>
         </div>
@@ -275,7 +232,7 @@ export default function Home() {
         {/* 1. Medidor Municipal */}
         <MedidorMunicipal />
 
-        {/* Informes — full width grid */}
+        {/* Informes - full width grid */}
         <section className="mb-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <SectionHeader title="Informes" href="/informes" />
@@ -298,7 +255,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 3. Publicaciones — vertical auto-scroll */}
+        {/* 3. Publicaciones - vertical auto-scroll */}
         <PublicacionesTicker hilos={allHilos} />
 
       </div>
