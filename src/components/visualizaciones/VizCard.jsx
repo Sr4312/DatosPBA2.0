@@ -171,7 +171,34 @@ function TableContent({ tableData }) {
   )
 }
 
+function resolveChartOptions(chartOptions) {
+  if (!chartOptions) return BASE_OPTIONS
+  const { y_tick_format, ...opts } = chartOptions
+  const merged = {
+    ...BASE_OPTIONS,
+    ...opts,
+    scales: { ...BASE_OPTIONS.scales, ...(opts.scales || {}) },
+    plugins: { ...BASE_OPTIONS.plugins, ...(opts.plugins || {}) },
+  }
+  if (y_tick_format === 'percent' && merged.scales?.y) {
+    merged.scales = {
+      ...merged.scales,
+      y: {
+        ...merged.scales.y,
+        ticks: { ...(merged.scales.y.ticks || {}), callback: v => v + '%' },
+      },
+    }
+  }
+  return merged
+}
+
 export default function VizCard({ viz, index = 0 }) {
+  // Support both camelCase (legacy) and snake_case (Supabase)
+  const chartData    = viz.chart_data    ?? viz.chartData
+  const chartOptions = viz.chart_options ?? viz.chartOptions
+  const tableData    = viz.table_data    ?? viz.tableData
+  const informeUrl   = viz.informe_url   ?? viz.informeUrl
+
   const ChartComponent = CHART_COMPONENTS[viz.tipo] ?? Bar
   const chartRef = useRef(null)
   const cardRef = useRef(null)
@@ -180,7 +207,7 @@ export default function VizCard({ viz, index = 0 }) {
   async function handleDownload() {
     const filename = viz.titulo || 'visualizacion'
 
-    if (viz.tipo === 'tabla') {
+    if (viz.tipo === 'tabla' || !chartData) {
       actionsRef.current.style.visibility = 'hidden'
       const captured = await html2canvas(cardRef.current, {
         scale: 2,
@@ -240,17 +267,17 @@ export default function VizCard({ viz, index = 0 }) {
       </div>
 
       {viz.tipo === 'tabla' ? (
-        <TableContent tableData={viz.tableData} />
+        <TableContent tableData={tableData} />
       ) : (
         <div className="h-64">
-          <ChartComponent ref={chartRef} data={viz.chartData} options={viz.chartOptions ? { ...BASE_OPTIONS, ...viz.chartOptions, scales: { ...BASE_OPTIONS.scales, ...viz.chartOptions.scales }, plugins: { ...BASE_OPTIONS.plugins, ...viz.chartOptions.plugins } } : BASE_OPTIONS} />
+          <ChartComponent ref={chartRef} data={chartData} options={resolveChartOptions(chartOptions)} />
         </div>
       )}
 
       <div className="flex items-center justify-between mt-3">
-        {viz.informeUrl ? (
+        {informeUrl ? (
           <Link
-            to={viz.informeUrl}
+            to={informeUrl}
             className="text-xs font-medium text-brand-600 hover:text-brand-700 no-underline"
           >
             Ver informe →

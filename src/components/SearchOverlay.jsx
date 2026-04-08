@@ -1,43 +1,26 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Search, X } from 'lucide-react'
-import { informes, hilos, reportesRapidos, datasets } from '@/components/data/mockData'
+import { supabase } from '@/lib/supabase'
 
-const INDEX = [
-  ...informes.map(x => ({
-    id: x.id,
-    tipo: 'Informe',
-    titulo: x.titulo,
-    subtitulo: x.bajada,
-    url: x.url,
-    tema: x.tema,
-  })),
-  ...hilos.map(x => ({
-    id: x.id,
-    tipo: 'Publicación',
-    titulo: x.titulo,
-    subtitulo: x.resumen,
-    url: x.url,
-    tema: x.tema,
-    external: true,
-  })),
-  ...reportesRapidos.map(x => ({
-    id: x.id,
-    tipo: 'Reporte rápido',
-    titulo: x.titulo,
-    subtitulo: x.dato,
-    url: '/reportes',
-    tema: x.tema,
-  })),
-  ...datasets.map(x => ({
-    id: x.id,
-    tipo: 'Dataset',
-    titulo: x.nombre,
-    subtitulo: x.descripcion,
-    url: '/datos',
-    tema: x.formato,
-  })),
-]
+let cachedIndex = null
+
+async function buildIndex() {
+  if (cachedIndex) return cachedIndex
+  const [{ data: informes }, { data: hilos }, { data: reportes }, { data: datasets }] = await Promise.all([
+    supabase.from('informes').select('id, titulo, bajada, url, tema'),
+    supabase.from('hilos').select('id, titulo, resumen, url, tema'),
+    supabase.from('reportes_rapidos').select('id, titulo, dato'),
+    supabase.from('datasets').select('id, nombre, descripcion, formato'),
+  ])
+  cachedIndex = [
+    ...(informes || []).map(x => ({ id: x.id, tipo: 'Informe', titulo: x.titulo, subtitulo: x.bajada, url: x.url, tema: x.tema })),
+    ...(hilos || []).map(x => ({ id: x.id, tipo: 'Publicación', titulo: x.titulo, subtitulo: x.resumen, url: x.url, tema: x.tema, external: true })),
+    ...(reportes || []).map(x => ({ id: x.id, tipo: 'Reporte rápido', titulo: x.titulo, subtitulo: x.dato, url: '/reportes' })),
+    ...(datasets || []).map(x => ({ id: x.id, tipo: 'Dataset', titulo: x.nombre, subtitulo: x.descripcion, url: '/datos', tema: x.formato })),
+  ]
+  return cachedIndex
+}
 
 function match(item, q) {
   const s = q.toLowerCase()
@@ -57,12 +40,14 @@ const TIPO_COLOR = {
 
 export default function SearchOverlay({ open, onClose }) {
   const [query, setQuery] = useState('')
+  const [index, setIndex] = useState([])
   const inputRef = useRef(null)
 
   useEffect(() => {
     if (open) {
       setQuery('')
       setTimeout(() => inputRef.current?.focus(), 50)
+      buildIndex().then(setIndex)
     }
   }, [open])
 
@@ -73,7 +58,7 @@ export default function SearchOverlay({ open, onClose }) {
   }, [onClose])
 
   const results = query.trim().length >= 2
-    ? INDEX.filter(item => match(item, query.trim())).slice(0, 12)
+    ? index.filter(item => match(item, query.trim())).slice(0, 12)
     : []
 
   if (!open) return null
@@ -84,7 +69,6 @@ export default function SearchOverlay({ open, onClose }) {
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
       <div className="w-full max-w-xl bg-white rounded-xl shadow-2xl overflow-hidden">
-        {/* Input */}
         <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-100">
           <Search className="w-4 h-4 text-slate-400 shrink-0" />
           <input
@@ -100,7 +84,6 @@ export default function SearchOverlay({ open, onClose }) {
           </button>
         </div>
 
-        {/* Results */}
         {results.length > 0 && (
           <ul className="max-h-80 overflow-y-auto divide-y divide-slate-50">
             {results.map(item => (

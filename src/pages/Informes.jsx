@@ -1,24 +1,28 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { m } from 'framer-motion'
-import { informes } from '@/components/data/mockData'
+import { supabase } from '@/lib/supabase'
 import EntryCard from '@/components/shared/EntryCard'
 import FilterBar from '@/components/shared/FilterBar'
 
 export default function Informes() {
-  const [search, setSearch] = useState("");
-  const [tema, setTema] = useState("all");
+  const [informes, setInformes] = useState([])
+  const [search, setSearch] = useState('')
+  const [tema, setTema] = useState('all')
 
-  const temaOptions = [...new Set(informes.map(i => i.tema))].map(t => ({ value: t, label: t }));
+  useEffect(() => {
+    supabase.from('informes').select('*').order('fecha_orden', { ascending: false })
+      .then(({ data }) => setInformes(data || []))
+  }, [])
+
+  const temaOptions = [...new Set(informes.map(i => i.tema))].map(t => ({ value: t, label: t }))
 
   const filtered = useMemo(() => {
-    return [...informes]
-      .sort((a, b) => (b.fechaOrden || '').localeCompare(a.fechaOrden || ''))
-      .filter(i => {
-        const matchSearch = !search || i.titulo.toLowerCase().includes(search.toLowerCase()) || i.bajada.toLowerCase().includes(search.toLowerCase());
-        const matchTema = tema === "all" || i.tema === tema;
-        return matchSearch && matchTema;
-      });
-  }, [search, tema]);
+    return informes.filter(i => {
+      const matchSearch = !search || i.titulo.toLowerCase().includes(search.toLowerCase()) || i.bajada.toLowerCase().includes(search.toLowerCase())
+      const matchTema = tema === 'all' || i.tema === tema
+      return matchSearch && matchTema
+    })
+  }, [informes, search, tema])
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
@@ -31,7 +35,7 @@ export default function Informes() {
         search={search}
         onSearchChange={setSearch}
         className="mb-8"
-        filters={[{ key: "tema", value: tema, onChange: setTema, placeholder: "Temática", options: temaOptions }]}
+        filters={[{ key: 'tema', value: tema, onChange: setTema, placeholder: 'Temática', options: temaOptions }]}
       />
 
       {filtered.length > 0 ? (
@@ -43,7 +47,7 @@ export default function Informes() {
               resumen={inf.bajada}
               fecha={inf.fecha}
               tema={inf.tema}
-              municipio={inf.municipios?.join(", ")}
+              municipio={inf.municipios?.join(', ')}
               insights={inf.insights}
               url={inf.url}
               imagen={inf.imagen}
@@ -57,5 +61,5 @@ export default function Informes() {
         </div>
       )}
     </div>
-  );
+  )
 }

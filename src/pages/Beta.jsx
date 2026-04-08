@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Search, ExternalLink } from 'lucide-react'
-import { informes, hilos, reportesRapidos, datasets } from '@/components/data/mockData'
+import { supabase } from '@/lib/supabase'
 
 const TYPE_STYLES = {
   'Informe':     { bg: 'bg-brand-100',  text: 'text-brand-700',  border: 'border-brand-400' },
@@ -10,42 +10,14 @@ const TYPE_STYLES = {
   'Dataset':     { bg: 'bg-slate-100',  text: 'text-slate-700',  border: 'border-slate-400' },
 }
 
-function buildItems() {
-  const items = []
-
-  informes.forEach(i => items.push({
-    id: i.id, type: 'Informe',
-    title: i.titulo, description: i.bajada,
-    theme: i.tema, date: i.fecha,
-    href: i.url, external: false,
-  }))
-
-  hilos.forEach(h => items.push({
-    id: h.id, type: 'Publicación',
-    title: h.titulo, description: h.resumen,
-    theme: h.tema, date: h.fecha,
-    href: h.url, external: true,
-  }))
-
-  reportesRapidos.forEach(r => items.push({
-    id: r.id, type: 'Reporte',
-    title: r.titulo, description: `${r.dato} - ${r.descripcion}`,
-    theme: r.tema, date: r.fecha,
-    href: '/reportes', external: false,
-  }))
-
-  datasets.forEach(d => items.push({
-    id: d.id, type: 'Dataset',
-    title: d.nombre, description: d.descripcion,
-    theme: d.tema || 'Datos', date: d.fechaActualizacion,
-    href: '/datos', external: false,
-  }))
-
-  return items
+function buildItems(informes, hilos, reportes, datasets) {
+  return [
+    ...informes.map(i => ({ id: i.id, type: 'Informe', title: i.titulo, description: i.bajada, theme: i.tema, date: i.fecha, href: i.url, external: false })),
+    ...hilos.map(h => ({ id: h.id, type: 'Publicación', title: h.titulo, description: h.resumen, theme: h.tema, date: h.fecha, href: h.url, external: true })),
+    ...reportes.map(r => ({ id: r.id, type: 'Reporte', title: r.titulo, description: `${r.dato} - ${r.descripcion}`, theme: r.tema, date: r.fecha, href: '/reportes', external: false })),
+    ...datasets.map(d => ({ id: d.id, type: 'Dataset', title: d.nombre, description: d.descripcion, theme: d.tema || 'Datos', date: d.fecha_actualizacion, href: '/datos', external: false })),
+  ]
 }
-
-const ALL_ITEMS = buildItems()
-const ALL_THEMES = ['Todos', ...Array.from(new Set(ALL_ITEMS.map(i => i.theme))).sort()]
 
 function BetaCard({ item }) {
   const s = TYPE_STYLES[item.type]
@@ -84,9 +56,23 @@ export default function Beta() {
   const [searchParams] = useSearchParams()
   const [query, setQuery] = useState('')
   const [theme, setTheme] = useState(searchParams.get('theme') || 'Todos')
+  const [allItems, setAllItems] = useState([])
+
+  useEffect(() => {
+    Promise.all([
+      supabase.from('informes').select('id, titulo, bajada, tema, fecha, url'),
+      supabase.from('hilos').select('id, titulo, resumen, tema, fecha, url'),
+      supabase.from('reportes_rapidos').select('id, titulo, dato, descripcion, tema, fecha'),
+      supabase.from('datasets').select('id, nombre, descripcion, tema, fecha_actualizacion'),
+    ]).then(([{ data: inf }, { data: hil }, { data: rep }, { data: dat }]) => {
+      setAllItems(buildItems(inf || [], hil || [], rep || [], dat || []))
+    })
+  }, [])
+
+  const allThemes = ['Todos', ...Array.from(new Set(allItems.map(i => i.theme))).sort()]
 
   const filtered = useMemo(() => {
-    let result = ALL_ITEMS
+    let result = allItems
     if (theme !== 'Todos') result = result.filter(i => i.theme === theme)
     if (query.trim().length >= 2) {
       const q = query.toLowerCase()
@@ -97,11 +83,10 @@ export default function Beta() {
       )
     }
     return result
-  }, [query, theme])
+  }, [allItems, query, theme])
 
   return (
     <div className="min-h-screen bg-[#f7f6f2]">
-      {/* Header */}
       <div className="bg-[#0a1628] py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-2">
@@ -113,10 +98,8 @@ export default function Beta() {
         </div>
       </div>
 
-      {/* Controls */}
       <div className="sticky top-14 z-40 bg-white border-b border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-          {/* Search */}
           <div className="relative w-full sm:w-80">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
             <input
@@ -128,9 +111,8 @@ export default function Beta() {
             />
           </div>
 
-          {/* Theme filters */}
           <div className="flex flex-wrap gap-1.5">
-            {ALL_THEMES.map(t => (
+            {allThemes.map(t => (
               <button
                 key={t}
                 onClick={() => setTheme(t)}
@@ -147,7 +129,6 @@ export default function Beta() {
         </div>
       </div>
 
-      {/* Results */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <p className="text-xs text-slate-400 mb-5">
           {filtered.length} resultado{filtered.length !== 1 ? 's' : ''}

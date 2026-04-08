@@ -1,12 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
-import { datasets } from '../components/data/mockData'
+import { supabase } from '@/lib/supabase'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Download, BarChart2, Calendar, X } from 'lucide-react'
-
-const sortedDatasets = [...datasets].sort((a, b) => (b.fechaOrden || '').localeCompare(a.fechaOrden || ''))
 
 function PreviewModal({ ds, onClose }) {
   if (!ds) return null
@@ -24,7 +22,6 @@ function PreviewModal({ ds, onClose }) {
         transition={{ duration: 0.2 }}
         className="bg-white rounded-2xl shadow-xl border border-slate-200 w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden"
       >
-        {/* Header */}
         <div className="flex items-start justify-between gap-4 px-6 py-5 border-b border-slate-100 shrink-0">
           <div>
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Vista previa del dataset</p>
@@ -39,7 +36,6 @@ function PreviewModal({ ds, onClose }) {
           </button>
         </div>
 
-        {/* Table */}
         <div className="overflow-auto flex-1">
           <table className="w-full text-sm border-collapse">
             <thead className="sticky top-0 bg-slate-50 border-b border-slate-200">
@@ -65,9 +61,8 @@ function PreviewModal({ ds, onClose }) {
           </table>
         </div>
 
-        {/* Footer */}
         <div className="px-6 py-3 border-t border-slate-100 flex items-center justify-between gap-4 shrink-0 bg-slate-50/50">
-          <p className="text-xs text-slate-400">{ds.formato} · {ds.variables} variables · Actualizado {ds.fechaActualizacion}</p>
+          <p className="text-xs text-slate-400">{ds.formato} · {ds.variables} variables · Actualizado {ds.fecha_actualizacion}</p>
           <Button size="sm" variant="outline" className="gap-1.5 h-8 shrink-0">
             <Download className="w-3 h-3" /> Descargar completo
           </Button>
@@ -78,7 +73,13 @@ function PreviewModal({ ds, onClose }) {
 }
 
 export default function Datos() {
+  const [datasets, setDatasets] = useState([])
   const [preview, setPreview] = useState(null)
+
+  useEffect(() => {
+    supabase.from('datasets').select('*').order('fecha_orden', { ascending: false })
+      .then(({ data }) => setDatasets(data || []))
+  }, [])
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
@@ -89,7 +90,7 @@ export default function Datos() {
 
       {/* Cards para mobile */}
       <div className="sm:hidden space-y-4">
-        {sortedDatasets.map((ds, i) => (
+        {datasets.map((ds, i) => (
           <m.div
             key={ds.id}
             initial={{ opacity: 0, y: 20 }}
@@ -106,7 +107,7 @@ export default function Datos() {
             </div>
             <div className="flex items-center justify-between text-xs text-slate-400">
               <span>{ds.variables} variables · {ds.registros?.toLocaleString('es-AR')} registros</span>
-              <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{ds.fechaActualizacion}</span>
+              <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{ds.fecha_actualizacion}</span>
             </div>
             <div className="flex gap-2 mt-4">
               <Button size="sm" variant="outline" className="gap-1.5 flex-1"><Download className="w-3 h-3" /> Descargar</Button>
@@ -139,7 +140,7 @@ export default function Datos() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedDatasets.map(ds => (
+            {datasets.map(ds => (
               <TableRow key={ds.id}>
                 <TableCell>
                   <div>
@@ -150,7 +151,7 @@ export default function Datos() {
                 <TableCell><Badge variant="secondary" className="text-xs">{ds.formato}</Badge></TableCell>
                 <TableCell className="text-sm text-slate-500">{ds.cobertura}</TableCell>
                 <TableCell className="text-sm text-slate-500">{ds.registros?.toLocaleString('es-AR')}</TableCell>
-                <TableCell className="text-sm text-slate-500">{ds.fechaActualizacion}</TableCell>
+                <TableCell className="text-sm text-slate-500">{ds.fecha_actualizacion}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex items-center justify-end gap-1.5">
                     <Button size="sm" variant="outline" className="gap-1.5 h-8"><Download className="w-3 h-3" /> Descargar</Button>

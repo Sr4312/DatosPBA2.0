@@ -1,24 +1,28 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { m } from 'framer-motion'
-import { hilos } from '@/components/data/mockData'
+import { supabase } from '@/lib/supabase'
 import HiloCard from '@/components/shared/HiloCard'
 import FilterBar from '@/components/shared/FilterBar'
 
 export default function Hilos() {
-  const [search, setSearch] = useState("");
-  const [tema, setTema] = useState("all");
+  const [hilos, setHilos] = useState([])
+  const [search, setSearch] = useState('')
+  const [tema, setTema] = useState('all')
 
-  const temaOptions = [...new Set(hilos.map(h => h.tema))].map(t => ({ value: t, label: t }));
+  useEffect(() => {
+    supabase.from('hilos').select('*').order('fecha_orden', { ascending: false })
+      .then(({ data }) => setHilos(data || []))
+  }, [])
+
+  const temaOptions = [...new Set(hilos.map(h => h.tema))].map(t => ({ value: t, label: t }))
 
   const filtered = useMemo(() => {
-    return [...hilos]
-      .sort((a, b) => (b.fechaOrden || '').localeCompare(a.fechaOrden || ''))
-      .filter(h => {
-        const matchSearch = !search || h.titulo.toLowerCase().includes(search.toLowerCase()) || h.resumen.toLowerCase().includes(search.toLowerCase());
-        const matchTema = tema === "all" || h.tema === tema;
-        return matchSearch && matchTema;
-      });
-  }, [search, tema]);
+    return hilos.filter(h => {
+      const matchSearch = !search || h.titulo.toLowerCase().includes(search.toLowerCase()) || h.resumen.toLowerCase().includes(search.toLowerCase())
+      const matchTema = tema === 'all' || h.tema === tema
+      return matchSearch && matchTema
+    })
+  }, [hilos, search, tema])
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
@@ -31,7 +35,7 @@ export default function Hilos() {
         search={search}
         onSearchChange={setSearch}
         className="mb-8"
-        filters={[{ key: "tema", value: tema, onChange: setTema, placeholder: "Temática", options: temaOptions }]}
+        filters={[{ key: 'tema', value: tema, onChange: setTema, placeholder: 'Temática', options: temaOptions }]}
       />
 
       {filtered.length > 0 ? (
@@ -46,5 +50,5 @@ export default function Hilos() {
         </div>
       )}
     </div>
-  );
+  )
 }

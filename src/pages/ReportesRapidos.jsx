@@ -1,18 +1,20 @@
-import { useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
-import { reportesRapidos } from '@/components/data/mockData'
+import { supabase } from '@/lib/supabase'
 import ReporteCard from '@/components/shared/ReporteCard'
 import TickerBar from '@/components/shared/TickerBar'
 
 export default function ReportesRapidos() {
-  const sorted = useMemo(
-    () => [...reportesRapidos].sort((a, b) => (b.fechaOrden || '').localeCompare(a.fechaOrden || '')),
-    []
-  )
+  const [reportes, setReportes] = useState([])
+
+  useEffect(() => {
+    supabase.from('reportes_rapidos').select('*').order('fecha_orden', { ascending: false })
+      .then(({ data }) => setReportes(data || []))
+  }, [])
 
   return (
     <div>
-      <TickerBar reportes={sorted} />
+      <TickerBar reportes={reportes} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <m.div
@@ -26,7 +28,7 @@ export default function ReportesRapidos() {
         </m.div>
 
         <div className="flex flex-col gap-3">
-          {sorted.map((r, i) => (
+          {reportes.map((r, i) => (
             <ReporteCard key={r.id} reporte={r} index={i} />
           ))}
         </div>

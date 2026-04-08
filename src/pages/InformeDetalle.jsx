@@ -1,13 +1,29 @@
 import { useParams, Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { m } from 'framer-motion'
 import { Calendar, MapPin, ArrowLeft } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { informes, visualizaciones } from '@/components/data/mockData'
+import { supabase } from '@/lib/supabase'
 import VizCard from '@/components/visualizaciones/VizCard'
 
 export default function InformeDetalle() {
   const { id } = useParams()
-  const informe = informes.find(inf => inf.id === id)
+  const [informe, setInforme] = useState(null)
+  const [vizRelacionadas, setVizRelacionadas] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    Promise.all([
+      supabase.from('informes').select('*').eq('id', id).single(),
+      supabase.from('visualizaciones').select('*').eq('informe_url', `/informes/${id}`),
+    ]).then(([{ data: inf }, { data: viz }]) => {
+      setInforme(inf)
+      setVizRelacionadas(viz || [])
+      setLoading(false)
+    })
+  }, [id])
+
+  if (loading) return null
 
   if (!informe) {
     return (
@@ -20,9 +36,6 @@ export default function InformeDetalle() {
     )
   }
 
-  // visualizaciones vinculadas a este informe
-  const vizRelacionadas = visualizaciones.filter(v => v.informeUrl === `/informes/${id}`)
-
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
       <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
@@ -34,7 +47,6 @@ export default function InformeDetalle() {
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
 
-        {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-3 flex-wrap">
             {informe.tema && <Badge variant="secondary">{informe.tema}</Badge>}
@@ -50,7 +62,6 @@ export default function InformeDetalle() {
           <p className="text-lg text-slate-600 leading-relaxed">{informe.bajada}</p>
         </div>
 
-        {/* Municipios */}
         {informe.municipios?.length > 0 && (
           <div className="flex items-center gap-2 mb-8 flex-wrap">
             <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
@@ -60,7 +71,6 @@ export default function InformeDetalle() {
           </div>
         )}
 
-        {/* Insights */}
         {informe.insights?.length > 0 && (
           <div className="bg-brand-50 border border-brand-100 rounded-2xl p-6 mb-10">
             <h2 className="text-sm font-semibold text-brand-800 mb-3 uppercase tracking-wide">Hallazgos clave</h2>
@@ -75,7 +85,6 @@ export default function InformeDetalle() {
           </div>
         )}
 
-        {/* Cuerpo */}
         {informe.cuerpo?.length > 0 && (
           <div className="prose prose-slate max-w-none mb-10 space-y-4">
             {informe.cuerpo.map((parrafo, i) => (
@@ -84,7 +93,6 @@ export default function InformeDetalle() {
           </div>
         )}
 
-        {/* Visualizaciones relacionadas */}
         {vizRelacionadas.length > 0 && (
           <div>
             <h2 className="text-xl font-bold text-[#0a1628] mb-5">Visualizaciones</h2>

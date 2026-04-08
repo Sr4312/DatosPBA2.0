@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { m } from 'framer-motion'
 import {
@@ -8,15 +8,13 @@ import {
   Tooltip, Legend, Filler,
 } from 'chart.js'
 import { Bar, Line } from 'react-chartjs-2'
-import { informes, hilos, reportesRapidos, visualizaciones } from '@/components/data/mockData'
+import { supabase } from '@/lib/supabase'
 import EntryCard from '@/components/shared/EntryCard'
 import TickerBar from '@/components/shared/TickerBar'
 import MedidorMunicipal from '@/components/MedidorMunicipal'
 import { Badge } from '@/components/ui/badge'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Tooltip, Legend, Filler)
-
-const byDate = arr => [...arr].sort((a, b) => (b.fechaOrden || '').localeCompare(a.fechaOrden || ''))
 
 function SectionHeader({ title, href }) {
   return (
@@ -37,7 +35,6 @@ const XLogo = () => (
   </svg>
 )
 
-/* ── Publicaciones: header estándar + ticker de tweets ── */
 function PublicacionesTicker({ hilos }) {
   const doubled = [...hilos, ...hilos, ...hilos, ...hilos]
   return (
@@ -78,15 +75,14 @@ function PublicacionesTicker({ hilos }) {
   )
 }
 
-
 const CHART_COMPONENTS = { bar: Bar, line: Line }
 
-// Finds the latest informe that has a linked visualization (non-tabla)
-function getHeroViz(sortedInformes) {
+function getHeroViz(sortedInformes, visualizaciones) {
   for (const inf of sortedInformes) {
-    const linked = visualizaciones.filter(v => v.informeUrl === inf.url && v.tipo !== 'tabla')
+    const linked = visualizaciones.filter(v => (v.informe_url ?? v.informeUrl) === inf.url && v.tipo !== 'tabla')
     if (linked.length > 0) {
-      const viz = linked.find(v => (v.chartData?.datasets?.length ?? 0) > 1) ?? linked[0]
+      const chartData = (v) => v.chart_data ?? v.chartData
+      const viz = linked.find(v => (chartData(v)?.datasets?.length ?? 0) > 1) ?? linked[0]
       return { viz, informe: inf }
     }
   }
@@ -96,6 +92,8 @@ function getHeroViz(sortedInformes) {
 function HeroVizPanel({ informe, viz }) {
   const chartRef = useRef(null)
   const ChartComponent = CHART_COMPONENTS[viz.tipo] ?? Bar
+  const chartData = viz.chart_data ?? viz.chartData
+  const chartOptions = viz.chart_options ?? viz.chartOptions
 
   const darkTicks = { color: 'rgba(255,255,255,0.45)', font: { family: 'Poppins', size: 10 } }
   const darkGrid  = { color: 'rgba(255,255,255,0.07)' }
@@ -105,7 +103,7 @@ function HeroVizPanel({ informe, viz }) {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: (viz.chartData?.datasets?.length ?? 0) > 1,
+        display: (chartData?.datasets?.length ?? 0) > 1,
         position: 'bottom',
         labels: { font: { family: 'Poppins', size: 10 }, color: 'rgba(255,255,255,0.55)', boxWidth: 10, padding: 10 },
       },
@@ -113,16 +111,16 @@ function HeroVizPanel({ informe, viz }) {
     },
     scales: {
       x: {
-        ...(viz.chartOptions?.scales?.x ?? {}),
-        ticks: { ...(viz.chartOptions?.scales?.x?.ticks ?? {}), ...darkTicks },
+        ...(chartOptions?.scales?.x ?? {}),
+        ticks: { ...(chartOptions?.scales?.x?.ticks ?? {}), ...darkTicks },
         grid: darkGrid,
-        title: { ...(viz.chartOptions?.scales?.x?.title ?? {}), color: 'rgba(255,255,255,0.3)' },
+        title: { ...(chartOptions?.scales?.x?.title ?? {}), color: 'rgba(255,255,255,0.3)' },
       },
       y: {
-        ...(viz.chartOptions?.scales?.y ?? {}),
-        ticks: { ...(viz.chartOptions?.scales?.y?.ticks ?? {}), ...darkTicks },
+        ...(chartOptions?.scales?.y ?? {}),
+        ticks: { ...(chartOptions?.scales?.y?.ticks ?? {}), ...darkTicks },
         grid: darkGrid,
-        title: { ...(viz.chartOptions?.scales?.y?.title ?? {}), color: 'rgba(255,255,255,0.3)' },
+        title: { ...(chartOptions?.scales?.y?.title ?? {}), color: 'rgba(255,255,255,0.3)' },
       },
     },
   }
@@ -134,7 +132,6 @@ function HeroVizPanel({ informe, viz }) {
       transition={{ duration: 0.6, delay: 0.25 }}
       className="w-full flex flex-col"
     >
-      {/* eyebrow */}
       <div className="flex items-center gap-2 mb-3">
         <span className="w-1.5 h-1.5 rounded-full bg-brand-400" />
         <span className="text-[10px] font-semibold text-brand-400 uppercase tracking-[0.18em]">
@@ -142,17 +139,14 @@ function HeroVizPanel({ informe, viz }) {
         </span>
       </div>
 
-      {/* informe title */}
       <p className="text-base font-semibold text-white leading-snug mb-4 line-clamp-2">
         {informe.titulo}
       </p>
 
-      {/* chart */}
       <div style={{ height: 260 }}>
-        <ChartComponent ref={chartRef} data={viz.chartData} options={options} />
+        <ChartComponent ref={chartRef} data={chartData} options={options} />
       </div>
 
-      {/* description + link */}
       <div className="mt-4 pt-4 border-t border-white/10">
         <p className="text-xs text-slate-400 leading-relaxed line-clamp-4">
           {informe.bajada}
@@ -168,24 +162,39 @@ function HeroVizPanel({ informe, viz }) {
   )
 }
 
-const allInformes = byDate(informes)
-const allReportes = byDate(reportesRapidos)
-const allHilos    = byDate(hilos)
-const heroData    = getHeroViz(allInformes)
-
 export default function Home() {
+  const [informes, setInformes] = useState([])
+  const [reportes, setReportes] = useState([])
+  const [hilos, setHilos] = useState([])
+  const [visualizaciones, setVisualizaciones] = useState([])
+
+  useEffect(() => {
+    Promise.all([
+      supabase.from('informes').select('*').order('fecha_orden', { ascending: false }),
+      supabase.from('reportes_rapidos').select('*').order('fecha_orden', { ascending: false }),
+      supabase.from('hilos').select('*').order('fecha_orden', { ascending: false }),
+      supabase.from('visualizaciones').select('*'),
+    ]).then(([{ data: inf }, { data: rep }, { data: hil }, { data: viz }]) => {
+      setInformes(inf || [])
+      setReportes(rep || [])
+      setHilos(hil || [])
+      setVisualizaciones(viz || [])
+    })
+  }, [])
+
+  const heroData = informes.length && visualizaciones.length
+    ? getHeroViz(informes, visualizaciones)
+    : null
 
   return (
     <div>
-      {/* Reportes rápidos - ticker */}
-      <TickerBar reportes={allReportes} />
+      <TickerBar reportes={reportes} />
 
       {/* Hero */}
       <section className="bg-[#0a1628] bg-pattern-dark py-10 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col lg:flex-row items-start lg:items-center lg:justify-between gap-10 lg:gap-16">
 
-            {/* Izquierda: texto */}
             <m.div
               className="flex-1"
               initial={{ opacity: 0, y: 16 }}
@@ -217,7 +226,6 @@ export default function Home() {
               </div>
             </m.div>
 
-            {/* Derecha: viz del último informe */}
             {heroData && (
               <div className="w-full lg:flex-1 lg:max-w-[500px]">
                 <HeroVizPanel viz={heroData.viz} informe={heroData.informe} />
@@ -229,15 +237,13 @@ export default function Home() {
       </section>
 
       <div className="py-16">
-        {/* 1. Medidor Municipal */}
         <MedidorMunicipal />
 
-        {/* Informes - full width grid */}
         <section className="mb-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <SectionHeader title="Informes" href="/informes" />
             <div className="grid sm:grid-cols-2 gap-5">
-              {allInformes.slice(0, 4).map((inf, i) => (
+              {informes.slice(0, 4).map((inf, i) => (
                 <EntryCard
                   key={inf.id}
                   titulo={inf.titulo}
@@ -255,9 +261,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 3. Publicaciones - vertical auto-scroll */}
-        <PublicacionesTicker hilos={allHilos} />
-
+        <PublicacionesTicker hilos={hilos} />
       </div>
     </div>
   )
