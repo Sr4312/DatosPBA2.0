@@ -2,23 +2,22 @@ import { Link } from 'react-router-dom'
 import { m } from 'framer-motion'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
 
-// ─── palette ────────────────────────────────────────────────
+// palette — chrome/layout colors
 const C = {
-  paper:    '#f4f1eb',
-  ink:      '#0d1117',
-  inkMid:   '#3d4555',
-  inkLight: '#8a93a8',
-  lean:     '#1a6b3a',   // deep green - efficient state
+  bg:       '#f7f6f2',
+  ink:      '#0a1628',
+  inkMid:   '#475569',
+  inkLight: '#94a3b8',
+  lean:     '#1a6b3a',
   leanBg:   '#e8f5ee',
-  heavy:    '#0f2d5e',   // deep navy - bloated state
+  heavy:    '#0f2d5e',
   heavyBg:  '#e8eef7',
-  mid:      '#b45309',   // amber - middle ground
+  mid:      '#b45309',
   midBg:    '#fef3c7',
-  rule:     'rgba(13,17,23,0.12)',
-  accent:   '#1565C0',
+  rule:     'rgba(13,17,23,0.09)',
+  accent:   '#3d65b2',
 }
 
-// ─── dataset ────────────────────────────────────────────────
 const MUNICIPIOS = [
   { name: 'Vicente López',    pct: 4.4,  zona: 'lean',  handle: '@VivamosVL' },
   { name: 'Tres de Febrero',  pct: 4.8,  zona: 'lean',  handle: '@Municipalidad3F' },
@@ -34,7 +33,6 @@ const ZONE_COLOR = { lean: C.lean, mid: C.mid, heavy: C.heavy }
 const ZONE_BG    = { lean: C.leanBg, mid: C.midBg, heavy: C.heavyBg }
 const ZONE_LABEL = { lean: 'Estado liviano', mid: 'Estado intermedio', heavy: 'Estado pesado' }
 
-// ─── helpers ────────────────────────────────────────────────
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
@@ -59,37 +57,28 @@ function Chip({ zona }) {
   )
 }
 
-// ─── Spectrum dot plot ───────────────────────────────────────
 function SpectrumChart() {
   const sorted = [...MUNICIPIOS].sort((a, b) => a.pct - b.pct)
 
   return (
     <m.div {...fadeUp(0.1)} style={{ position: 'relative', paddingBottom: 48 }}>
-      {/* zone backgrounds */}
       <div style={{ position: 'relative', height: 120 }}>
-        {/* lean zone */}
         <div style={{
           position: 'absolute', left: 0, width: `${(10 / MAX) * 100}%`,
           top: 0, bottom: 0, background: C.leanBg, borderRadius: '8px 0 0 8px',
         }} />
-        {/* mid zone */}
         <div style={{
           position: 'absolute', left: `${(10 / MAX) * 100}%`, width: `${(20 / MAX) * 100}%`,
           top: 0, bottom: 0, background: '#fffbf0',
         }} />
-        {/* heavy zone */}
         <div style={{
           position: 'absolute', left: `${(30 / MAX) * 100}%`, right: 0,
           top: 0, bottom: 0, background: C.heavyBg, borderRadius: '0 8px 8px 0',
         }} />
-
-        {/* axis line */}
         <div style={{
           position: 'absolute', left: 0, right: 0, top: '50%',
           height: 2, background: C.rule,
         }} />
-
-        {/* tick marks */}
         {[0, 10, 20, 30, 40].map(t => (
           <div key={t} style={{
             position: 'absolute', left: `${(t / MAX) * 100}%`,
@@ -98,8 +87,6 @@ function SpectrumChart() {
             <div style={{ width: 1, height: 10, background: C.inkLight, margin: '0 auto' }} />
           </div>
         ))}
-
-        {/* dots */}
         {sorted.map((muni, i) => {
           const left = `${(muni.pct / MAX) * 100}%`
           const isTop = i % 2 === 0
@@ -110,15 +97,8 @@ function SpectrumChart() {
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: 0.05 * i + 0.3, type: 'spring', stiffness: 300 }}
-              style={{
-                position: 'absolute',
-                left,
-                top: '50%',
-                transform: 'translate(-50%, -50%)',
-                zIndex: 10,
-              }}
+              style={{ position: 'absolute', left, top: '50%', transform: 'translate(-50%, -50%)', zIndex: 10 }}
             >
-              {/* label above/below */}
               <div style={{
                 position: 'absolute',
                 bottom: isTop ? 18 : 'auto',
@@ -135,15 +115,13 @@ function SpectrumChart() {
                   {muni.name}
                 </div>
               </div>
-              {/* dot */}
               <div style={{
                 width: 14, height: 14,
                 borderRadius: '50%',
                 background: ZONE_COLOR[muni.zona],
-                border: `2px solid ${C.paper}`,
+                border: `2px solid ${C.bg}`,
                 boxShadow: `0 0 0 1px ${ZONE_COLOR[muni.zona]}`,
               }} />
-              {/* stem */}
               <div style={{
                 position: 'absolute',
                 left: '50%', transform: 'translateX(-50%)',
@@ -156,8 +134,6 @@ function SpectrumChart() {
           )
         })}
       </div>
-
-      {/* x-axis labels */}
       <div style={{ position: 'relative', marginTop: 8 }}>
         {[0, 10, 20, 30, 40].map(t => (
           <span key={t} style={{
@@ -171,8 +147,6 @@ function SpectrumChart() {
           </span>
         ))}
       </div>
-
-      {/* zone labels */}
       <div style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap' }}>
         {['lean', 'mid', 'heavy'].map(z => (
           <div key={z} className="flex items-center gap-1.5">
@@ -185,7 +159,6 @@ function SpectrumChart() {
   )
 }
 
-// ─── municipality card ──────────────────────────────────────
 function MuniCard({ m: muni, delay = 0 }) {
   const col = ZONE_COLOR[muni.zona]
   const bg  = ZONE_BG[muni.zona]
@@ -199,7 +172,6 @@ function MuniCard({ m: muni, delay = 0 }) {
         overflow: 'hidden',
       }}
     >
-      {/* color band */}
       <div style={{ height: 4, background: col }} />
       <div style={{ padding: '20px 22px' }}>
         <div className="flex items-start justify-between gap-3">
@@ -207,7 +179,7 @@ function MuniCard({ m: muni, delay = 0 }) {
             <div style={{ fontSize: '0.7rem', color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4 }}>
               Empleo en adm. pública
             </div>
-            <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '2.4rem', fontWeight: 700, color: col, lineHeight: 1 }}>
+            <div className="font-display" style={{ fontSize: '2.4rem', fontWeight: 700, color: col, lineHeight: 1 }}>
               {muni.pct}%
             </div>
             <div style={{ fontWeight: 600, color: C.ink, marginTop: 6, fontSize: '0.9rem' }}>{muni.name}</div>
@@ -217,7 +189,6 @@ function MuniCard({ m: muni, delay = 0 }) {
           </div>
           <Chip zona={muni.zona} />
         </div>
-        {/* bar */}
         <div style={{ marginTop: 16, background: bg, borderRadius: 999, height: 6, overflow: 'hidden' }}>
           <m.div
             initial={{ width: 0 }}
@@ -235,10 +206,9 @@ function MuniCard({ m: muni, delay = 0 }) {
   )
 }
 
-// ─── dumbbell comparison ────────────────────────────────────
 function Dumbbell() {
-  const lean  = MUNICIPIOS[0]  // Vicente López 4.4%
-  const heavy = MUNICIPIOS[6]  // Alberti 38%
+  const lean  = MUNICIPIOS[0]
+  const heavy = MUNICIPIOS[6]
   const ratio = (heavy.pct / lean.pct).toFixed(1)
 
   return (
@@ -253,19 +223,16 @@ function Dumbbell() {
       </p>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-        {/* lean side */}
         <div style={{ textAlign: 'center', minWidth: 120 }}>
-          <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '3.5rem', fontWeight: 700, color: C.lean, lineHeight: 1 }}>
+          <div className="font-display" style={{ fontSize: '3.5rem', fontWeight: 700, color: C.lean, lineHeight: 1 }}>
             {lean.pct}%
           </div>
           <div style={{ fontWeight: 600, color: C.ink, fontSize: '0.85rem', marginTop: 6 }}>{lean.name}</div>
           <Chip zona="lean" />
         </div>
 
-        {/* dumbbell bar */}
         <div style={{ flex: 1, position: 'relative', height: 4, margin: '0 16px', marginTop: -12 }}>
           <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(90deg, ${C.lean}, ${C.heavy})`, borderRadius: 999 }} />
-          {/* ratio badge */}
           <div style={{
             position: 'absolute', left: '50%', top: '50%',
             transform: 'translate(-50%, -50%)',
@@ -277,9 +244,8 @@ function Dumbbell() {
           </div>
         </div>
 
-        {/* heavy side */}
         <div style={{ textAlign: 'center', minWidth: 120 }}>
-          <div style={{ fontFamily: '"Playfair Display", serif', fontSize: '3.5rem', fontWeight: 700, color: C.heavy, lineHeight: 1 }}>
+          <div className="font-display" style={{ fontSize: '3.5rem', fontWeight: 700, color: C.heavy, lineHeight: 1 }}>
             {heavy.pct}%
           </div>
           <div style={{ fontWeight: 600, color: C.ink, fontSize: '0.85rem', marginTop: 6 }}>{heavy.name}</div>
@@ -295,82 +261,80 @@ function Dumbbell() {
   )
 }
 
-// ─── main page ──────────────────────────────────────────────
 export default function InformeCAFEstadoMunicipal() {
   const lean  = MUNICIPIOS.filter(m => m.zona === 'lean')
   const mid   = MUNICIPIOS.filter(m => m.zona === 'mid')
   const heavy = MUNICIPIOS.filter(m => m.zona === 'heavy')
 
   return (
-    <div style={{ background: C.paper, minHeight: '100vh' }}>
+    <div style={{ background: C.bg, minHeight: '100vh' }}>
 
-      {/* ── back nav ── */}
-      <div className="max-w-5xl mx-auto px-6 pt-10">
-        <Link
-          to="/informes"
-          className="inline-flex items-center gap-1.5 text-sm no-underline"
-          style={{ color: C.inkLight }}
-        >
-          <ArrowLeft className="w-4 h-4" /> Volver a informes
-        </Link>
-      </div>
+      {/* HERO OSCURO */}
+      <div
+        className="bg-pattern-dark"
+        style={{ background: '#0a1628' }}
+      >
+        <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
+          <Link
+            to="/informes"
+            className="inline-flex items-center gap-1.5 text-sm no-underline mb-10"
+            style={{ color: 'rgba(255,255,255,0.45)' }}
+          >
+            <ArrowLeft className="w-4 h-4" /> Volver a informes
+          </Link>
 
-      {/* ══════════════════════ HERO ══════════════════════ */}
-      <div className="max-w-5xl mx-auto px-6 pt-10 pb-14">
-
-        {/* eyebrow */}
-        <m.div {...fadeUp(0)}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
-            <div style={{ width: 32, height: 2, background: C.accent }} />
-            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent, textTransform: 'uppercase', letterSpacing: '0.15em' }}>
-              Atlas CAF · Gobiernos Locales · Buenos Aires
-            </span>
-          </div>
-        </m.div>
-
-        <m.h1
-          {...fadeUp(0.05)}
-          style={{
-            fontFamily: '"Playfair Display", serif',
-            fontSize: 'clamp(2.4rem, 6vw, 4rem)',
-            fontWeight: 700,
-            color: C.ink,
-            lineHeight: 1.1,
-            marginBottom: 20,
-            maxWidth: 780,
-          }}
-        >
-          Dos Buenos Aires:<br />
-          <span style={{ color: C.lean }}>el estado que trabaja</span>{' '}
-          y <span style={{ color: C.heavy }}>el estado que pesa</span>
-        </m.h1>
-
-        <m.p {...fadeUp(0.1)} style={{ color: C.inkMid, maxWidth: 620, lineHeight: 1.7, fontSize: '1.02rem' }}>
-          El Atlas de CAF revela una brecha de hasta <strong>9 veces</strong> en el porcentaje
-          de empleo en administración pública entre municipios bonaerenses. Más estado no significa
-          mejor estado: significa más carga tributaria y menos sector privado.
-        </m.p>
-
-        {/* meta */}
-        <m.div {...fadeUp(0.15)} style={{ display: 'flex', gap: 24, marginTop: 24, flexWrap: 'wrap' }}>
-          {[
-            { label: 'Fuente', val: 'Atlas CAF Gobiernos Locales' },
-            { label: 'Cobertura', val: 'Municipios de Buenos Aires' },
-            { label: 'Indicador', val: '% empleo en adm. pública' },
-          ].map(item => (
-            <div key={item.label}>
-              <div style={{ fontSize: '0.68rem', color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
-              <div style={{ fontSize: '0.82rem', fontWeight: 600, color: C.ink, marginTop: 2 }}>{item.val}</div>
+          <m.div {...fadeUp(0)}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
+              <div style={{ width: 32, height: 2, background: C.accent }} />
+              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent, textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+                Atlas CAF · Gobiernos Locales · Buenos Aires
+              </span>
             </div>
-          ))}
-        </m.div>
+          </m.div>
+
+          <m.h1
+            {...fadeUp(0.05)}
+            className="font-display"
+            style={{
+              fontSize: 'clamp(2.4rem, 6vw, 4rem)',
+              fontWeight: 700,
+              color: '#fff',
+              lineHeight: 1.1,
+              marginBottom: 20,
+              maxWidth: 780,
+            }}
+          >
+            Dos Buenos Aires:<br />
+            <span style={{ color: '#34d399' }}>el estado que trabaja</span>{' '}
+            y <span style={{ color: '#7dd3fc' }}>el estado que pesa</span>
+          </m.h1>
+
+          <m.p {...fadeUp(0.1)} style={{ color: 'rgba(255,255,255,0.60)', maxWidth: 620, lineHeight: 1.7, fontSize: '1.02rem' }}>
+            El Atlas de CAF revela una brecha de hasta <strong style={{ color: 'rgba(255,255,255,0.9)' }}>9 veces</strong> en el porcentaje
+            de empleo en administración pública entre municipios bonaerenses. Más estado no significa
+            mejor estado: significa más carga tributaria y menos sector privado.
+          </m.p>
+
+          <m.div {...fadeUp(0.15)} style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}>
+            {[
+              { label: 'Fuente', val: 'Atlas CAF Gobiernos Locales' },
+              { label: 'Cobertura', val: 'Municipios de Buenos Aires' },
+              { label: 'Indicador', val: '% empleo en adm. pública' },
+            ].map(item => (
+              <div key={item.label}>
+                <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
+                <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
+              </div>
+            ))}
+          </m.div>
+        </div>
       </div>
 
-      {/* ══════════════════ SPECTRUM ══════════════════ */}
-      <div style={{ background: '#fff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
+      {/* SPECTRUM */}
+      <div style={{ background: '#fff', borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-14">
           <m.div {...fadeUp(0)} className="mb-8">
-            <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: '1.6rem', fontWeight: 700, color: C.ink, marginBottom: 8 }}>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               El espectro del empleo estatal municipal
             </h2>
             <p style={{ color: C.inkMid, fontSize: '0.88rem', maxWidth: 560 }}>
@@ -378,15 +342,14 @@ export default function InformeCAFEstadoMunicipal() {
               que trabaja en la administración pública.
             </p>
           </m.div>
-
           <SpectrumChart />
         </div>
       </div>
 
-      {/* ══════════════════ DUMBBELL ══════════════════ */}
+      {/* DUMBBELL */}
       <div className="max-w-5xl mx-auto px-6 py-14">
         <m.div {...fadeUp(0)} className="mb-8">
-          <h2 style={{ fontFamily: '"Playfair Display", serif', fontSize: '1.6rem', fontWeight: 700, color: C.ink, marginBottom: 8 }}>
+          <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             La brecha que no debería existir
           </h2>
           <p style={{ color: C.inkMid, fontSize: '0.88rem', maxWidth: 560 }}>
@@ -394,11 +357,10 @@ export default function InformeCAFEstadoMunicipal() {
             radicalmente distintos.
           </p>
         </m.div>
-
         <Dumbbell />
       </div>
 
-      {/* ══════════════════ CARDS GRID ══════════════════ */}
+      {/* CARDS GRID */}
       <div style={{ background: '#fff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-14">
 
@@ -454,28 +416,28 @@ export default function InformeCAFEstadoMunicipal() {
         </div>
       </div>
 
-      {/* ══════════════════ INSIGHT BLOCK ══════════════════ */}
+      {/* CONCLUSIÓN */}
       <div className="max-w-5xl mx-auto px-6 py-14">
         <m.div
           {...fadeUp(0)}
+          className="bg-pattern-dark"
           style={{
-            background: C.ink,
+            background: '#0a1628',
             borderRadius: 20,
             padding: '40px 44px',
             position: 'relative',
             overflow: 'hidden',
           }}
         >
-          {/* geometric accent */}
           <div style={{
             position: 'absolute', right: -60, top: -60,
             width: 240, height: 240, borderRadius: '50%',
-            border: `40px solid rgba(255,255,255,0.04)`,
+            border: '40px solid rgba(255,255,255,0.04)',
           }} />
           <div style={{
             position: 'absolute', right: 40, bottom: -80,
             width: 160, height: 160, borderRadius: '50%',
-            border: `30px solid rgba(255,255,255,0.03)`,
+            border: '30px solid rgba(255,255,255,0.03)',
           }} />
 
           <div className="relative z-10">
@@ -511,7 +473,7 @@ export default function InformeCAFEstadoMunicipal() {
         </m.div>
       </div>
 
-      {/* ══════════════════════ FOOTER ══════════════════════ */}
+      {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <p style={{ fontSize: '0.78rem', color: C.inkLight }}>
