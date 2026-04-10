@@ -36,13 +36,14 @@ const XLogo = () => (
 )
 
 function PublicacionesTicker({ hilos }) {
-  const doubled = [...hilos, ...hilos, ...hilos, ...hilos]
+  if (!hilos.length) return null
+  const doubled = [...hilos, ...hilos]
   return (
-    <section className="mb-16">
+    <section className="mb-16 py-10 border-y border-slate-200/80 bg-gradient-to-b from-white/60 to-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-6">
         <SectionHeader title="Publicaciones" href="/hilos" />
       </div>
-      <div className="overflow-hidden">
+      <div className="max-w-7xl mx-auto pl-4 sm:pl-6 overflow-hidden relative">
         <div className="flex gap-4 ticker-track" style={{ width: 'max-content' }}>
           {doubled.map((h, i) => (
             <a
@@ -50,19 +51,19 @@ function PublicacionesTicker({ hilos }) {
               href={h.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-64 shrink-0 bg-white rounded-xl border border-slate-200/60 border-l-4 border-l-purple-400 p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow no-underline"
+              className="w-72 shrink-0 bg-white rounded-2xl border border-slate-200/60 border-l-4 border-l-purple-400 p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 no-underline"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <img src="/logo-icon.svg" alt="DatosPBA" className="w-8 h-8 rounded-full shrink-0 object-cover" />
+                  <img src="/logo-icon.svg" alt="DatosPBA" className="w-7 h-7 rounded-full shrink-0 object-cover" />
                   <div className="leading-tight">
                     <p className="text-xs font-bold text-slate-900">DatosPBA</p>
                     <p className="text-[10px] text-slate-400">@datospba</p>
                   </div>
                 </div>
-                <span className="text-slate-900"><XLogo /></span>
+                <span className="text-slate-300"><XLogo /></span>
               </div>
-              <p className="text-xs text-slate-800 leading-relaxed line-clamp-4 flex-1">{h.resumen}</p>
+              <p className="text-xs text-slate-700 leading-relaxed line-clamp-4 flex-1">{h.resumen}</p>
               <div className="flex items-center justify-between pt-2 border-t border-slate-100">
                 <span className="text-[10px] text-slate-400">{h.fecha}</span>
                 {h.tema && <Badge variant="secondary" className="text-[10px] py-0">{h.tema}</Badge>}
@@ -70,6 +71,7 @@ function PublicacionesTicker({ hilos }) {
             </a>
           ))}
         </div>
+        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent pointer-events-none" />
       </div>
     </section>
   )
