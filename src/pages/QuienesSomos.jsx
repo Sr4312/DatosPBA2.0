@@ -1,11 +1,13 @@
+import { useState, useEffect } from 'react'
 import { m } from 'framer-motion'
 import { BarChart2, Database, FileText, MapPin, Users, Target, Eye, TrendingUp } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
 
-const STATS = [
-  { icon: FileText,  value: '40+',  label: 'Informes publicados',       color: 'bg-blue-50 text-blue-700' },
-  { icon: Database,  value: '5',    label: 'Datasets abiertos',          color: 'bg-indigo-50 text-indigo-700' },
-  { icon: MapPin,    value: '135',  label: 'Municipios analizados',      color: 'bg-slate-50 text-slate-700' },
-  { icon: Users,     value: '17M+', label: 'Bonaerenses representados',  color: 'bg-sky-50 text-sky-700' },
+const STAT_META = [
+  { icon: FileText, label: 'Informes publicados',      color: 'bg-blue-50 text-blue-700' },
+  { icon: Database, label: 'Datasets abiertos',         color: 'bg-indigo-50 text-indigo-700' },
+  { icon: MapPin,   label: 'Municipios analizados',     color: 'bg-slate-50 text-slate-700' },
+  { icon: Users,    label: 'Bonaerenses representados', color: 'bg-sky-50 text-sky-700' },
 ]
 
 const PILARES = [
@@ -64,6 +66,27 @@ function BarSimple({ label, pct }) {
 }
 
 export default function QuienesSomos() {
+  const [stats, setStats] = useState([
+    { ...STAT_META[0], value: '…' },
+    { ...STAT_META[1], value: '…' },
+    { ...STAT_META[2], value: '135' },
+    { ...STAT_META[3], value: '17M+' },
+  ])
+
+  useEffect(() => {
+    Promise.all([
+      supabase.from('informes').select('id', { count: 'exact', head: true }),
+      supabase.from('datasets').select('id', { count: 'exact', head: true }),
+    ]).then(([{ count: inf }, { count: dat }]) => {
+      setStats([
+        { ...STAT_META[0], value: inf ? `${inf}` : '—' },
+        { ...STAT_META[1], value: dat ? `${dat}` : '—' },
+        { ...STAT_META[2], value: '135' },
+        { ...STAT_META[3], value: '17M+' },
+      ])
+    })
+  }, [])
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
 
@@ -87,7 +110,7 @@ export default function QuienesSomos() {
 
       {/* Stats grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-20">
-        {STATS.map((s, i) => (
+        {stats.map((s, i) => (
           <m.div
             key={s.label}
             initial={{ opacity: 0, y: 20 }}
