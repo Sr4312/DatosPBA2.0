@@ -154,8 +154,8 @@ export default function QuienesSomos() {
               y datasets listos para usar.
             </p>
             <p>
-              No tenemos filiación política ni financiamiento institucional. Nuestro único
-              compromiso es con la evidencia.
+              Creemos que el acceso a la información es la base de cualquier debate público
+              serio. Por eso todo lo que publicamos es abierto, descargable y reutilizable.
             </p>
           </div>
         </m.div>
