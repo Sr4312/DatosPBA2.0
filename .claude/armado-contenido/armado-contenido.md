@@ -1,12 +1,7 @@
 ---
 name: generador-informe
 description: >
-  Este skill genera un informe estructurado en el formato adecuado para 
-  cargar a la página web de Datos PBA. Debe activarse siempre que el usuario
-  provea información (texto, CSV, imagen, datos sueltos) y pida armar un informe,
-  nota de análisis o reporte. No debe activarse si no hay ningún dato o contenido
-  de base. Usá este skill también cuando el usuario diga "haceme un informe",
-  "armá una nota", "quiero publicar esto en Datos PBA" o similares.
+  Este skill genera un informe estructurado en el formato adecuado para cargar a la página web de Datos PBA. Debe activarse siempre que el usuario provea información (texto, CSV, imagen, datos sueltos) y pida armar un informe, nota de análisis o reporte. No debe activarse si no hay ningún dato o contenido de base. Usá este skill también cuando el usuario diga "haceme un informe", "armá una nota", "quiero publicar esto en Datos PBA" o similares.
 ---
 
 # Generador de Informes — Datos PBA
@@ -69,6 +64,8 @@ Todo dato utilizado en el informe debe ser citado con su fuente correspondiente.
 
 7. **Presentar el borrador al usuario** para revisión. Una vez aprobado,
    proceder a subir el informe a la web de Datos PBA con todos sus componentes.
+
+8. **Sumar el grafico creado en la pagina de inicio** en la pagina de inicio, al lado del Datos PBA, hay un grafico del ultimo informe. Cuando se crea un informe nuevo, se debe debe cargar uno de los graficos de ese ultimo informe, en la pagina de inicio, siguiendo el formato del informe anterior.   
 
 ## Output esperado
 
