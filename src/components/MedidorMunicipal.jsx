@@ -48,6 +48,67 @@ CONCEJALES_RAW.forEach(d => { CONCEJALES_DATA[normName(d.municipio)] = d })
 const CONC_MIN = Math.min(...CONCEJALES_RAW.map(d => d.por_habitante))
 const CONC_MAX = Math.max(...CONCEJALES_RAW.map(d => d.por_habitante))
 
+/* ── Tasa Vial data ─────────────────────────────────────────────────────── */
+const TASA_VIAL_RAW = {
+  'marcos paz':                    { tipo: 'pct', valor: 0.80 },
+  'escobar':                       { tipo: 'pct', valor: 0.90 },
+  'tigre':                         { tipo: 'pct', valor: 0.90 },
+  'las heras':                     { tipo: 'pct', valor: 1.00 },
+  'hurlingham':                    { tipo: 'pct', valor: 1.44 },
+  'la matanza':                    { tipo: 'pct', valor: 1.50 },
+  'almirante brown':               { tipo: 'pct', valor: 2.00 },
+  'avellaneda':                    { tipo: 'pct', valor: 2.00 },
+  'berazategui':                   { tipo: 'pct', valor: 2.00 },
+  'ezeiza':                        { tipo: 'pct', valor: 2.00 },
+  'florencio varela':              { tipo: 'pct', valor: 2.00 },
+  'ituzaingo':                     { tipo: 'pct', valor: 2.00 },
+  'lanus':                         { tipo: 'pct', valor: 2.00 },
+  'lomas de zamora':               { tipo: 'pct', valor: 2.00 },
+  'lujan':                         { tipo: 'pct', valor: 2.00 },
+  'pehuajo':                       { tipo: 'pct', valor: 2.00 },
+  'presidente peron':              { tipo: 'pct', valor: 2.00 },
+  'presidente juan domingo peron': { tipo: 'pct', valor: 2.00 },
+  'quilmes':                       { tipo: 'pct', valor: 2.00 },
+  'azul':                          { tipo: 'pct', valor: 2.50 },
+  'moreno':                        { tipo: 'pct', valor: 2.50 },
+  'pilar':                         { tipo: 'pct', valor: 2.50 },
+  'general pueyrredon':            { tipo: 'pct', valor: 3.00 },
+  'pinamar':                       { tipo: 'pct', valor: 3.00, nota: 'Eliminada tras temporada estival 2025-2026' },
+  'malvinas argentinas':           { tipo: 'pesos', label: '$2,75–$3,50/l' },
+  'campana':                       { tipo: 'pesos', label: '$4–$8/l' },
+  'san fernando':                  { tipo: 'pesos', label: '$7,92/l' },
+  'junin':                         { tipo: 'pesos', label: '$8,30–$11/l' },
+  'general rodriguez':             { tipo: 'pesos', label: '$10/l' },
+  'jose c. paz':                   { tipo: 'pesos', label: '$30/l' },
+  'jose clemente paz':             { tipo: 'pesos', label: '$30/l' },
+}
+
+function getTasaVial(name) {
+  return TASA_VIAL_RAW[normName(name)] ?? null
+}
+
+function tasaFill(valor) {
+  const t = (valor - 0.8) / 2.2
+  const h = Math.round(45 * (1 - t))
+  const s = Math.round(97 - 24 * t)
+  const l = Math.round(55 - 14 * t)
+  return `hsl(${h},${s}%,${l}%)`
+}
+
+function tasaVialStyle(tasa, state) {
+  const w = state !== 'default' ? 1.5 : 0.6
+  if (!tasa) {
+    return { fillColor: '#cbd5e1', fillOpacity: 0.25, color: '#94a3b8', weight: 0.4, opacity: 0.6 }
+  }
+  if (tasa.tipo === 'pesos') {
+    const fo = state === 'selected' ? 0.82 : state === 'hover' ? 0.65 : 0.45
+    return { fillColor: '#0d9488', fillOpacity: fo, color: '#0f766e', weight: w, opacity: 0.9 }
+  }
+  const base = 0.28 + ((tasa.valor - 0.8) / 2.2) * 0.52
+  const fo = state === 'selected' ? 0.90 : state === 'hover' ? Math.min(base + 0.22, 0.92) : base
+  return { fillColor: tasaFill(tasa.valor), fillOpacity: fo, color: '#7f1d1d', weight: w, opacity: 0.8 }
+}
+
 function concejalesStyle(porHabitante, state) {
   const t = (porHabitante - CONC_MIN) / (CONC_MAX - CONC_MIN)
   const fillOpacity = state === 'hover' ? 0.15 + t * 0.55 + 0.15 : 0.08 + t * 0.62
@@ -117,7 +178,7 @@ const INDICATORS = {
     { key: 'urbano',          label: 'Urbanización',                 good: 'high' },
     { key: 'participacion_mujeres', label: 'Participación laboral fem.', good: 'high' },
   ],
-  tasas: null,
+  tasas: 'tasa',
   concejales: 'custom',
 }
 
@@ -192,6 +253,8 @@ export default function AtlasMunicipal() {
       if (t === 'concejales') {
         const cd = layer._concejalesData
         layer.setStyle(cd ? concejalesStyle(cd.por_habitante, 'default') : HIDDEN_STYLE)
+      } else if (t === 'tasas') {
+        layer.setStyle(tasaVialStyle(layer._tasaData, 'default'))
       } else {
         layer.setStyle(THEMES[t]?.default || THEMES.general.default)
       }
@@ -206,6 +269,8 @@ export default function AtlasMunicipal() {
       if (t === 'concejales') {
         const cd = selectedRef.current._concejalesData
         selectedRef.current.setStyle(cd ? concejalesStyle(cd.por_habitante, 'default') : HIDDEN_STYLE)
+      } else if (t === 'tasas') {
+        selectedRef.current.setStyle(tasaVialStyle(selectedRef.current._tasaData, 'default'))
       } else {
         selectedRef.current.setStyle(THEMES[t]?.default || THEMES.general.default)
       }
@@ -262,6 +327,7 @@ export default function AtlasMunicipal() {
 
             layer._municipiosData   = codigo ? dataByCode[codigo] : null
             layer._concejalesData   = CONCEJALES_DATA[normName(name)] || null
+            layer._tasaData         = getTasaVial(name)
             layer._featureName      = name
 
             layer.bindTooltip(name, { sticky: true, direction: 'auto', className: 'muni-tooltip' })
@@ -272,6 +338,8 @@ export default function AtlasMunicipal() {
               if (t === 'concejales') {
                 const cd = e.target._concejalesData
                 if (cd) e.target.setStyle(concejalesStyle(cd.por_habitante, 'hover'))
+              } else if (t === 'tasas') {
+                e.target.setStyle(tasaVialStyle(e.target._tasaData, 'hover'))
               } else {
                 e.target.setStyle(THEMES[t]?.hover || THEMES.general.hover)
               }
@@ -283,6 +351,8 @@ export default function AtlasMunicipal() {
               if (t === 'concejales') {
                 const cd = e.target._concejalesData
                 e.target.setStyle(cd ? concejalesStyle(cd.por_habitante, 'default') : HIDDEN_STYLE)
+              } else if (t === 'tasas') {
+                e.target.setStyle(tasaVialStyle(e.target._tasaData, 'default'))
               } else {
                 e.target.setStyle(THEMES[t]?.default || THEMES.general.default)
               }
@@ -312,7 +382,8 @@ export default function AtlasMunicipal() {
                 nombre: name,
                 ...(muniData || {}),
                 _concejales: cd || null,
-                _noData: !muniData && !cd,
+                _tasa: layer._tasaData || null,
+                _noData: t !== 'tasas' && !muniData && !cd,
               })
             })
           },
@@ -409,15 +480,39 @@ export default function AtlasMunicipal() {
         </div>
 
         {/* Body */}
-        {indicators === null ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center gap-2 px-6 pb-6">
-            <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center mb-1">
-              <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#94a3b8" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <p className="text-sm font-medium text-slate-600">Próximamente</p>
-            <p className="text-xs text-slate-400 leading-relaxed">Estamos procesando datos de tasas e ingresos municipales.</p>
+        {indicators === 'tasa' ? (
+          <div className="flex-1 overflow-y-auto px-5 py-4">
+            {selected._tasa ? (
+              <div className="flex flex-col gap-4">
+                <div className="bg-slate-50 rounded-xl p-4 text-center">
+                  <p className={`text-3xl font-bold leading-none ${selected._tasa.tipo === 'pesos' ? 'text-teal-700' : 'text-red-700'}`}>
+                    {selected._tasa.tipo === 'pct'
+                      ? `${selected._tasa.valor.toFixed(2).replace('.', ',')}%`
+                      : selected._tasa.label}
+                  </p>
+                  <p className="text-[10px] text-slate-400 mt-2 uppercase tracking-wider">
+                    {selected._tasa.tipo === 'pct' ? 'por litro expendido' : 'fijo por litro (pesos)'}
+                  </p>
+                </div>
+                {selected._tasa.nota && (
+                  <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 leading-snug">
+                    {selected._tasa.nota}
+                  </p>
+                )}
+                {selected._tasa.tipo === 'pesos' && (
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    Tasa fija en pesos por litro. Su carga real varía según el precio del combustible.
+                  </p>
+                )}
+                <div className="pt-3 border-t border-slate-100">
+                  <a href="/informes/tasa-vial-municipios-pba-2025" className="text-xs font-medium text-brand-600 hover:text-brand-700 no-underline">
+                    Ver informe completo →
+                  </a>
+                </div>
+              </div>
+            ) : (
+              <p className="text-xs text-slate-400">Sin datos de tasa vial para este partido en el relevamiento 2025.</p>
+            )}
           </div>
         ) : indicators === 'custom' ? (
           /* Concejales detail */
@@ -491,9 +586,6 @@ export default function AtlasMunicipal() {
                   className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${colors[t.id]}`}
                 >
                   {t.label}
-                  {t.id === 'tasas' && (
-                    <span className="ml-2 text-[10px] font-semibold uppercase tracking-wider opacity-60">próx.</span>
-                  )}
                 </button>
               )
             })}
@@ -503,6 +595,27 @@ export default function AtlasMunicipal() {
             <p className="text-[11px] text-slate-400 mt-2">
               Fuente: CAF - Banco de Desarrollo de América Latina y el Caribe
             </p>
+          )}
+          {tema === 'tasas' && (
+            <>
+              <div className="flex items-center gap-3 mt-3">
+                <div className="flex items-center gap-1.5">
+                  <div className="flex-shrink-0 w-20 h-2 rounded-full" style={{ background: 'linear-gradient(to right, hsl(45,97%,55%), hsl(22,88%,51%), hsl(0,73%,41%))' }} />
+                  <span className="text-[10px] text-slate-400">0,8% → 3%</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-3 h-3 rounded-sm shrink-0" style={{ background: '#0d9488', opacity: 0.7 }} />
+                  <span className="text-[10px] text-slate-400">Pesos fijos/l</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-3 h-3 rounded-sm shrink-0 bg-slate-300 opacity-60" />
+                  <span className="text-[10px] text-slate-400">Sin datos</span>
+                </div>
+              </div>
+              <p className="text-[11px] text-slate-400 mt-1.5">
+                Fuente: Ministerio de Economía de la Nación — Subsecretaría de Coordinación Fiscal Provincial, mar. 2025
+              </p>
+            </>
           )}
           {tema === 'concejales' && (
             <>

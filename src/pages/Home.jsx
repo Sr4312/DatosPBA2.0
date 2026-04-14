@@ -12,7 +12,6 @@ import { supabase } from '@/lib/supabase'
 import EntryCard from '@/components/shared/EntryCard'
 import TickerBar from '@/components/shared/TickerBar'
 import MedidorMunicipal from '@/components/MedidorMunicipal'
-import TasaVialMap from '@/components/TasaVialMap'
 import { Badge } from '@/components/ui/badge'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Tooltip, Legend, Filler)
@@ -241,13 +240,6 @@ export default function Home() {
 
       <div className="py-16">
         <MedidorMunicipal />
-
-        <section className="mb-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-8">
-            <SectionHeader title="Tasa Vial Municipal" href="/informes/tasa-vial-municipios-pba-2025" />
-          </div>
-          <TasaVialMap />
-        </section>
 
         <section className="mb-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
