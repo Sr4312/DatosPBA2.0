@@ -150,6 +150,7 @@ const TEMAS = [
   { id: 'general',    label: 'Información general' },
   { id: 'produccion', label: 'Índice de producción' },
   { id: 'tasas',      label: 'Tasas municipales'   },
+  { id: 'tasavial',   label: 'Tasa vial'           },
   { id: 'concejales', label: 'Gasto concejales'    },
 ]
 
@@ -178,7 +179,8 @@ const INDICATORS = {
     { key: 'urbano',          label: 'Urbanización',                 good: 'high' },
     { key: 'participacion_mujeres', label: 'Participación laboral fem.', good: 'high' },
   ],
-  tasas: 'tasa',
+  tasas: null,
+  tasavial: 'tasa',
   concejales: 'custom',
 }
 
@@ -253,7 +255,7 @@ export default function AtlasMunicipal() {
       if (t === 'concejales') {
         const cd = layer._concejalesData
         layer.setStyle(cd ? concejalesStyle(cd.por_habitante, 'default') : HIDDEN_STYLE)
-      } else if (t === 'tasas') {
+      } else if (t === 'tasavial') {
         layer.setStyle(tasaVialStyle(layer._tasaData, 'default'))
       } else {
         layer.setStyle(THEMES[t]?.default || THEMES.general.default)
@@ -269,7 +271,7 @@ export default function AtlasMunicipal() {
       if (t === 'concejales') {
         const cd = selectedRef.current._concejalesData
         selectedRef.current.setStyle(cd ? concejalesStyle(cd.por_habitante, 'default') : HIDDEN_STYLE)
-      } else if (t === 'tasas') {
+      } else if (t === 'tasavial') {
         selectedRef.current.setStyle(tasaVialStyle(selectedRef.current._tasaData, 'default'))
       } else {
         selectedRef.current.setStyle(THEMES[t]?.default || THEMES.general.default)
@@ -338,7 +340,7 @@ export default function AtlasMunicipal() {
               if (t === 'concejales') {
                 const cd = e.target._concejalesData
                 if (cd) e.target.setStyle(concejalesStyle(cd.por_habitante, 'hover'))
-              } else if (t === 'tasas') {
+              } else if (t === 'tasavial') {
                 e.target.setStyle(tasaVialStyle(e.target._tasaData, 'hover'))
               } else {
                 e.target.setStyle(THEMES[t]?.hover || THEMES.general.hover)
@@ -351,7 +353,7 @@ export default function AtlasMunicipal() {
               if (t === 'concejales') {
                 const cd = e.target._concejalesData
                 e.target.setStyle(cd ? concejalesStyle(cd.por_habitante, 'default') : HIDDEN_STYLE)
-              } else if (t === 'tasas') {
+              } else if (t === 'tasavial') {
                 e.target.setStyle(tasaVialStyle(e.target._tasaData, 'default'))
               } else {
                 e.target.setStyle(THEMES[t]?.default || THEMES.general.default)
@@ -383,7 +385,7 @@ export default function AtlasMunicipal() {
                 ...(muniData || {}),
                 _concejales: cd || null,
                 _tasa: layer._tasaData || null,
-                _noData: t !== 'tasas' && !muniData && !cd,
+                _noData: t !== 'tasavial' && !muniData && !cd,
               })
             })
           },
@@ -574,10 +576,11 @@ export default function AtlasMunicipal() {
           <div className="flex flex-wrap gap-2">
             {TEMAS.map(t => {
               const colors = {
-                general:    tema === t.id ? 'bg-[#0a1628] text-white border-[#0a1628]'                       : 'bg-white text-slate-500 border-slate-200 hover:border-[#1a3d7c] hover:text-[#1a3d7c]',
-                produccion: tema === t.id ? 'bg-[#063d2f] text-white border-[#063d2f]'                       : 'bg-white text-slate-500 border-slate-200 hover:border-[#0a5240] hover:text-[#0a5240]',
-                tasas:      tema === t.id ? 'bg-[#4c1d95] text-white border-[#4c1d95]'                       : 'bg-white text-slate-500 border-slate-200 hover:border-[#6d28d9] hover:text-[#6d28d9]',
-                concejales: tema === t.id ? 'bg-[#7b2d00] text-white border-[#7b2d00]'                       : 'bg-white text-slate-500 border-slate-200 hover:border-[#5c2000] hover:text-[#5c2000]',
+                general:    tema === t.id ? 'bg-[#0a1628] text-white border-[#0a1628]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#1a3d7c] hover:text-[#1a3d7c]',
+                produccion: tema === t.id ? 'bg-[#063d2f] text-white border-[#063d2f]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#0a5240] hover:text-[#0a5240]',
+                tasas:      tema === t.id ? 'bg-[#4c1d95] text-white border-[#4c1d95]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#6d28d9] hover:text-[#6d28d9]',
+                tasavial:   tema === t.id ? 'bg-[#991b1b] text-white border-[#991b1b]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#7f1d1d] hover:text-[#7f1d1d]',
+                concejales: tema === t.id ? 'bg-[#7b2d00] text-white border-[#7b2d00]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#5c2000] hover:text-[#5c2000]',
               }
               return (
                 <button
@@ -586,6 +589,9 @@ export default function AtlasMunicipal() {
                   className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${colors[t.id]}`}
                 >
                   {t.label}
+                  {t.id === 'tasas' && (
+                    <span className="ml-2 text-[10px] font-semibold uppercase tracking-wider opacity-60">próx.</span>
+                  )}
                 </button>
               )
             })}
@@ -596,7 +602,7 @@ export default function AtlasMunicipal() {
               Fuente: CAF - Banco de Desarrollo de América Latina y el Caribe
             </p>
           )}
-          {tema === 'tasas' && (
+          {tema === 'tasavial' && (
             <>
               <div className="flex items-center gap-3 mt-3">
                 <div className="flex items-center gap-1.5">
