@@ -93,6 +93,17 @@ export default function InformeDetalle() {
           </div>
         )}
 
+        {informe.fuentes?.length > 0 && (
+          <div className="border-t border-slate-200 pt-6 mb-10">
+            <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Fuentes</h2>
+            <ul className="space-y-1">
+              {informe.fuentes.map((f, i) => (
+                <li key={i} className="text-sm text-slate-500 leading-relaxed">{f}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {vizRelacionadas.length > 0 && (
           <div>
             <h2 className="text-xl font-bold text-[#0a1628] mb-5">Visualizaciones</h2>

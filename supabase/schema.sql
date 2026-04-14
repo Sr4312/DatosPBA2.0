@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS informes (
   insights         jsonb DEFAULT '[]',
   url              text,
   imagen           text,
-  custom           boolean DEFAULT false
+  custom           boolean DEFAULT false,
+  fuentes          jsonb DEFAULT '[]'
 );
 
 CREATE TABLE IF NOT EXISTS datasets (
@@ -316,5 +317,29 @@ INSERT INTO visualizaciones VALUES (
   'Abr. 2026', '2026-04-07', '/informes/uipba-presion-tributaria-2024',
   '{"labels":["Industria","EGA","Construcción","Transporte","Serv. empresariales","Serv. personales","Interm. financiera"],"datasets":[{"label":"Buenos Aires","data":[4.7,10.1,4.8,9.6,9.8,18.4,24.6],"backgroundColor":"#0369a1bb","borderColor":"#0369a1","borderWidth":1,"borderRadius":4},{"label":"Santa Fe","data":[3.6,6.7,3.8,8.2,12.5,15.2,22.0],"backgroundColor":"#0d9488bb","borderColor":"#0d9488","borderWidth":1,"borderRadius":4},{"label":"Córdoba","data":[3.5,6.7,4.8,10.1,11.4,14.1,14.3],"backgroundColor":"#b45309bb","borderColor":"#b45309","borderWidth":1,"borderRadius":4}]}'::jsonb,
   '{"y_tick_format":"percent","plugins":{"legend":{"display":true,"position":"bottom","labels":{"font":{"family":"Poppins","size":11},"color":"#64748b","boxWidth":12}}},"scales":{"x":{"ticks":{"font":{"family":"Poppins","size":11},"color":"#64748b"},"grid":{"color":"rgba(0,0,0,0.04)"}},"y":{"ticks":{"font":{"family":"Poppins","size":11},"color":"#64748b"},"grid":{"color":"rgba(0,0,0,0.04)"},"title":{"display":true,"text":"% sobre VAB","font":{"family":"Poppins","size":11},"color":"#94a3b8"}}}}'::jsonb,
+  null
+);
+
+-- ── Informe: IARAF Transferencias Provincias 2024-2026 ──────
+
+INSERT INTO informes VALUES (
+  'iaraf-transferencias-provincias-2024-2026',
+  'Buenos Aires: la provincia que más perdió en la redistribución nacional',
+  'Desde enero de 2024 hasta febrero de 2026, Buenos Aires acumuló una pérdida de $14,1 billones en transferencias nacionales respecto al promedio de 2023. Tres cuartas partes de esa caída provienen de recortes discrecionales, no de dinámica tributaria.',
+  'Abr. 2026', '2026-04-14', 'Fiscal',
+  '[]',
+  $$["Para medir el impacto del ajuste fiscal nacional sobre las provincias, el IARAF tomó el promedio mensual de transferencias de 2023 como línea de base y calculó, mes a mes, la diferencia acumulada entre ese nivel de referencia y lo que cada jurisdicción efectivamente recibió entre enero de 2024 y febrero de 2026. El resultado, expresado en pesos constantes de febrero de 2026 para eliminar el efecto inflación, permite una comparación objetiva entre provincias. La \"pérdida\" no implica que la provincia haya tenido dinero y lo haya perdido: es cuánto menos recibió respecto al ritmo previo.","Los números no dejan lugar a dudas: la Provincia de Buenos Aires absorbió el impacto más grande con una pérdida acumulada de $14,117 billones. La distancia con el segundo lugar es abismal. Santa Fe registró $2,531 billones y Córdoba $2,115 billones. En términos relativos, PBA perdió casi el doble que Santa Fe y Córdoba combinadas, y casi seis veces más que Santa Fe sola.","La pérdida bonaerense no responde a un único factor. Se descompone en dos canales distintos: $10,5 billones corresponden a transferencias no automáticas —obra pública, programas sociales, subsidios y otros giros discrecionales que el gobierno nacional decidió recortar— y $3,6 billones a transferencias automáticas —principalmente coparticipación federal y leyes especiales—, que cayeron como consecuencia de la dinámica recaudatoria. La restitución de certificados de exclusión de percepción aduanera en marzo de 2025 redujo la recaudación de IVA, y las rebajas en Ganancias y Bienes Personales impactaron directamente en los fondos coparticipables. En definitiva, tres cuartas partes del impacto provienen de una decisión política.","El contraste con CABA es significativo. La Ciudad Autónoma fue la única jurisdicción que terminó con saldo positivo en el período: recibió $549.855 millones más que su promedio de 2023, equivalente a $179.340 por habitante a su favor versus una pérdida de $808.913 por habitante en PBA. Mientras el resto del país resignó recursos, CABA consolidó su posición como beneficiaria neta de la redistribución nacional.","Los datos del IARAF iluminan una tensión estructural que persiste en el federalismo fiscal argentino: la Provincia de Buenos Aires, que concentra el 38% de la población nacional, no solo enfrenta la mayor pérdida absoluta sino también una de las pérdidas per cápita más altas. El ajuste tiene nombre y dirección. Entender su composición —qué parte es decisión política y qué parte es dinámica tributaria— es el primer paso para debatirlo con datos."]$$::jsonb,
+  $$["Buenos Aires acumuló $14,1 billones menos en transferencias nacionales entre enero 2024 y febrero 2026: casi 6 veces más que Santa Fe ($2,5 billones), la segunda más afectada.","El 75% de la pérdida bonaerense ($10,5 billones) proviene de transferencias no automáticas: recortes discrecionales en obra pública, programas sociales y subsidios.","El 25% restante ($3,6 billones) refleja la caída en coparticipación y leyes especiales, impulsada por rebajas impositivas en Ganancias y Bienes Personales.","CABA fue la única jurisdicción con saldo positivo: recibió $549.855 millones más que su promedio de 2023, equivalente a $179.340 por habitante a su favor."]$$::jsonb,
+  '/informes/iaraf-transferencias-provincias-2024-2026', null, true
+);
+
+INSERT INTO visualizaciones VALUES (
+  'v-transferencias-provincias-iaraf',
+  'Pérdida acumulada en transferencias nacionales por provincia (ene. 2024 – feb. 2026)',
+  'Fiscal', 'bar',
+  'IARAF en base a Ministerio de Economía e INDEC',
+  'Abr. 2026', '2026-04-14', '/informes/iaraf-transferencias-provincias-2024-2026',
+  '{"labels":["Buenos Aires","Santa Fe","Córdoba","Chaco","Entre Ríos","La Rioja","Tucumán","S. del Estero","Formosa","Misiones","Mendoza","Salta","Corrientes","San Juan","Catamarca","Río Negro","Neuquén","Jujuy","San Luis","Santa Cruz","La Pampa","T. del Fuego","Chubut","CABA"],"datasets":[{"label":"Diferencia vs. promedio 2023 (millones de $ const. feb. 2026)","data":[-14117989,-2531725,-2115919,-1608224,-1325468,-1250699,-1231074,-1229834,-1117156,-1018861,-994854,-964099,-886545,-754337,-708667,-660323,-611615,-618830,-609001,-558877,-553584,-381861,-279612,549855],"backgroundColor":["#b91c1cbb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#1ab8b8bb","#0d9488bb"],"borderColor":["#b91c1c","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#1ab8b8","#0d9488"],"borderWidth":1,"borderRadius":4}]}'::jsonb,
+  '{"scales":{"x":{"ticks":{"font":{"family":"Poppins","size":9},"color":"#64748b","maxRotation":45},"grid":{"color":"rgba(0,0,0,0.04)"}},"y":{"ticks":{"font":{"family":"Poppins","size":11},"color":"#64748b"},"grid":{"color":"rgba(0,0,0,0.04)"},"title":{"display":true,"text":"Millones de $ const. feb. 2026","font":{"family":"Poppins","size":11},"color":"#94a3b8"}}}}'::jsonb,
   null
 );
