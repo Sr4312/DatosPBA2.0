@@ -29,7 +29,8 @@ clara y fundamentada.
 - Indicación opcional del municipio, partido o región que es el foco del informe.
 - Indicación opcional del tema (laboral, electoral, social, económico, etc.).
 
-Todo dato utilizado en el informe debe ser citado con su fuente correspondiente.
+**Todo dato utilizado en el informe debe ser citado con su fuente correspondiente.**
+Si el usuario no indicó la fuente, preguntar antes de publicar. No inventar ni asumir fuentes.
 
 ## Proceso paso a paso
 
@@ -59,13 +60,24 @@ Todo dato utilizado en el informe debe ser citado con su fuente correspondiente.
    - Si no hay datos suficientes para un gráfico: avisar al usuario y sugerir
      qué datos harían falta.
 
-6. **Armar la bibliografía/fuentes** al final del informe, listando todas las
-   fuentes utilizadas con nombre, organismo y fecha si está disponible.
+6. **Armar el campo `fuentes`** — OBLIGATORIO, nunca omitir.
+   Array de strings, una entrada por fuente. Cada entrada debe incluir:
+   - Nombre del organismo o autor
+   - Nombre del documento o dataset
+   - Fecha de publicación o relevamiento si está disponible
+
+   Ejemplos bien formados:
+   - `"Ministerio de Economía de la Nación — Tasa de Mantenimiento Vial 2025 (datos al 31/03/2025)"`
+   - `"IARAF — Informe de Transferencias Nación-Provincias, en base a Ministerio de Economía e INDEC"`
+   - `"INDEC — Encuesta Permanente de Hogares, 3er trimestre 2025"`
+
+   Si el dato viene de una imagen sin fuente clara: indicarlo en el cuerpo y pedirle
+   al usuario que confirme el origen antes de publicar.
 
 7. **Presentar el borrador al usuario** para revisión. Una vez aprobado,
    proceder a subir el informe a la web de Datos PBA con todos sus componentes.
 
-8. **Sumar el grafico creado en la pagina de inicio** en la pagina de inicio, al lado del Datos PBA, hay un grafico del ultimo informe. Cuando se crea un informe nuevo, se debe debe cargar uno de los graficos de ese ultimo informe, en la pagina de inicio, siguiendo el formato del informe anterior.   
+8. **Sumar el grafico creado en la pagina de inicio** en la pagina de inicio, al lado del Datos PBA, hay un grafico del ultimo informe. Cuando se crea un informe nuevo, se debe debe cargar uno de los graficos de ese ultimo informe, en la pagina de inicio, siguiendo el formato del informe anterior.
 
 ## Output esperado
 
@@ -79,7 +91,7 @@ Un informe completo con los siguientes bloques, en este orden:
 | Card de hallazgos clave | 3–4 bullets destacados |
 | Cuerpo del informe | 3–5 párrafos de análisis |
 | Gráfico / visualización | Chart.js o similar, estilo Datos PBA |
-| Bibliografía / fuentes | Lista de fuentes citadas |
+| Fuentes | **Obligatorio** — campo `fuentes` en Supabase, visible al pie del informe |
 
 ## Casos borde / Errores comunes
 
