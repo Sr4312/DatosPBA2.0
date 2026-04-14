@@ -174,6 +174,14 @@ INSERT INTO datasets VALUES (
   '{"columns":["CUE","Establecimiento","Nivel","Sector","Partido","Matríc. 2024","Var. vs 2019"],"rows":[["060001","E.P. N° 1 Sarmiento","Primario","Estatal","La Plata","412","−3.7 %"],["060002","Jardín N° 901","Inicial","Estatal","La Plata","178","−1.1 %"],["060045","Colegio San José","Primario","Privado","La Plata","534","+0.8 %"],["180312","E.P. N° 12","Primario","Estatal","Florencio Varela","389","−6.2 %"],["180415","Jardín N° 914","Inicial","Estatal","Florencio Varela","152","−4.8 %"],["260789","E.P. N° 23 San Martín","Primario","Estatal","Quilmes","467","−5.1 %"],["260801","Instituto Sagrado Corazón","Primario","Privado","Quilmes","598","+1.2 %"]]}'::jsonb
 );
 
+INSERT INTO datasets VALUES (
+  'ds-tasa-vial-municipios-pba-2025',
+  'Tasa de Mantenimiento Vial por municipio — PBA 2025',
+  'Alícuotas de la Tasa de Mantenimiento Vial sobre combustibles expendidos en cada partido de la Provincia de Buenos Aires, según Ordenanzas Fiscal y Tarifaria vigentes al inicio del ejercicio 2025. 29 municipios relevados; incluye alícuotas porcentuales y tarifas en pesos fijos por litro.',
+  'CSV', '29 municipios — PBA', 7, 29, 'Mar. 2025', '2025-03-31',
+  '{"columns":["Municipio","Diesel G2","Diesel G3","Nafta G2 (92-95)","Nafta G3 (+95)","Otros","GNC"],"rows":[["Marcos Paz","0,80%","0,80%","0,80%","0,80%","0,80%","0,40%"],["La Matanza","1,50%","1,50%","1,50%","1,50%","1,50%","1,00%"],["Moreno","2,50%","2,50%","2,50%","2,50%","2,50%","2,00%"],["General Pueyrredón","3,00%","3,00%","3,00%","3,00%","3,00%","3,00%"],["José C. Paz","$30,00","$30,00","$30,00","$30,00","$30,00","$16,00"]]}'::jsonb
+);
+
 -- ── Seed: hilos ─────────────────────────────────────────────
 
 INSERT INTO hilos VALUES (
