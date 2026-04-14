@@ -343,3 +343,32 @@ INSERT INTO visualizaciones VALUES (
   '{"scales":{"x":{"ticks":{"font":{"family":"Poppins","size":9},"color":"#64748b","maxRotation":45},"grid":{"color":"rgba(0,0,0,0.04)"}},"y":{"ticks":{"font":{"family":"Poppins","size":11},"color":"#64748b"},"grid":{"color":"rgba(0,0,0,0.04)"},"title":{"display":true,"text":"Millones de $ const. feb. 2026","font":{"family":"Poppins","size":11},"color":"#94a3b8"}}}}'::jsonb,
   null
 );
+
+-- ── Informe: Tasa Vial Municipios PBA 2025 ──────────────────
+
+INSERT INTO informes VALUES (
+  'tasa-vial-municipios-pba-2025',
+  'La nafta también paga tributo municipal: quién cobra más por la tasa vial en PBA',
+  'En la Provincia de Buenos Aires, cada municipio fija libremente la Tasa de Mantenimiento Vial sobre cada litro de combustible expendido. El rango va de 0,8% a 3%, y algunos distritos directamente cobran en pesos por litro. Una dispersión fiscal que impacta de forma desigual a conductores en partidos vecinos.',
+  'Abr. 2026', '2026-04-14', 'Fiscal',
+  '["General Pueyrredón","Moreno","Pilar","Avellaneda","Berazategui","Lomas de Zamora","La Matanza","Tigre","José C. Paz","Pinamar"]',
+  $$["La Tasa de Mantenimiento Vial es un tributo municipal que se aplica sobre cada litro de combustible expendido en las estaciones de servicio del partido. A diferencia de los impuestos al combustible de alcance nacional, este gravamen es de diseño y recaudación enteramente municipal: cada distrito fija su alícuota por ordenanza tarifaria, sin techo ni piso impuesto por la Provincia. El resultado es una atomización fiscal que afecta de forma desigual a conductores que viven en partidos vecinos.","El relevamiento realizado por la Subsecretaría de Coordinación Fiscal Provincial del Ministerio de Economía de la Nación (con datos de 2025) muestra un rango de alícuotas que va de 0,8% (Marcos Paz) a 3% (General Pueyrredón). En el Conurbano, la distribución está concentrada: la mayoría de los municipios del sur del GBA (Avellaneda, Berazategui, Ezeiza, Florencio Varela, Lanús, Lomas de Zamora) aplica exactamente el 2%, mientras que Moreno y Pilar llegan al 2,5%. Tigre y Escobar se ubican en el extremo más bajo del Gran Buenos Aires, con 0,9%.","El caso de General Pueyrredón es el más emblemático. Con el 3% aplicado a todos los tipos de combustible sin distinción, Mar del Plata combina su condición de ciudad turística con uno de los tributos municipales más altos de la Provincia. Pinamar había igualado esa alícuota, pero eliminó su tasa vial tras el cierre de la temporada estival 2025-2026, convirtiéndose en el único distrito del relevamiento que aplicó y luego derogó el tributo en el período analizado. El contraste subraya el carácter marcadamente estacional que puede tener este gravamen en municipios con alta concentración de visitantes.","Una heterodoxia tarifaria aparece en al menos seis municipios que optaron por fijar el tributo en pesos por litro en lugar de un porcentaje. José C. Paz cobra $30 por litro; General Rodríguez, $10; Junín, entre $6 y $11 según el tipo de combustible; San Fernando $7,92; Campana, entre $4 y $8. Esta modalidad desindexada puede parecer baja cuando se fija la ordenanza, pero su carga real depende de cuándo se actualizó: si el precio del combustible sube y la ordenanza no se toca, el peso efectivo cae.","La dispersión de la tasa vial entre municipios bonaerenses no es solo un dato fiscal: es un síntoma de la heterogeneidad del federalismo local en PBA. Dos conductores separados por un límite municipal pueden pagar alícuotas que difieren en más del doble. El argumento de la tasa (financiar el mantenimiento vial) no justifica por sí solo esas diferencias, especialmente cuando la calidad de la red de caminos locales no siempre guarda relación con la presión tributaria ejercida. El dato invita a comparar no solo cuánto se cobra, sino para qué se usa."]$$::jsonb,
+  $$["General Pueyrredón (Mar del Plata) lidera con 3% por litro: la alícuota más alta entre los municipios relevados. Pinamar, que igualaba ese registro durante el verano, eliminó su tasa vial tras el cierre de la temporada estival 2025-2026.","La dispersión entre municipios va de 0,8% (Marcos Paz) a 3% (Mar del Plata): casi 4 veces de diferencia entre el mínimo y el máximo.","En el Conurbano, el rango es 0,9% (Escobar, Tigre) a 2,5% (Moreno, Pilar); la mayoría del sur del GBA converge en 2%.","Al menos 6 municipios —entre ellos José C. Paz ($30/litro) y General Rodríguez ($10/litro)— fijan el tributo en pesos fijos, no en porcentaje, con una carga real que varía según el precio del combustible."]$$::jsonb,
+  '/informes/tasa-vial-municipios-pba-2025', null, true
+);
+
+ALTER TABLE informes ADD COLUMN IF NOT EXISTS fuentes jsonb DEFAULT '[]'::jsonb;
+
+UPDATE informes SET fuentes = '["Ministerio de Economía de la Nación, Secretaría de Hacienda — Tasa de Mantenimiento Vial 2025 (datos relevados de sitios web oficiales de municipios al 31 de marzo de 2025)","Subsecretaría de Coordinación Fiscal Provincial — Elaboración propia en base a Ordenanzas Fiscal y Tarifaria municipales, ejercicio 2025"]'::jsonb
+WHERE id = 'tasa-vial-municipios-pba-2025';
+
+INSERT INTO visualizaciones VALUES (
+  'v-tasa-vial-top6-pba',
+  'Top 6 municipios con mayor tasa vial sobre combustible — PBA 2025 (%)',
+  'Fiscal', 'bar',
+  'Ministerio de Economía de la Nación - Subsecretaría de Coordinación Fiscal Provincial',
+  'Abr. 2026', '2026-04-14', '/informes/tasa-vial-municipios-pba-2025',
+  '{"labels":["Gral. Pueyrredón","Azul","Moreno","Pilar","Almirante Brown","Avellaneda"],"datasets":[{"label":"Tasa vial sobre nafta (% por litro)","data":[3.0,2.5,2.5,2.5,2.0,2.0],"backgroundColor":["#b91c1cbb","#b45309bb","#b45309bb","#b45309bb","#1ab8b8bb","#1ab8b8bb"],"borderColor":["#b91c1c","#b45309","#b45309","#b45309","#1ab8b8","#1ab8b8"],"borderWidth":1,"borderRadius":6}]}'::jsonb,
+  '{"y_tick_format":"percent","scales":{"y":{"min":0,"max":3.5,"ticks":{"font":{"family":"Poppins","size":11},"color":"#64748b"},"grid":{"color":"rgba(0,0,0,0.04)"},"title":{"display":true,"text":"% por litro expendido","font":{"family":"Poppins","size":11},"color":"#94a3b8"}},"x":{"ticks":{"font":{"family":"Poppins","size":11},"color":"#64748b"},"grid":{"color":"rgba(0,0,0,0.04)"}}}}'::jsonb,
+  null
+);
