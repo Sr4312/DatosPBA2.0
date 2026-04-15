@@ -173,7 +173,7 @@ function TableContent({ tableData }) {
 
 function resolveChartOptions(chartOptions) {
   if (!chartOptions) return BASE_OPTIONS
-  const { y_tick_format, ...opts } = chartOptions
+  const { y_tick_format, x_tick_format, ...opts } = chartOptions
   const merged = {
     ...BASE_OPTIONS,
     ...opts,
@@ -186,6 +186,15 @@ function resolveChartOptions(chartOptions) {
       y: {
         ...merged.scales.y,
         ticks: { ...(merged.scales.y.ticks || {}), callback: v => v + '%' },
+      },
+    }
+  }
+  if (x_tick_format === 'percent' && merged.scales?.x) {
+    merged.scales = {
+      ...merged.scales,
+      x: {
+        ...merged.scales.x,
+        ticks: { ...(merged.scales.x.ticks || {}), callback: v => v + '%' },
       },
     }
   }

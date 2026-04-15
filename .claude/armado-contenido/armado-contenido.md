@@ -89,9 +89,26 @@ Un informe completo con los siguientes bloques, en este orden:
 | Subtítulo | Complementa el título |
 | Contexto geográfico/demográfico | Datos duros de encuadre |
 | Card de hallazgos clave | 3–4 bullets destacados |
-| Cuerpo del informe | 3–5 párrafos de análisis |
-| Gráfico / visualización | Chart.js o similar, estilo Datos PBA |
+| Cuerpo + gráficos intercalados | Párrafos y viz alternados (ver formato abajo) |
 | Fuentes | **Obligatorio** — campo `fuentes` en Supabase, visible al pie del informe |
+
+### Formato del campo `cuerpo` con visualizaciones intercaladas
+
+El campo `cuerpo` es un array mixto: cada elemento puede ser un string (párrafo) o un objeto `{"viz": "viz-id"}` que inserta el gráfico inline en ese punto del texto.
+
+```json
+[
+  "Primer párrafo introductorio...",
+  {"viz": "v-sectores-retroceso-pba-2025"},
+  "Párrafo que analiza ese gráfico...",
+  {"viz": "v-neumaticos-pba-2024-2025"},
+  "Párrafo siguiente..."
+]
+```
+
+- Los gráficos referenciados en `cuerpo` se renderizan inline y **no** se repiten al pie.
+- Los gráficos que NO están referenciados en `cuerpo` se muestran al final en la sección "Visualizaciones".
+- Intercalar siempre el gráfico **después** del párrafo que lo presenta, no antes.
 
 ## Casos borde / Errores comunes
 

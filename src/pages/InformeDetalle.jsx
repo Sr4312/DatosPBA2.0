@@ -86,10 +86,14 @@ export default function InformeDetalle() {
         )}
 
         {informe.cuerpo?.length > 0 && (
-          <div className="prose prose-slate max-w-none mb-10 space-y-4">
-            {informe.cuerpo.map((parrafo, i) => (
-              <p key={i} className="text-base text-slate-700 leading-relaxed">{parrafo}</p>
-            ))}
+          <div className="mb-10 space-y-6">
+            {informe.cuerpo.map((item, i) => {
+              if (item?.viz) {
+                const viz = vizRelacionadas.find(v => v.id === item.viz)
+                return viz ? <VizCard key={i} viz={viz} index={i} /> : null
+              }
+              return <p key={i} className="text-base text-slate-700 leading-relaxed">{item}</p>
+            })}
           </div>
         )}
 
@@ -104,16 +108,22 @@ export default function InformeDetalle() {
           </div>
         )}
 
-        {vizRelacionadas.length > 0 && (
-          <div>
-            <h2 className="text-xl font-bold text-[#0a1628] mb-5">Visualizaciones</h2>
-            <div className="flex flex-col gap-6">
-              {vizRelacionadas.map((viz, i) => (
-                <VizCard key={viz.id} viz={viz} index={i} />
-              ))}
+        {(() => {
+          const embeddedIds = new Set(
+            (informe.cuerpo || []).filter(item => item?.viz).map(item => item.viz)
+          )
+          const remaining = vizRelacionadas.filter(v => !embeddedIds.has(v.id))
+          return remaining.length > 0 ? (
+            <div>
+              <h2 className="text-xl font-bold text-[#0a1628] mb-5">Visualizaciones</h2>
+              <div className="flex flex-col gap-6">
+                {remaining.map((viz, i) => (
+                  <VizCard key={viz.id} viz={viz} index={i} />
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          ) : null
+        })()}
 
       </m.div>
     </div>
