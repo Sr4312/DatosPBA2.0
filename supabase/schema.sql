@@ -370,6 +370,73 @@ ALTER TABLE informes ADD COLUMN IF NOT EXISTS fuentes jsonb DEFAULT '[]'::jsonb;
 UPDATE informes SET fuentes = '["Ministerio de Economía de la Nación, Secretaría de Hacienda — Tasa de Mantenimiento Vial 2025 (datos relevados de sitios web oficiales de municipios al 31 de marzo de 2025)","Subsecretaría de Coordinación Fiscal Provincial — Elaboración propia en base a Ordenanzas Fiscal y Tarifaria municipales, ejercicio 2025"]'::jsonb
 WHERE id = 'tasa-vial-municipios-pba-2025';
 
+-- ── Informe: ISIM Sectores en retroceso PBA 2025 ───────────
+
+INSERT INTO informes VALUES (
+  'isim-sectores-retroceso-pba-2025',
+  'Los que perdieron: neumáticos, biodiesel y gas industrial lideraron la caída productiva bonaerense en 2025',
+  'Mientras el agro, la pesca y la construcción traccionaron la actividad, siete sectores industriales retrocedieron en 2025. Neumáticos cayó un 32%, biodiesel un 18% y el gas a la industria un 17%. Los datos mes a mes revelan cuándo y cuánto se hundió cada cadena.',
+  '15 abr. 2026', '2026-04-15', 'Economía',
+  '[]',
+  $$["En 2025, la actividad productiva de la Provincia de Buenos Aires mostró un mapa heterogéneo. Mientras la agroindustria aceitera, el cemento, la pesca y los vehículos utilitarios registraron mejoras, siete indicadores industriales terminaron el año con caídas interanuales. Los datos mensuales compilados por la Dirección Provincial de Estadística (DPE PBA) e INDEC permiten identificar con precisión qué sectores retrocedieron, cuándo empezó el deterioro y cuál fue la magnitud del ajuste.","El caso más extremo es la producción de neumáticos. Del acumulado de 89.933 unidades en 2024, la actividad cayó a 61.555 en 2025: un descenso del 31,6% que no responde a estacionalidad, sino a un deterioro generalizado que se profundizó en el segundo semestre. Diciembre 2025 cerró con apenas 2.643 unidades producidas, frente a 6.581 en igual mes del año anterior. La caída en la producción de automóviles (-10,4%) explica parte del fenómeno, pero la magnitud del derrumbe también sugiere pérdida de participación frente al neumático importado en un contexto de apertura comercial.","El biodiesel atravesó su año más volátil del período. Tras un primer semestre relativamente estable, el segundo semestre se hundió: septiembre marcó 10.479 toneladas y octubre apenas 5.307 tn, el mínimo absoluto del período analizado. La caída interanual del 17,9% es consistente con la retracción de la demanda interna de gasoil de corte y la presión de las importaciones. En paralelo, el gas entregado a usuarios industriales cayó un 17,3% interanual, pasando de 4.987 a 4.125 millones de m³ acumulados: una señal de que el tejido fabril bonaerense operó en 2025 con menor intensidad energética.","En la industria automotriz, el contraste entre segmentos es marcado. Los vehículos utilitarios cerraron 2025 con 211.809 unidades (+1,2% vs. 2024), impulsados por la demanda del agro y la construcción. Pero los automóviles cayeron un 10,4% anual, con una aceleración dramática del deterioro en el cuarto trimestre: noviembre 2025 registró 5.942 unidades (vs. 14.541 en noviembre 2024) y diciembre apenas 3.353 (vs. 12.598). Ese patrón de colapso de fin de año sugiere una contracción abrupta en la demanda de consumo final, vinculada al crédito caro, la incertidumbre cambiaria y el efecto rezago del ajuste de ingresos reales."]$$::jsonb,
+  $$["Neumáticos: la caída más abrupta del período. De 89.933 unidades en 2024 a 61.555 en 2025 (-31,6%). Diciembre 2025 cerró con apenas 2.643 unidades, menos de la mitad que en diciembre 2024.","Biodiesel en picada en el segundo semestre: octubre 2025 fue el piso absoluto del período con 5.307 toneladas producidas, contra un promedio mensual de 25.091 tn en 2024.","El gas entregado a usuarios industriales cayó un 17,3% interanual, señal de menor intensidad operativa en el tejido fabril bonaerense.","Vehículos automóviles aceleraron su caída hacia fin de año: noviembre (-59%) y diciembre (-73%) de 2025 respecto a los mismos meses de 2024."]$$::jsonb,
+  '/informes/isim-sectores-retroceso-pba-2025', null, false,
+  '["Dirección Provincial de Estadística (DPE PBA) — Indicadores de actividad productiva, serie mensual enero 2024–febrero 2026","INDEC — Estadísticas sectoriales: neumáticos, automotores, biodiesel, hierro y acero, pesca","Cámara de la Industria y Comercio de Carnes y Derivados de la República Argentina (CICCRA) — Faena bovina mensual 2024–2025"]'::jsonb
+);
+
+INSERT INTO visualizaciones VALUES (
+  'v-sectores-retroceso-pba-2025',
+  'Sectores productivos en retroceso — caída % interanual 2024 a 2025 (PBA)',
+  'Economía', 'bar',
+  'DPE PBA / INDEC',
+  'Abr. 2026', '2026-04-15', '/informes/isim-sectores-retroceso-pba-2025',
+  '{"labels":["Neumaticos","Biodiesel","Gas industrial","Vehiculos automoviles","Hierro primario","Molienda trigo pan","Faena bovina"],"datasets":[{"label":"Variacion % 2024-2025","data":[-31.6,-17.9,-17.3,-10.4,-7.7,-4.2,-2.6],"backgroundColor":["rgba(153,27,27,0.85)","rgba(185,28,28,0.80)","rgba(220,38,38,0.75)","rgba(239,68,68,0.70)","rgba(248,113,113,0.65)","rgba(252,165,165,0.60)","rgba(254,202,202,0.55)"],"borderColor":["rgba(153,27,27,1)","rgba(185,28,28,1)","rgba(220,38,38,1)","rgba(239,68,68,1)","rgba(248,113,113,1)","rgba(252,165,165,1)","rgba(254,202,202,1)"],"borderWidth":1}]}'::jsonb,
+  '{"indexAxis":"y","plugins":{"legend":{"display":false}},"scales":{"x":{"title":{"display":true,"text":"Variacion interanual (%)"}},"y":{"title":{"display":false}}},"y_tick_format":"percent"}'::jsonb,
+  null
+);
+
+INSERT INTO visualizaciones VALUES (
+  'v-neumaticos-pba-2024-2025',
+  'Neumaticos: produccion mensual 2024 vs. 2025 (unidades, PBA)',
+  'Economía', 'line',
+  'INDEC',
+  'Abr. 2026', '2026-04-15', '/informes/isim-sectores-retroceso-pba-2025',
+  '{"labels":["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"],"datasets":[{"label":"2024","data":[5487,7492,8972,7937,7648,6881,8315,8189,7931,7373,7127,6581],"borderColor":"rgba(37,99,235,0.85)","backgroundColor":"rgba(37,99,235,0.12)","borderWidth":2,"pointRadius":3,"fill":false,"tension":0.3},{"label":"2025","data":[4362,5655,5394,5833,6065,5261,5819,5269,5463,5093,4699,2643],"borderColor":"rgba(153,27,27,0.85)","backgroundColor":"rgba(153,27,27,0.12)","borderWidth":2,"pointRadius":3,"fill":false,"tension":0.3}]}'::jsonb,
+  '{"plugins":{"legend":{"display":true}},"scales":{"x":{"title":{"display":true,"text":"Mes"}},"y":{"title":{"display":true,"text":"Unidades producidas"}}}}'::jsonb,
+  null
+);
+
+INSERT INTO visualizaciones VALUES (
+  'v-biodiesel-pba-2024-2025',
+  'Biodiesel: produccion mensual 2024 vs. 2025 — colapso en el segundo semestre (toneladas, PBA)',
+  'Economía', 'line',
+  'INDEC',
+  'Abr. 2026', '2026-04-15', '/informes/isim-sectores-retroceso-pba-2025',
+  '{"labels":["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"],"datasets":[{"label":"2024","data":[25616,23197,23635,24727,27671,28150,28844,28911,27330,24528,11128,27358],"borderColor":"rgba(37,99,235,0.85)","backgroundColor":"rgba(37,99,235,0.12)","borderWidth":2,"pointRadius":3,"fill":false,"tension":0.3},{"label":"2025","data":[26014,18011,17690,25093,29591,26710,25274,21763,10479,5307,16413,24787],"borderColor":"rgba(153,27,27,0.85)","backgroundColor":"rgba(153,27,27,0.12)","borderWidth":2,"pointRadius":3,"fill":false,"tension":0.3}]}'::jsonb,
+  '{"plugins":{"legend":{"display":true}},"scales":{"x":{"title":{"display":true,"text":"Mes"}},"y":{"title":{"display":true,"text":"Toneladas"}}}}'::jsonb,
+  null
+);
+
+INSERT INTO visualizaciones VALUES (
+  'v-autos-pba-2024-2025',
+  'Vehiculos automoviles: produccion mensual 2024 vs. 2025 — colapso del cuarto trimestre (unidades, PBA)',
+  'Economía', 'line',
+  'INDEC',
+  'Abr. 2026', '2026-04-15', '/informes/isim-sectores-retroceso-pba-2025',
+  '{"labels":["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"],"datasets":[{"label":"2024","data":[6169,8788,9940,10982,9966,6529,11160,14133,13432,14117,14541,12598],"borderColor":"rgba(37,99,235,0.85)","backgroundColor":"rgba(37,99,235,0.12)","borderWidth":2,"pointRadius":3,"fill":false,"tension":0.3},{"label":"2025","data":[9373,10244,11985,12917,13623,12053,7528,10600,10112,10871,5942,3353],"borderColor":"rgba(153,27,27,0.85)","backgroundColor":"rgba(153,27,27,0.12)","borderWidth":2,"pointRadius":3,"fill":false,"tension":0.3}]}'::jsonb,
+  '{"plugins":{"legend":{"display":true}},"scales":{"x":{"title":{"display":true,"text":"Mes"}},"y":{"title":{"display":true,"text":"Unidades producidas"}}}}'::jsonb,
+  null
+);
+
+INSERT INTO datasets VALUES (
+  'ds-datos-productivos-pba-2024-2026',
+  'Indicadores de actividad productiva PBA 2024-2026',
+  'Serie mensual de 31 indicadores industriales y agropecuarios de la Provincia de Buenos Aires. Incluye neumaticos, biodiesel, acero, cemento, faena bovina/avicola/porcina, capturas pesqueras, gas a usuarios industriales, gasoil, nafta, hierro primario, molienda de trigo/girasol/soja, vehiculos, ISIM-PBA y mas. Datos al cierre de febrero 2026.',
+  'CSV', 'Provincia de Buenos Aires', 31, 710,
+  'Feb. 2026', '2026-02-28',
+  '{"columns":["Anio","Mes","Indicador","Valor"],"rows":[{"Anio":2025,"Mes":10,"Indicador":"Biodiesel. Produccion","Valor":5306.78},{"Anio":2025,"Mes":12,"Indicador":"Neumaticos. Produccion","Valor":2643},{"Anio":2025,"Mes":12,"Indicador":"Vehiculos automoviles. Produccion","Valor":3353},{"Anio":2025,"Mes":12,"Indicador":"Gas entregado a usuarios industriales","Valor":316},{"Anio":2026,"Mes":2,"Indicador":"Acero crudo","Valor":176489}]}'::jsonb
+);
+
 INSERT INTO visualizaciones VALUES (
   'v-tasa-vial-top6-pba',
   'Top 6 municipios con mayor tasa vial sobre combustible — PBA 2025 (%)',
