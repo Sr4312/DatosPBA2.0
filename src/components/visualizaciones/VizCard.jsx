@@ -290,7 +290,7 @@ export default function VizCard({ viz, index = 0 }) {
       ) : (
         <div style={{
           height: chartOptions?.indexAxis === 'y' && (chartData?.labels?.length ?? 0) > 8
-            ? `${Math.max(300, (chartData.labels.length) * 40)}px`
+            ? `${Math.max(300, (chartData.labels.length) * 25)}px`
             : '256px'
         }}>
           <ChartComponent ref={chartRef} data={chartData} options={resolveChartOptions(chartOptions)} />
