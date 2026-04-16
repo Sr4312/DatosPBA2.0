@@ -1,0 +1,13 @@
+[     261ms] [ERROR] Failed to fetch PH flags: API is not available @ https://frontend-assets.supabase.com/studio/612d0f366367/_next/static/chunks/07haec__xu0.x.js?dpl=dpl_CkTaChDxtSMNin2D7uKBSTHEiyTy:12
+[     273ms] [WARNING] [FeatureFlags] PostHog flags failed TypeError: Failed to fetch (api.supabase.com)
+    at https://frontend-assets.supabase.com/studio/612d0f366367/_next/static/chunks/07haec__xu0.x.js?dpl=dpl_CkTaChDxtSMNin2D7uKBSTHEiyTy:13:1799
+    at https://ss.supabase.com/4icgbaujh.js?60a389s=aWQ9R1RNLVdDVlJMTU43&page=2:1:670
+    at https://ss.supabase.com/4icgbaujh.js?60a389s=aWQ9R1RNLVdDVlJMTU43&page=2:779:632
+    at tC (https://frontend-assets.supabase.com/studio/612d0f366367/_next/static/chunks/0c_zhp_6gb_td.js?dpl=dpl_CkTaChDxtSMNin2D7uKBSTHEiyTy:5:116277)
+    at async tZ (https://frontend-assets.supabase.com/studio/612d0f366367/_next/static/chunks/0c_zhp_6gb_td.js?dpl=dpl_CkTaChDxtSMNin2D7uKBSTHEiyTy:5:125263)
+    at async Promise.allSettled (index 0)
+    at async https://frontend-assets.supabase.com/studio/612d0f366367/_next/static/chunks/0c_zhp_6gb_td.js?dpl=dpl_CkTaChDxtSMNin2D7uKBSTHEiyTy:5:126592 @ https://frontend-assets.supabase.com/studio/612d0f366367/_next/static/chunks/07haec__xu0.x.js?dpl=dpl_CkTaChDxtSMNin2D7uKBSTHEiyTy:12
+[     582ms] [WARNING] [Warning] Please install/enable Redux devtools extension @ https://frontend-assets.supabase.com/studio/612d0f366367/_next/static/chunks/07haec__xu0.x.js?dpl=dpl_CkTaChDxtSMNin2D7uKBSTHEiyTy:12
+[    1012ms] [LOG] Supabase Studio is running commit 612d0f366367907e89829fc2e28dee1edc9f285f deployed at 2026-04-16 12:52:20 -03:00. @ https://frontend-assets.supabase.com/studio/612d0f366367/_next/static/chunks/07haec__xu0.x.js?dpl=dpl_CkTaChDxtSMNin2D7uKBSTHEiyTy:12
+[  161262ms] [WARNING] Tabs is changing from controlled to uncontrolled. Components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled value for the lifetime of the component. @ https://frontend-assets.supabase.com/studio/612d0f366367/_next/static/chunks/07haec__xu0.x.js?dpl=dpl_CkTaChDxtSMNin2D7uKBSTHEiyTy:12
+[  161503ms] [WARNING] Tabs is changing from uncontrolled to controlled. Components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled value for the lifetime of the component. @ https://frontend-assets.supabase.com/studio/612d0f366367/_next/static/chunks/07haec__xu0.x.js?dpl=dpl_CkTaChDxtSMNin2D7uKBSTHEiyTy:12

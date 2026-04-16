@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dos Buenos Aires: territorio, infraestructura y conectividad | Datos PBA</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#08080e;
+  --bg2:#0f0f1a;
+  --bg3:#141422;
+  --card:#1a1a2e;
+  --border:#252540;
+  --teal:#00c8a0;
+  --orange:#ff6b35;
+  --red:#ff2d55;
+  --yellow:#ffd60a;
+  --white:#f0f0f0;
+  --muted:#888;
+  --poppins:'Poppins',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:var(--poppins);line-height:1.6;overflow-x:hidden}
+a{color:var(--teal);text-decoration:none}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,8,14,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px}
+.nav-brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1rem;letter-spacing:.5px}
+.nav-dot{width:10px;height:10px;background:var(--teal);border-radius:50%;display:inline-block}
+.nav-tag{font-size:.7rem;color:var(--muted);font-weight:400;border:1px solid var(--border);padding:2px 8px;border-radius:20px}
+.nav-links{display:flex;gap:1.5rem;font-size:.8rem;color:var(--muted)}
+.nav-links a{color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:100px 3rem 3rem;background:radial-gradient(ellipse at 20% 50%,rgba(0,200,160,.06) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(255,107,53,.04) 0%,transparent 50%),var(--bg)}
+.hero-tag{font-size:.75rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:1rem}
+.hero-title{font-size:clamp(2.2rem,6vw,4.5rem);font-weight:900;line-height:1.05;margin-bottom:1.2rem;max-width:820px}
+.hero-title span{color:var(--teal)}
+.hero-subtitle{font-size:1.1rem;color:var(--muted);max-width:600px;margin-bottom:3rem;line-height:1.7}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:900px}
+.hero-stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.8rem 1.5rem;position:relative;overflow:hidden}
+.hero-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.hero-stat.red::before{background:var(--red)}
+.hero-stat.orange::before{background:var(--orange)}
+.hero-stat.teal::before{background:var(--teal)}
+.stat-number{font-size:3rem;font-weight:900;line-height:1;margin-bottom:.4rem}
+.stat-number.red{color:var(--red)}
+.stat-number.orange{color:var(--orange)}
+.stat-number.teal{color:var(--teal)}
+.stat-label{font-size:.82rem;color:var(--muted);line-height:1.5}
+.stat-label strong{color:var(--white);display:block;font-size:.95rem;margin-bottom:.2rem}
+
+/* SECTIONS */
+section.bloque{padding:6rem 3rem;max-width:1300px;margin:0 auto}
+.section-tag{font-size:.7rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:.8rem}
+.section-title{font-size:clamp(1.6rem,3vw,2.4rem);font-weight:800;line-height:1.15;margin-bottom:.8rem}
+.section-lead{font-size:1rem;color:var(--muted);max-width:700px;line-height:1.7;margin-bottom:3rem}
+.divider{height:1px;background:var(--border);margin:4rem 0}
+
+/* GRID LAYOUTS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+
+/* CHART CARDS */
+.chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:2rem;margin-bottom:2rem}
+.chart-card.full{max-width:100%}
+.chart-title{font-size:1rem;font-weight:700;margin-bottom:.3rem}
+.chart-subtitle{font-size:.78rem;color:var(--muted);margin-bottom:1.5rem}
+.chart-wrap{position:relative}
+.chart-note{font-size:.7rem;color:var(--muted);margin-top:1rem;font-style:italic}
+
+/* CALLOUT */
+.callout{background:linear-gradient(135deg,rgba(255,45,85,.08),rgba(255,107,53,.05));border:1px solid rgba(255,45,85,.25);border-radius:12px;padding:2rem;margin:2rem 0}
+.callout.teal{background:linear-gradient(135deg,rgba(0,200,160,.08),rgba(0,200,160,.03));border-color:rgba(0,200,160,.25)}
+.callout-label{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:.6rem}
+.callout.teal .callout-label{color:var(--teal)}
+.callout-text{font-size:1.05rem;font-weight:500;line-height:1.6}
+.callout-text em{font-style:normal;font-weight:700;color:var(--red)}
+.callout.teal .callout-text em{color:var(--teal)}
+
+/* RANKING BARS */
+.ranking-list{display:flex;flex-direction:column;gap:.6rem}
+.rank-item{display:flex;align-items:center;gap:.8rem;font-size:.82rem}
+.rank-n{color:var(--muted);font-size:.7rem;width:1.2rem;text-align:right;flex-shrink:0}
+.rank-name{width:180px;flex-shrink:0;font-weight:500}
+.rank-bar-wrap{flex:1;background:rgba(255,255,255,.05);border-radius:4px;height:6px;overflow:hidden}
+.rank-bar{height:100%;border-radius:4px;transition:width .4s}
+.rank-val{width:4rem;text-align:right;font-weight:700;font-size:.85rem;flex-shrink:0}
+
+/* TWITTER CARDS */
+.twitter-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:5rem 3rem}
+.twitter-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;max-width:1200px;margin:0 auto}
+.tweet-card{background:#000;border:1px solid #1f1f1f;border-radius:16px;padding:1.5rem;position:relative;overflow:hidden}
+.tweet-header{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem}
+.tweet-avatar{width:36px;height:36px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.8rem;color:var(--bg);flex-shrink:0}
+.tweet-handle{font-size:.82rem;font-weight:700}
+.tweet-subhandle{font-size:.72rem;color:#666}
+.tweet-body{font-size:.9rem;line-height:1.55;margin-bottom:1.2rem}
+.tweet-body strong{color:var(--teal)}
+.tweet-chart-area{background:#0a0a0a;border-radius:12px;overflow:hidden;margin-bottom:1rem}
+.tweet-meta{font-size:.72rem;color:#555;border-top:1px solid #1f1f1f;padding-top:.8rem}
+
+/* CONCLUSIONS */
+.conclusions{max-width:900px;margin:0 auto}
+.conclusion-item{display:flex;gap:1.5rem;padding:2rem 0;border-bottom:1px solid var(--border)}
+.conclusion-item:last-child{border-bottom:none}
+.conclusion-num{font-size:3rem;font-weight:900;color:var(--border);line-height:1;flex-shrink:0;width:60px}
+.conclusion-content h3{font-size:1.1rem;font-weight:700;margin-bottom:.5rem}
+.conclusion-content p{font-size:.9rem;color:var(--muted);line-height:1.7}
+.conclusion-content .tag{display:inline-block;font-size:.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:20px;margin-bottom:.5rem}
+.tag.red{background:rgba(255,45,85,.15);color:var(--red);border:1px solid rgba(255,45,85,.3)}
+.tag.orange{background:rgba(255,107,53,.15);color:var(--orange);border:1px solid rgba(255,107,53,.3)}
+.tag.teal{background:rgba(0,200,160,.15);color:var(--teal);border:1px solid rgba(0,200,160,.3)}
+.tag.yellow{background:rgba(255,214,10,.15);color:var(--yellow);border:1px solid rgba(255,214,10,.3)}
+
+/* FUENTES */
+.fuentes{padding:3rem;background:var(--bg2);border-top:1px solid var(--border)}
+.fuentes-inner{max-width:1200px;margin:0 auto}
+.fuentes h4{font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.fuentes ul{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.fuentes li{font-size:.78rem;color:var(--muted);padding-left:1rem;border-left:2px solid var(--border)}
+
+/* FOOTER */
+footer{padding:2rem 3rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+footer p{font-size:.75rem;color:var(--muted)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .hero{padding:80px 1.5rem 2rem}
+  .hero-stats{grid-template-columns:1fr}
+  section.bloque{padding:4rem 1.5rem}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .twitter-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .rank-name{width:120px}
+}
+
+/* SEPARATOR */
+.sep-line{display:flex;align-items:center;gap:1rem;margin:1rem 0 2.5rem}
+.sep-line::after{content:'';flex:1;height:1px;background:var(--border)}
+.sep-label{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+
+/* SCATTER LEGEND */
+.scatter-legend{display:flex;gap:1.5rem;margin-top:.8rem}
+.legend-item{display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--muted)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* PULL QUOTE */
+.pull-quote{font-size:1.35rem;font-weight:700;line-height:1.4;border-left:4px solid var(--teal);padding:1rem 1.5rem;margin:2.5rem 0;color:var(--white)}
+.pull-quote em{color:var(--teal);font-style:normal}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <span class="nav-dot"></span>
+    DATOS PBA
+    <span class="nav-tag">CENSO 2022</span>
+  </div>
+  <div class="nav-links">
+    <a href="#territorio">Territorio</a>
+    <a href="#servicios">Servicios</a>
+    <a href="#conectividad">Conectividad</a>
+    <a href="#conclusiones">Conclusiones</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Análisis · Censo Nacional 2022 · 135 partidos</div>
+  <h1 class="hero-title">Dos Buenos Aires:<br><span>la brecha que el mapa no muestra</span></h1>
+  <p class="hero-subtitle">El Censo 2022 reveló una provincia partida al medio: mientras algunos municipios superan el 98% de hogares con cloacas, otros —a pocos kilómetros— no llegan al 10%. Los datos de los 135 partidos de la Provincia de Buenos Aires.</p>
+  <div class="hero-stats">
+    <div class="hero-stat red">
+      <div class="stat-number red">90</div>
+      <div class="stat-label"><strong>puntos de brecha en cloacas</strong>Vicente López 98.4% — José C. Paz 8.1%<br>Son municipios vecinos, separados por una autopista.</div>
+    </div>
+    <div class="hero-stat orange">
+      <div class="stat-number orange">14%</div>
+      <div class="stat-label"><strong>hogares con agua de red pública</strong>El mínimo en el GBA: Malvinas Argentinas.<br>A 30 km de la Ciudad de Buenos Aires.</div>
+    </div>
+    <div class="hero-stat teal">
+      <div class="stat-number teal">65%</div>
+      <div class="stat-label"><strong>crecimiento demográfico en San Vicente</strong>El partido más dinámico de la provincia.<br>Solo el 43.7% tiene cloacas.</div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOQUE 1: TERRITORIO -->
+<section class="bloque" id="territorio">
+  <div class="section-tag">Bloque 1 · Territorio</div>
+  <h2 class="section-title">La provincia que crece sin red</h2>
+  <p class="section-lead">Entre 2010 y 2022, la Provincia de Buenos Aires sumó millones de habitantes. Pero el crecimiento se concentró en municipios periféricos donde la infraestructura de servicios básicos no acompañó la expansión urbana.</p>
+
+  <div class="grid-2">
+    <div>
+      <div class="sep-line"><span class="sep-label">Top 10 · mayor crecimiento 2010–2022</span></div>
+      <div class="chart-card">
+        <div class="chart-title">Municipios de mayor expansión demográfica</div>
+        <div class="chart-subtitle">Variación de población 2010–2022 (%)</div>
+        <div class="chart-wrap"><canvas id="topGrowthChart" height="300"></canvas></div>
+        <div class="chart-note">Fuente: INDEC, CNPHV 2022</div>
+      </div>
+    </div>
+    <div>
+      <div class="sep-line"><span class="sep-label">Densidad · extremos provinciales</span></div>
+      <div class="chart-card">
+        <div class="chart-title">Densidad poblacional: del conurbano al interior</div>
+        <div class="chart-subtitle">Habitantes por km² — partidos seleccionados</div>
+        <div class="chart-wrap"><canvas id="densityChart" height="300"></canvas></div>
+        <div class="chart-note">Fuente: INDEC, CNPHV 2022</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">Hallazgo clave</div>
+    <div class="callout-text">Los cinco municipios con mayor crecimiento demográfico tienen, en promedio, <em>33% de cobertura de red cloacal</em>. San Vicente creció un 65% y tiene 43.7% de cloacas. General Rodríguez creció 64% y llega al 24.2%. Cañuelas creció 36% y tiene apenas el 27.6%.</div>
+  </div>
+
+  <div class="chart-card full" style="margin-top:2rem">
+    <div class="chart-title">Crecimiento vs. infraestructura cloacal — los 135 partidos</div>
+    <div class="chart-subtitle">Eje X: crecimiento demográfico 2010–2022 (%) · Eje Y: hogares con cloaca de red pública (%) · Tamaño: población 2022</div>
+    <div class="chart-wrap"><canvas id="scatterChart" height="380"></canvas></div>
+    <div class="scatter-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#ff6b35"></span>GBA 24</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#00c8a0"></span>Interior</div>
+    </div>
+    <div class="chart-note">Partidos sin dato de variación (Lezama, Guaminí, 25 de Mayo) excluidos del scatter. Fuente: INDEC, CNPHV 2022.</div>
+  </div>
+</section>
+
+<div style="background:var(--border);height:1px;max-width:1300px;margin:0 auto"></div>
+
+<!-- BLOQUE 2: SERVICIOS -->
+<section class="bloque" id="servicios">
+  <div class="section-tag">Bloque 2 · Servicios básicos</div>
+  <h2 class="section-title">La brecha sanitaria del GBA</h2>
+  <p class="section-lead">En el Conurbano conviven realidades que deberían pertenecer a países distintos. El acceso a la red cloacal y al agua potable varía de manera brutal entre partidos que son, literalmente, vecinos.</p>
+
+  <div class="chart-card full">
+    <div class="chart-title">Acceso a red cloacal — los 24 partidos del GBA</div>
+    <div class="chart-subtitle">% de hogares con desagüe de inodoro a red pública (cloaca), ordenado de menor a mayor</div>
+    <div class="chart-wrap"><canvas id="cloacaGBAChart" height="500"></canvas></div>
+    <div class="chart-note">Fuente: INDEC, CNPHV 2022 — Resultados provisionales</div>
+  </div>
+
+  <div class="pull-quote">
+    José C. Paz y Vicente López son partidos del mismo conurbano bonaerense.<br>
+    Los separa una autopista y <em>90 puntos porcentuales de infraestructura cloacal</em>.
+  </div>
+
+  <div class="chart-card full">
+    <div class="chart-title">Crisis del agua en el GBA: partidos con menos del 75% de agua de red pública</div>
+    <div class="chart-subtitle">% de hogares cuya fuente principal para beber y cocinar es la red pública (agua corriente)</div>
+    <div class="chart-wrap"><canvas id="aguaGBAChart" height="320"></canvas></div>
+    <div class="chart-note">Fuente: INDEC, CNPHV 2022</div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">Paradoja sanitaria</div>
+    <div class="callout-text">Malvinas Argentinas tiene solo el <em>14.1%</em> de hogares con agua de red pública y el 9.3% con cloaca, pero el 82.2% de sus hogares tiene internet. La conectividad digital llegó donde las tuberías nunca llegaron.</div>
+  </div>
+
+  <div class="grid-2" style="margin-top:2rem">
+    <div>
+      <div class="chart-card">
+        <div class="chart-title">Ranking completo: cloaca en todo el GBA</div>
+        <div class="chart-subtitle">Partidos del GBA ordenados por % cloaca</div>
+        <div class="ranking-list" id="cloacaRanking"></div>
+        <div class="chart-note">Fuente: INDEC, CNPHV 2022</div>
+      </div>
+    </div>
+    <div>
+      <div class="chart-card">
+        <div class="chart-title">Agua de red en el GBA</div>
+        <div class="chart-subtitle">Partidos del GBA ordenados por % agua red pública</div>
+        <div class="ranking-list" id="aguaRanking"></div>
+        <div class="chart-note">Fuente: INDEC, CNPHV 2022</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-card full" style="margin-top:2rem">
+    <div class="chart-title">Los que más crecieron, con los servicios que tienen</div>
+    <div class="chart-subtitle">Top 8 municipios por crecimiento demográfico 2010–2022: cobertura de cloaca vs. internet</div>
+    <div class="chart-wrap"><canvas id="growthServicesChart" height="320"></canvas></div>
+    <div class="chart-note">Fuente: INDEC, CNPHV 2022</div>
+  </div>
+</section>
+
+<div style="background:var(--border);height:1px;max-width:1300px;margin:0 auto"></div>
+
+<!-- BLOQUE 3: CONECTIVIDAD -->
+<section class="bloque" id="conectividad">
+  <div class="section-tag">Bloque 3 · Conectividad y tecnología</div>
+  <h2 class="section-title">La red que sí llegó</h2>
+  <p class="section-lead">La conectividad digital tuvo una penetración más igualitaria que los servicios de red física. En casi todos los municipios de la provincia, el acceso a internet móvil supera el 85%. La brecha digital existe, pero es mucho menor que la brecha sanitaria.</p>
+
+  <div class="chart-card full">
+    <div class="chart-title">Conectividad digital: internet, celular con internet y computadora</div>
+    <div class="chart-subtitle">Partidos seleccionados por contraste — de mayor a menor acceso a internet (%)</div>
+    <div class="chart-wrap"><canvas id="connectivityChart" height="400"></canvas></div>
+    <div class="chart-note">Fuente: INDEC, CNPHV 2022</div>
+  </div>
+
+  <div class="callout teal">
+    <div class="callout-label">La democratización digital</div>
+    <div class="callout-text">José C. Paz tiene el 8.1% de cloacas pero el <em>77.3% de hogares con internet</em>. Moreno tiene el 32.2% de cloacas pero el 75.7% con internet. La tecnología móvil saltó las barreras físicas que la infraestructura de red no pudo.</div>
+  </div>
+
+  <div class="chart-card full" style="margin-top:2rem">
+    <div class="chart-title">Paradoja PBA: internet vs. cloaca en los 135 partidos</div>
+    <div class="chart-subtitle">Eje X: hogares con internet (%) · Eje Y: hogares con cloaca (%) — cada punto es un partido</div>
+    <div class="chart-wrap"><canvas id="paradoxChart" height="380"></canvas></div>
+    <div class="scatter-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#ff6b35"></span>GBA 24</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#00c8a0"></span>Interior</div>
+    </div>
+    <div class="chart-note">Fuente: INDEC, CNPHV 2022</div>
+  </div>
+
+  <div class="grid-3" style="margin-top:2rem">
+    <div class="chart-card">
+      <div class="chart-title">Top 5 · Internet</div>
+      <div class="chart-subtitle">Mayor acceso</div>
+      <div class="ranking-list" id="topInternet"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Top 5 · Computadora</div>
+      <div class="chart-subtitle">Mayor acceso</div>
+      <div class="ranking-list" id="topComp"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Vivienda propia</div>
+      <div class="chart-subtitle">Mayor % propiedad</div>
+      <div class="ranking-list" id="topVivienda"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TWITTER CARDS -->
+<div class="twitter-section">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="section-tag" style="margin-bottom:1rem">Para redes sociales · Gráficos exportables</div>
+    <h2 class="section-title">Lo más compartible</h2>
+    <p class="section-lead" style="margin-bottom:2.5rem">Tres hallazgos para publicar en redes con sus visualizaciones.</p>
+    <div class="twitter-grid">
+      <div class="tweet-card">
+        <div class="tweet-header">
+          <div class="tweet-avatar">D</div>
+          <div><div class="tweet-handle">Datos PBA</div><div class="tweet-subhandle">@datosPBA</div></div>
+        </div>
+        <div class="tweet-body">
+          📊 En el GBA, la brecha cloacal es de <strong>90 puntos porcentuales</strong>.<br><br>
+          Vicente López: 98.4% de hogares con cloaca.<br>
+          José C. Paz: 8.1%.<br><br>
+          Son municipios vecinos. Censos 2022 / INDEC.
+        </div>
+        <div class="tweet-chart-area">
+          <canvas id="tweetChart1" height="180"></canvas>
+        </div>
+        <div class="tweet-meta">Fuente: INDEC, CNPHV 2022 · datos.pba.ar</div>
+      </div>
+
+      <div class="tweet-card">
+        <div class="tweet-header">
+          <div class="tweet-avatar">D</div>
+          <div><div class="tweet-handle">Datos PBA</div><div class="tweet-subhandle">@datosPBA</div></div>
+        </div>
+        <div class="tweet-body">
+          🧵 Los municipios que más crecieron son los que peor infraestructura tienen.<br><br>
+          San Vicente: <strong>+65%</strong> de población, 43.7% de cloacas.<br>
+          General Rodríguez: <strong>+64%</strong> de población, 24.2% de cloacas.<br><br>
+          El bonaerense se mueve donde el Estado no llegó.
+        </div>
+        <div class="tweet-chart-area">
+          <canvas id="tweetChart2" height="180"></canvas>
+        </div>
+        <div class="tweet-meta">Fuente: INDEC, CNPHV 2022 · datos.pba.ar</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONCLUSIONES -->
+<section class="bloque" id="conclusiones">
+  <div class="section-tag">Conclusiones</div>
+  <h2 class="section-title">Lo que nos dice el Censo 2022</h2>
+  <p class="section-lead">Cinco hallazgos que definen el estado de la Provincia de Buenos Aires según el relevamiento más completo de la última década.</p>
+  <div class="conclusions">
+    <div class="conclusion-item">
+      <div class="conclusion-num">01</div>
+      <div class="conclusion-content">
+        <span class="tag red">Brecha crítica</span>
+        <h3>El conurbano sigue partido al medio en infraestructura básica</h3>
+        <p>La brecha de 90 puntos en cobertura cloacal entre Vicente López (98.4%) y José C. Paz (8.1%) no es una anomalía: refleja décadas de inversión concentrada en los municipios del norte del GBA y abandono sistemático en el oeste y sur. Malvinas Argentinas (9.3%), Moreno (32.2%) y Tigre (34.9%) confirman el patrón.</p>
+      </div>
+    </div>
+    <div class="conclusion-item">
+      <div class="conclusion-num">02</div>
+      <div class="conclusion-content">
+        <span class="tag orange">Crecimiento sin planificación</span>
+        <h3>El bonaerense se expandió hacia donde no hay red</h3>
+        <p>Los municipios de mayor crecimiento demográfico 2010–2022 (San Vicente +65%, General Rodríguez +64%, Mar Chiquita +56%) son, en promedio, los que peor infraestructura tienen. La gente se instaló donde el suelo es accesible, no donde los servicios están garantizados. El resultado es un crecimiento urbano que se autofinancia con déficit de servicios.</p>
+      </div>
+    </div>
+    <div class="conclusion-item">
+      <div class="conclusion-num">03</div>
+      <div class="conclusion-content">
+        <span class="tag red">Crisis de agua</span>
+        <h3>El agua potable de red pública es el servicio más deficitario</h3>
+        <p>Mientras el celular con internet supera el 85% en casi todos los municipios, el agua de red pública en Malvinas Argentinas llega apenas al 14.1% de los hogares. Ituzaingó tiene el 25.9%, Escobar el 27.6% y General Rodríguez el 26.3%. Todos dentro del área metropolitana. El agua de pozo o cisterna sigue siendo la norma en el corredor oeste del GBA.</p>
+      </div>
+    </div>
+    <div class="conclusion-item">
+      <div class="conclusion-num">04</div>
+      <div class="conclusion-content">
+        <span class="tag teal">Democratización digital</span>
+        <h3>La conectividad llegó donde las tuberías no pudieron</h3>
+        <p>La diferencia entre el municipio con más internet (Vicente López, 91.9%) y el de menos (General Pinto, 63.7%) es de 28 puntos. La brecha cloacal equivalente es de 95 puntos. El celular con internet supera el 85% en 133 de los 135 partidos. La tecnología inalámbrica democratizó el acceso a la información de una manera que la infraestructura física nunca logró.</p>
+      </div>
+    </div>
+    <div class="conclusion-item">
+      <div class="conclusion-num">05</div>
+      <div class="conclusion-content">
+        <span class="tag yellow">Paradoja bonaerense</span>
+        <h3>José C. Paz navega internet pero no tiene cloacas</h3>
+        <p>El caso de José C. Paz es el símbolo de la paradoja: 77.3% de hogares con internet, 90.3% con celular con internet, pero apenas 8.1% con cloaca y 14.5% con agua de red pública. La provincia digital y la provincia sanitaria son dos realidades que coexisten sin resolver la tensión. El Censo 2022 la midió con precisión. La política pública tiene el mapa.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUENTES -->
+<div class="fuentes">
+  <div class="fuentes-inner">
+    <h4>Fuentes</h4>
+    <ul>
+      <li>INDEC — Censo Nacional de Población, Hogares y Viviendas 2022 (CNPHV 2022). Resultados provisionales. Publicado mayo 2023.</li>
+      <li>INDEC — Condiciones Habitacionales por partido, Provincia de Buenos Aires. Cuadros 3.1 a 3.135. CNPHV 2022.</li>
+      <li>INDEC — Población por partido, variación intercensal 2010–2022. CNPHV 2022.</li>
+      <li>INDEC — Densidad de población y superficie por partido, PBA 2022. CNPHV 2022.</li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  <p>Datos PBA · Análisis de datos de la Provincia de Buenos Aires · Censo Nacional 2022</p>
+  <p style="color:var(--muted)">Elaboración propia en base a INDEC CNPHV 2022</p>
+</footer>
+
+<script>
+// ============================================================
+// DATASET COMPLETO — 135 partidos PBA
+// n=nombre, r=región(GBA/INT), sup=superficie km², p22=pob2022, p10=pob2010,
+// var=variación%, dens=densidad, ag=agua red%, cl=cloaca%, ga=gas/elec%,
+// int=internet%, cel=celular%, comp=computadora%, vp=vivienda propia%
+// ============================================================
+const DATA = [
+  // GBA 24
+  {n:"Almirante Brown",r:"GBA",sup:129.3,p22:584827,p10:552902,var:5.77,dens:4523,ag:54.8,cl:41.4,ga:65.1,int:83.0,cel:91.6,comp:55.9,vp:73.3},
+  {n:"Avellaneda",r:"GBA",sup:56.2,p22:367554,p10:342677,var:7.26,dens:6540,ag:96.6,cl:81.1,ga:78.2,int:85.6,cel:92.4,comp:65.3,vp:64.0},
+  {n:"Berazategui",r:"GBA",sup:220.2,p22:358712,p10:324244,var:10.63,dens:1629,ag:89.8,cl:77.1,ga:67.4,int:86.3,cel:92.7,comp:58.3,vp:71.1},
+  {n:"Esteban Echeverría",r:"GBA",sup:121.3,p22:338480,p10:300959,var:12.47,dens:2790,ag:61.0,cl:50.4,ga:61.2,int:82.4,cel:92.1,comp:54.5,vp:70.4},
+  {n:"Ezeiza",r:"GBA",sup:238.2,p22:201511,p10:163722,var:23.08,dens:846,ag:49.4,cl:35.7,ga:55.0,int:76.8,cel:91.7,comp:51.4,vp:72.9},
+  {n:"Florencio Varela",r:"GBA",sup:189.5,p22:496433,p10:426005,var:16.53,dens:2620,ag:83.2,cl:46.8,ga:45.4,int:77.9,cel:90.3,comp:44.6,vp:73.6},
+  {n:"General San Martín",r:"GBA",sup:56.5,p22:450518,p10:414196,var:8.77,dens:7974,ag:97.0,cl:76.1,ga:75.9,int:84.0,cel:92.0,comp:63.3,vp:64.4},
+  {n:"Hurlingham",r:"GBA",sup:35.8,p22:185641,p10:181241,var:2.43,dens:5186,ag:45.3,cl:56.1,ga:78.3,int:85.8,cel:92.3,comp:62.2,vp:66.9},
+  {n:"Ituzaingó",r:"GBA",sup:38.1,p22:180232,p10:167824,var:7.39,dens:4730,ag:25.9,cl:38.7,ga:81.1,int:87.3,cel:93.0,comp:67.7,vp:71.5},
+  {n:"José C. Paz",r:"GBA",sup:50.2,p22:326992,p10:265981,var:22.94,dens:6514,ag:14.5,cl:8.1,ga:40.6,int:77.3,cel:90.3,comp:45.7,vp:72.4},
+  {n:"La Matanza",r:"GBA",sup:327.4,p22:1841247,p10:1775816,var:3.68,dens:5624,ag:90.7,cl:58.8,ga:57.1,int:79.6,cel:90.8,comp:51.3,vp:67.5},
+  {n:"Lanús",r:"GBA",sup:50.2,p22:461267,p10:459263,var:0.44,dens:9189,ag:96.2,cl:57.5,ga:79.2,int:86.5,cel:92.0,comp:64.5,vp:65.6},
+  {n:"Lomas de Zamora",r:"GBA",sup:88.7,p22:690480,p10:616279,var:12.04,dens:7784,ag:94.5,cl:47.8,ga:66.2,int:82.3,cel:91.2,comp:59.7,vp:70.0},
+  {n:"Malvinas Argentinas",r:"GBA",sup:62.9,p22:350674,p10:322375,var:8.78,dens:5575,ag:14.1,cl:9.3,ga:54.7,int:82.2,cel:91.4,comp:54.8,vp:68.8},
+  {n:"Merlo",r:"GBA",sup:174.1,p22:582486,p10:528494,var:10.22,dens:3346,ag:41.4,cl:39.5,ga:45.9,int:79.2,cel:90.8,comp:49.0,vp:72.2},
+  {n:"Moreno",r:"GBA",sup:186.2,p22:576632,p10:452505,var:27.43,dens:3097,ag:35.8,cl:32.2,ga:35.0,int:75.7,cel:90.7,comp:45.3,vp:74.0},
+  {n:"Morón",r:"GBA",sup:55.1,p22:331183,p10:321109,var:3.14,dens:6011,ag:88.0,cl:79.5,ga:90.5,int:89.1,cel:93.1,comp:70.8,vp:63.4},
+  {n:"Quilmes",r:"GBA",sup:91.6,p22:633391,p10:582943,var:8.65,dens:6915,ag:95.0,cl:78.9,ga:65.8,int:82.1,cel:91.1,comp:58.4,vp:70.2},
+  {n:"San Fernando",r:"GBA",sup:992.8,p22:171616,p10:163240,var:5.13,dens:173,ag:96.9,cl:93.1,ga:73.5,int:82.8,cel:91.9,comp:62.8,vp:61.9},
+  {n:"San Isidro",r:"GBA",sup:52.4,p22:297282,p10:292878,var:1.50,dens:5673,ag:98.0,cl:94.6,ga:87.9,int:89.4,cel:93.3,comp:77.5,vp:66.8},
+  {n:"San Miguel",r:"GBA",sup:82.8,p22:328835,p10:276190,var:19.06,dens:3971,ag:42.8,cl:49.7,ga:64.2,int:83.6,cel:92.4,comp:59.9,vp:63.8},
+  {n:"Tigre",r:"GBA",sup:393.9,p22:446949,p10:376381,var:18.75,dens:1135,ag:72.7,cl:34.9,ga:60.7,int:87.2,cel:93.1,comp:64.6,vp:66.8},
+  {n:"Tres de Febrero",r:"GBA",sup:45.4,p22:364176,p10:340071,var:7.09,dens:8021,ag:96.6,cl:94.2,ga:88.6,int:86.4,cel:92.6,comp:68.1,vp:61.8},
+  {n:"Vicente López",r:"GBA",sup:34.5,p22:282280,p10:269420,var:4.77,dens:8182,ag:98.6,cl:98.4,ga:94.3,int:91.9,cel:94.1,comp:82.2,vp:63.5},
+  // INTERIOR
+  {n:"Adolfo Alsina",r:"INT",sup:5881.6,p22:17552,p10:17072,var:2.81,dens:2.98,ag:90.4,cl:49.7,ga:75.7,int:80.9,cel:88.3,comp:56.4,vp:69.2},
+  {n:"Adolfo G. Chaves",r:"INT",sup:3788.7,p22:12914,p10:12047,var:7.20,dens:3.41,ag:91.1,cl:53.1,ga:69.4,int:78.4,cel:88.2,comp:60.0,vp:68.7},
+  {n:"Alberti",r:"INT",sup:1122.6,p22:12982,p10:10654,var:21.85,dens:11.56,ag:71.3,cl:77.1,ga:61.3,int:79.2,cel:87.6,comp:58.3,vp:69.2},
+  {n:"Arrecifes",r:"INT",sup:1243.8,p22:32215,p10:29044,var:10.92,dens:25.90,ag:95.4,cl:73.9,ga:59.4,int:79.7,cel:88.3,comp:51.5,vp:69.7},
+  {n:"Ayacucho",r:"INT",sup:6756.1,p22:21977,p10:20337,var:8.06,dens:3.25,ag:89.4,cl:82.9,ga:68.9,int:74.3,cel:85.7,comp:51.7,vp:64.8},
+  {n:"Azul",r:"INT",sup:6537.8,p22:75905,p10:65280,var:16.28,dens:11.61,ag:93.1,cl:81.4,ga:78.2,int:76.6,cel:87.7,comp:58.0,vp:67.9},
+  {n:"Bahía Blanca",r:"INT",sup:2239.9,p22:336557,p10:301572,var:11.60,dens:150.26,ag:96.4,cl:83.8,ga:85.1,int:85.9,cel:92.8,comp:69.6,vp:61.3},
+  {n:"Balcarce",r:"INT",sup:4119.6,p22:48982,p10:43823,var:11.77,dens:11.89,ag:90.3,cl:82.2,ga:68.1,int:75.9,cel:86.2,comp:57.6,vp:65.4},
+  {n:"Baradero",r:"INT",sup:1529.7,p22:40002,p10:32761,var:22.10,dens:26.15,ag:93.4,cl:68.4,ga:54.1,int:76.2,cel:89.2,comp:55.0,vp:68.4},
+  {n:"Benito Juárez",r:"INT",sup:5336.0,p22:22292,p10:20239,var:10.14,dens:4.18,ag:90.2,cl:65.5,ga:79.7,int:74.0,cel:85.5,comp:56.5,vp:66.5},
+  {n:"Berisso",r:"INT",sup:144.5,p22:100930,p10:88470,var:14.08,dens:698.48,ag:91.5,cl:50.2,ga:63.2,int:82.1,cel:90.9,comp:57.2,vp:73.6},
+  {n:"Bolívar",r:"INT",sup:4934.7,p22:37594,p10:34190,var:9.96,dens:7.62,ag:92.0,cl:79.1,ga:68.3,int:74.3,cel:85.5,comp:53.7,vp:64.8},
+  {n:"Bragado",r:"INT",sup:2198.5,p22:46504,p10:41336,var:12.50,dens:21.15,ag:86.8,cl:69.9,ga:70.2,int:85.3,cel:90.0,comp:59.4,vp:71.1},
+  {n:"Brandsen",r:"INT",sup:1114.2,p22:32448,p10:26367,var:23.06,dens:29.12,ag:63.3,cl:47.4,ga:42.0,int:68.5,cel:87.5,comp:52.2,vp:69.0},
+  {n:"Campana",r:"INT",sup:986.3,p22:110566,p10:94461,var:17.05,dens:112.10,ag:89.4,cl:55.2,ga:63.4,int:80.7,cel:91.8,comp:60.2,vp:67.3},
+  {n:"Cañuelas",r:"INT",sup:1186.2,p22:70684,p10:51892,var:36.21,dens:59.59,ag:34.0,cl:27.6,ga:33.0,int:76.9,cel:90.5,comp:51.1,vp:71.4},
+  {n:"Capitán Sarmiento",r:"INT",sup:548.9,p22:15965,p10:14494,var:10.15,dens:29.09,ag:92.3,cl:90.1,ga:69.7,int:82.6,cel:89.6,comp:58.1,vp:64.8},
+  {n:"Carlos Casares",r:"INT",sup:2531.7,p22:23100,p10:22237,var:3.88,dens:9.12,ag:75.1,cl:82.8,ga:67.4,int:81.7,cel:88.9,comp:57.1,vp:67.5},
+  {n:"Carlos Tejedor",r:"INT",sup:3912.2,p22:14079,p10:11570,var:21.69,dens:3.60,ag:67.4,cl:9.3,ga:52.7,int:83.1,cel:88.6,comp:56.8,vp:68.3},
+  {n:"Carmen de Areco",r:"INT",sup:1061.4,p22:17499,p10:14692,var:19.11,dens:16.49,ag:84.6,cl:57.2,ga:53.5,int:74.9,cel:88.2,comp:51.3,vp:66.5},
+  {n:"Castelli",r:"INT",sup:2112.9,p22:9594,p10:8205,var:16.93,dens:4.54,ag:81.3,cl:79.0,ga:57.4,int:77.5,cel:86.8,comp:50.9,vp:63.1},
+  {n:"Chacabuco",r:"INT",sup:2290.1,p22:52729,p10:48703,var:8.27,dens:23.02,ag:92.1,cl:82.9,ga:62.7,int:79.6,cel:88.0,comp:55.8,vp:66.9},
+  {n:"Chascomús",r:"INT",sup:3159.2,p22:42452,p10:42277,var:0.41,dens:13.44,ag:73.6,cl:62.9,ga:59.2,int:79.7,cel:89.5,comp:57.9,vp:66.4},
+  {n:"Chivilcoy",r:"INT",sup:2058.9,p22:70839,p10:64185,var:10.37,dens:34.41,ag:82.3,cl:76.2,ga:71.5,int:82.1,cel:89.0,comp:60.5,vp:65.1},
+  {n:"Colón",r:"INT",sup:1000.9,p22:27504,p10:24890,var:10.50,dens:27.48,ag:81.9,cl:74.7,ga:60.4,int:76.9,cel:87.0,comp:50.6,vp:72.5},
+  {n:"Cnel. Rosales",r:"INT",sup:1289.9,p22:67503,p10:62152,var:8.61,dens:52.33,ag:95.7,cl:77.0,ga:82.8,int:89.4,cel:93.0,comp:68.5,vp:59.9},
+  {n:"Coronel Dorrego",r:"INT",sup:5844.9,p22:15968,p10:15825,var:0.90,dens:2.73,ag:84.2,cl:72.7,ga:75.5,int:77.7,cel:87.4,comp:56.7,vp:68.6},
+  {n:"Coronel Pringles",r:"INT",sup:5256.7,p22:24420,p10:22933,var:6.48,dens:4.65,ag:90.5,cl:80.0,ga:66.1,int:81.6,cel:88.5,comp:58.6,vp:69.5},
+  {n:"Coronel Suárez",r:"INT",sup:5984.1,p22:42110,p10:38320,var:9.89,dens:7.04,ag:87.4,cl:54.5,ga:81.3,int:82.4,cel:88.6,comp:61.0,vp:71.9},
+  {n:"Daireaux",r:"INT",sup:3822.8,p22:18422,p10:16889,var:9.08,dens:4.82,ag:86.2,cl:69.5,ga:58.0,int:79.8,cel:86.8,comp:57.4,vp:65.9},
+  {n:"Dolores",r:"INT",sup:1977.5,p22:32032,p10:27042,var:18.45,dens:16.20,ag:72.7,cl:56.6,ga:61.8,int:78.3,cel:87.3,comp:58.3,vp:69.9},
+  {n:"Ensenada",r:"INT",sup:113.5,p22:63997,p10:56729,var:12.81,dens:563.85,ag:94.7,cl:61.7,ga:60.1,int:81.7,cel:91.3,comp:56.6,vp:71.8},
+  {n:"Escobar",r:"INT",sup:301.0,p22:256268,p10:213619,var:19.96,dens:851.39,ag:27.6,cl:21.8,ga:48.6,int:82.6,cel:92.4,comp:59.0,vp:68.7},
+  {n:"Exaltación de la Cruz",r:"INT",sup:636.5,p22:40159,p10:29805,var:34.74,dens:63.09,ag:57.0,cl:45.5,ga:50.3,int:74.6,cel:91.1,comp:58.1,vp:66.3},
+  {n:"Florentino Ameghino",r:"INT",sup:1812.8,p22:10790,p10:8869,var:21.66,dens:5.95,ag:88.4,cl:77.8,ga:69.0,int:79.4,cel:87.9,comp:54.5,vp:69.5},
+  {n:"General Alvarado",r:"INT",sup:1627.8,p22:45526,p10:39594,var:14.98,dens:27.97,ag:88.0,cl:69.4,ga:58.2,int:68.4,cel:88.2,comp:53.3,vp:67.6},
+  {n:"General Alvear",r:"INT",sup:3366.4,p22:12631,p10:11130,var:13.49,dens:3.75,ag:85.6,cl:68.3,ga:65.0,int:76.8,cel:88.8,comp:52.9,vp:66.4},
+  {n:"General Arenales",r:"INT",sup:1486.4,p22:16350,p10:14903,var:9.71,dens:11.00,ag:87.0,cl:54.2,ga:68.1,int:82.7,cel:88.3,comp:59.2,vp:73.9},
+  {n:"General Belgrano",r:"INT",sup:1857.5,p22:20791,p10:17365,var:19.73,dens:11.19,ag:83.4,cl:45.0,ga:66.9,int:77.0,cel:86.5,comp:52.5,vp:65.5},
+  {n:"General Guido",r:"INT",sup:2326.4,p22:3174,p10:2816,var:12.71,dens:1.36,ag:78.8,cl:5.9,ga:53.8,int:68.3,cel:85.1,comp:48.2,vp:65.3},
+  {n:"Gral. Juan Madariaga",r:"INT",sup:2982.3,p22:22624,p10:19747,var:14.57,dens:7.59,ag:54.8,cl:56.9,ga:56.2,int:72.2,cel:86.4,comp:51.9,vp:66.7},
+  {n:"General La Madrid",r:"INT",sup:4814.0,p22:11618,p10:10783,var:7.74,dens:2.41,ag:75.8,cl:29.1,ga:65.4,int:81.7,cel:87.2,comp:55.5,vp:69.9},
+  {n:"General Las Heras",r:"INT",sup:751.3,p22:18022,p10:14889,var:21.04,dens:23.99,ag:60.2,cl:36.0,ga:46.6,int:77.2,cel:89.8,comp:55.2,vp:62.5},
+  {n:"General Lavalle",r:"INT",sup:2704.6,p22:4870,p10:3700,var:31.62,dens:1.80,ag:59.3,cl:42.2,ga:32.4,int:70.1,cel:88.5,comp:49.9,vp:74.2},
+  {n:"General Paz",r:"INT",sup:1199.9,p22:14207,p10:11202,var:26.83,dens:11.84,ag:82.7,cl:61.0,ga:54.3,int:68.0,cel:83.8,comp:48.1,vp:64.3},
+  {n:"General Pinto",r:"INT",sup:2558.1,p22:12941,p10:11261,var:14.92,dens:5.06,ag:85.5,cl:76.1,ga:49.2,int:63.7,cel:85.4,comp:49.6,vp:69.2},
+  {n:"General Pueyrredón",r:"INT",sup:1462.3,p22:667082,p10:618989,var:7.77,dens:456.19,ag:91.8,cl:87.4,ga:81.3,int:84.7,cel:92.6,comp:66.6,vp:62.1},
+  {n:"General Rodríguez",r:"INT",sup:366.5,p22:142709,p10:87185,var:63.69,dens:389.38,ag:26.3,cl:24.2,ga:27.8,int:67.1,cel:90.0,comp:44.0,vp:75.5},
+  {n:"General Viamonte",r:"INT",sup:2140.2,p22:22649,p10:18078,var:25.28,dens:10.58,ag:52.9,cl:66.0,ga:52.5,int:81.1,cel:88.1,comp:60.3,vp:69.7},
+  {n:"General Villegas",r:"INT",sup:7261.7,p22:35251,p10:30864,var:14.21,dens:4.85,ag:31.3,cl:48.5,ga:30.2,int:79.5,cel:88.2,comp:54.8,vp:68.0},
+  {n:"Guaminí",r:"INT",sup:4824.2,p22:11801,p10:11826,var:-0.21,dens:2.45,ag:86.6,cl:62.7,ga:67.3,int:80.5,cel:88.9,comp:58.0,vp:68.1},
+  {n:"Hipólito Yrigoyen",r:"INT",sup:1645.3,p22:10661,p10:9585,var:11.23,dens:6.48,ag:88.9,cl:78.8,ga:77.3,int:78.2,cel:87.2,comp:57.6,vp:66.0},
+  {n:"Junín",r:"INT",sup:2254.7,p22:103787,p10:90305,var:14.93,dens:46.03,ag:91.2,cl:86.5,ga:67.0,int:84.4,cel:91.8,comp:66.2,vp:65.4},
+  {n:"La Costa",r:"INT",sup:233.9,p22:100689,p10:69633,var:44.60,dens:430.48,ag:26.4,cl:69.2,ga:42.8,int:76.3,cel:90.3,comp:52.4,vp:61.2},
+  {n:"La Plata",r:"INT",sup:892.8,p22:768547,p10:654324,var:17.46,dens:860.83,ag:87.9,cl:69.5,ga:74.7,int:85.4,cel:93.1,comp:71.0,vp:62.6},
+  {n:"Laprida",r:"INT",sup:3448.0,p22:11646,p10:10210,var:14.06,dens:3.38,ag:91.7,cl:78.8,ga:78.1,int:81.4,cel:87.8,comp:54.8,vp:69.4},
+  {n:"Las Flores",r:"INT",sup:3341.0,p22:27239,p10:23871,var:14.11,dens:8.15,ag:91.1,cl:73.4,ga:67.7,int:68.2,cel:83.4,comp:50.4,vp:71.0},
+  {n:"Leandro N. Alem",r:"INT",sup:1606.2,p22:17266,p10:16799,var:2.78,dens:10.75,ag:64.5,cl:76.8,ga:64.8,int:74.3,cel:87.1,comp:54.3,vp:68.7},
+  {n:"Lezama",r:"INT",sup:1047.4,p22:6221,p10:null,var:null,dens:5.94,ag:86.3,cl:78.9,ga:68.6,int:79.6,cel:89.9,comp:57.4,vp:64.3},
+  {n:"Lincoln",r:"INT",sup:5778.3,p22:45506,p10:41808,var:8.85,dens:7.88,ag:72.8,cl:62.7,ga:66.1,int:80.9,cel:87.9,comp:56.1,vp:66.6},
+  {n:"Lobería",r:"INT",sup:4720.3,p22:18243,p10:17523,var:4.11,dens:3.86,ag:87.0,cl:77.2,ga:67.8,int:72.3,cel:86.3,comp:53.3,vp:67.6},
+  {n:"Lobos",r:"INT",sup:1725.5,p22:41760,p10:36172,var:15.45,dens:24.20,ag:61.9,cl:30.3,ga:63.2,int:83.7,cel:90.2,comp:56.4,vp:65.9},
+  {n:"Luján",r:"INT",sup:771.3,p22:111251,p10:106273,var:4.68,dens:144.24,ag:56.4,cl:38.1,ga:65.4,int:80.2,cel:91.6,comp:61.3,vp:65.8},
+  {n:"Magdalena",r:"INT",sup:1849.6,p22:26613,p10:19301,var:37.88,dens:14.39,ag:76.8,cl:57.1,ga:37.0,int:80.8,cel:88.8,comp:57.5,vp:59.7},
+  {n:"Maipú",r:"INT",sup:2604.0,p22:11323,p10:10188,var:11.14,dens:4.35,ag:92.9,cl:73.8,ga:65.3,int:73.2,cel:86.6,comp:55.7,vp:68.0},
+  {n:"Mar Chiquita",r:"INT",sup:3088.5,p22:33110,p10:21279,var:55.60,dens:10.72,ag:60.2,cl:30.9,ga:48.2,int:71.9,cel:90.8,comp:56.8,vp:67.7},
+  {n:"Marcos Paz",r:"INT",sup:422.2,p22:67011,p10:54181,var:23.68,dens:158.72,ag:83.4,cl:40.6,ga:36.9,int:74.5,cel:90.3,comp:48.1,vp:70.7},
+  {n:"Mercedes",r:"INT",sup:1049.5,p22:72980,p10:63284,var:15.32,dens:69.54,ag:80.3,cl:68.2,ga:67.3,int:85.2,cel:91.4,comp:60.5,vp:62.6},
+  {n:"Monte",r:"INT",sup:1875.6,p22:24868,p10:21034,var:18.23,dens:13.26,ag:73.9,cl:58.2,ga:50.7,int:74.2,cel:87.6,comp:51.7,vp:61.5},
+  {n:"Monte Hermoso",r:"INT",sup:200.3,p22:8465,p10:6499,var:30.25,dens:42.26,ag:84.5,cl:71.5,ga:69.6,int:80.9,cel:92.3,comp:55.6,vp:59.4},
+  {n:"Navarro",r:"INT",sup:1619.5,p22:19899,p10:17054,var:16.68,dens:12.29,ag:87.4,cl:62.5,ga:44.0,int:83.3,cel:88.8,comp:51.3,vp:63.0},
+  {n:"Necochea",r:"INT",sup:4566.1,p22:102110,p10:92933,var:9.87,dens:22.36,ag:93.0,cl:80.1,ga:77.2,int:83.4,cel:91.4,comp:62.9,vp:65.6},
+  {n:"9 de Julio",r:"INT",sup:4290.9,p22:52607,p10:47722,var:10.24,dens:12.26,ag:79.8,cl:69.9,ga:66.6,int:81.4,cel:89.0,comp:58.2,vp:64.8},
+  {n:"Olavarría",r:"INT",sup:7666.2,p22:125751,p10:111708,var:12.57,dens:16.40,ag:88.1,cl:51.7,ga:87.4,int:81.6,cel:89.6,comp:64.8,vp:63.8},
+  {n:"Patagones",r:"INT",sup:13564.4,p22:37646,p10:30207,var:24.63,dens:2.78,ag:95.0,cl:74.3,ga:88.3,int:79.8,cel:89.4,comp:59.7,vp:63.8},
+  {n:"Pehuajó",r:"INT",sup:4523.2,p22:44783,p10:39776,var:12.59,dens:9.90,ag:44.9,cl:48.9,ga:70.9,int:74.2,cel:87.5,comp:54.2,vp:65.9},
+  {n:"Pellegrini",r:"INT",sup:1821.0,p22:7143,p10:5887,var:21.34,dens:3.92,ag:80.7,cl:81.7,ga:80.0,int:67.9,cel:87.0,comp:52.8,vp:64.7},
+  {n:"Pergamino",r:"INT",sup:3004.7,p22:115340,p10:104590,var:10.28,dens:38.39,ag:89.8,cl:82.2,ga:63.2,int:76.5,cel:88.4,comp:59.1,vp:67.7},
+  {n:"Pila",r:"INT",sup:3449.4,p22:4642,p10:3640,var:27.53,dens:1.35,ag:78.2,cl:72.4,ga:52.6,int:69.5,cel:84.7,comp:47.6,vp:67.0},
+  {n:"Pilar",r:"INT",sup:384.7,p22:394754,p10:299077,var:31.99,dens:1026.13,ag:35.6,cl:24.4,ga:41.2,int:80.7,cel:92.1,comp:58.6,vp:69.6},
+  {n:"Pinamar",r:"INT",sup:65.7,p22:39449,p10:25728,var:53.33,dens:600.44,ag:77.3,cl:36.5,ga:73.8,int:89.2,cel:93.8,comp:65.0,vp:54.2},
+  {n:"Presidente Perón",r:"INT",sup:122.0,p22:102106,p10:81141,var:25.84,dens:836.93,ag:62.5,cl:38.1,ga:42.5,int:79.4,cel:91.4,comp:43.0,vp:77.5},
+  {n:"Puan",r:"INT",sup:6376.3,p22:16613,p10:15743,var:5.53,dens:2.61,ag:90.7,cl:37.7,ga:83.4,int:79.4,cel:86.6,comp:60.1,vp:70.2},
+  {n:"Punta Indio",r:"INT",sup:1605.4,p22:12297,p10:9888,var:24.36,dens:7.66,ag:76.8,cl:66.8,ga:36.9,int:81.3,cel:87.5,comp:57.6,vp:65.1},
+  {n:"Ramallo",r:"INT",sup:1047.6,p22:39730,p10:33042,var:20.24,dens:37.92,ag:94.8,cl:78.8,ga:51.6,int:72.9,cel:87.0,comp:51.7,vp:70.9},
+  {n:"Rauch",r:"INT",sup:4312.8,p22:16635,p10:15176,var:9.61,dens:3.86,ag:87.8,cl:81.8,ga:78.4,int:64.4,cel:82.6,comp:52.7,vp:65.3},
+  {n:"Rivadavia",r:"INT",sup:3955.0,p22:19849,p10:17143,var:15.78,dens:5.02,ag:39.7,cl:66.3,ga:52.5,int:82.2,cel:89.8,comp:59.4,vp:66.9},
+  {n:"Rojas",r:"INT",sup:2060.4,p22:25627,p10:23432,var:9.37,dens:12.44,ag:92.2,cl:80.7,ga:63.5,int:79.1,cel:89.2,comp:60.2,vp:70.4},
+  {n:"Roque Pérez",r:"INT",sup:1556.2,p22:13977,p10:12513,var:11.70,dens:8.98,ag:60.0,cl:60.2,ga:64.7,int:84.7,cel:89.8,comp:55.1,vp:63.7},
+  {n:"Saavedra",r:"INT",sup:3546.2,p22:22347,p10:20749,var:7.70,dens:6.30,ag:94.7,cl:74.3,ga:85.7,int:85.4,cel:90.4,comp:65.0,vp:64.0},
+  {n:"Saladillo",r:"INT",sup:2706.4,p22:35656,p10:32103,var:11.07,dens:13.17,ag:88.8,cl:64.2,ga:65.1,int:77.8,cel:87.3,comp:56.1,vp:65.2},
+  {n:"Salliqueló",r:"INT",sup:796.4,p22:9427,p10:8644,var:9.06,dens:11.84,ag:88.0,cl:50.7,ga:82.7,int:85.1,cel:89.7,comp:60.8,vp:67.9},
+  {n:"Salto",r:"INT",sup:1611.1,p22:39425,p10:32653,var:20.74,dens:24.47,ag:91.9,cl:49.2,ga:52.9,int:83.9,cel:90.0,comp:55.1,vp:65.5},
+  {n:"San Andrés de Giles",r:"INT",sup:1129.2,p22:26510,p10:23027,var:15.13,dens:23.48,ag:72.9,cl:44.5,ga:51.3,int:82.2,cel:89.3,comp:55.4,vp:61.2},
+  {n:"San Antonio de Areco",r:"INT",sup:861.8,p22:26897,p10:23138,var:16.25,dens:31.21,ag:82.1,cl:46.4,ga:66.7,int:83.6,cel:90.8,comp:63.8,vp:65.9},
+  {n:"San Cayetano",r:"INT",sup:2997.3,p22:8994,p10:8399,var:7.08,dens:3.00,ag:87.7,cl:80.8,ga:80.2,int:79.5,cel:88.6,comp:60.8,vp:69.4},
+  {n:"San Nicolás",r:"INT",sup:680.6,p22:168041,p10:145857,var:15.21,dens:246.90,ag:97.8,cl:90.8,ga:74.7,int:76.6,cel:89.0,comp:57.4,vp:69.1},
+  {n:"San Pedro",r:"INT",sup:1356.5,p22:68613,p10:59036,var:16.22,dens:50.58,ag:93.3,cl:79.0,ga:50.6,int:72.9,cel:86.1,comp:50.1,vp:68.2},
+  {n:"San Vicente",r:"INT",sup:660.8,p22:98215,p10:59478,var:65.13,dens:148.63,ag:46.6,cl:43.7,ga:41.3,int:72.6,cel:90.9,comp:47.6,vp:77.4},
+  {n:"Suipacha",r:"INT",sup:943.0,p22:11786,p10:10081,var:16.91,dens:12.50,ag:75.9,cl:53.4,ga:71.3,int:83.7,cel:89.8,comp:59.3,vp:67.3},
+  {n:"Tandil",r:"INT",sup:4855.0,p22:145575,p10:123871,var:17.52,dens:29.98,ag:94.0,cl:86.0,ga:82.0,int:83.2,cel:91.9,comp:68.0,vp:57.8},
+  {n:"Tapalqué",r:"INT",sup:4168.5,p22:10783,p10:9178,var:17.49,dens:2.59,ag:76.8,cl:73.1,ga:76.0,int:77.9,cel:86.8,comp:51.6,vp:64.2},
+  {n:"Tordillo",r:"INT",sup:1334.4,p22:2542,p10:1764,var:44.10,dens:1.90,ag:61.7,cl:30.7,ga:42.3,int:69.6,cel:91.2,comp:42.5,vp:68.5},
+  {n:"Tornquist",r:"INT",sup:4160.2,p22:14810,p10:12723,var:16.40,dens:3.56,ag:90.0,cl:48.2,ga:66.3,int:87.3,cel:91.3,comp:63.5,vp:61.4},
+  {n:"Trenque Lauquen",r:"INT",sup:5498.3,p22:49499,p10:43021,var:15.06,dens:9.00,ag:77.9,cl:86.6,ga:78.7,int:86.4,cel:91.4,comp:62.8,vp:64.1},
+  {n:"Tres Arroyos",r:"INT",sup:5927.2,p22:62426,p10:57110,var:9.31,dens:10.53,ag:92.0,cl:71.4,ga:77.6,int:83.0,cel:90.4,comp:65.2,vp:66.7},
+  {n:"Tres Lomas",r:"INT",sup:1252.0,p22:9164,p10:8700,var:5.33,dens:7.32,ag:92.1,cl:61.9,ga:78.7,int:82.2,cel:87.6,comp:57.1,vp:69.8},
+  {n:"25 de Mayo",r:"INT",sup:4789.1,p22:35563,p10:35842,var:-0.78,dens:7.43,ag:87.0,cl:57.7,ga:53.1,int:72.8,cel:85.5,comp:53.8,vp:64.9},
+  {n:"Villa Gesell",r:"INT",sup:164.4,p22:37463,p10:31730,var:18.07,dens:227.88,ag:89.1,cl:59.9,ga:53.3,int:79.9,cel:91.7,comp:58.9,vp:60.0},
+  {n:"Villarino",r:"INT",sup:10399.0,p22:32717,p10:31014,var:5.49,dens:3.15,ag:88.3,cl:33.3,ga:49.3,int:74.8,cel:88.0,comp:47.2,vp:65.0},
+  {n:"Zárate",r:"INT",sup:1185.1,p22:132221,p10:114269,var:15.71,dens:111.57,ag:88.0,cl:63.2,ga:57.7,int:79.3,cel:90.9,comp:57.9,vp:70.0},
+];
+
+// ============================================================
+// HELPERS
+// ============================================================
+const GBA = DATA.filter(d=>d.r==="GBA");
+const INT = DATA.filter(d=>d.r==="INT");
+
+Chart.defaults.font.family = "'Poppins', sans-serif";
+Chart.defaults.color = "#888";
+
+function clColor(v){
+  if(v<20) return '#ff2d55';
+  if(v<40) return '#ff4d6d';
+  if(v<55) return '#ff6b35';
+  if(v<70) return '#ffd60a';
+  if(v<85) return '#30d158';
+  return '#00c8a0';
+}
+
+function agColor(v){
+  if(v<30) return '#ff2d55';
+  if(v<50) return '#ff6b35';
+  if(v<70) return '#ffd60a';
+  return '#00c8a0';
+}
+
+// ============================================================
+// CHART 1: TOP GROWTH
+// ============================================================
+(function(){
+  const withVar = DATA.filter(d=>d.var!==null).sort((a,b)=>b.var-a.var).slice(0,10);
+  const ctx = document.getElementById('topGrowthChart');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels: withVar.map(d=>d.n),
+      datasets:[{
+        label:'Crecimiento %',
+        data: withVar.map(d=>d.var),
+        backgroundColor: withVar.map(d=> d.var>50?'#ff2d55': d.var>30?'#ff6b35':'#ffd60a'),
+        borderRadius:4,
+        borderSkipped:false,
+      }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`+${ctx.raw.toFixed(1)}%`}}
+      },
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{callback:v=>v+'%',font:{size:10}}},
+        y:{grid:{display:false},ticks:{font:{size:10},color:'#ccc'}}
+      }
+    }
+  });
+})();
+
+// ============================================================
+// CHART 2: DENSITY EXTREMES
+// ============================================================
+(function(){
+  const sorted = [...DATA].sort((a,b)=>b.dens-a.dens);
+  const top5 = sorted.slice(0,5);
+  const bot5 = sorted.slice(-5).reverse();
+  const sel = [...top5,...bot5];
+  const ctx = document.getElementById('densityChart');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels: sel.map(d=>d.n),
+      datasets:[{
+        label:'Hab/km²',
+        data: sel.map(d=>d.dens),
+        backgroundColor: sel.map((d,i)=> i<5?'#00c8a0':'rgba(0,200,160,.25)'),
+        borderRadius:4,
+        borderSkipped:false,
+      }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`${ctx.raw.toLocaleString('es')} hab/km²`}}
+      },
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,.05)'},ticks:{font:{size:10}}},
+        y:{grid:{display:false},ticks:{font:{size:10},color:'#ccc'}}
+      }
+    }
+  });
+})();
+
+// ============================================================
+// CHART 3: SCATTER GROWTH vs CLOACA
+// ============================================================
+(function(){
+  const valid = DATA.filter(d=>d.var!==null);
+  const gbaData = valid.filter(d=>d.r==="GBA");
+  const intData = valid.filter(d=>d.r==="INT");
+  function toPoint(d){return{x:d.var,y:d.cl,label:d.n,pop:d.p22};}
+  const ctx = document.getElementById('scatterChart');
+  new Chart(ctx,{
+    type:'scatter',
+    data:{
+      datasets:[
+        {
+          label:'GBA',
+          data: gbaData.map(toPoint),
+          backgroundColor:'rgba(255,107,53,0.7)',
+          pointRadius: gbaData.map(d=>Math.max(4,Math.sqrt(d.p22/15000))),
+          pointHoverRadius:8,
+        },
+        {
+          label:'Interior',
+          data: intData.map(toPoint),
+          backgroundColor:'rgba(0,200,160,0.5)',
+          pointRadius: intData.map(d=>Math.max(3,Math.sqrt(d.p22/15000))),
+          pointHoverRadius:7,
+        }
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{
+          label:ctx=>{
+            const d=ctx.raw;
+            return [`${d.label}`,`Crecimiento: +${d.x.toFixed(1)}%`,`Cloaca: ${d.y}%`];
+          }
+        }}
+      },
+      scales:{
+        x:{
+          title:{display:true,text:'Crecimiento poblacional 2010–2022 (%)',font:{size:10},color:'#888'},
+          grid:{color:'rgba(255,255,255,.05)'},
+          ticks:{callback:v=>v+'%',font:{size:10}}
+        },
+        y:{
+          title:{display:true,text:'Hogares con cloaca de red pública (%)',font:{size:10},color:'#888'},
+          grid:{color:'rgba(255,255,255,.05)'},
+          ticks:{callback:v=>v+'%',font:{size:10}},
+          min:0,max:100
+        }
+      }
+    }
+  });
+})();
+
+// ============================================================
+// CHART 4: GBA CLOACA RANKING (horizontal bar)
+// ============================================================
+(function(){
+  const sorted = [...GBA].sort((a,b)=>a.cl-b.cl);
+  const ctx = document.getElementById('cloacaGBAChart');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels: sorted.map(d=>d.n),
+      datasets:[{
+        label:'% cloaca',
+        data: sorted.map(d=>d.cl),
+        backgroundColor: sorted.map(d=>clColor(d.cl)),
+        borderRadius:3,
+        borderSkipped:false,
+      }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`${ctx.raw}% con cloaca`}}
+      },
+      scales:{
+        x:{min:0,max:100,grid:{color:'rgba(255,255,255,.05)'},ticks:{callback:v=>v+'%',font:{size:10}}},
+        y:{grid:{display:false},ticks:{font:{size:10,weight:'500'},color:'#ddd'}}
+      }
+    }
+  });
+})();
+
+// ============================================================
+// CHART 5: AGUA GBA (partidos <75%)
+// ============================================================
+(function(){
+  const low = [...GBA].filter(d=>d.ag<75).sort((a,b)=>a.ag-b.ag);
+  const ctx = document.getElementById('aguaGBAChart');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels: low.map(d=>d.n),
+      datasets:[{
+        label:'% agua de red pública',
+        data: low.map(d=>d.ag),
+        backgroundColor: low.map(d=>agColor(d.ag)),
+        borderRadius:4,
+        borderSkipped:false,
+      }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`${ctx.raw}% con agua de red pública`}}
+      },
+      scales:{
+        x:{min:0,max:100,grid:{color:'rgba(255,255,255,.05)'},ticks:{callback:v=>v+'%',font:{size:10}}},
+        y:{grid:{display:false},ticks:{font:{size:10},color:'#ddd'}}
+      }
+    }
+  });
+})();
+
+// ============================================================
+// CHART 6: GROWTH + SERVICES (grouped bar)
+// ============================================================
+(function(){
+  const top8 = DATA.filter(d=>d.var!==null).sort((a,b)=>b.var-a.var).slice(0,8);
+  const ctx = document.getElementById('growthServicesChart');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels: top8.map(d=>d.n),
+      datasets:[
+        {
+          label:'Cloaca (%)',
+          data: top8.map(d=>d.cl),
+          backgroundColor:'rgba(255,45,85,0.75)',
+          borderRadius:3,
+          borderSkipped:false,
+        },
+        {
+          label:'Internet (%)',
+          data: top8.map(d=>d.int),
+          backgroundColor:'rgba(0,200,160,0.7)',
+          borderRadius:3,
+          borderSkipped:false,
+        }
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{
+          display:true,
+          labels:{color:'#aaa',font:{size:10},boxWidth:12}
+        },
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}%`}}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:9},color:'#bbb',maxRotation:35}},
+        y:{min:0,max:100,grid:{color:'rgba(255,255,255,.05)'},ticks:{callback:v=>v+'%',font:{size:10}}}
+      }
+    }
+  });
+})();
+
+// ============================================================
+// CHART 7: CONNECTIVITY grouped bar
+// ============================================================
+(function(){
+  const sel = [...DATA].sort((a,b)=>b.int-a.int);
+  // Take top 6 and bottom 6 by internet
+  const items = [...sel.slice(0,6),...sel.slice(-6)];
+  const ctx = document.getElementById('connectivityChart');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels: items.map(d=>d.n),
+      datasets:[
+        {label:'Internet (%)',data:items.map(d=>d.int),backgroundColor:'rgba(0,200,160,0.8)',borderRadius:2,borderSkipped:false},
+        {label:'Celular internet (%)',data:items.map(d=>d.cel),backgroundColor:'rgba(0,200,160,0.35)',borderRadius:2,borderSkipped:false},
+        {label:'Computadora (%)',data:items.map(d=>d.comp),backgroundColor:'rgba(255,214,10,0.5)',borderRadius:2,borderSkipped:false},
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{display:true,labels:{color:'#aaa',font:{size:10},boxWidth:12}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw}%`}}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:9},color:'#bbb',maxRotation:40}},
+        y:{min:30,max:100,grid:{color:'rgba(255,255,255,.05)'},ticks:{callback:v=>v+'%',font:{size:10}}}
+      }
+    }
+  });
+})();
+
+// ============================================================
+// CHART 8: PARADOX SCATTER (internet vs cloaca)
+// ============================================================
+(function(){
+  const ctx = document.getElementById('paradoxChart');
+  new Chart(ctx,{
+    type:'scatter',
+    data:{
+      datasets:[
+        {
+          label:'GBA',
+          data: GBA.map(d=>({x:d.int,y:d.cl,label:d.n})),
+          backgroundColor:'rgba(255,107,53,0.75)',
+          pointRadius:6,
+          pointHoverRadius:9,
+        },
+        {
+          label:'Interior',
+          data: INT.map(d=>({x:d.int,y:d.cl,label:d.n})),
+          backgroundColor:'rgba(0,200,160,0.45)',
+          pointRadius:5,
+          pointHoverRadius:8,
+        }
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{
+          label:ctx=>{
+            const d=ctx.raw;
+            return [`${d.label}`,`Internet: ${d.x}%`,`Cloaca: ${d.y}%`];
+          }
+        }}
+      },
+      scales:{
+        x:{
+          title:{display:true,text:'Hogares con internet (%)',font:{size:10},color:'#888'},
+          min:60,max:96,
+          grid:{color:'rgba(255,255,255,.05)'},
+          ticks:{callback:v=>v+'%',font:{size:10}}
+        },
+        y:{
+          title:{display:true,text:'Hogares con cloaca (%)',font:{size:10},color:'#888'},
+          min:0,max:100,
+          grid:{color:'rgba(255,255,255,.05)'},
+          ticks:{callback:v=>v+'%',font:{size:10}}
+        }
+      }
+    }
+  });
+})();
+
+// ============================================================
+// RANKING LISTS
+// ============================================================
+function buildRanking(containerId, items, field, colorFn, maxVal=100){
+  const el = document.getElementById(containerId);
+  items.forEach((d,i)=>{
+    const pct = (d[field]/maxVal)*100;
+    const color = colorFn(d[field]);
+    el.innerHTML += `
+      <div class="rank-item">
+        <span class="rank-n">${i+1}</span>
+        <span class="rank-name">${d.n}</span>
+        <div class="rank-bar-wrap"><div class="rank-bar" style="width:${pct}%;background:${color}"></div></div>
+        <span class="rank-val" style="color:${color}">${d[field]}%</span>
+      </div>`;
+  });
+}
+
+// GBA cloaca ranking (sorted asc)
+buildRanking('cloacaRanking', [...GBA].sort((a,b)=>a.cl-b.cl), 'cl', clColor);
+
+// GBA agua ranking (sorted asc)
+buildRanking('aguaRanking', [...GBA].sort((a,b)=>a.ag-b.ag), 'ag', agColor);
+
+// Top internet (all 135, top 5)
+buildRanking('topInternet', [...DATA].sort((a,b)=>b.int-a.int).slice(0,5), 'int', ()=>'#00c8a0');
+
+// Top computadora (all 135, top 5)
+buildRanking('topComp', [...DATA].sort((a,b)=>b.comp-a.comp).slice(0,5), 'comp', ()=>'#ffd60a');
+
+// Top vivienda propia (all 135, top 5)
+buildRanking('topVivienda', [...DATA].sort((a,b)=>b.vp-a.vp).slice(0,5), 'vp', ()=>'#30d158');
+
+// ============================================================
+// TWEET CHARTS
+// ============================================================
+(function(){
+  const sorted = [...GBA].sort((a,b)=>a.cl-b.cl);
+  const ctx = document.getElementById('tweetChart1');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels: sorted.map(d=>d.n),
+      datasets:[{
+        data: sorted.map(d=>d.cl),
+        backgroundColor: sorted.map(d=>clColor(d.cl)),
+        borderRadius:2,
+        borderSkipped:false,
+      }]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,
+      plugins:{legend:{display:false},tooltip:{enabled:false}},
+      scales:{
+        x:{min:0,max:100,grid:{color:'rgba(255,255,255,.04)'},ticks:{callback:v=>v+'%',font:{size:8},color:'#555'}},
+        y:{grid:{display:false},ticks:{font:{size:7},color:'#888'}}
+      }
+    }
+  });
+})();
+
+(function(){
+  const top8 = DATA.filter(d=>d.var!==null).sort((a,b)=>b.var-a.var).slice(0,8);
+  const ctx = document.getElementById('tweetChart2');
+  new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels: top8.map(d=>d.n.split(' ').slice(0,2).join(' ')),
+      datasets:[
+        {label:'Cloaca %',data:top8.map(d=>d.cl),backgroundColor:'rgba(255,45,85,0.8)',borderRadius:2,borderSkipped:false},
+        {label:'Crecimiento %',data:top8.map(d=>d.var),backgroundColor:'rgba(255,214,10,0.6)',borderRadius:2,borderSkipped:false},
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{
+        legend:{display:true,labels:{color:'#555',font:{size:8},boxWidth:8}},
+        tooltip:{enabled:false}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{size:7},color:'#666',maxRotation:40}},
+        y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{font:{size:8},color:'#666'}}
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>

@@ -174,11 +174,21 @@ function TableContent({ tableData }) {
 function resolveChartOptions(chartOptions) {
   if (!chartOptions) return BASE_OPTIONS
   const { y_tick_format, x_tick_format, ...opts } = chartOptions
+  const isHorizontal = opts.indexAxis === 'y'
   const merged = {
     ...BASE_OPTIONS,
     ...opts,
     scales: { ...BASE_OPTIONS.scales, ...(opts.scales || {}) },
     plugins: { ...BASE_OPTIONS.plugins, ...(opts.plugins || {}) },
+  }
+  if (isHorizontal) {
+    merged.scales = {
+      ...merged.scales,
+      y: {
+        ...merged.scales.y,
+        ticks: { ...(merged.scales.y?.ticks || {}), autoSkip: false },
+      },
+    }
   }
   if (y_tick_format === 'percent' && merged.scales?.y) {
     merged.scales = {
@@ -278,7 +288,11 @@ export default function VizCard({ viz, index = 0 }) {
       {viz.tipo === 'tabla' ? (
         <TableContent tableData={tableData} />
       ) : (
-        <div className="h-64">
+        <div style={{
+          height: chartOptions?.indexAxis === 'y' && (chartData?.labels?.length ?? 0) > 8
+            ? `${Math.max(300, (chartData.labels.length) * 40)}px`
+            : '256px'
+        }}>
           <ChartComponent ref={chartRef} data={chartData} options={resolveChartOptions(chartOptions)} />
         </div>
       )}
