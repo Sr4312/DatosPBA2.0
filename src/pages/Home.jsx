@@ -63,8 +63,16 @@ function PublicacionesTicker({ hilos }) {
                 </div>
                 <span className="text-slate-300"><XLogo /></span>
               </div>
-              <p className="text-xs text-slate-700 leading-relaxed line-clamp-4 flex-1">{h.resumen}</p>
-              <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+              <p className={`text-xs text-slate-700 leading-relaxed ${h.imagen ? 'line-clamp-3' : 'line-clamp-4 flex-1'}`}>{h.resumen}</p>
+              {h.imagen && (
+                <img
+                  src={h.imagen}
+                  alt=""
+                  loading="lazy"
+                  className="w-full h-28 object-cover rounded-lg border border-slate-200/70"
+                />
+              )}
+              <div className="flex items-center justify-between pt-2 border-t border-slate-100 mt-auto">
                 <span className="text-[10px] text-slate-400">{h.fecha}</span>
                 {h.tema && <Badge variant="secondary" className="text-[10px] py-0">{h.tema}</Badge>}
               </div>

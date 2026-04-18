@@ -190,7 +190,68 @@ INSERT INTO hilos VALUES (
   'En 2025, PBA exportó USD 31.684 millones (+7,3%). Las MOI lideraron con USD 11.664 M, semillas oleaginosas creció 117,1% y el 30,4% fue al Mercosur. Industria y agro empujando juntos.',
   '7 abr. 2026', '2026-04-07', 'Economía', 'Twitter/X',
   '["exportaciones","PBA","economía","INDEC"]',
-  'https://x.com/DatosPBA/status/2041517166105710730?s=20', null
+  'https://x.com/DatosPBA/status/2041517166105710730?s=20',
+  '/images/hilos/exportaciones-pba-2025.jpg'
+);
+
+INSERT INTO hilos VALUES (
+  'h-iibb-recursos-propios-pba',
+  'Ingresos Brutos concentra casi el 80% de los recursos propios de la PBA',
+  'En 1999, Ingresos Brutos representaba el 51% de los recursos propios de la PBA. Hoy casi el 80%. Un impuesto que no para de crecer y uno de los más distorsivos que existen.',
+  '17 abr. 2026', '2026-04-17', 'Fiscal', 'Twitter/X',
+  '["IIBB","recaudación","PBA","fiscal"]',
+  'https://x.com/DatosPBA/status/2045277275793363115?s=20',
+  '/images/hilos/iibb-recursos-propios-pba.jpg'
+);
+
+INSERT INTO hilos VALUES (
+  'h-agua-potable-gba-2026',
+  'En 11 de 24 municipios del GBA, menos del 75% de los hogares tiene agua de red',
+  'En el GBA, el acceso al agua potable sigue siendo una deuda estructural. En Malvinas Argentinas y José C. Paz, ni siquiera llega al 15%. Una desigualdad básica que persiste.',
+  '17 abr. 2026', '2026-04-17', 'Infraestructura', 'Twitter/X',
+  '["agua","GBA","INDEC","infraestructura"]',
+  'https://x.com/DatosPBA/status/2045212628977398050?s=20',
+  '/images/hilos/agua-potable-gba-2026.jpg'
+);
+
+INSERT INTO hilos VALUES (
+  'h-crecimiento-vs-cloacas-pba',
+  'Los municipios que más crecieron son los que peor infraestructura tienen',
+  'San Vicente: +65% de población, 43,7% de cloacas. General Rodríguez: +64% de población, 24,2% de cloacas. El bonaerense se mueve donde el Estado no llegó. Fuente: INDEC, CNPHV 2022.',
+  '16 abr. 2026', '2026-04-16', 'Infraestructura', 'Twitter/X',
+  '["demografía","cloacas","PBA","INDEC"]',
+  'https://x.com/DatosPBA/status/2044860039458910576?s=20',
+  '/images/hilos/crecimiento-vs-cloacas-pba.jpg'
+);
+
+INSERT INTO hilos VALUES (
+  'h-brecha-cloacal-gba',
+  'La brecha cloacal del GBA es de 90 puntos porcentuales',
+  'Vicente López 98,4%, San Isidro 94,6% y Tres de Febrero 93,9% frente a José C. Paz 8,1%, Malvinas Argentinas 9,3% y Moreno 32,2%. Fuente: INDEC, CNPHV 2022.',
+  '16 abr. 2026', '2026-04-16', 'Infraestructura', 'Twitter/X',
+  '["cloacas","GBA","desigualdad","INDEC"]',
+  'https://x.com/DatosPBA/status/2044863105327349944?s=20',
+  '/images/hilos/brecha-cloacal-gba.jpg'
+);
+
+INSERT INTO hilos VALUES (
+  'h-tasa-vial-combustible-pba',
+  'La nafta también paga tributo municipal: Gral. Pueyrredón cobra 3% por litro',
+  'Gral. Pueyrredón cobra la tasa vial más alta de la Provincia: 3% por litro de combustible. En el Conurbano el rango va de 0,9% a 2,5%, con la mayoría del sur del GBA convergiendo en 2%.',
+  '14 abr. 2026', '2026-04-14', 'Fiscal', 'Twitter/X',
+  '["tasa vial","combustible","municipios","PBA"]',
+  'https://x.com/DatosPBA/status/2044100216740057115?s=20',
+  '/images/hilos/tasa-vial-combustible-pba.jpg'
+);
+
+INSERT INTO hilos VALUES (
+  'h-iibb-precios-kpmg-2025',
+  'IIBB es el impuesto que más encarece los precios en Argentina',
+  'Según la encuesta KPMG Argentina 2025, Ingresos Brutos concentra el 61% de las menciones como el impuesto que más encarece los precios. Buenos Aires es la provincia más gravosa del país.',
+  '13 abr. 2026', '2026-04-13', 'Fiscal', 'Twitter/X',
+  '["IIBB","KPMG","precios","impuestos"]',
+  'https://x.com/DatosPBA/status/2043758822771069294?s=20',
+  '/images/hilos/iibb-precios-kpmg-2025.jpg'
 );
 
 -- ── Seed: reportes_rapidos ──────────────────────────────────
