@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { m } from 'framer-motion'
+import { Calendar, ChevronRight } from 'lucide-react'
 import {
   Chart as ChartJS,
   CategoryScale, LinearScale,
@@ -87,16 +88,103 @@ function PublicacionesTicker({ hilos }) {
 
 const CHART_COMPONENTS = { bar: Bar, line: Line }
 
+function getInformeViz(inf, visualizaciones) {
+  const linked = visualizaciones.filter(v => (v.informe_url ?? v.informeUrl) === inf.url && v.tipo !== 'tabla')
+  if (linked.length === 0) return null
+  const chartData = (v) => v.chart_data ?? v.chartData
+  return linked.find(v => (chartData(v)?.datasets?.length ?? 0) > 1) ?? linked[0]
+}
+
 function getHeroViz(sortedInformes, visualizaciones) {
   for (const inf of sortedInformes) {
-    const linked = visualizaciones.filter(v => (v.informe_url ?? v.informeUrl) === inf.url && v.tipo !== 'tabla')
-    if (linked.length > 0) {
-      const chartData = (v) => v.chart_data ?? v.chartData
-      const viz = linked.find(v => (chartData(v)?.datasets?.length ?? 0) > 1) ?? linked[0]
-      return { viz, informe: inf }
-    }
+    const viz = getInformeViz(inf, visualizaciones)
+    if (viz) return { viz, informe: inf }
   }
   return null
+}
+
+function getFeaturedInforme(sortedInformes, visualizaciones, excludeUrl) {
+  for (const inf of sortedInformes) {
+    if (inf.url === excludeUrl) continue
+    const viz = getInformeViz(inf, visualizaciones)
+    if (viz) return { inf, viz }
+  }
+  return null
+}
+
+function FeaturedInformeCard({ inf, viz }) {
+  const chartRef = useRef(null)
+  const ChartComponent = CHART_COMPONENTS[viz.tipo] ?? Bar
+  const chartData = viz.chart_data ?? viz.chartData
+  const chartOptions = viz.chart_options ?? viz.chartOptions
+
+  const darkTicks = { color: 'rgba(255,255,255,0.45)', font: { family: 'Poppins', size: 10 } }
+  const darkGrid = { color: 'rgba(255,255,255,0.07)' }
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: (chartData?.datasets?.length ?? 0) > 1,
+        position: 'bottom',
+        labels: { font: { family: 'Poppins', size: 10 }, color: 'rgba(255,255,255,0.55)', boxWidth: 10, padding: 10 },
+      },
+      tooltip: { enabled: true },
+    },
+    scales: {
+      x: {
+        ...(chartOptions?.scales?.x ?? {}),
+        ticks: { ...(chartOptions?.scales?.x?.ticks ?? {}), ...darkTicks },
+        grid: darkGrid,
+        title: { ...(chartOptions?.scales?.x?.title ?? {}), color: 'rgba(255,255,255,0.3)' },
+      },
+      y: {
+        ...(chartOptions?.scales?.y ?? {}),
+        ticks: { ...(chartOptions?.scales?.y?.ticks ?? {}), ...darkTicks },
+        grid: darkGrid,
+        title: { ...(chartOptions?.scales?.y?.title ?? {}), color: 'rgba(255,255,255,0.3)' },
+      },
+    },
+  }
+
+  return (
+    <m.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      className="bg-white rounded-xl border border-slate-200/60 overflow-hidden grid lg:grid-cols-5 mb-5 hover:shadow-md transition-all"
+    >
+      <div className="lg:col-span-3 p-6 sm:p-8 flex flex-col gap-4">
+        <div className="flex items-center gap-2 flex-wrap">
+          {inf.tema && <Badge variant="secondary">{inf.tema}</Badge>}
+          {inf.fecha && (
+            <span className="flex items-center gap-1 text-xs text-slate-400">
+              <Calendar className="w-3 h-3" />{inf.fecha}
+            </span>
+          )}
+        </div>
+        <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#0a1628] leading-tight tracking-tight">
+          {inf.titulo}
+        </h3>
+        {inf.bajada && <p className="text-sm text-slate-600 leading-relaxed line-clamp-4">{inf.bajada}</p>}
+        <Link to={inf.url} className="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:text-brand-700 no-underline group pt-2">
+          Leer informe
+          <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+        </Link>
+      </div>
+
+      <div className="lg:col-span-2 bg-[#0a1628] bg-pattern-dark p-6 sm:p-7 flex flex-col">
+        <p className="text-brand-400 text-[10px] font-semibold tracking-[0.2em] uppercase mb-4">
+          Destacado
+        </p>
+        <div className="flex-1 min-h-[240px]">
+          <ChartComponent ref={chartRef} data={chartData} options={options} />
+        </div>
+      </div>
+    </m.div>
+  )
 }
 
 function HeroVizPanel({ informe, viz }) {
@@ -196,6 +284,14 @@ export default function Home() {
     ? getHeroViz(informes, visualizaciones)
     : null
 
+  const featuredInforme = informes.length && visualizaciones.length
+    ? getFeaturedInforme(informes, visualizaciones, heroData?.informe?.url)
+    : null
+
+  const gridInformes = featuredInforme
+    ? informes.filter(i => i.id !== featuredInforme.inf.id).slice(0, 4)
+    : informes.slice(0, 4)
+
   return (
     <div>
       <TickerBar reportes={reportes} />
@@ -252,8 +348,13 @@ export default function Home() {
         <section className="mb-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <SectionHeader title="Informes" href="/informes" />
+
+            {featuredInforme && (
+              <FeaturedInformeCard inf={featuredInforme.inf} viz={featuredInforme.viz} />
+            )}
+
             <div className="grid sm:grid-cols-2 gap-5">
-              {informes.slice(0, 4).map((inf, i) => (
+              {gridInformes.map((inf, i) => (
                 <EntryCard
                   key={inf.id}
                   titulo={inf.titulo}
