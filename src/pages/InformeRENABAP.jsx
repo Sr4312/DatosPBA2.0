@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { m } from 'framer-motion'
-import { ArrowLeft, ExternalLink, Download, Twitter } from 'lucide-react'
+import { ArrowLeft, ExternalLink } from 'lucide-react'
 import {
   Chart as ChartJS,
   ArcElement,
@@ -788,68 +788,6 @@ function FisuVsDesfinanciamiento() {
   )
 }
 
-// ───────────────── Twitter-shareable cards ─────────────────
-function TwitterCard({ stat, sub, color, bgDark = true, extra }) {
-  return (
-    <m.div
-      {...fadeUp()}
-      style={{
-        background: bgDark ? C.hero : '#fff',
-        border: `1px solid ${bgDark ? 'rgba(255,255,255,0.08)' : C.rule}`,
-        borderRadius: 20,
-        padding: '36px 32px',
-        aspectRatio: '1 / 1',
-        display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-        position: 'relative', overflow: 'hidden',
-      }}
-      className={bgDark ? 'bg-pattern-dark' : ''}
-    >
-      <div style={{
-        display: 'flex', alignItems: 'center', gap: 8,
-        fontSize: '0.7rem', fontWeight: 700,
-        color: bgDark ? 'rgba(255,255,255,0.45)' : C.inkLight,
-        textTransform: 'uppercase', letterSpacing: '0.12em',
-      }}>
-        <div style={{ width: 22, height: 2, background: color }} />
-        DatosPBA · RENABAP
-      </div>
-
-      <div>
-        <div className="font-display" style={{
-          fontSize: 'clamp(3rem, 8vw, 5rem)',
-          fontWeight: 800, color, lineHeight: 1, marginBottom: 12,
-        }}>
-          {stat}
-        </div>
-        <p style={{
-          color: bgDark ? 'rgba(255,255,255,0.82)' : C.ink,
-          fontSize: 'clamp(0.95rem, 2.2vw, 1.15rem)',
-          lineHeight: 1.4, fontWeight: 500,
-        }}>
-          {sub}
-        </p>
-        {extra && (
-          <p style={{
-            color: bgDark ? 'rgba(255,255,255,0.4)' : C.inkMid,
-            fontSize: '0.78rem', marginTop: 10, lineHeight: 1.5,
-          }}>
-            {extra}
-          </p>
-        )}
-      </div>
-
-      <div style={{
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        fontSize: '0.7rem',
-        color: bgDark ? 'rgba(255,255,255,0.4)' : C.inkLight,
-      }}>
-        <span>datospba.com.ar</span>
-        <Twitter className="w-3.5 h-3.5" />
-      </div>
-    </m.div>
-  )
-}
-
 // ───────────────── PAGE ─────────────────
 export default function InformeRENABAP() {
   return (
@@ -991,63 +929,6 @@ export default function InformeRENABAP() {
             </p>
           </m.div>
           <FisuVsDesfinanciamiento />
-        </div>
-      </div>
-
-      {/* TWITTER-SHAREABLE */}
-      <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp(0)} className="mb-8">
-          <div className="flex items-center gap-2 mb-3">
-            <h2 className="w-4 h-4" style={{ color: C.accent }} />
-            <SectionLabel>Sección 8 · Para compartir </SectionLabel>
-          </div>
-          <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
-            Los datos en formato cuadrado
-          </h2>
-          <p style={{ color: C.inkMid }} className="text-sm max-w-xl">
-            Capturá cualquiera de estas tarjetas y compartelas para contar los datos del RENABAP.
-          </p>
-        </m.div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          <TwitterCard
-            stat="2.327"
-            sub="barrios populares relevados en la Provincia de Buenos Aires"
-            extra="Fuente: RENABAP, 2023"
-            color="#ff6abf"
-          />
-          <TwitterCard
-            stat="36%"
-            sub="del total nacional de barrios populares está en la PBA"
-            extra="1 de cada 3 barrios informales del país"
-            color="#7dd3fc"
-          />
-          <TwitterCard
-            stat="+2,5M"
-            sub="personas viven en barrios populares bonaerenses"
-            extra="Más que la población de la Ciudad de Buenos Aires"
-            color="#34d399"
-          />
-          <TwitterCard
-            stat="4%"
-            sub="de los hogares RENABAP tiene cloaca de red"
-            extra="El resto usa pozo ciego o cámara séptica"
-            color="#fff"
-            bgDark
-          />
-          <TwitterCard
-            stat="98%"
-            sub="de los hogares NO tiene título de propiedad formal"
-            extra="Informalidad dominial sin resolver hace décadas"
-            color="#ef4444"
-            bgDark={false}
-          />
-          <TwitterCard
-            stat="−95%"
-            sub="cayó la ejecución del FISU durante 2024"
-            extra="La herramienta principal para cerrar la brecha quedó sin presupuesto operativo"
-            color="#fca5a5"
-          />
         </div>
       </div>
 
