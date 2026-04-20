@@ -103,25 +103,22 @@ function getHeroViz(sortedInformes, visualizaciones) {
   return null
 }
 
-function getFeaturedInforme(sortedInformes, visualizaciones, excludeUrl) {
-  for (const inf of sortedInformes) {
-    if (inf.url === excludeUrl) continue
-    const viz = getInformeViz(inf, visualizaciones)
-    if (viz) return { inf, viz }
-  }
-  return null
+function getFeaturedInforme(sortedInformes, visualizaciones) {
+  const inf = sortedInformes[0]
+  if (!inf) return null
+  return { inf, viz: getInformeViz(inf, visualizaciones) }
 }
 
 function FeaturedInformeCard({ inf, viz }) {
   const chartRef = useRef(null)
-  const ChartComponent = CHART_COMPONENTS[viz.tipo] ?? Bar
-  const chartData = viz.chart_data ?? viz.chartData
-  const chartOptions = viz.chart_options ?? viz.chartOptions
+  const ChartComponent = viz ? (CHART_COMPONENTS[viz.tipo] ?? Bar) : null
+  const chartData = viz?.chart_data ?? viz?.chartData
+  const chartOptions = viz?.chart_options ?? viz?.chartOptions
 
   const darkTicks = { color: 'rgba(255,255,255,0.45)', font: { family: 'Poppins', size: 10 } }
   const darkGrid = { color: 'rgba(255,255,255,0.07)' }
 
-  const options = {
+  const options = viz ? {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -146,7 +143,7 @@ function FeaturedInformeCard({ inf, viz }) {
         title: { ...(chartOptions?.scales?.y?.title ?? {}), color: 'rgba(255,255,255,0.3)' },
       },
     },
-  }
+  } : null
 
   return (
     <m.div
@@ -179,9 +176,13 @@ function FeaturedInformeCard({ inf, viz }) {
         <p className="text-brand-400 text-[10px] font-semibold tracking-[0.2em] uppercase mb-4">
           Destacado
         </p>
-        <div className="flex-1 min-h-[240px]">
-          <ChartComponent ref={chartRef} data={chartData} options={options} />
-        </div>
+        {viz && ChartComponent ? (
+          <div className="flex-1 min-h-[240px]">
+            <ChartComponent ref={chartRef} data={chartData} options={options} />
+          </div>
+        ) : (
+          <p className="text-white/70 text-sm leading-relaxed">{inf.bajada}</p>
+        )}
       </div>
     </m.div>
   )
@@ -284,8 +285,8 @@ export default function Home() {
     ? getHeroViz(informes, visualizaciones)
     : null
 
-  const featuredInforme = informes.length && visualizaciones.length
-    ? getFeaturedInforme(informes, visualizaciones, heroData?.informe?.url)
+  const featuredInforme = informes.length
+    ? getFeaturedInforme(informes, visualizaciones)
     : null
 
   const gridInformes = featuredInforme
