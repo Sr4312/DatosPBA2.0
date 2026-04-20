@@ -998,15 +998,14 @@ export default function InformeRENABAP() {
       <div className="max-w-5xl mx-auto px-6 py-16">
         <m.div {...fadeUp(0)} className="mb-8">
           <div className="flex items-center gap-2 mb-3">
-            <Twitter className="w-4 h-4" style={{ color: C.accent }} />
-            <SectionLabel>Sección 8 · Para compartir en Twitter / X</SectionLabel>
+            <h2 className="w-4 h-4" style={{ color: C.accent }} />
+            <SectionLabel>Sección 8 · Para compartir </SectionLabel>
           </div>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             Los datos en formato cuadrado
           </h2>
           <p style={{ color: C.inkMid }} className="text-sm max-w-xl">
-            Capturá cualquiera de estas tarjetas y subilas directamente a X. Formato 1:1, pensadas para
-            consumir de un vistazo.
+            Capturá cualquiera de estas tarjetas y compartelas para contar los datos del RENABAP.
           </p>
         </m.div>
 
