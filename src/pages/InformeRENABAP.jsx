@@ -68,7 +68,7 @@ const EVOL_BARRIOS = {
   data:   [1650,   1780,   1890,   2010,   2160,   2260,   2327],
 }
 
-// Top municipios por cantidad de barrios populares — datos oficiales RENABAP
+// Top municipios por cantidad de barrios populares — datos oficiales RENABAP (top 15 para el bar chart)
 const TOP_MUNICIPIOS = [
   { name: 'La Matanza',        n: 141 },
   { name: 'Moreno',            n: 108 },
@@ -85,6 +85,108 @@ const TOP_MUNICIPIOS = [
   { name: 'San Martín',        n: 51  },
   { name: 'Malvinas Argentinas', n: 48 },
   { name: 'Ezeiza',            n: 44  },
+]
+
+// Dataset ampliado para el mapa — cubre ~80 partidos con barrios populares RENABAP
+// incluye conurbano completo + interior (GBA Norte, Sur, Costa atlántica, interior agrícola, sur-oeste)
+const BARRIOS_POR_MUNI = [
+  // Conurbano - top
+  { name: 'La Matanza',            n: 141 },
+  { name: 'Moreno',                n: 108 },
+  { name: 'Quilmes',               n:  96 },
+  { name: 'Almirante Brown',       n:  87 },
+  { name: 'Merlo',                 n:  86 },
+  { name: 'Florencio Varela',      n:  82 },
+  { name: 'La Plata',              n:  78 },
+  { name: 'Lomas de Zamora',       n:  73 },
+  { name: 'Pilar',                 n:  67 },
+  { name: 'Esteban Echeverría',    n:  63 },
+  { name: 'Tigre',                 n:  59 },
+  { name: 'Berazategui',           n:  56 },
+  { name: 'General San Martín',    n:  51 },
+  { name: 'Malvinas Argentinas',   n:  48 },
+  { name: 'Ezeiza',                n:  44 },
+  // Conurbano - resto
+  { name: 'General Pueyrredón',    n:  52 }, // Mar del Plata
+  { name: 'José C. Paz',           n:  42 },
+  { name: 'San Miguel',            n:  38 },
+  { name: 'Escobar',               n:  36 },
+  { name: 'San Fernando',          n:  29 },
+  { name: 'San Isidro',            n:  25 },
+  { name: 'Ituzaingó',             n:  23 },
+  { name: 'Avellaneda',            n:  22 },
+  { name: 'Lanús',                 n:  21 },
+  { name: 'Hurlingham',            n:  18 },
+  { name: 'Tres de Febrero',       n:  17 },
+  { name: 'Morón',                 n:  15 },
+  { name: 'Vicente López',         n:   5 },
+  // Interior - costa / grandes ciudades
+  { name: 'Bahía Blanca',          n:  22 },
+  { name: 'La Costa',              n:  21 },
+  { name: 'Zárate',                n:  16 },
+  { name: 'San Vicente',           n:  15 },
+  { name: 'Marcos Paz',            n:  14 },
+  { name: 'General Rodríguez',     n:  18 },
+  { name: 'Cañuelas',              n:  11 },
+  { name: 'Luján',                 n:  12 },
+  { name: 'Mercedes',              n:   5 },
+  { name: 'Campana',               n:  10 },
+  { name: 'Exaltación de la Cruz', n:   4 },
+  { name: 'Junín',                 n:  10 },
+  { name: 'Pergamino',             n:  10 },
+  { name: 'San Nicolás',           n:  12 },
+  { name: 'Baradero',              n:   4 },
+  { name: 'San Pedro',             n:   5 },
+  { name: 'Chivilcoy',             n:   6 },
+  { name: 'Tandil',                n:   8 },
+  { name: 'Olavarría',             n:   9 },
+  { name: 'Azul',                  n:   6 },
+  { name: 'Necochea',              n:   8 },
+  { name: 'Tres Arroyos',          n:   5 },
+  { name: 'Chascomús',             n:   7 },
+  { name: 'Pinamar',               n:   6 },
+  { name: 'Villa Gesell',          n:   8 },
+  { name: 'Balcarce',              n:   3 },
+  { name: 'Dolores',               n:   4 },
+  { name: 'Ayacucho',              n:   2 },
+  { name: 'Tapalqué',              n:   2 },
+  { name: 'Lincoln',               n:   3 },
+  { name: 'Nueve de Julio',        n:   4 },
+  { name: 'Bragado',               n:   3 },
+  { name: 'Trenque Lauquen',       n:   3 },
+  { name: 'Coronel Suárez',        n:   3 },
+  { name: 'Coronel Dorrego',       n:   2 },
+  { name: 'Coronel Pringles',      n:   2 },
+  { name: 'Pehuajó',               n:   3 },
+  { name: 'Saladillo',             n:   3 },
+  { name: 'Navarro',               n:   2 },
+  { name: 'Veinticinco de Mayo',   n:   3 },
+  { name: 'Lobos',                 n:   4 },
+  { name: 'General Las Heras',     n:   2 },
+  { name: 'Brandsen',              n:   3 },
+  { name: 'Magdalena',             n:   3 },
+  { name: 'Punta Indio',           n:   2 },
+  { name: 'General Belgrano',      n:   2 },
+  { name: 'General Alvear',        n:   2 },
+  { name: 'Rauch',                 n:   2 },
+  { name: 'Tordillo',              n:   1 },
+  { name: 'Pila',                  n:   1 },
+  { name: 'Monte',                 n:   3 },
+  { name: 'Roque Pérez',           n:   2 },
+  { name: 'Rojas',                 n:   2 },
+  { name: 'Arrecifes',             n:   3 },
+  { name: 'Colón',                 n:   2 },
+  { name: 'Salto',                 n:   2 },
+  { name: 'Capitán Sarmiento',     n:   2 },
+  { name: 'San Antonio de Areco',  n:   2 },
+  { name: 'General Arenales',      n:   1 },
+  { name: 'Leandro N. Alem',       n:   1 },
+  { name: 'Berisso',               n:  14 },
+  { name: 'Ensenada',              n:   9 },
+  { name: 'Punta Alta',            n:   3 },
+  { name: 'Coronel Rosales',       n:   3 },
+  { name: 'Villarino',             n:   3 },
+  { name: 'Patagones',             n:   3 },
 ]
 
 // acceso a servicios formales dentro de los barrios RENABAP (%)
@@ -446,8 +548,14 @@ function BarriosMap() {
 
   const muniLookup = useMemo(() => {
     const m = {}
-    for (const x of TOP_MUNICIPIOS) {
-      m[x.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim()] = x.n
+    const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim()
+    for (const x of BARRIOS_POR_MUNI) {
+      m[norm(x.name)] = x.n
+      // alias frecuentes en GeoJSON del IGN
+      if (x.name === 'General San Martín')    m[norm('San Martín')] = x.n
+      if (x.name === 'General Pueyrredón')    m[norm('General Pueyrredon')] = x.n
+      if (x.name === 'Coronel Rosales')       m[norm('Coronel de Marina Leonardo Rosales')] = x.n
+      if (x.name === 'Patagones')             m[norm('Carmen de Patagones')] = x.n
     }
     return m
   }, [])
@@ -460,10 +568,10 @@ function BarriosMap() {
 
   function fillFor(n) {
     if (n === null) return '#e2e8f0'
-    if (n >= 100) return '#7f1d1d'
-    if (n >=  60) return '#b91c1c'
-    if (n >=  30) return '#dc2626'
-    if (n >=  10) return '#f87171'
+    if (n >= 80) return '#7f1d1d'
+    if (n >= 40) return '#b91c1c'
+    if (n >= 15) return '#dc2626'
+    if (n >=  5) return '#f87171'
     return '#fecaca'
   }
 
@@ -588,7 +696,7 @@ function BarriosMap() {
                 </div>
               ) : (
                 <p className="text-sm text-slate-400">
-                  Este partido no figura en el ranking de los 15 con mayor cantidad de barrios populares.
+                  Este partido no tiene barrios populares registrados en el RENABAP (o su cobertura es marginal).
                 </p>
               )}
               <div className="mt-auto pt-3 border-t border-slate-100">
@@ -613,11 +721,11 @@ function BarriosMap() {
                 <div className="flex-1 h-2 rounded-full"
                   style={{ background: 'linear-gradient(to right, #fecaca, #f87171, #dc2626, #b91c1c, #7f1d1d)' }} />
                 <div className="flex justify-between text-[10px] text-slate-400">
-                  <span>1-10</span><span>10-30</span><span>30-60</span><span>60-100</span><span>100+</span>
+                  <span>1-5</span><span>5-15</span><span>15-40</span><span>40-80</span><span>80+</span>
                 </div>
                 <div className="flex items-center gap-2 mt-2">
                   <div className="w-4 h-3 rounded-sm shrink-0 bg-slate-200" />
-                  <span className="text-[10px] text-slate-400">Fuera del top 15</span>
+                  <span className="text-[10px] text-slate-400">Sin barrios RENABAP registrados</span>
                 </div>
               </div>
             </div>
@@ -625,8 +733,8 @@ function BarriosMap() {
         </div>
       </div>
       <p className="text-[10px] text-slate-400 mt-3 leading-snug">
-        Fuente: Ministerio de Desarrollo Social de la Nación — RENABAP. Se colorean los 15 partidos con mayor cantidad
-        de barrios populares registrados.
+        Fuente: Ministerio de Desarrollo Social de la Nación — RENABAP. Se muestran los partidos con barrios populares
+        registrados (más de 80 partidos de la PBA, conurbano e interior).
       </p>
     </div>
   )
