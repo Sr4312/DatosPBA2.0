@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { m } from 'framer-motion'
-import { ArrowLeft, ExternalLink } from 'lucide-react'
+import { ArrowLeft, ExternalLink, Download } from 'lucide-react'
+import html2canvas from 'html2canvas'
 import {
   Chart as ChartJS,
   ArcElement,
@@ -120,6 +121,121 @@ const fadeUp = (delay = 0) => ({
   viewport: { once: true },
   transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
 })
+
+// ───── DOWNLOAD HELPER ─────────────────────────────────────────
+// Estilo idéntico a VizCard de DataPBA: título + fuente arriba, footer azul abajo.
+const DL_PADDING = 60
+const DL_FOOTER_H = 56
+const DL_MIN_W = 1200
+const FUENTE_DEFAULT = 'PEC — Programa de Estudios del Conurbano'
+
+function drawFooter(ctx, y, w) {
+  ctx.fillStyle = '#0a1628'
+  ctx.fillRect(0, y, w, DL_FOOTER_H)
+  ctx.fillStyle = '#ffffff'
+  ctx.font = `bold ${Math.round(w * 0.018)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.fillText('Datos', DL_PADDING, y + DL_FOOTER_H * 0.65)
+  ctx.fillStyle = '#60a5fa'
+  ctx.fillText('PBA', DL_PADDING + Math.round(w * 0.06), y + DL_FOOTER_H * 0.65)
+  ctx.fillStyle = '#94a3b8'
+  ctx.font = `${Math.round(w * 0.013)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.fillText('datospba.com', w - DL_PADDING - Math.round(w * 0.11), y + DL_FOOTER_H * 0.65)
+}
+
+function triggerDownload(canvas, filename) {
+  const a = document.createElement('a')
+  a.download = filename.replace(/[^a-zA-Z0-9\-_áéíóúñ ]/g, '').trim() + '.png'
+  a.href = canvas.toDataURL('image/png')
+  a.click()
+}
+
+async function downloadVizContainer(node, title, fuente) {
+  const captured = await html2canvas(node, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: '#ffffff',
+  })
+  const upscale = Math.max(1, DL_MIN_W / captured.width)
+  const innerW = Math.round(captured.width * upscale)
+  const innerH = Math.round(captured.height * upscale)
+  const titleH = fuente ? 96 : 72
+  const W = innerW
+  const H = innerH + titleH + DL_FOOTER_H
+
+  const out = document.createElement('canvas')
+  out.width = W
+  out.height = H
+  const ctx = out.getContext('2d')
+
+  ctx.fillStyle = '#ffffff'
+  ctx.fillRect(0, 0, W, H)
+
+  // Title
+  ctx.fillStyle = '#0a1628'
+  ctx.font = `bold ${Math.round(W * 0.020)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.fillText(title, DL_PADDING, Math.round(titleH * 0.52), W - DL_PADDING * 2)
+
+  if (fuente) {
+    ctx.fillStyle = '#94a3b8'
+    ctx.font = `${Math.round(W * 0.014)}px Poppins, Roboto, system-ui, sans-serif`
+    ctx.fillText(`Fuente: ${fuente}`, DL_PADDING, Math.round(titleH * 0.82))
+  }
+
+  ctx.drawImage(captured, 0, titleH, innerW, innerH)
+  drawFooter(ctx, H - DL_FOOTER_H, W)
+  triggerDownload(out, title)
+}
+
+// Wrapper que agrega un botón de descarga sobre cualquier visualización.
+function DownloadableViz({ title, fuente = FUENTE_DEFAULT, children }) {
+  const ref = useRef(null)
+  const btnRef = useRef(null)
+  const [busy, setBusy] = useState(false)
+
+  async function handleDownload() {
+    if (!ref.current || busy) return
+    setBusy(true)
+    if (btnRef.current) btnRef.current.style.visibility = 'hidden'
+    try {
+      await downloadVizContainer(ref.current, title, fuente)
+    } catch (e) { console.error(e) }
+    if (btnRef.current) btnRef.current.style.visibility = ''
+    setBusy(false)
+  }
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <div ref={btnRef} style={{
+        display: 'flex', justifyContent: 'flex-end', marginBottom: 8,
+      }}>
+        <button
+          onClick={handleDownload}
+          disabled={busy}
+          title="Descargar PNG con marca DatosPBA"
+          style={{
+            background: '#fff',
+            border: `1px solid ${C.rule}`,
+            borderRadius: 8,
+            padding: '6px 10px',
+            cursor: busy ? 'wait' : 'pointer',
+            color: C.inkMid,
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            fontSize: '0.72rem', fontWeight: 600,
+            transition: 'color 0.15s, border-color 0.15s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.color = C.accent; e.currentTarget.style.borderColor = C.accent }}
+          onMouseLeave={e => { e.currentTarget.style.color = C.inkMid; e.currentTarget.style.borderColor = C.rule }}
+        >
+          <Download style={{ width: 13, height: 13 }} />
+          {busy ? 'generando…' : 'Descargar PNG'}
+        </button>
+      </div>
+      <div ref={ref} style={{ background: C.bg }}>
+        {children}
+      </div>
+    </div>
+  )
+}
 
 function SectionLabel({ children, dark = false, color }) {
   return (
@@ -962,7 +1078,11 @@ export default function InformeSaludConurbano() {
               dependen del Estado para atenderse.
             </p>
           </m.div>
-          <CoberturaDonut />
+          <DownloadableViz title="Cobertura de salud — Conurbano bonaerense">
+            <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
+              <CoberturaDonut />
+            </div>
+          </DownloadableViz>
         </div>
       </div>
 
@@ -980,7 +1100,11 @@ export default function InformeSaludConurbano() {
           </p>
         </m.div>
         <m.div {...fadeUp(0.1)}>
-          <DependientesBar />
+          <DownloadableViz title="Habitantes dependientes del sistema público — por partido del conurbano">
+            <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
+              <DependientesBar />
+            </div>
+          </DownloadableViz>
         </m.div>
       </div>
 
@@ -999,7 +1123,9 @@ export default function InformeSaludConurbano() {
             </p>
           </m.div>
           <m.div {...fadeUp(0.1)}>
-            <BarometroCarga />
+            <DownloadableViz title="Barómetro de carga sanitaria — personas dependientes del sistema público por establecimiento">
+              <BarometroCarga />
+            </DownloadableViz>
           </m.div>
         </div>
       </div>
@@ -1019,7 +1145,9 @@ export default function InformeSaludConurbano() {
           </p>
         </m.div>
         <m.div {...fadeUp(0.1)}>
-          <CuadranteGestion />
+          <DownloadableViz title="Cuadrante de gestión sanitaria — establecimientos vs. demanda por partido">
+            <CuadranteGestion />
+          </DownloadableViz>
         </m.div>
       </div>
 
@@ -1037,7 +1165,9 @@ export default function InformeSaludConurbano() {
               <strong style={{ color: D.bad }}>7,5 veces más personas</strong> que uno en Vicente López.
             </p>
           </m.div>
-          <BalanzaExtrema />
+          <DownloadableViz title="Vicente López vs. La Matanza — los dos extremos de la gestión sanitaria">
+            <BalanzaExtrema />
+          </DownloadableViz>
         </div>
       </div>
 
@@ -1053,7 +1183,9 @@ export default function InformeSaludConurbano() {
             Cifras absolutas: cuanto más bajo, mejor. Cuanto más alto, peor.
           </p>
         </m.div>
-        <RankingPodios />
+        <DownloadableViz title="Top 5 mejor y peor gestionados — carga sanitaria por establecimiento">
+          <RankingPodios />
+        </DownloadableViz>
       </div>
 
       {/* SECCIÓN 7 — TABLA */}
@@ -1070,7 +1202,9 @@ export default function InformeSaludConurbano() {
             </p>
           </m.div>
           <m.div {...fadeUp(0.1)}>
-            <TablaCompleta />
+            <DownloadableViz title="Salud pública en el conurbano — los 24 partidos del GBA">
+              <TablaCompleta />
+            </DownloadableViz>
           </m.div>
         </div>
       </div>

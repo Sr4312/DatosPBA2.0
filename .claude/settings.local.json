@@ -59,7 +59,11 @@
       "Bash(python -c \"import cairosvg; cairosvg.svg2png\\(url='c:/Users/salva/Desktop/Claude/public/logo-icon.svg', write_to='c:/Users/salva/Desktop/logo-icon.png', output_width=512, output_height=512\\); print\\('done'\\)\")",
       "WebSearch",
       "WebFetch(domain:www.datospba.gba.gob.ar)",
-      "mcp__plugin_playwright_playwright__browser_close"
+      "mcp__plugin_playwright_playwright__browser_close",
+      "Read(//c/Users/salva/**)",
+      "Bash(node -e \"const fs=require\\('fs'\\);const t=fs.readFileSync\\('cobertura-png-data.txt','utf8'\\).replace\\(/^\\\\\"|\\\\\"$/g,''\\);const m=t.match\\(/^data:image\\\\/png;base64,\\(.+\\)$/\\);if\\(m\\){fs.writeFileSync\\('cobertura-out.png',Buffer.from\\(m[1],'base64'\\)\\);console.log\\('saved cobertura-out.png:', fs.statSync\\('cobertura-out.png'\\).size, 'bytes'\\);}else{console.log\\('no match'\\);}\")",
+      "Bash(xargs -I {} sh -c 'wc -c \"{}\" && head -c 60 \"{}\"')",
+      "Bash(node -e \"const fs=require\\('fs'\\);const t=fs.readFileSync\\('barometro-png-full.txt','utf8'\\).replace\\(/^\\\\\"|\\\\\"$/g,''\\);const m=t.match\\(/^data:image\\\\/png;base64,\\(.+\\)$/\\);if\\(m\\){fs.writeFileSync\\('barometro-out.png',Buffer.from\\(m[1],'base64'\\)\\);console.log\\('saved barometro-out.png:',fs.statSync\\('barometro-out.png'\\).size,'bytes'\\);}else{console.log\\('no match, head:',t.slice\\(0,80\\)\\);}\")"
     ]
   }
 }
