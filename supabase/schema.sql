@@ -132,6 +132,17 @@ INSERT INTO informes VALUES (
   '/informes/exportaciones-pba-2025', null, false
 );
 
+INSERT INTO informes VALUES (
+  'salud-conurbano-pec-2026',
+  'Salud pública en el conurbano: 1.088 establecimientos para 4,3 millones de personas',
+  'Un análisis de los 24 partidos del Gran Buenos Aires revela una brecha de 7,5 veces en la carga sanitaria por establecimiento. La Matanza atiende 10.012 personas dependientes del sistema público por centro; Vicente López, solo 1.327. La distribución de la oferta pública no responde a la demanda real.',
+  '30 abr. 2026', '2026-04-30', 'Social',
+  '["Vicente López","San Fernando","Avellaneda","Ituzaingó","Lanús","La Matanza","Merlo","Moreno","Almirante Brown","Florencio Varela"]',
+  $$["El 40% del conurbano bonaerense — 4,3 millones de personas — depende del sistema público de salud. No tiene obra social, prepaga ni PAMI, o accede vía planes estatales que operan sobre la red pública. Para atenderlas existen 1.088 establecimientos públicos distribuidos en los 24 partidos del Gran Buenos Aires. Pero la asignación territorial está descoordinada con la demanda real.","La métrica clave es la carga sanitaria: cuántas personas dependientes del sistema público hay por cada establecimiento. El promedio del conurbano es de 3.982 personas por centro. Pero los extremos son brutales: Vicente López tiene 1.327 personas dependientes por establecimiento, mientras La Matanza tiene 10.012 — una brecha de 7,5 veces dentro de la misma provincia.","La Matanza concentra por sí sola el 21% de la demanda pública del conurbano (901.000 personas dependientes) y solo el 8% de los establecimientos (90 centros). Merlo, Moreno, Almirante Brown y Florencio Varela completan la lista de partidos sobre-cargados, todos en el primer y segundo cordón sur/oeste, todos con fuerte crecimiento demográfico de las últimas décadas.","En el extremo opuesto, los partidos con mejor ratio público (Vicente López, San Fernando, Avellaneda, Ituzaingó, Lanús) son también los que tienen mayor cobertura privada. Donde menos se necesita la red pública, mejor está dimensionada. Donde más se necesita, peor. La distribución del sistema público de salud en el conurbano es regresiva: el Estado tiene mejor ratio donde menos lo requieren los vecinos."]$$::jsonb,
+  $$["4,3 millones de personas dependen del sistema público de salud en el conurbano (40% del total).","Brecha de 7,5x entre el partido mejor gestionado (Vicente López: 1.327 personas/establecimiento) y el peor (La Matanza: 10.012).","La Matanza, Merlo y Moreno concentran la peor carga sanitaria — todos en el sur/oeste del conurbano.","El sistema público está sobrecargado donde más se necesita y holgado donde la demanda es menor."]$$::jsonb,
+  '/informes/salud-conurbano-pec-2026', null, true
+);
+
 -- ── Seed: datasets ──────────────────────────────────────────
 
 INSERT INTO datasets VALUES (
