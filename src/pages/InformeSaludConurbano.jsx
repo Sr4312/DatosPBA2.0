@@ -80,15 +80,16 @@ const RAW = [
   { name: 'Vicente López',       pop: 280541,  est: 32, conCob: 242565, sinCob:  37976, obraSocial: 238072, planEstatal:  4493 },
 ]
 
-// dependientes del sistema público = sin cobertura + planes estatales
-// (los planes estatales operan sobre la red pública)
+// "Dependientes del sistema público" = sin cobertura formal (no_tiene_cobertura_salud).
+// Se usa la columna directa del CSV: la población que NO declara obra social, prepaga,
+// PAMI ni programa estatal. Es la métrica más estricta y la que usa el doughnut.
 const MUNIS = RAW.map(m => {
-  const depPublico = m.sinCob + m.planEstatal
+  const depPublico = m.sinCob
   const carga = depPublico / m.est
   const estPer10k = (m.est / m.pop) * 10000
-  const pctSinCob = (m.sinCob / m.pop) * 100
   const pctDepPublico = (depPublico / m.pop) * 100
-  return { ...m, depPublico, carga, estPer10k, pctSinCob, pctDepPublico }
+  const pctPlanEstatal = (m.planEstatal / m.pop) * 100
+  return { ...m, depPublico, carga, estPer10k, pctDepPublico, pctPlanEstatal }
 })
 
 const TOT = {
@@ -98,20 +99,24 @@ const TOT = {
   sinCob: 4056187,
   obraSocial: 6468888,
   planEstatal: 276261,
-  depPublico: 4332448,
 }
-const AVG_CARGA = TOT.depPublico / TOT.est // ≈ 3982
+TOT.depPublico = TOT.sinCob
+const AVG_CARGA = TOT.depPublico / TOT.est // ≈ 3.728
+const PCT_DEP_PUBLICO = (TOT.depPublico / TOT.pop) * 100 // ≈ 37.6
 
 const SORTED = [...MUNIS].sort((a, b) => a.carga - b.carga)
 const BEST = SORTED.slice(0, 5)
 const WORST = SORTED.slice(-5).reverse()
 
-// HERO stats — colores soft (visibles sobre fondo oscuro pero menos saturados)
+const SORTED_PRE = [...MUNIS].sort((a, b) => a.carga - b.carga)
+const BRECHA = SORTED_PRE[SORTED_PRE.length - 1].carga / SORTED_PRE[0].carga
+
+// HERO stats — se calculan dinámicamente desde los datos
 const HERO_STATS = [
-  { n: '4,3 M',   label: 'personas dependen del sistema público en el conurbano', color: '#fda4af' },
-  { n: '1.088',   label: 'establecimientos públicos en los 24 partidos',          color: '#93c5fd' },
-  { n: '3.982',   label: 'personas por establecimiento — promedio conurbano',     color: '#fcd34d' },
-  { n: '7,5×',    label: 'brecha entre el mejor y el peor partido',               color: '#6ee7b7' },
+  { n: '4,1 M',                                          label: 'personas sin cobertura formal en el conurbano',           color: '#fda4af' },
+  { n: TOT.est.toLocaleString('es-AR'),                  label: 'establecimientos públicos en los 24 partidos',           color: '#93c5fd' },
+  { n: Math.round(AVG_CARGA).toLocaleString('es-AR'),    label: 'personas por establecimiento — promedio conurbano',      color: '#fcd34d' },
+  { n: BRECHA.toFixed(1).replace('.', ',') + '×',        label: 'brecha entre el mejor y el peor partido',                color: '#6ee7b7' },
 ]
 
 // ───── animation ───────────────────────────────────────────────
@@ -278,7 +283,7 @@ function Hero() {
         >
           La salud que se gestiona<br />
           <span style={{ color: D.goodSoft }}>y la que se desborda:</span><br />
-          <span style={{ color: D.badSoft }}>1.088 establecimientos para 4,3 M de personas</span>
+          <span style={{ color: D.badSoft }}>1.088 establecimientos para 4,1 M de personas</span>
         </m.h1>
 
         <m.p
@@ -290,10 +295,10 @@ function Hero() {
         >
           En los 24 partidos del conurbano bonaerense viven{' '}
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>10,8 millones de personas</strong>.
-          De ellas, <strong style={{ color: 'rgba(255,255,255,0.9)' }}>4,3 millones</strong> dependen del sistema público de salud:
-          no tienen obra social, prepaga ni PAMI, o acceden vía planes estatales. Para atenderlas existen{' '}
+          De ellas, <strong style={{ color: 'rgba(255,255,255,0.9)' }}>4,1 millones</strong> no tienen obra social,
+          prepaga ni PAMI: dependen exclusivamente del sistema público de salud. Para atenderlas existen{' '}
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>1.088 establecimientos públicos</strong>. Pero la
-          distribución no responde a la demanda: hay partidos con un establecimiento cada 1.300 personas y otros con uno cada 10.000.
+          distribución no responde a la demanda: hay partidos con un establecimiento cada 1.200 personas y otros con uno cada 9.400.
         </m.p>
 
         <m.div
@@ -375,9 +380,9 @@ function CoberturaDonut() {
       <m.div {...fadeUp(0.05)} className="relative mx-auto" style={{ width: 250, height: 250 }}>
         <Doughnut data={data} options={opts} />
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span className="font-display text-4xl font-bold" style={{ color: C.ink }}>40%</span>
+          <span className="font-display text-4xl font-bold" style={{ color: D.bad }}>{PCT_DEP_PUBLICO.toFixed(1).replace('.', ',')}%</span>
           <span style={{ fontSize: '0.72rem', color: C.inkMid, marginTop: 4, textAlign: 'center' }}>
-            depende del sistema<br/>público de salud
+            sin cobertura<br/>formal de salud
           </span>
         </div>
       </m.div>
@@ -462,11 +467,11 @@ function BarometroCarga() {
           menos carga por establecimiento
         </text>
 
-        <rect x={xScale(AVG_CARGA) - 50} y={padT - 26} width={100} height={20}
+        <rect x={xScale(AVG_CARGA) - 55} y={padT - 26} width={110} height={20}
               fill={D.warn} rx={4} />
         <text x={xScale(AVG_CARGA)} y={padT - 11} textAnchor="middle"
               fontSize="11" fill="#fff" fontWeight="700" fontFamily="Poppins, sans-serif">
-          PROMEDIO 3.982
+          PROMEDIO {fmt(AVG_CARGA)}
         </text>
 
         <text x={padL + innerW - 10} y={padT - 16} fontSize="9.5" fill={D.bad}
@@ -630,7 +635,7 @@ function CuadranteGestion() {
           <text x={diagX2 + 68} y={diagY2 + 18} textAnchor="middle"
                 fontSize="9.5" fill="#fff" fontWeight="700"
                 fontFamily="Poppins, sans-serif">
-            promedio: 3.982 / est.
+            promedio: {fmt(AVG_CARGA)} / est.
           </text>
         </g>
 
@@ -920,7 +925,7 @@ function DependientesBar() {
   const data = {
     labels: sorted.map(m => m.name),
     datasets: [{
-      label: 'Personas que dependen del sistema público',
+      label: 'Personas sin cobertura formal de salud',
       data: sorted.map(m => m.depPublico),
       backgroundColor: sorted.map(m => m.carga > AVG_CARGA ? D.bad : D.good),
       borderRadius: 4,
@@ -935,7 +940,7 @@ function DependientesBar() {
       tooltip: {
         backgroundColor: C.ink, titleColor: '#fff', bodyColor: '#cbd5e1',
         callbacks: {
-          label: ctx => ` ${fmt(ctx.parsed.x)} personas dependientes`,
+          label: ctx => ` ${fmt(ctx.parsed.x)} personas sin cobertura`,
           afterLabel: ctx => ` ${sorted[ctx.dataIndex].est} establecimientos`,
         },
       },
@@ -943,19 +948,22 @@ function DependientesBar() {
     scales: {
       x: {
         beginAtZero: true,
-        title: { display: true, text: 'Habitantes dependientes del sistema público', color: C.inkMid, font: { weight: 600, family: 'Poppins, sans-serif' } },
+        title: { display: true, text: 'Habitantes sin cobertura formal de salud', color: C.inkMid, font: { weight: 600, family: 'Poppins, sans-serif' } },
         grid: { color: C.rule },
         ticks: { font: { family: 'Poppins, sans-serif' }, callback: v => fmt(v) },
       },
       y: {
         title: { display: true, text: 'Partido del conurbano', color: C.inkMid, font: { weight: 600, family: 'Poppins, sans-serif' } },
         grid: { display: false },
-        ticks: { font: { family: 'Poppins, sans-serif' } },
+        ticks: {
+          autoSkip: false,
+          font: { family: 'Poppins, sans-serif', size: 11 },
+        },
       },
     },
   }
   return (
-    <div style={{ height: 440 }}>
+    <div style={{ height: 640 }}>
       <Bar data={data} options={opts} />
     </div>
   )
@@ -1070,12 +1078,12 @@ export default function InformeSaludConurbano() {
           <m.div {...fadeUp(0)} className="mb-10">
             <SectionLabel>Sección 1 · Quién depende del sistema público</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
-              4 de cada 10 bonaerenses no tiene cobertura privada
+              Casi 4 de cada 10 bonaerenses depende del sistema público
             </h2>
             <p style={{ color: C.inkMid }} className="text-sm max-w-2xl">
-              El 37,6% del conurbano no declara obra social, prepaga ni PAMI. Otro 2,6% accede a través de
-              programas estatales que operan sobre la red pública. En conjunto, casi 40% de los bonaerenses
-              dependen del Estado para atenderse.
+              El 37,6% del conurbano no declara obra social, prepaga ni PAMI: depende exclusivamente
+              de los hospitales y centros de salud públicos. Un 2,6% adicional accede vía programas
+              estatales (Incluir Salud, CUS, PROFE) que también operan sobre la red pública.
             </p>
           </m.div>
           <DownloadableViz title="Cobertura de salud — Conurbano bonaerense">
@@ -1094,9 +1102,9 @@ export default function InformeSaludConurbano() {
             La demanda no se reparte por igual
           </h2>
           <p style={{ color: C.inkMid }} className="text-sm max-w-2xl">
-            Cantidad absoluta de habitantes dependientes del sistema público en cada partido.
-            La Matanza concentra por sí sola el 21% de la demanda total del conurbano:
-            900.000 personas que dependen exclusivamente de la red pública.
+            Cantidad absoluta de habitantes sin cobertura formal en cada partido — los que dependen
+            exclusivamente de la red pública. La Matanza concentra por sí sola el 21% de la demanda
+            del conurbano: más de 846.000 personas.
           </p>
         </m.div>
         <m.div {...fadeUp(0.1)}>
@@ -1117,9 +1125,9 @@ export default function InformeSaludConurbano() {
               Barómetro de carga sanitaria
             </h2>
             <p style={{ color: C.inkMid }} className="text-sm max-w-2xl">
-              Cuántas personas que dependen del sistema público existen por cada establecimiento de salud.
+              Cuántas personas sin cobertura formal existen por cada establecimiento de salud público.
               Es la métrica que combina demanda y oferta. Cuanto más alto el número,
-              más estirado está el sistema. La línea naranja marca el promedio del conurbano (3.982).
+              más estirado está el sistema. La línea naranja marca el promedio del conurbano ({fmt(AVG_CARGA)}).
             </p>
           </m.div>
           <m.div {...fadeUp(0.1)}>
@@ -1138,7 +1146,7 @@ export default function InformeSaludConurbano() {
             Cuántos establecimientos para cuánta demanda
           </h2>
           <p style={{ color: C.inkMid }} className="text-sm max-w-2xl">
-            Cada partido es una burbuja: el eje horizontal mide habitantes dependientes y el vertical
+            Cada partido es una burbuja: el eje horizontal mide habitantes sin cobertura formal y el vertical
             cantidad de establecimientos públicos. La diagonal naranja representa la proporción promedio
             del conurbano. Las burbujas que están <strong style={{ color: D.good }}>arriba de la línea</strong> tienen
             más oferta de la esperada para su demanda. Las que están <strong style={{ color: D.bad }}>debajo</strong> tienen menos.
@@ -1162,7 +1170,7 @@ export default function InformeSaludConurbano() {
             <p style={{ color: C.inkMid }} className="text-sm max-w-2xl">
               Dos partidos vecinos, en la misma provincia, con la misma constitución y los mismos derechos
               sanitarios. Pero un establecimiento público en La Matanza atiende a{' '}
-              <strong style={{ color: D.bad }}>7,5 veces más personas</strong> que uno en Vicente López.
+              <strong style={{ color: D.bad }}>{BRECHA.toFixed(1).replace('.', ',')} veces más personas</strong> que uno en Vicente López.
             </p>
           </m.div>
           <DownloadableViz title="Vicente López vs. La Matanza — los dos extremos de la gestión sanitaria">
@@ -1295,8 +1303,8 @@ export default function InformeSaludConurbano() {
               El conurbano bonaerense no tiene un problema de cobertura: tiene un problema de{' '}
               <span style={{ color: D.goodSoft, fontWeight: 700 }}>distribución</span>.
               Los <strong style={{ color: '#fff' }}>1.088 establecimientos públicos</strong> existen, pero su asignación territorial
-              está descoordinada con la demanda real. La Matanza necesita atender 901.000 personas con 90 centros;
-              Vicente López, 42.000 con 32. La salud pública del conurbano está{' '}
+              está descoordinada con la demanda real. La Matanza necesita atender 846.000 personas con 90 centros;
+              Vicente López, 38.000 con 32. La salud pública del conurbano está{' '}
               <span style={{ color: D.badSoft, fontWeight: 700 }}>sobrecargada donde más se la necesita</span>{' '}
               y holgada donde la demanda es menor. Cerrar la brecha no requiere inventar un sistema:
               requiere redistribuir, ampliar y planificar el que ya existe.
