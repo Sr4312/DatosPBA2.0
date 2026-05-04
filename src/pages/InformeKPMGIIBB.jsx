@@ -1,4 +1,3 @@
-import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { m } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
@@ -6,15 +5,12 @@ import {
   Chart as ChartJS,
   ArcElement,
   DoughnutController,
-  CategoryScale,
-  LinearScale,
-  BarElement,
   Tooltip,
   Legend,
 } from 'chart.js'
-import { Doughnut, Bar } from 'react-chartjs-2'
+import { Doughnut } from 'react-chartjs-2'
 
-ChartJS.register(ArcElement, DoughnutController, CategoryScale, LinearScale, BarElement, Tooltip, Legend)
+ChartJS.register(ArcElement, DoughnutController, Tooltip, Legend)
 
 // data colors (semánticos para las visualizaciones)
 const D = {

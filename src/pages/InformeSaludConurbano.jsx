@@ -88,8 +88,7 @@ const MUNIS = RAW.map(m => {
   const carga = depPublico / m.est
   const estPer10k = (m.est / m.pop) * 10000
   const pctDepPublico = (depPublico / m.pop) * 100
-  const pctPlanEstatal = (m.planEstatal / m.pop) * 100
-  return { ...m, depPublico, carga, estPer10k, pctDepPublico, pctPlanEstatal }
+  return { ...m, depPublico, carga, estPer10k, pctDepPublico }
 })
 
 const TOT = {
