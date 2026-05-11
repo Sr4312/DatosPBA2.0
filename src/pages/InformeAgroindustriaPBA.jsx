@@ -7,6 +7,7 @@ import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
+  LogarithmicScale,
   BarElement,
   ArcElement,
   Tooltip,
@@ -14,7 +15,7 @@ import {
 } from 'chart.js'
 import { Bar, Doughnut } from 'react-chartjs-2'
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend)
+ChartJS.register(CategoryScale, LinearScale, LogarithmicScale, BarElement, ArcElement, Tooltip, Legend)
 ChartJS.defaults.font.family = 'Poppins, sans-serif'
 ChartJS.defaults.font.size = 12
 ChartJS.defaults.color = '#475569'
