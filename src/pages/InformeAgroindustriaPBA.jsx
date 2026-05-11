@@ -358,6 +358,25 @@ function ChartParticipacion() {
   )
 }
 
+const valueLabelsPlugin = {
+  id: 'valueLabels',
+  afterDatasetsDraw(chart) {
+    const { ctx } = chart
+    chart.data.datasets.forEach((dataset, di) => {
+      chart.getDatasetMeta(di).data.forEach((bar, i) => {
+        const v = dataset.data[i]
+        const label = v >= 1000 ? v.toLocaleString('es-AR') : String(v)
+        ctx.save()
+        ctx.fillStyle = '#334155'
+        ctx.font = 'bold 11px Poppins, sans-serif'
+        ctx.textAlign = 'center'
+        ctx.fillText(label, bar.x, bar.y - 7)
+        ctx.restore()
+      })
+    })
+  },
+}
+
 function ChartEmpleoPorHa() {
   const data = {
     labels: EMPLEO_POR_HA.map(d => d.label),
@@ -372,13 +391,30 @@ function ChartEmpleoPorHa() {
       title="Empleos por cada 1.000 hectáreas según tipo de producción"
       fuente="Gobierno PBA / OIT (en Agencia Tierra Viva, 2022)"
       legend={[{ label: 'Intensivos / diversificados', color: B[600] }, { label: 'Extensivos / commodities', color: '#f59e0b' }]}
-      height={230}
+      height={260}
     >
-      <Bar data={data} options={{
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false }, tooltip: { backgroundColor: C.ink, titleColor: '#fff', bodyColor: '#cbd5e1', padding: 12, cornerRadius: 8, callbacks: { label: ctx => `  ${ctx.raw.toLocaleString('es-AR')} empleos / 1.000 ha` } } },
-        scales: { y: { ticks: { callback: v => v >= 1000 ? v / 1000 + 'K' : v }, grid: { color: C.rule } }, x: { grid: { display: false } } },
-      }} />
+      <Bar
+        data={data}
+        plugins={[valueLabelsPlugin]}
+        options={{
+          responsive: true, maintainAspectRatio: false,
+          layout: { padding: { top: 20 } },
+          plugins: {
+            legend: { display: false },
+            tooltip: { backgroundColor: C.ink, titleColor: '#fff', bodyColor: '#cbd5e1', padding: 12, cornerRadius: 8, callbacks: { label: ctx => `  ${ctx.raw.toLocaleString('es-AR')} empleos / 1.000 ha` } },
+          },
+          scales: {
+            y: {
+              type: 'logarithmic',
+              ticks: {
+                callback: v => [1, 10, 100, 1000].includes(v) ? (v >= 1000 ? v / 1000 + 'K' : v) : '',
+              },
+              grid: { color: C.rule },
+            },
+            x: { grid: { display: false } },
+          },
+        }}
+      />
     </ChartCard>
   )
 }
