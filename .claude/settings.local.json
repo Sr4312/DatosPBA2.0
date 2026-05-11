@@ -82,7 +82,9 @@
       "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\salva\\\\Desktop\\\\Datos-PBA\" -Recurse -Depth 2)",
       "Bash(Select-Object FullName)",
       "Bash(rtk ls *)",
-      "Bash(rtk npm *)"
+      "Bash(rtk npm *)",
+      "Bash(rtk curl -s -X POST https://wucdmcjzvsgqyenglwth.supabase.co/rest/v1/informes -H 'apikey: sb_publishable_4cWy96LeDmeHu1EAAGm1wA_TIh8zyTL' -H 'Authorization: Bearer sb_publishable_4cWy96LeDmeHu1EAAGm1wA_TIh8zyTL' -H 'Content-Type: application/json' -H 'Prefer: return=representation' -d '{ *)",
+      "Bash(rtk curl *)"
     ]
   }
 }
