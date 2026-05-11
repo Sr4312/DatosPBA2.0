@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La agroindustria en la Provincia de Buenos Aires — Datos PBA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand-50:  #edf1f8;
+      --brand-100: #d0daf0;
+      --brand-200: #a1b4e0;
+      --brand-300: #6a8bca;
+      --brand-400: #3d65b2;
+      --brand-500: #1f4795;
+      --brand-600: #1a3d7c;
+      --brand-700: #152952;
+      --dark:      #0a1628;
+    }
+
+    ::selection { background: var(--brand-100); color: var(--brand-700); }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f7f6f2;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900'%3E%3Cpolygon points='0,0 230,0 470,900 0,900' fill='%231e3a8a' opacity='0.048'/%3E%3Cpolygon points='185,0 370,0 610,900 425,900' fill='%231d4ed8' opacity='0.036'/%3E%3Cpolygon points='330,0 500,0 740,900 570,900' fill='%232563eb' opacity='0.038'/%3E%3Cpolygon points='470,0 635,0 875,900 710,900' fill='%233b82f6' opacity='0.032'/%3E%3Cpolygon points='605,0 770,0 1010,900 845,900' fill='%2360a5fa' opacity='0.028'/%3E%3Cpolygon points='740,0 910,0 1150,900 980,900' fill='%2393c5fd' opacity='0.036'/%3E%3Cpolygon points='875,0 1055,0 1295,900 1115,900' fill='%23bfdbfe' opacity='0.042'/%3E%3Cpolygon points='1010,0 1230,0 1440,840 1255,900' fill='%23dbeafe' opacity='0.048'/%3E%3C/svg%3E");
+      background-size: cover;
+      background-position: top center;
+      background-repeat: no-repeat;
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ─────────────────────────────────────────── */
+    .header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #e2e8f0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .header-inner {
+      max-width: 72rem; margin: 0 auto; padding: 0 1.5rem;
+      height: 3.75rem; display: flex; align-items: center; gap: 0.625rem;
+    }
+    .logo-wrap { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
+    .logo-wrap svg { width: 26px; height: 26px; }
+    .logo-text { font-size: 0.875rem; font-weight: 700; color: var(--dark); letter-spacing: -0.01em; }
+    .header-sep { color: #cbd5e1; font-weight: 300; font-size: 1rem; }
+    .header-breadcrumb { font-size: 0.6875rem; color: #94a3b8; font-weight: 500; }
+    .header-tag {
+      margin-left: auto;
+      font-size: 0.6875rem; font-weight: 600;
+      background: var(--brand-50); color: var(--brand-600);
+      padding: 0.25rem 0.75rem; border-radius: 2rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── HERO ────────────────────────────────────────────── */
+    .hero {
+      background-color: var(--dark);
+      background-image: radial-gradient(circle, rgba(255,255,255,0.09) 1px, transparent 1px);
+      background-size: 28px 28px;
+      padding: 3.5rem 1.5rem 3.25rem;
+    }
+    .hero-inner { max-width: 72rem; margin: 0 auto; }
+    .hero-meta {
+      font-size: 0.625rem; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--brand-300); margin-bottom: 0.75rem;
+    }
+    .hero-title {
+      font-size: clamp(1.875rem, 4.5vw, 3.25rem);
+      font-weight: 800; color: white; line-height: 1.08;
+      letter-spacing: -0.025em; margin-bottom: 0.875rem; max-width: 28ch;
+    }
+    .hero-title span { color: var(--brand-300); }
+    .hero-sub {
+      font-size: 0.9375rem; color: rgba(255,255,255,0.55);
+      margin-bottom: 2rem; max-width: 50ch; line-height: 1.65;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.55);
+      font-size: 0.6875rem; font-weight: 500;
+      padding: 0.35rem 0.875rem; border-radius: 2rem;
+      margin-bottom: 2.75rem;
+    }
+    .hero-stats {
+      display: flex; flex-wrap: wrap; gap: 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .hero-stat {
+      padding: 1.5rem 2rem 0.75rem 0;
+      border-right: 1px solid rgba(255,255,255,0.08);
+      margin-right: 2rem;
+    }
+    .hero-stat:last-child { border-right: none; }
+    .hero-stat-value {
+      font-size: 2.25rem; font-weight: 800; color: white;
+      line-height: 1; margin-bottom: 0.4rem;
+    }
+    .hero-stat-label {
+      font-size: 0.625rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.14em;
+      color: rgba(255,255,255,0.38); max-width: 18ch; line-height: 1.4;
+    }
+
+    /* ── MAIN ────────────────────────────────────────────── */
+    .main { max-width: 72rem; margin: 0 auto; padding: 2.75rem 1.5rem 3rem; }
+
+    /* ── SECTION HEADER ──────────────────────────────────── */
+    .sh {
+      border-bottom: 2px solid var(--dark);
+      padding-bottom: 0.75rem;
+      margin: 3rem 0 1.75rem;
+    }
+    .sh:first-child { margin-top: 0; }
+    .sh-num {
+      font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--brand-400); margin-bottom: 0.25rem;
+    }
+    .sh-title {
+      font-size: clamp(1.4rem, 2.8vw, 1.875rem);
+      font-weight: 700; color: var(--dark);
+      line-height: 1.05; letter-spacing: -0.015em;
+    }
+
+    /* ── PROSE ───────────────────────────────────────────── */
+    .prose {
+      font-size: 0.9375rem; line-height: 1.78;
+      color: #334155; margin-bottom: 1.25rem; max-width: 72ch;
+    }
+
+    /* ── METRIC CARDS ────────────────────────────────────── */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      gap: 0.75rem; margin: 1.5rem 0;
+    }
+    .mc {
+      background: white; border-radius: 0.875rem;
+      border: 1px solid rgba(226,232,240,0.7);
+      border-left: 4px solid var(--brand-400);
+      padding: 1.125rem 1.125rem 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: box-shadow 0.15s, border-left-color 0.15s;
+    }
+    .mc:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-left-color: var(--brand-600); }
+    .mc.hi { border-left-color: var(--brand-600); }
+    .mc-label {
+      font-size: 0.625rem; font-weight: 600; color: #64748b;
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem;
+    }
+    .mc-value {
+      font-size: 1.875rem; font-weight: 800; color: var(--dark);
+      line-height: 1; margin-bottom: 0.375rem;
+    }
+    .mc.hi .mc-value { color: var(--brand-600); }
+    .mc-unit { font-size: 0.6875rem; color: #94a3b8; line-height: 1.4; }
+
+    /* ── CHART CARD ──────────────────────────────────────── */
+    .chart-card {
+      background: white; border-radius: 0.875rem;
+      border: 1px solid rgba(226,232,240,0.7);
+      padding: 1.25rem 1.25rem 0.875rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      margin: 1.25rem 0;
+    }
+    .chart-card-label {
+      font-size: 0.75rem; font-weight: 600; color: #334155; margin-bottom: 0.75rem;
+    }
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 0.875rem; margin-bottom: 0.625rem;
+    }
+    .li {
+      display: flex; align-items: center; gap: 0.375rem;
+      font-size: 0.6875rem; color: #64748b; font-weight: 500;
+    }
+    .ld { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+    .chart-source {
+      font-size: 0.625rem; color: #94a3b8;
+      text-align: right; margin-top: 0.625rem; font-style: italic;
+    }
+
+    /* ── TABLE ───────────────────────────────────────────── */
+    .table-wrap {
+      background: white; border-radius: 0.875rem;
+      border: 1px solid rgba(226,232,240,0.7);
+      overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      margin: 1.5rem 0; overflow-x: auto;
+    }
+    table { width: 100%; border-collapse: collapse; min-width: 480px; }
+    thead th {
+      background: #f8fafc; text-align: left;
+      font-size: 0.625rem; font-weight: 700; color: #475569;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      padding: 0.75rem 1rem; border-bottom: 1px solid #e2e8f0;
+    }
+    tbody td {
+      padding: 0.75rem 1rem; font-size: 0.8125rem; color: #334155;
+      border-bottom: 0.5px solid #f1f5f9; vertical-align: top;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: #fafbfc; }
+    td strong { font-weight: 600; color: var(--dark); }
+
+    /* ── QUOTE ───────────────────────────────────────────── */
+    .blockquote {
+      border-left: 3px solid var(--brand-300);
+      padding: 0.875rem 1.25rem;
+      background: var(--brand-50); border-radius: 0 0.5rem 0.5rem 0;
+      margin: 1.5rem 0;
+    }
+    .blockquote p {
+      font-size: 0.9rem; color: var(--brand-700);
+      font-style: italic; line-height: 1.7;
+    }
+    .blockquote cite {
+      font-size: 0.6875rem; color: var(--brand-400);
+      font-style: normal; font-weight: 500;
+      display: block; margin-top: 0.5rem;
+    }
+
+    /* ── TAGS ────────────────────────────────────────────── */
+    .tag {
+      display: inline-flex; align-items: center;
+      font-size: 0.6rem; font-weight: 700;
+      padding: 0.2rem 0.55rem; border-radius: 0.3rem;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .tag-amber  { background: #fef3c7; color: #92400e; }
+    .tag-red    { background: #fee2e2; color: #991b1b; }
+    .tag-blue   { background: var(--brand-50); color: var(--brand-600); }
+    .tag-green  { background: #dcfce7; color: #166534; }
+
+    /* ── DESAFÍOS ────────────────────────────────────────── */
+    .desafios-wrap {
+      background: white; border-radius: 0.875rem;
+      border: 1px solid rgba(226,232,240,0.7);
+      overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      margin: 1.25rem 0;
+    }
+    .desafio {
+      display: flex; gap: 0.875rem; padding: 1rem 1.25rem;
+      border-bottom: 0.5px solid #f1f5f9;
+      border-left: 4px solid transparent;
+      transition: background 0.12s;
+    }
+    .desafio:last-child { border-bottom: none; }
+    .desafio:hover { background: #fafbfc; }
+    .desafio.amber { border-left-color: #d97706; }
+    .desafio.red   { border-left-color: #dc2626; }
+    .desafio.green { border-left-color: #16a34a; }
+    .d-icon {
+      width: 2.125rem; height: 2.125rem; border-radius: 0.5rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 1rem;
+    }
+    .d-icon.amber { background: #fef3c7; }
+    .d-icon.red   { background: #fee2e2; }
+    .d-icon.green { background: #dcfce7; }
+    .d-icon.blue  { background: var(--brand-50); }
+    .d-title {
+      font-size: 0.875rem; font-weight: 600; color: var(--dark);
+      display: flex; align-items: center; gap: 0.5rem;
+      flex-wrap: wrap; margin-bottom: 0.3rem;
+    }
+    .d-body { font-size: 0.8125rem; color: #475569; line-height: 1.65; }
+
+    /* ── RECOMENDACIONES ─────────────────────────────────── */
+    .recs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 0.75rem; margin-top: 1.25rem;
+    }
+    .rec {
+      background: white; border-radius: 0.875rem;
+      border: 1px solid rgba(226,232,240,0.7);
+      border-left: 4px solid var(--brand-500);
+      padding: 1.125rem 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: box-shadow 0.15s, border-left-color 0.15s;
+    }
+    .rec:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-left-color: var(--brand-700); }
+    .rec-num {
+      font-size: 0.575rem; font-weight: 700; letter-spacing: 0.17em;
+      text-transform: uppercase; color: var(--brand-400); margin-bottom: 0.375rem;
+    }
+    .rec-title { font-size: 0.9rem; font-weight: 600; color: var(--dark); margin-bottom: 0.4rem; }
+    .rec-body  { font-size: 0.8125rem; color: #475569; line-height: 1.65; }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    .footer-sources {
+      background: white; border-top: 1px solid #e2e8f0;
+      padding: 1.75rem 1.5rem;
+    }
+    .footer-sources-inner {
+      max-width: 72rem; margin: 0 auto;
+      font-size: 0.6875rem; color: #94a3b8; line-height: 1.75;
+    }
+    .footer-sources-inner strong { color: #64748b; font-weight: 600; }
+    .footer-bar { background: var(--dark); padding: 1rem 1.5rem; }
+    .footer-bar-inner {
+      max-width: 72rem; margin: 0 auto;
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .footer-brand { display: flex; align-items: center; gap: 0.5rem; }
+    .footer-brand svg { width: 22px; height: 22px; }
+    .footer-brand-name { font-size: 0.8125rem; font-weight: 700; color: white; }
+    .footer-copy { font-size: 0.625rem; color: rgba(255,255,255,0.3); }
+
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .hero { padding: 2.25rem 1rem 2rem; }
+      .hero-stat { padding-right: 1.25rem; margin-right: 1.25rem; }
+      .hero-stat-value { font-size: 1.75rem; }
+      .main { padding: 2rem 1rem 2.5rem; }
+      .metrics { grid-template-columns: 1fr 1fr; }
+      .header-tag { display: none; }
+      .recs { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════════════════════ -->
+<header class="header">
+  <div class="header-inner">
+    <a href="https://www.datospba.com" class="logo-wrap">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="50" fill="#0a1628"/>
+        <rect x="22" y="30" width="12" height="50" rx="6" fill="#93c5fd"/>
+        <rect x="37" y="23" width="12" height="43" rx="6" fill="#93c5fd"/>
+        <rect x="52" y="25" width="12" height="36" rx="6" fill="#93c5fd"/>
+        <rect x="67" y="33" width="12" height="25" rx="6" fill="#93c5fd"/>
+      </svg>
+      <span class="logo-text">Datos PBA</span>
+    </a>
+    <span class="header-sep">/</span>
+    <span class="header-breadcrumb">Informes sectoriales</span>
+    <span class="header-tag">Agroindustria · Mayo 2026</span>
+  </div>
+</header>
+
+<!-- ════════════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <p class="hero-meta">Informe sectorial · Mayo 2026</p>
+    <h1 class="hero-title">La agroindustria en la <span>Provincia de Buenos Aires</span></h1>
+    <p class="hero-sub">Peso productivo, desafíos estructurales y recomendaciones de política</p>
+    <div class="hero-badge">Fuentes: FADA &nbsp;·&nbsp; INDEC &nbsp;·&nbsp; Tierra Viva &nbsp;·&nbsp; Bolsa de Cereales &nbsp;·&nbsp; Argendata</div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">26%</div>
+        <div class="hero-stat-label">de la producción agroindustrial nacional</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">35%</div>
+        <div class="hero-stat-label">de las exportaciones totales del país</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">4,2 M</div>
+        <div class="hero-stat-label">puestos de trabajo generados en 2023</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">61%</div>
+        <div class="hero-stat-label">del total exportado son agroindustriales</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     MAIN
+═══════════════════════════════════════════════════════════ -->
+<main class="main">
+
+  <!-- 01 · LA PROVINCIA COMO EPICENTRO ─────────────────── -->
+  <div class="sh">
+    <p class="sh-num">01 · Contexto</p>
+    <h2 class="sh-title">La provincia como epicentro agroindustrial</h2>
+  </div>
+
+  <p class="prose">Buenos Aires es la jurisdicción con mayor peso económico del país y el corazón de su sistema agroindustrial. Con más de 30,7 millones de hectáreas totales y aproximadamente 23,7 millones de superficie rural, concentra el 26% de la producción agroindustrial nacional y el 35% de las exportaciones totales del país.</p>
+
+  <div class="metrics">
+    <div class="mc hi">
+      <div class="mc-label">Participación en agroindustria nacional</div>
+      <div class="mc-value">26%</div>
+      <div class="mc-unit">de la producción del país</div>
+    </div>
+    <div class="mc">
+      <div class="mc-label">Exportaciones provinciales</div>
+      <div class="mc-value">35%</div>
+      <div class="mc-unit">del total exportado</div>
+    </div>
+    <div class="mc">
+      <div class="mc-label">Establecimientos agropecuarios</div>
+      <div class="mc-value">36.700</div>
+      <div class="mc-unit">EAP (CNA 2018)</div>
+    </div>
+    <div class="mc">
+      <div class="mc-label">Superficie rural</div>
+      <div class="mc-value">23,7 M</div>
+      <div class="mc-unit">hectáreas</div>
+    </div>
+  </div>
+
+  <p class="prose">La producción provincial en promedio decenal (2009/10–2018/19) representó el 93,1% de la cebada nacional, el 56% del girasol, el 49,5% del trigo, el 33,1% de la soja y el 28,9% del maíz, según datos del Ministerio de Desarrollo Agrario y el CNA 2018.</p>
+
+  <div class="chart-card">
+    <p class="chart-card-label">Participación de Buenos Aires en producción nacional por cultivo (promedio 2009/10–2018/19, %)</p>
+    <div style="position:relative;height:210px;">
+      <canvas id="chart1"></canvas>
+    </div>
+    <p class="chart-source">Fuente: CNA 2018 · Ministerio de Desarrollo Agrario PBA · Agencia Tierra Viva (2022)</p>
+  </div>
+
+  <!-- 02 · MAPA PRODUCTIVO ─────────────────────────────── -->
+  <div class="sh">
+    <p class="sh-num">02 · Territorio</p>
+    <h2 class="sh-title">El mapa productivo bonaerense</h2>
+  </div>
+
+  <p class="prose">El territorio provincial organiza su producción en zonas claramente diferenciadas. Al norte se extiende la llamada "zona núcleo" del agronegocio, dominada por la soja. El sudeste concentra la producción de trigo y cebada junto con porciones hortícolas. El centro y el oeste serrano se orientan hacia la ganadería bovina, mientras que el "cinturón verde" (de La Plata a Campana) rodea al Conurbano con producción hortícola intensiva.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Zona</th>
+          <th>Actividad predominante</th>
+          <th>Municipios de referencia</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Norte / zona núcleo</strong></td><td>Soja transgénica, maíz</td><td>Pergamino, Ramallo, San Nicolás</td></tr>
+        <tr><td><strong>Sudeste</strong></td><td>Trigo, cebada, papa, horticultura</td><td>Tres Arroyos, Coronel Suárez, Balcarce</td></tr>
+        <tr><td><strong>Centro / serranías oeste</strong></td><td>Ganadería bovina, pasturas</td><td>Olavarría, Tandil, Azul</td></tr>
+        <tr><td><strong>Cinturón verde</strong></td><td>Horticultura intensiva</td><td>La Plata, Escobar, Campana</td></tr>
+        <tr><td><strong>Sudoeste</strong></td><td>Girasol, ganadería extensiva</td><td>Bahía Blanca, Coronel Dorrego</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 03 · EMPLEO Y CADENAS ────────────────────────────── -->
+  <div class="sh">
+    <p class="sh-num">03 · Empleo</p>
+    <h2 class="sh-title">Empleo y cadenas de valor</h2>
+  </div>
+
+  <p class="prose">Las cadenas agroindustriales generaron 4,2 millones de puestos de trabajo en Argentina en 2023, equivalentes al 22,4% del empleo privado nacional (FADA, 2025). Buenos Aires, como principal provincia productora, concentra cerca del 28% de los establecimientos agropecuarios del país y es la primera jurisdicción generadora de empleo con el 31,2% del total nacional.</p>
+
+  <div class="metrics">
+    <div class="mc hi">
+      <div class="mc-label">Empleo en CAI (Argentina)</div>
+      <div class="mc-value">4,2 M</div>
+      <div class="mc-unit">puestos, 2023</div>
+    </div>
+    <div class="mc">
+      <div class="mc-label">Cadenas trigo y cebada (PBA)</div>
+      <div class="mc-value">+200 K</div>
+      <div class="mc-unit">empleos directos</div>
+    </div>
+    <div class="mc">
+      <div class="mc-label">EAP lideradas por PBA</div>
+      <div class="mc-value">28%</div>
+      <div class="mc-unit">del total nacional</div>
+    </div>
+  </div>
+
+  <p class="prose">Sin embargo, existe una brecha estructural entre empleo y modelo productivo: cada 1.000 hectáreas, los cultivos extensivos generan muy poco empleo directo comparado con las producciones intensivas.</p>
+
+  <div class="chart-card">
+    <p class="chart-card-label">Empleos por cada 1.000 hectáreas según tipo de producción</p>
+    <div class="legend">
+      <div class="li"><span class="ld" style="background:var(--brand-600)"></span>Intensivos / diversificados</div>
+      <div class="li"><span class="ld" style="background:#f59e0b"></span>Extensivos / commodities</div>
+    </div>
+    <div style="position:relative;height:230px;">
+      <canvas id="chart2"></canvas>
+    </div>
+    <p class="chart-source">Fuente: Gobierno PBA / OIT (en Agencia Tierra Viva, 2022)</p>
+  </div>
+
+  <!-- 04 · DISTRIBUCIÓN DE LA TIERRA ───────────────────── -->
+  <div class="sh">
+    <p class="sh-num">04 · Estructura</p>
+    <h2 class="sh-title">La distribución de la tierra</h2>
+  </div>
+
+  <p class="prose">El Censo Agropecuario 2018 reveló una concentración extrema de la propiedad de la tierra en Buenos Aires. El 16% de las explotaciones agropecuarias —aquellas con más de 1.000 hectáreas— controlan el 66,5% de la superficie total provincial. En el extremo opuesto, el 30% de las EAP con menos de 100 ha apenas posee el 1,8% del suelo.</p>
+
+  <div class="chart-card">
+    <p class="chart-card-label">Distribución de tierra por tamaño de explotación (PBA, 2018)</p>
+    <div class="legend">
+      <div class="li"><span class="ld" style="background:var(--brand-400)"></span>% de EAP</div>
+      <div class="li"><span class="ld" style="background:var(--brand-700)"></span>% de superficie</div>
+    </div>
+    <div style="position:relative;height:195px;">
+      <canvas id="chart3"></canvas>
+    </div>
+    <p class="chart-source">Fuente: CNA 2018 · Agencia Tierra Viva (2022)</p>
+  </div>
+
+  <p class="prose">Este proceso de concentración vino acompañado de una reducción drástica del número de explotaciones: de 75.531 en 1988 a 36.700 en 2018, casi la mitad en tres décadas. En paralelo, la densidad de población rural cayó de 1 persona cada 141 hectáreas en 1988 a 1 cada 258 en 2018. El CNA 2018 registró también un 18,5% menos de trabajadores permanentes que el censo anterior.</p>
+
+  <!-- 05 · DEBATE SOBRE EL MODELO ──────────────────────── -->
+  <div class="sh">
+    <p class="sh-num">05 · Modelo productivo</p>
+    <h2 class="sh-title">El debate sobre el modelo productivo</h2>
+  </div>
+
+  <p class="prose">La soja transgénica —aprobada en Argentina en 1996— transformó radicalmente el paisaje productivo bonaerense. En 2018, la oleaginosa representaba el 86,5% de las hectáreas sembradas con oleaginosas, con 3,9 millones de hectáreas. Sólo el cultivo de soja demandaba el 46% del total de plaguicidas utilizados por los agricultores bonaerenses, con el glifosato como producto más empleado.</p>
+
+  <div class="blockquote">
+    <p>"La agricultura dominante busca reducir al mínimo el empleo directo en las explotaciones."</p>
+    <cite>— Informe PBA / OIT, citado en Agencia Tierra Viva (2022)</cite>
+  </div>
+
+  <p class="prose">Como contrapunto, se multiplican las experiencias alternativas. El registro voluntario de productores agroecológicos del Ministerio de Desarrollo Agrario PBA cuenta con 321 productores que representan 23.000 hectáreas. La UTT (Unión de Trabajadores de la Tierra) representa a 9.000 familias en los cordones hortícolas del Conurbano, General Pueyrredón, Villarino y Bahía Blanca, con 100 hectáreas agroecológicas en la provincia. A nivel nacional, el CNA 2018 identificó unos 5.000 establecimientos con producción orgánica, agroecológica o biodinámica.</p>
+
+  <div class="chart-card">
+    <p class="chart-card-label">Evolución de explotaciones agropecuarias en PBA</p>
+    <div style="position:relative;height:175px;">
+      <canvas id="chart4"></canvas>
+    </div>
+    <p class="chart-source">Fuente: CNA 1988, 2002, 2018</p>
+  </div>
+
+  <!-- 06 · EXPORTACIONES ───────────────────────────────── -->
+  <div class="sh">
+    <p class="sh-num">06 · Comercio exterior</p>
+    <h2 class="sh-title">Exportaciones y rol en la economía nacional</h2>
+  </div>
+
+  <p class="prose">Las cadenas agroindustriales generaron exportaciones por USD 52.900 millones en 2025, el 61% del total exportado por Argentina —6 de cada 10 dólares que ingresaron al país. Entre enero y octubre de 2025, los complejos de granos líderes sumaron USD 28.875 millones, un 5% más en valor y 10% en volumen respecto de 2024.</p>
+
+  <div class="metrics">
+    <div class="mc hi">
+      <div class="mc-label">Exportaciones agroindustriales 2025</div>
+      <div class="mc-value">USD 52,9 B</div>
+      <div class="mc-unit">récord histórico en volumen</div>
+    </div>
+    <div class="mc">
+      <div class="mc-label">Participación en exportaciones</div>
+      <div class="mc-value">61%</div>
+      <div class="mc-unit">del total exportado por Argentina</div>
+    </div>
+    <div class="mc">
+      <div class="mc-label">Retenciones agro (ARCA 2024)</div>
+      <div class="mc-value">USD 5,99 B</div>
+      <div class="mc-unit">91% proviene de las CAI</div>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <p class="chart-card-label">Principales complejos exportadores de Argentina (participación estimada, 2025)</p>
+    <div class="legend">
+      <div class="li"><span class="ld" style="background:var(--brand-600)"></span>Agroindustriales</div>
+      <div class="li"><span class="ld" style="background:#cbd5e1"></span>Resto</div>
+    </div>
+    <div style="position:relative;height:275px;max-width:380px;margin:0 auto;">
+      <canvas id="chart5"></canvas>
+    </div>
+    <p class="chart-source">Fuente: FADA (2026) · BCR · Secretaría de Agricultura</p>
+  </div>
+
+  <!-- 07 · DESAFÍOS ESTRUCTURALES ─────────────────────── -->
+  <div class="sh">
+    <p class="sh-num">07 · Diagnóstico</p>
+    <h2 class="sh-title">Desafíos estructurales del sector</h2>
+  </div>
+
+  <div class="desafios-wrap">
+    <div class="desafio amber">
+      <div class="d-icon amber">🏛️</div>
+      <div>
+        <div class="d-title">Presión fiscal y retenciones <span class="tag tag-amber">Político</span></div>
+        <div class="d-body">Argentina mantiene retenciones a las exportaciones agropecuarias que no tienen equivalente en los principales competidores globales. Aunque el gobierno Milei las redujo (soja de 26% a 24%; trigo de 9,5% a 7,5% en dic. 2025), el reclamo histórico del sector es su eliminación total. El costo fiscal acumulado en más de 20 años se estima en USD 209.000 millones según la SRA.</div>
+      </div>
+    </div>
+    <div class="desafio amber">
+      <div class="d-icon amber">👷</div>
+      <div>
+        <div class="d-title">Generación de empleo insuficiente <span class="tag tag-amber">Social</span></div>
+        <div class="d-body">El modelo extensivo de commodities —soja, trigo, maíz— genera muy poco empleo por hectárea (6–11 personas/1.000 ha) en comparación con la horticultura intensiva (1.209 personas/1.000 ha). La concentración de la tierra y la mecanización agudizaron la expulsión de trabajadores rurales: un 18,5% menos de permanentes entre 2008 y 2018.</div>
+      </div>
+    </div>
+    <div class="desafio red">
+      <div class="d-icon red">🌱</div>
+      <div>
+        <div class="d-title">Impacto ambiental y agroquímicos <span class="tag tag-red">Ambiental</span></div>
+        <div class="d-body">Argentina registra la tasa más alta del mundo en uso de plaguicidas: 12 litros por habitante por año. En Buenos Aires, la soja demandaba el 46% del total de plaguicidas utilizados. Sólo 71 de los 135 municipios cuentan con ordenanzas que regulan distancias de aplicación; 28 no tienen regulación alguna.</div>
+      </div>
+    </div>
+    <div class="desafio red">
+      <div class="d-icon red">📐</div>
+      <div>
+        <div class="d-title">Concentración de la tierra y escala <span class="tag tag-red">Estructural</span></div>
+        <div class="d-body">El 16% de las EAP controla el 66,5% de la superficie bonaerense. Esta concentración limita el acceso a la tierra para nuevos productores, empuja a la informalidad y dificulta políticas de diversificación productiva. El número de EAP cayó un 51% entre 1988 y 2018.</div>
+      </div>
+    </div>
+    <div class="desafio amber">
+      <div class="d-icon green">🌦️</div>
+      <div>
+        <div class="d-title">Vulnerabilidad climática y sequía <span class="tag tag-amber">Productivo</span></div>
+        <div class="d-body">La dependencia de las lluvias es estructural en la Pampa Bonaerense. La sequía de 2022/23 redujo las exportaciones agroindustriales en un 36%, golpeando fuertemente al sector. El cambio climático amenaza con volver más frecuentes estos eventos extremos, sin mecanismos de cobertura suficientemente desarrollados para pequeños y medianos productores.</div>
+      </div>
+    </div>
+    <div class="desafio amber">
+      <div class="d-icon amber">🔄</div>
+      <div>
+        <div class="d-title">Escasa diversificación productiva <span class="tag tag-amber">Estratégico</span></div>
+        <div class="d-body">La hegemonía de cuatro commodities (soja, maíz, trigo, girasol) hace al sector muy dependiente de los ciclos de precios internacionales. La horticultura, a pesar de ser la que abastece de alimentos frescos a las grandes ciudades, representaba apenas el 0,2% de la superficie cultivada provincial según el CNA 2018.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 · RECOMENDACIONES ─────────────────────────────── -->
+  <div class="sh">
+    <p class="sh-num">08 · Política pública</p>
+    <h2 class="sh-title">Recomendaciones de política</h2>
+  </div>
+
+  <div class="recs">
+    <div class="rec">
+      <div class="rec-num">Recomendación 1 · Fiscal</div>
+      <div class="rec-title">Continuar la reducción gradual y predecible de retenciones</div>
+      <div class="rec-body">La eliminación progresiva de los derechos de exportación —especialmente para los complejos con mayor generación de empleo en origen, como trigo y cebada— debe estar acompañada de mecanismos de compensación fiscal. La previsibilidad de reglas es tan importante como el nivel de la alícuota.</div>
+    </div>
+    <div class="rec">
+      <div class="rec-num">Recomendación 2 · Tierras</div>
+      <div class="rec-title">Políticas de acceso a la tierra para pequeños y medianos productores</div>
+      <div class="rec-body">La concentración extrema del suelo bonaerense requiere políticas activas: catastros actualizados, impuesto progresivo a la tierra ociosa o subutilizada, y programas de crédito para facilitar el acceso a la propiedad rural para pequeños productores familiares y cooperativas.</div>
+    </div>
+    <div class="rec">
+      <div class="rec-num">Recomendación 3 · Ambiental</div>
+      <div class="rec-title">Marco regulatorio provincial unificado para agroquímicos</div>
+      <div class="rec-body">La ausencia de regulación en 28 municipios bonaerenses es una brecha grave. La Provincia debe avanzar en un marco normativo mínimo unificado que establezca zonas de exclusión alrededor de centros urbanos, escuelas rurales y cursos de agua.</div>
+    </div>
+    <div class="rec">
+      <div class="rec-num">Recomendación 4 · Empleo</div>
+      <div class="rec-title">Fomentar la intensificación productiva y la horticultura</div>
+      <div class="rec-body">Dado el diferencial en generación de empleo (1.209 vs. 6 puestos por 1.000 ha), la política provincial debería incentivar la transición hacia producciones intensivas: horticultura, fruticultura, porcicultura y producción bajo cubierta. Esto implica acceso a crédito, asistencia técnica y mercados de proximidad.</div>
+    </div>
+    <div class="rec">
+      <div class="rec-num">Recomendación 5 · Sustentabilidad</div>
+      <div class="rec-title">Escalar el programa de agroecología y transición productiva</div>
+      <div class="rec-body">El registro voluntario de productores agroecológicos de PBA (321 productores, 23.000 ha) es un buen comienzo pero marginal. Debe escalarse con incentivos concretos: desgravaciones impositivas, primas de precio y acceso preferencial a mercados públicos.</div>
+    </div>
+    <div class="rec">
+      <div class="rec-num">Recomendación 6 · Riesgo climático</div>
+      <div class="rec-title">Ampliar los instrumentos de gestión del riesgo climático</div>
+      <div class="rec-body">Los seguros agrícolas y los fondos de emergencia agropecuaria deben llegar a los pequeños y medianos productores que hoy no acceden a ellos. La Provincia puede articular con Nación para ampliar la cobertura de seguros multi-riesgo subsidiados.</div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ════════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-sources">
+    <div class="footer-sources-inner">
+      <strong>Fuentes:</strong> FADA (2025) — Empleo en las Cadenas Agroindustriales 2023; BCCBA — Informe Económico N° 453 (julio 2025); Agencia Tierra Viva (2022) — "Buenos Aires: pilar del agronegocio"; Ministerio de Economía Nación / CEP XXI; CNA 2018; BCR — Informativo Semanal (2024, 2026); Argentina.gob.ar / Secretaría de Agricultura; Chequeado (2024); Argendata / Fund.ar.
+    </div>
+  </div>
+  <div class="footer-bar">
+    <div class="footer-bar-inner">
+      <div class="footer-brand">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="50" fill="#1f4795"/>
+          <rect x="22" y="30" width="12" height="50" rx="6" fill="#93c5fd"/>
+          <rect x="37" y="23" width="12" height="43" rx="6" fill="#93c5fd"/>
+          <rect x="52" y="25" width="12" height="36" rx="6" fill="#93c5fd"/>
+          <rect x="67" y="33" width="12" height="25" rx="6" fill="#93c5fd"/>
+        </svg>
+        <span class="footer-brand-name">Datos PBA</span>
+      </div>
+      <span class="footer-copy">© 2026 · Informe sectorial · Agroindustria bonaerense</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════════════════════════════════════════════════════
+     CHARTS
+═══════════════════════════════════════════════════════════ -->
+<script>
+  Chart.defaults.font.family = "'Poppins', sans-serif";
+  Chart.defaults.font.size = 11;
+  Chart.defaults.color = '#64748b';
+  const grid = 'rgba(0,0,0,0.05)';
+
+  /* 01 — Participación en producción nacional (horizontal bars) */
+  new Chart(document.getElementById('chart1'), {
+    type: 'bar',
+    data: {
+      labels: ['Cebada', 'Girasol', 'Trigo', 'Soja', 'Maíz'],
+      datasets: [{
+        data: [93.1, 56, 49.5, 33.1, 28.9],
+        backgroundColor: ['#152952','#1f4795','#3d65b2','#6a8bca','#a1b4e0'],
+        borderRadius: 4,
+        barPercentage: 0.65
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: v => '  ' + v.raw + '%' } }
+      },
+      scales: {
+        x: { max: 100, ticks: { callback: v => v + '%' }, grid: { color: grid } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+  /* 02 — Empleos por 1.000 ha */
+  new Chart(document.getElementById('chart2'), {
+    type: 'bar',
+    data: {
+      labels: ['Bajo cubierta', 'Porcinos', 'Soja', 'Trigo', 'Maíz'],
+      datasets: [{
+        data: [1209, 46, 11, 8, 6],
+        backgroundColor: ['#1a3d7c','#3d65b2','#f59e0b','#f59e0b','#f59e0b'],
+        borderRadius: 4,
+        barPercentage: 0.6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: v => '  ' + v.raw.toLocaleString('es-AR') + ' empleos / 1.000 ha' } }
+      },
+      scales: {
+        y: { ticks: { callback: v => v >= 1000 ? (v/1000) + 'K' : v }, grid: { color: grid } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  /* 03 — Distribución de tierra (grouped bars) */
+  new Chart(document.getElementById('chart3'), {
+    type: 'bar',
+    data: {
+      labels: ['Grandes (+1.000 ha)', 'Medianas (100–1.000 ha)', 'Pequeñas (−100 ha)'],
+      datasets: [
+        { label: '% de EAP',       data: [16, 54, 30],   backgroundColor: '#3d65b2', borderRadius: 4, barPercentage: 0.5 },
+        { label: '% de superficie', data: [66.5, 31.7, 1.8], backgroundColor: '#152952', borderRadius: 4, barPercentage: 0.5 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: v => '  ' + v.dataset.label + ': ' + v.raw + '%' } }
+      },
+      scales: {
+        y: { max: 100, ticks: { callback: v => v + '%' }, grid: { color: grid } },
+        x: { ticks: { font: { size: 10 }, maxRotation: 0 }, grid: { display: false } }
+      }
+    }
+  });
+
+  /* 04 — Evolución EAP */
+  new Chart(document.getElementById('chart4'), {
+    type: 'bar',
+    data: {
+      labels: ['1988', '2002', '2018'],
+      datasets: [{
+        data: [75531, 51116, 36700],
+        backgroundColor: ['#1f4795','#3d65b2','#6a8bca'],
+        borderRadius: 4,
+        barPercentage: 0.55
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: v => '  ' + v.raw.toLocaleString('es-AR') + ' EAP' } }
+      },
+      scales: {
+        y: { ticks: { callback: v => (v/1000).toFixed(0) + 'K' }, grid: { color: grid } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  /* 05 — Doughnut exportaciones */
+  new Chart(document.getElementById('chart5'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Soja y subprod.','Maíz','Bovinos','Trigo','Pesquero','Girasol','Lácteos / cebada','Resto'],
+      datasets: [{
+        data: [29, 14, 9, 8, 4, 4, 5, 27],
+        backgroundColor: ['#152952','#1f4795','#1a3d7c','#3d65b2','#6a8bca','#a1b4e0','#d0daf0','#cbd5e1'],
+        borderWidth: 2,
+        borderColor: 'white'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '60%',
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: { font: { size: 10 }, boxWidth: 10, padding: 10 }
+        },
+        tooltip: { callbacks: { label: v => '  ' + v.label + ': ~' + v.raw + '%' } }
+      }
+    }
+  });
+</script>
+</body>
+</html>

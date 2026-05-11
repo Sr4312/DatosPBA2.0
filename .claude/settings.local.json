@@ -84,7 +84,9 @@
       "Bash(rtk ls *)",
       "Bash(rtk npm *)",
       "Bash(rtk curl -s -X POST https://wucdmcjzvsgqyenglwth.supabase.co/rest/v1/informes -H 'apikey: sb_publishable_4cWy96LeDmeHu1EAAGm1wA_TIh8zyTL' -H 'Authorization: Bearer sb_publishable_4cWy96LeDmeHu1EAAGm1wA_TIh8zyTL' -H 'Content-Type: application/json' -H 'Prefer: return=representation' -d '{ *)",
-      "Bash(rtk curl *)"
+      "Bash(rtk curl *)",
+      "PowerShell(Get-ChildItem -Path \"c:\\\\Users\\\\salva\\\\Desktop\\\\Datos-PBA\" -Exclude node_modules -Recurse -File | Where-Object {$_.Extension -in '.html', '.css', '.md', '.tsx', '.ts', '.jsx', '.js'} | Select-Object -First 40 FullName)",
+      "Bash(rtk find *)"
     ]
   }
 }
