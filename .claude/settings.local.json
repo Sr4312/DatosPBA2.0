@@ -65,7 +65,24 @@
       "Bash(xargs -I {} sh -c 'wc -c \"{}\" && head -c 60 \"{}\"')",
       "Bash(node -e \"const fs=require\\('fs'\\);const t=fs.readFileSync\\('barometro-png-full.txt','utf8'\\).replace\\(/^\\\\\"|\\\\\"$/g,''\\);const m=t.match\\(/^data:image\\\\/png;base64,\\(.+\\)$/\\);if\\(m\\){fs.writeFileSync\\('barometro-out.png',Buffer.from\\(m[1],'base64'\\)\\);console.log\\('saved barometro-out.png:',fs.statSync\\('barometro-out.png'\\).size,'bytes'\\);}else{console.log\\('no match, head:',t.slice\\(0,80\\)\\);}\")",
       "Bash(rm -v src/components/TasaVialMap.jsx src/components/data/mockData.js src/components/ui/button.jsx src/components/ui/table.jsx)",
-      "Bash(rmdir src/components/data)"
+      "Bash(rmdir src/components/data)",
+      "Bash(gh repo *)",
+      "Bash(cargo --version)",
+      "Bash(rustc --version)",
+      "WebFetch(domain:api.github.com)",
+      "Bash(cd /tmp)",
+      "Bash(curl -fL -o rtk-windows.zip \"https://github.com/rtk-ai/rtk/releases/download/v0.38.0/rtk-x86_64-pc-windows-msvc.zip\")",
+      "Bash(mkdir -p rtk-extracted)",
+      "Bash(unzip -o rtk-windows.zip -d rtk-extracted)",
+      "Bash(mv /tmp/rtk-extracted/rtk.exe __TRACKED_VAR__/.local/bin/rtk.exe)",
+      "Bash(rm -rf /tmp/rtk-extracted /tmp/rtk-windows.zip)",
+      "Bash(rtk --version)",
+      "Bash(rtk --help)",
+      "Bash(rtk init *)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\salva\\\\Desktop\\\\Datos-PBA\" -Recurse -Depth 2)",
+      "Bash(Select-Object FullName)",
+      "Bash(rtk ls *)",
+      "Bash(rtk npm *)"
     ]
   }
 }

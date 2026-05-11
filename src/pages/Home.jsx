@@ -121,6 +121,7 @@ function FeaturedInformeCard({ inf, viz }) {
   const options = viz ? {
     responsive: true,
     maintainAspectRatio: false,
+    indexAxis: chartOptions?.indexAxis ?? 'x',
     plugins: {
       legend: {
         display: (chartData?.datasets?.length ?? 0) > 1,
@@ -200,6 +201,7 @@ function HeroVizPanel({ informe, viz }) {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    indexAxis: chartOptions?.indexAxis ?? 'x',
     plugins: {
       legend: {
         display: (chartData?.datasets?.length ?? 0) > 1,

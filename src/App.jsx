@@ -14,6 +14,7 @@ const InformeKPMGIIBB         = lazy(() => import('./pages/InformeKPMGIIBB'))
 const InformeCAFEstadoMunicipal = lazy(() => import('./pages/InformeCAFEstadoMunicipal'))
 const InformeRENABAP          = lazy(() => import('./pages/InformeRENABAP'))
 const InformeSaludConurbano   = lazy(() => import('./pages/InformeSaludConurbano'))
+const InformeMineriaPBA       = lazy(() => import('./pages/InformeMineriaPBA'))
 const Beta            = lazy(() => import('./pages/Beta'))
 const QuienesSomos    = lazy(() => import('./pages/QuienesSomos'))
 
@@ -30,6 +31,7 @@ export default function App() {
             <Route path="informes/caf-estado-municipal-pba" element={<Suspense fallback={null}><InformeCAFEstadoMunicipal /></Suspense>} />
             <Route path="informes/renabap-pba-2026" element={<Suspense fallback={null}><InformeRENABAP /></Suspense>} />
             <Route path="informes/salud-conurbano-pec-2026" element={<Suspense fallback={null}><InformeSaludConurbano /></Suspense>} />
+            <Route path="informes/mineria-pba-2025" element={<Suspense fallback={null}><InformeMineriaPBA /></Suspense>} />
             <Route path="informes/:id" element={<Suspense fallback={null}><InformeDetalle /></Suspense>} />
             <Route path="datos" element={<Suspense fallback={null}><Datos /></Suspense>} />
             <Route path="hilos" element={<Suspense fallback={null}><Hilos /></Suspense>} />
