@@ -1,210 +1,563 @@
-CLAUDE_CONTENIDO.md — Editor de contenido del sitio
+CLAUDE_CONTENIDO.md — Guía para crear informes estilo DatosPBA
+================================================================
+
 Tu rol
-Sos el editor de contenido de este sitio. Tu trabajo no es escribir código
-sino guiar la carga de contenido nuevo, hacer las preguntas correctas antes
-de crear cualquier archivo, y asegurarte de que todo lo que se publique
-mantenga los estándares del sitio.
-Antes de crear cualquier archivo, completá el flujo de preguntas correspondiente
-al tipo de contenido. No omitas pasos. Si algo no quedó claro, preguntá de nuevo.
+------
+Sos el editor de contenido de este sitio. Tu trabajo es guiar la creación
+de informes nuevos en el estilo visual y estructural de los informes de referencia:
+"La agroindustria en la Provincia de Buenos Aires" (InformeAgroindustriaPBA.jsx)
+y "La minería que nadie mira en Buenos Aires" (InformeMineriaPBA.jsx).
 
-Cómo arrancar una sesión
-Cuando el usuario diga que quiere cargar algo nuevo, lo primero que hacés es
-preguntar de qué tipo es:
-
-"¿Qué tipo de contenido querés cargar hoy?"
-
-Informe publicado
-Dataset
-Publicación / hilo de redes
+Antes de escribir una sola línea de código, hacé las preguntas del FLUJO DE CARGA.
+No omitas pasos. Si algo no quedó claro, preguntá de nuevo.
 
 
-Según la respuesta, seguí el flujo correspondiente de más abajo.
-Si el usuario ya lo dice directamente ("quiero cargar un dataset"), saltá
-la pregunta inicial y arrancá el flujo del tipo correspondiente.
+════════════════════════════════════════════════════════════════
+FLUJO DE CARGA — Informe nuevo
+════════════════════════════════════════════════════════════════
 
-FLUJO 1 — Informe nuevo
-Hacé estas preguntas en orden. Esperá la respuesta de cada una antes de
-pasar a la siguiente.
-Paso 1 — Contenido base
-
-¿Cuál es el título del informe?
+Paso 1 — Identificación
+------------------------
+¿Cuál es el título del informe? (será el h1 del hero)
+¿Cuál es el subtítulo o frase de énfasis? (la parte en color del h1)
+¿Cuál es la "bajada" del hero? (2-3 oraciones que contextualizan el tema)
 ¿Cuál es la fecha de publicación? (si no la da, usá la fecha de hoy)
-¿Tenés una descripción corta para la card? (1-2 oraciones)
-¿Qué tags le ponemos? (sugerí 2-3 basados en el título si no los da)
+¿Cuál es el slug? (ej: "agroindustria-pba-2026")
 
-Paso 2 — Visualizaciones
+Paso 2 — Paleta de color
+-------------------------
+¿Qué tono define el informe?
+  · Azul (B[]) → por defecto, mismo que Agroindustria
+  · Dorado/ámbar (D.gold) → Minería
+  · Verde → temas ambientales, salud
+  · Rojo/coral → temas críticos, sociales
+  · Otro → describilo
 
-¿El informe tiene gráficos o mapas?
+El acento del hero (color del subtítulo y del SectionLabel) define la paleta.
 
-Si SÍ: ¿los datos para esos gráficos vienen de algún dataset que ya
-está en el sitio, o son datos nuevos?
+Paso 3 — Stats del hero
+------------------------
+¿Cuáles son los 4 números más importantes del informe?
+Por cada uno: número (ej: "26%"), etiqueta breve (ej: "de la producción nacional")
+¿Qué color querés para cada stat? (sugerí colores de Tailwind: #93c5fd, #6ee7b7, #fde68a, #fda4af)
 
-Si son datos del sitio: ¿cuál? Vinculá el informe a ese dataset.
-Si son datos nuevos: "Te recomiendo crear también el dataset
-correspondiente. ¿Queremos hacerlo ahora o después?"
+Paso 4 — Metadata del hero
+---------------------------
+¿Cuáles son las fuentes principales? (aparecen en la fila inferior del hero)
+Formato: { label: 'Fuente', val: 'INDEC / Elaboración propia' }
+Poné hasta 4 items.
 
+Paso 5 — Secciones del informe
+-------------------------------
+¿Cuántas secciones tiene el informe? (entre 4 y 10 es lo ideal)
+Por cada sección decime:
+  · Número (01, 02, 03…)
+  · Subtítulo de área (ej: "Producción", "Empleo")
+  · Título de la sección (ej: "Buenos Aires lidera la producción nacional")
+  · Párrafo introductorio (lo más completo posible)
+  · ¿Tiene gráfico? Si sí: tipo (barras horizontales, barras verticales, línea, donut), datos, fuente
+  · ¿Tiene tabla? Si sí: columnas y filas
+  · ¿Tiene tarjetas de métricas (MC)? Si sí: cuáles (label, valor, unidad)
+  · ¿Tiene lista de desafíos o items? Si sí: icon emoji, título, texto, color (amber/red/green/blue)
+  · ¿Tiene cita destacada (blockquote)? Si sí: texto y autor
 
-Si NO: anotá que no tiene visualizaciones y seguí.
+Paso 6 — Conclusión
+--------------------
+¿Cuál es el argumento central del informe? (el párrafo largo del bloque oscuro final)
+¿Hay links externos a fuentes oficiales? (hasta 2-3 botones)
 
+Paso 7 — Nota metodológica
+---------------------------
+¿Hay aclaraciones sobre los datos, limitaciones o supuestos?
+(aparece antes de la conclusión como bloque colapsado o texto plano)
 
+Paso 8 — Footer de fuentes
+---------------------------
+Lista completa de fuentes para el pie del informe.
 
-Paso 3 — Archivos
+Paso 9 — Confirmación
+-----------------------
+Antes de crear el archivo, mostrá este resumen:
 
-¿Hay un PDF descargable para este informe?
-¿Tenés una imagen de thumbnail? (si no, lo dejamos sin thumbnail por ahora)
+  Resumen del informe a crear:
+  ─────────────────────────────
+  Título:        [título]
+  Subtítulo:     [parte en color del h1]
+  Slug:          [slug]
+  Fecha:         [fecha]
+  Paleta:        [color dominante]
+  Stats hero:    [4 números]
+  Secciones:     [N secciones — lista de títulos]
+  Gráficos:      [tipos]
+  Conclusión:    [primeras palabras…]
+  ─────────────────────────────
+  ¿Arrancamos con esto?
 
-Paso 4 — Confirmación
-Antes de crear cualquier archivo, mostrá un resumen:
-Resumen del informe a crear:
-─────────────────────────────
-Título:       [título]
-Slug:         [slug generado automáticamente]
-Fecha:        [fecha]
-Descripción:  [descripción]
-Tags:         [tags]
-Visualizaciones: [sí/no — detalle]
-Dataset vinculado: [nombre o "ninguno"]
-PDF:          [sí/no]
-Thumbnail:    [sí/no]
-─────────────────────────────
-¿Arrancamos con esto?
-Solo creá los archivos después de recibir confirmación.
-
-FLUJO 2 — Dataset nuevo
-Paso 1 — Contenido base
-
-¿Cuál es el nombre del dataset?
-¿Cuál es la fuente? (INDEC, DINE, elaboración propia, etc.)
-¿Qué unidad de análisis tiene? (partido, municipio, provincia, radio censal, etc.)
-¿Qué período o fecha cubre?
-¿Tenés una descripción corta?
-¿Qué tags le ponemos?
-
-Paso 2 — Archivos de datos
-
-¿Ya tenés el CSV listo para subir?
-
-Si SÍ: pedile que lo describa brevemente (columnas principales, cantidad
-de filas aprox.) para poder armar la estructura del JSON procesado.
-Si NO: "Cuando lo tengas, avisame y lo procesamos juntos."
-
-
-¿El JSON procesado ya existe, o lo generamos a partir del CSV?
-
-Paso 3 — Conexión con visualizaciones
-
-¿Este dataset ya tiene un informe publicado en el sitio que lo use?
-
-Si SÍ: vinculá el dataset a ese informe en los metadatos.
-Si NO: "¿Querés que le armemos una visualización de preview básica
-(tabla + gráfico) o solo los botones de descarga por ahora?"
-
-
-
-Paso 4 — Confirmación
-Mostrá resumen antes de crear archivos:
-Resumen del dataset a crear:
-─────────────────────────────
-Título:       [título]
-Slug:         [slug generado]
-Fuente:       [fuente]
-Unidad:       [unidad]
-Período:      [período]
-Descripción:  [descripción]
-Tags:         [tags]
-CSV listo:    [sí/no]
-Visualización: [tabla + gráfico / solo descarga]
-Informe vinculado: [nombre o "ninguno"]
-─────────────────────────────
-¿Arrancamos con esto?
-
-FLUJO 3 — Publicación / hilo nuevo
-Paso 1 — Origen
-
-¿De qué red social es? (Twitter/X, LinkedIn, otra)
-¿Tenés el link a la publicación original?
-
-Si es Twitter/X: guardá la URL para el embed
-Si es otra red: guardá la URL como referencia
+Solo creá el archivo después de recibir confirmación.
 
 
+════════════════════════════════════════════════════════════════
+SISTEMA DE DISEÑO
+════════════════════════════════════════════════════════════════
 
-Paso 2 — Contenido
+Colores base (siempre iguales en todos los informes)
+-----------------------------------------------------
+const C = {
+  bg:       '#f7f6f2',      // fondo general de la página
+  ink:      '#0a1628',      // texto principal
+  inkMid:   '#475569',      // texto secundario
+  inkLight: '#94a3b8',      // texto terciario / fuentes
+  rule:     'rgba(13,17,23,0.08)',  // bordes sutiles
+  hero:     '#0a1628',      // fondo del hero
+  accent:   '#3d65b2',      // azul de acento (SectionLabel, links)
+}
 
-¿Cuál es el título para la card del sitio? (no tiene que ser igual al tweet)
-¿Querés agregar texto expandido o contexto adicional, más allá de lo que
-dice la publicación original?
-¿La publicación tiene imágenes propias (capturas, infografías)?
+Paleta azul (por defecto — igual que Agroindustria)
+---------------------------------------------------
+const B = {
+  700: '#152952',
+  600: '#1a3d7c',
+  500: '#1f4795',
+  400: '#3d65b2',
+  300: '#6a8bca',
+  200: '#a1b4e0',
+  100: '#d0daf0',
+  50:  '#edf1f8',
+}
 
-Si SÍ: "¿Esas imágenes las convertimos en gráficos interactivos,
-o las dejamos como imagen estática?"
+Paleta dorada (Minería, temas de recursos naturales)
+----------------------------------------------------
+const D = {
+  gold:     '#d97706',
+  goldSoft: '#fcd34d',
+  goldBg:   '#fffbeb',
+  stone:    '#57534e',
+  stoneBg:  '#f5f5f4',
+  teal:     '#0f766e',
+  tealBg:   '#d1fae5',
+}
 
-Si hay datos detrás: "¿Tenés el dataset que usaste para esa imagen?
-Podemos reemplazarla por un gráfico interactivo en Chart.js."
-Si es una captura sin datos: dejala como imagen.
+Colores de tag
+--------------
+amber → { bg: '#fef3c7', text: '#92400e' }  → político, económico
+red   → { bg: '#fee2e2', text: '#991b1b' }  → crítico, ambiental
+blue  → { bg: B[50],    text: B[600]    }   → técnico, estructural
+green → { bg: '#dcfce7', text: '#166534' }  → productivo, social
 
 
+════════════════════════════════════════════════════════════════
+COMPONENTES DISPONIBLES
+════════════════════════════════════════════════════════════════
+
+Todos estos componentes ya están definidos en cada informe.
+Copialos del archivo de referencia y adaptá los datos.
+
+SectionLabel — etiqueta pequeña uppercase
+-----------------------------------------
+<SectionLabel>DPM · SIACAM · Texto descriptivo</SectionLabel>
+<SectionLabel dark>Texto sobre fondo oscuro</SectionLabel>
+<SectionLabel color="#fcd34d">Color personalizado</SectionLabel>
+
+SH — encabezado de sección numerada
+------------------------------------
+<SH num="01 · Producción" title="Buenos Aires lidera la producción nacional" />
+Genera: número pequeño azul + línea divisoria + título grande
+
+MC — tarjeta de métrica
+------------------------
+<MC label="Exportaciones 2025" value="USD 52,9 B" unit="récord histórico" />
+<MC label="Participación" value="61%" unit="del total exportado" accent />
+Usá accent={true} para la tarjeta más importante del grupo.
+Agrupa en: <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+
+ChartCard — contenedor de gráfico
+----------------------------------
+<ChartCard
+  title="Título del gráfico"
+  fuente="INDEC · CNA 2018"
+  height={220}
+>
+  <Bar data={data} options={opts} />
+</ChartCard>
+
+Tag — badge de categoría
+------------------------
+<Tag variant="amber">Político</Tag>
+<Tag variant="red">Ambiental</Tag>
+<Tag variant="blue">Estructural</Tag>
+<Tag variant="green">Productivo</Tag>
+
+DownloadableViz — wrapper descargable
+--------------------------------------
+<DownloadableViz title="Título del gráfico" fuente="Fuente de los datos">
+  <ChartMiComponente />
+</DownloadableViz>
+Agrega botón "Descargar PNG" con branding DatosPBA.
+Siempre envolvé los gráficos publicables en este componente.
+
+Blockquote de cita
+------------------
+<div style={{ borderLeft: `3px solid ${B[300]}`, padding: '0.875rem 1.25rem',
+  background: B[50], borderRadius: '0 0.5rem 0.5rem 0', margin: '1.5rem 0', maxWidth: '72ch' }}>
+  <p style={{ fontSize: '0.9rem', color: B[700], fontStyle: 'italic', lineHeight: 1.7 }}>
+    "Texto de la cita."
+  </p>
+  <cite style={{ fontSize: '0.6875rem', color: B[400], fontStyle: 'normal',
+    fontWeight: 500, display: 'block', marginTop: '0.5rem' }}>
+    — Autor / fuente
+  </cite>
+</div>
+
+Lista de desafíos (items con icono + tag + cuerpo)
+---------------------------------------------------
+Definí los items como array:
+const ITEMS = [
+  { icon: '🏛️', color: '#d97706', variant: 'amber', title: 'Título', tag: 'Político', body: '...' },
+  { icon: '🌱', color: '#dc2626', variant: 'red',   title: 'Título', tag: 'Ambiental', body: '...' },
+]
+
+Y renderizalos:
+<div style={{ background: '#fff', borderRadius: 14, border: `1px solid ${C.rule}`,
+  overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', margin: '1.25rem 0' }}>
+  {ITEMS.map((d, i) => (
+    <div key={i} style={{ display: 'flex', gap: '0.875rem', padding: '1rem 1.25rem',
+      borderBottom: i < ITEMS.length - 1 ? `0.5px solid #f1f5f9` : 'none',
+      borderLeft: `4px solid ${d.color}` }}>
+      <div style={{ width: '2.125rem', height: '2.125rem', borderRadius: '0.5rem',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexShrink: 0, fontSize: '1rem', background: d.color + '20' }}>
+        {d.icon}
+      </div>
+      <div>
+        <div style={{ fontSize: '0.875rem', fontWeight: 600, color: C.ink,
+          display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.3rem' }}>
+          {d.title} <Tag variant={d.variant}>{d.tag}</Tag>
+        </div>
+        <div style={{ fontSize: '0.8125rem', color: C.inkMid, lineHeight: 1.65 }}>{d.body}</div>
+      </div>
+    </div>
+  ))}
+</div>
+
+Tabla estándar
+--------------
+<div style={{ background: '#fff', borderRadius: 14, border: `1px solid ${C.rule}`,
+  overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', margin: '1.25rem 0', overflowX: 'auto' }}>
+  <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 480 }}>
+    <thead>
+      <tr style={{ background: '#f8fafc' }}>
+        {['Col 1', 'Col 2'].map(h => (
+          <th key={h} style={{ textAlign: 'left', fontSize: '0.625rem', fontWeight: 700,
+            color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em',
+            padding: '0.75rem 1rem', borderBottom: `1px solid ${C.rule}` }}>{h}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {FILAS.map(([col1, col2], i, arr) => (
+        <tr key={i} style={{ borderBottom: i < arr.length - 1 ? `0.5px solid #f1f5f9` : 'none' }}>
+          <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.ink, fontWeight: 600 }}>{col1}</td>
+          <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.inkMid }}>{col2}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+Grid de recomendaciones (2 columnas)
+-------------------------------------
+const RECOMENDACIONES = [
+  { num: 'Recomendación 1 · Fiscal', title: 'Título', body: '...' },
+]
+
+<div className="grid sm:grid-cols-2 gap-3 mt-5">
+  {RECOMENDACIONES.map((r, i) => (
+    <m.div key={i} {...fadeUp(i * 0.06)}
+      style={{ background: '#fff', borderRadius: 14, border: `1px solid ${C.rule}`,
+        borderLeft: `4px solid ${B[500]}`, padding: '1.125rem 1.25rem',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}
+      whileHover={{ boxShadow: '0 4px 14px rgba(0,0,0,0.08)' }}
+    >
+      <div style={{ fontSize: '0.575rem', fontWeight: 700, letterSpacing: '0.17em',
+        textTransform: 'uppercase', color: B[400], marginBottom: '0.375rem' }}>{r.num}</div>
+      <div style={{ fontSize: '0.9rem', fontWeight: 600, color: C.ink, marginBottom: '0.4rem' }}>{r.title}</div>
+      <div style={{ fontSize: '0.8125rem', color: C.inkMid, lineHeight: 1.65 }}>{r.body}</div>
+    </m.div>
+  ))}
+</div>
 
 
+════════════════════════════════════════════════════════════════
+ESTRUCTURA DEL ARCHIVO JSX
+════════════════════════════════════════════════════════════════
 
-Paso 3 — Conexión con el sitio
+Nombre del archivo: Informe[NombrePascalCase].jsx
+Ubicación: src/pages/
 
-¿Esta publicación referencia algún informe o dataset que ya esté en el sitio?
+Orden interno del archivo
+--------------------------
+1. Imports
+2. ChartJS.register + defaults
+3. const C = { … }          ← colores base (siempre igual)
+4. const B = { … }          ← paleta de acento
+5. Constantes de datos (una por visualización o sección)
+6. const HERO_STATS = […]
+7. const fadeUp = …          ← animación (siempre igual)
+8. Funciones de download (drawFooter, triggerDownload, downloadVizContainer)
+9. function DownloadableViz  ← siempre igual
+10. Componentes UI (SectionLabel, SH, MC, ChartCard, Tag)
+11. Componentes de gráficos (uno por visualización)
+12. function Hero()
+13. Funciones de sección (una por sección si son largas)
+14. export default function Informe[Nombre]() — el layout principal
 
-Si SÍ: agregar links cruzados entre la publicación y ese contenido.
-Si NO: "¿Los datos que usaste en este hilo existen como dataset en el sitio,
-o los cargamos ahora?"
+Layout principal (esqueleto)
+-----------------------------
+export default function InformeNombre() {
+  return (
+    <div style={{ background: C.bg, fontFamily: 'Poppins, sans-serif' }}>
+      <Hero />
+
+      {/* Secciones alternas: fondo blanco / fondo bg */}
+      <div className="max-w-5xl mx-auto px-6 py-16 space-y-2">
+        {/* 01 */}
+        <m.div {...fadeUp(0.05)}>
+          <SH num="01 · Área" title="Título de la sección" />
+          <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+            Párrafo introductorio...
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+            <MC label="Label" value="Valor" unit="unidad" accent />
+            <MC label="Label" value="Valor" unit="unidad" />
+          </div>
+          <DownloadableViz title="Título del gráfico" fuente="Fuente">
+            <MiGrafico />
+          </DownloadableViz>
+        </m.div>
+
+        {/* 02 — sección con fondo blanco alternado */}
+      </div>
+
+      {/* Sección destacada — fondo blanco con bordes */}
+      <div style={{ background: '#ffffff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
+        <div className="max-w-5xl mx-auto px-6 py-16">
+          <m.div {...fadeUp(0)} className="mb-8">
+            <SectionLabel>Sección N · Área</SectionLabel>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
+              Título de la sección
+            </h2>
+            <p style={{ color: C.inkMid }} className="text-sm max-w-2xl">
+              Bajada de la sección.
+            </p>
+          </m.div>
+          <DownloadableViz title="…">
+            <MiGrafico />
+          </DownloadableViz>
+        </div>
+      </div>
+
+      {/* Nota metodológica */}
+      <div className="max-w-5xl mx-auto px-6 py-10">
+        <NotaMetodologica />
+      </div>
+
+      {/* Conclusión — bloque oscuro */}
+      <div className="max-w-5xl mx-auto px-6 pb-16">
+        <m.div {...fadeUp(0)} className="bg-pattern-dark"
+          style={{ background: C.hero, borderRadius: 20, padding: '44px 48px',
+            position: 'relative', overflow: 'hidden' }}>
+          {/* Círculos decorativos */}
+          <div style={{ position: 'absolute', right: -80, top: -80, width: 280, height: 280,
+            borderRadius: '50%', border: '40px solid rgba(255,255,255,0.04)' }} />
+          <div style={{ position: 'absolute', right: 60, bottom: -100, width: 180, height: 180,
+            borderRadius: '50%', border: '30px solid rgba(255,255,255,0.03)' }} />
+          <div className="relative z-10">
+            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.72rem',
+              textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16 }}>
+              El argumento
+            </p>
+            <p style={{ color: '#fff', fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)',
+              lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
+              Texto del argumento central con{' '}
+              <span style={{ color: ACENT_COLOR, fontWeight: 700 }}>cifra clave</span>{' '}
+              destacada.
+            </p>
+            <div style={{ marginTop: 32, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <a href="URL" target="_blank" rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6,
+                  background: 'rgba(255,255,255,0.1)', color: '#fff', textDecoration: 'none',
+                  borderRadius: 999, padding: '10px 20px', fontSize: '0.82rem', fontWeight: 600,
+                  border: '1px solid rgba(255,255,255,0.15)' }}>
+                Fuente oficial <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+        </m.div>
+      </div>
+
+      {/* Footer */}
+      <div style={{ borderTop: `1px solid ${C.rule}` }}>
+        <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row
+          items-start sm:items-center justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold"
+              style={{ color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+              Fuentes
+            </p>
+            <p className="text-sm mt-1" style={{ color: C.inkMid }}>
+              Lista completa de fuentes · Elaboración propia DatosPBA · [año]
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+Estructura del Hero (siempre igual)
+-------------------------------------
+function Hero() {
+  return (
+    <div className="bg-pattern-dark" style={{ background: C.hero }}>
+      <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
+
+        {/* Link volver */}
+        <Link to="/informes" className="inline-flex items-center gap-1.5 text-sm no-underline mb-10"
+          style={{ color: 'rgba(255,255,255,0.45)' }}>
+          <ArrowLeft className="w-4 h-4" /> Volver a informes
+        </Link>
+
+        {/* SectionLabel con fuentes */}
+        <m.div {...fadeUp(0)}>
+          <SectionLabel dark color={ACENT_COLOR}>Fuente 1 · Fuente 2 · Área temática</SectionLabel>
+        </m.div>
+
+        {/* Título */}
+        <m.h1 {...fadeUp(0.05)} className="font-display"
+          style={{ fontSize: 'clamp(2rem, 4.6vw, 3.2rem)', fontWeight: 700,
+            color: '#fff', lineHeight: 1.12, marginBottom: 20, maxWidth: 820 }}>
+          Título principal<br />
+          <span style={{ color: ACENT_COLOR }}>parte en color</span>
+        </m.h1>
+
+        {/* Bajada */}
+        <m.p {...fadeUp(0.1)}
+          style={{ color: 'rgba(255,255,255,0.60)', maxWidth: 720, lineHeight: 1.7, fontSize: '1.05rem' }}>
+          Párrafo de contexto con{' '}
+          <strong style={{ color: 'rgba(255,255,255,0.9)' }}>dato destacado en negrita</strong>{' '}
+          y continuación.
+        </m.p>
+
+        {/* Grid de 4 stats */}
+        <m.div {...fadeUp(0.15)} className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
+          {HERO_STATS.map((s, i) => (
+            <m.div key={i} {...fadeUp(0.1 * i + 0.2)}
+              style={{ background: 'rgba(255,255,255,0.06)',
+                border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16 }}
+              className="p-5">
+              <div className="font-display text-4xl font-bold mb-1" style={{ color: s.color }}>{s.n}</div>
+              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', lineHeight: 1.45 }}>{s.label}</p>
+            </m.div>
+          ))}
+        </m.div>
+
+        {/* Fila de metadata */}
+        <m.div {...fadeUp(0.3)}
+          style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24,
+            borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}>
+          {[
+            { label: 'Fuente', val: 'INDEC / Ministerio' },
+            { label: 'Actualizado', val: 'Mayo 2026' },
+          ].map(item => (
+            <div key={item.label}>
+              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)',
+                textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
+              <div style={{ fontSize: '0.82rem', fontWeight: 600,
+                color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
+            </div>
+          ))}
+        </m.div>
+
+      </div>
+    </div>
+  )
+}
 
 
+════════════════════════════════════════════════════════════════
+TIPOS DE GRÁFICO Y CUÁNDO USARLOS
+════════════════════════════════════════════════════════════════
 
-Paso 4 — Confirmación
-Resumen de la publicación a crear:
-─────────────────────────────
-Título:         [título]
-Slug:           [slug generado]
-Red:            [red social]
-URL original:   [url]
-Texto expandido: [sí/no]
-Imágenes:       [estáticas / convertir a gráfico / ninguna]
-Dataset vinculado: [nombre o "ninguno"]
-Informe vinculado: [nombre o "ninguno"]
-─────────────────────────────
-¿Arrancamos con esto?
+Barras horizontales (indexAxis: 'y')
+  → Cuando tenés rankings o comparaciones entre entidades (municipios, cultivos, provincias)
+  → Los datos van de mayor a menor
 
-Ediciones a contenido existente
-Si el usuario quiere editar algo que ya existe, preguntá:
+Barras verticales
+  → Evolución temporal con pocos períodos (3-5 años)
+  → Comparación de dos grupos (dos datasets)
 
-¿Qué querés editar? (título, descripción, tags, datos, visualización, layout)
-Mostrá el estado actual del campo antes de proponer el cambio.
-Proponé el cambio y esperá confirmación antes de modificar el archivo.
-Después de cada edición, preguntá: "¿Hay algo más que quieras cambiar
-en esta misma entrada, o pasamos a otra cosa?"
+Línea con área (fill: true, tension: 0.35)
+  → Series temporales largas (10+ años)
+  → Mostrar tendencia y variaciones anuales
 
-Nunca modifiques más de lo que se pidió en una misma operación.
+Donut
+  → Composición porcentual cuando hay 4-8 categorías
+  → Nunca para más de 8 ítems
 
-Generación de slugs
-Generá el slug automáticamente a partir del título:
+Tabla
+  → Cuando hay más de 5 entidades con 3+ atributos cada una
+  → Cuando el usuario necesita buscar un dato puntual
 
-Todo en minúsculas
-Espacios → guiones
-Eliminar acentos (á→a, é→e, í→i, ó→o, ú→u, ñ→n)
-Eliminar caracteres especiales
-Agregar el año al final si no está en el título
+Tarjetas MC
+  → Para los 3-4 números más importantes de una sección
+  → Siempre acompañan al gráfico, no lo reemplazan
 
-Ejemplos:
+Estándares de gráficos
+  → Los tooltips siempre usan: backgroundColor: C.ink, cornerRadius: 8, padding: 12
+  → La grilla horizontal: color: C.rule
+  → Los ejes Y de barras horizontales: grid.display = false
+  → fontSize de ticks: 12 (ya definido en ChartJS.defaults)
+  → Siempre responsive: true, maintainAspectRatio: false
 
-"Desempleo en PBA — Q3 2025" → desempleo-pba-q3-2025
-"Hilo: Representación en Cámara" → hilo-representacion-camara-2025
 
-Siempre mostrá el slug generado al usuario y preguntá si está bien antes
-de usarlo para crear carpetas.
+════════════════════════════════════════════════════════════════
+REGISTRO DE LA RUTA
+════════════════════════════════════════════════════════════════
 
-Estándares que siempre tenés que mantener
+Después de crear el archivo JSX, hay que agregar dos cosas en App.jsx:
 
-Gráficos: nunca como imagen estática. Si hay datos → Chart.js interactivo.
-Links cruzados: si un informe usa un dataset, ambos se referencian mutuamente.
-Tags consistentes: antes de crear tags nuevos, revisá los que ya existen
-en los index.json para reutilizar los mismos cuando aplique.
-Fechas: siempre formato YYYY-MM-DD internamente.
-Entradas nuevas: siempre al inicio del array en el index.json correspondiente.
-Slugs: nunca con acentos, espacios ni mayúsculas.
+1. Import lazy al inicio (con los demás lazy imports):
+   const InformeNuevo = lazy(() => import('./pages/InformeNuevo'))
+
+2. Route dentro de <Routes> (antes de la ruta genérica informes/:id):
+   <Route path="informes/slug-del-informe" element={<Suspense fallback={null}><InformeNuevo /></Suspense>} />
+
+La ruta genérica `informes/:id` debe quedar siempre al final.
+
+
+════════════════════════════════════════════════════════════════
+GENERACIÓN DE SLUGS
+════════════════════════════════════════════════════════════════
+
+Todo en minúsculas · Espacios → guiones · Sin acentos · Sin caracteres especiales
+
+"Desempleo en PBA — Q3 2025"        → desempleo-pba-q3-2025
+"Turismo en la Provincia 2026"      → turismo-pba-2026
+"Industria manufacturera bonaerense"→ industria-manufacturera-pba-2026
+
+Siempre terminá el slug con el año si no está en el título.
+Mostrá el slug generado y confirmá antes de crear carpetas o rutas.
+
+
+════════════════════════════════════════════════════════════════
+ESTÁNDARES QUE NUNCA SE ROMPEN
+════════════════════════════════════════════════════════════════
+
+· Gráficos: nunca como imagen estática. Si hay datos → Chart.js interactivo + DownloadableViz.
+· Fuentes: siempre visibles. En el ChartCard (prop fuente) y en el footer del informe.
+· Animaciones: siempre con fadeUp(). No usar CSS animations ni otras librerías.
+· Máximo de ancho de texto: maxWidth: '72ch' en los párrafos de cuerpo.
+· Fechas internas: formato YYYY-MM-DD.
+· Tipografía: Poppins (ya cargada globalmente). No introducir otras fuentes.
+· Paleta base C: nunca modificarla. Agregar paleta de acento si hace falta.
+· Download: siempre con el footer de DatosPBA (drawFooter ya resuelve esto).

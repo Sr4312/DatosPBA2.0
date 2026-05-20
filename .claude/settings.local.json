@@ -91,7 +91,18 @@
       "Bash(rtk npx *)",
       "Bash(cmd /c \"npm run dev 2>&1\")",
       "Bash(node_modules/.bin/vite --port 5173)",
-      "Bash(curl -s http://localhost:5173)"
+      "Bash(curl -s http://localhost:5173)",
+      "Bash(rtk gain *)",
+      "Bash(gh api *)",
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "Bash(npm --version)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(rtk git *)",
+      "Bash(rtk grep *)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\salva\\.claude"
     ]
   }
 }

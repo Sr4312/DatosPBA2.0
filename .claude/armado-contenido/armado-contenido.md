@@ -1,158 +1,139 @@
 ---
 name: generador-informe
 description: >
-  Este skill genera un informe estructurado en el formato adecuado para cargar a la página web de Datos PBA. Debe activarse siempre que el usuario provea información (texto, CSV, imagen, datos sueltos) y pida armar un informe, nota de análisis o reporte. No debe activarse si no hay ningún dato o contenido de base. Usá este skill también cuando el usuario diga "haceme un informe", "armá una nota", "quiero publicar esto en Datos PBA" o similares.
+  Activa cuando el usuario quiera crear un informe nuevo para Datos PBA en el
+  estilo visual de InformeAgroindustriaPBA.jsx o InformeMineriaPBA.jsx. También
+  cuando el usuario diga "haceme un informe", "armá una nota" o "quiero publicar
+  esto en Datos PBA" y haya datos de base. No activar si no hay contenido de base.
 ---
 
 # Generador de Informes — Datos PBA
 
-Skill para producir informes de análisis político-territorial de la provincia de
-Buenos Aires, estructurados y listos para su publicación en la web de Datos PBA.
-El rol de Claude al ejecutar este skill es el de un analista político especializado
-en PBA: lectura crítica de los datos, encuadre político-institucional y redacción
-clara y fundamentada.
+## Rol
 
-## Cuándo usarlo
+Sos un analista político especializado en la Provincia de Buenos Aires. Cuando se
+activa este skill, leés el material provisto, lo encuadrás políticamente y construís
+un informe JSX listo para publicar, con el diseño de los informes de referencia.
 
-- El usuario provee información (CSV, texto, estadísticas, imagen de gráfico) y
-  pide armar un informe o nota de análisis.
-- El usuario quiere publicar contenido en Datos PBA.
-- El usuario dice "haceme un informe sobre X" con algún material adjunto.
+---
 
-**No activar** si no hay ningún dato, archivo o texto de base provisto.
+## Diseño de referencia
 
-## Inputs esperados
+Los informes de referencia son `InformeAgroindustriaPBA.jsx` y `InformeMineriaPBA.jsx`.
+Todo informe nuevo debe replicar su estilo visual exacto.
 
-- Texto, estadísticas, CSVs, tablas o cualquier dato estructurado o no estructurado.
-- Imágenes o PNGs de gráficos existentes (en ese caso, Claude debe recrear el gráfico
-  con el diseño visual de Datos PBA en lugar de usar la imagen original).
-- Indicación opcional del municipio, partido o región que es el foco del informe.
-- Indicación opcional del tema (laboral, electoral, social, económico, etc.).
+**Paleta base** — siempre igual en todos los informes:
+- Fondo de página: `#f7f6f2` (crema)
+- Texto principal: `#0a1628` (azul muy oscuro)
+- Texto secundario: `#475569`
+- Bordes: `rgba(13,17,23,0.08)`
+- Fondo del hero y conclusión: `#0a1628`
 
-**Todo dato utilizado en el informe debe ser citado con su fuente correspondiente.**
-Si el usuario no indicó la fuente, preguntar antes de publicar. No inventar ni asumir fuentes.
+**Paleta de acento** — varía según el tema del informe. Azul (`#3d65b2`) es el
+default. Dorado (`#d97706`) para recursos naturales. Verde para temas ambientales
+o de salud. El acento define el color del subtítulo del hero, los SectionLabel
+y los bordes izquierdos de las tarjetas.
 
-## Proceso paso a paso
+**Tipografía**: Poppins en todo el sitio. No introducir otras fuentes.
 
-1. **Analizar el material provisto.** Identificar el tema central, el alcance
-   geográfico (municipio, partido, región, provincia) y el período temporal.
-   Asumir el rol de analista político de PBA.
+---
 
-2. **Definir estructura editorial:**
-   - Título atractivo y directo.
-   - Subtítulo que amplía o contextualiza.
-   - Datos geográficos/demográficos de contexto (población, densidad, partido,
-     región, intendente si es relevante).
-   - Fecha de publicación.
+## Estructura de la página
 
-3. **Armar la card de hallazgos clave** (3 a 4 puntos concisos, en formato
-   destacado, que resuman los findings más importantes del informe).
+Un informe tiene siempre esta secuencia de bloques:
 
-4. **Redactar el cuerpo del informe** (3 a 5 párrafos). Encuadre del problema,
-   análisis de los datos, interpretación política-territorial, conclusión o
-   implicancias. Tono claro, sin jerga innecesaria, con precisión técnica.
+**1. Hero (fondo oscuro `#0a1628`)**
+Link "Volver a informes" arriba. Label pequeño uppercase con las fuentes
+principales. Título grande con dos líneas: la primera en blanco, la segunda en
+el color de acento. Bajada de 2-3 oraciones. Grid de 4 stat-cards con número
+grande + etiqueta corta. Fila inferior con metadata (fuente, fecha, organismo).
 
-5. **Gráfico o visualización:**
-   - Si el usuario proveyó un PNG o imagen: recrear el gráfico con diseño Datos PBA
-     (paleta de colores, tipografía y estilo del sitio).
-   - Si el usuario proveyó datos crudos: generar el gráfico más adecuado para
-     la información (barras, líneas, mapa si aplica, etc.).
-   - Si no hay datos suficientes para un gráfico: avisar al usuario y sugerir
-     qué datos harían falta.
+**2. Cuerpo de secciones (fondo crema)**
+Secciones numeradas 01, 02, 03… Cada sección arranca con un encabezado que tiene
+el número y el área en azul pequeño, más el título en grande con línea divisoria.
+Párrafo introductorio limitado a 72 caracteres de ancho. Luego tarjetas de
+métricas (grid de 3), gráficos descargables, tablas o listas de items.
 
-6. **Armar el campo `fuentes`** — OBLIGATORIO, nunca omitir.
-   Array de strings, una entrada por fuente. Cada entrada debe incluir:
-   - Nombre del organismo o autor
-   - Nombre del documento o dataset
-   - Fecha de publicación o relevamiento si está disponible
+Algunas secciones tienen fondo blanco con borde superior e inferior para alternar
+visualmente. No todas: solo las que tienen mucho contenido visual.
 
-   Ejemplos bien formados:
-   - `"Ministerio de Economía de la Nación — Tasa de Mantenimiento Vial 2025 (datos al 31/03/2025)"`
-   - `"IARAF — Informe de Transferencias Nación-Provincias, en base a Ministerio de Economía e INDEC"`
-   - `"INDEC — Encuesta Permanente de Hogares, 3er trimestre 2025"`
+**3. Nota metodológica (fondo crema)**
+Bloque de texto plano antes de la conclusión. Aclara límites de los datos,
+estimaciones o supuestos del análisis.
 
-   Si el dato viene de una imagen sin fuente clara: indicarlo en el cuerpo y pedirle
-   al usuario que confirme el origen antes de publicar.
+**4. Conclusión (fondo oscuro)**
+Tarjeta redondeada con fondo `#0a1628`, círculos decorativos semitransparentes
+en las esquinas. Label pequeño "El argumento". Párrafo central con la tesis
+del informe, una cifra clave en color de acento. Uno o dos botones pill hacia
+fuentes oficiales.
 
-7. **Presentar el borrador al usuario** para revisión. Una vez aprobado,
-   proceder a subir el informe a la web de Datos PBA con todos sus componentes.
+**5. Footer**
+Línea divisoria. Etiqueta "Fuentes" en uppercase. Lista completa de fuentes.
 
-8. **Sumar el grafico creado en la pagina de inicio** en la pagina de inicio, al lado del Datos PBA, hay un grafico del ultimo informe. Cuando se crea un informe nuevo, se debe debe cargar uno de los graficos de ese ultimo informe, en la pagina de inicio, siguiendo el formato del informe anterior.
+---
 
-## Output esperado
+## Componentes que siempre existen
 
-Un informe completo con los siguientes bloques, en este orden:
+Estos componentes se copian de los informes de referencia sin cambiar su código:
 
-| Bloque | Descripción |
-|---|---|
-| Título | Atractivo, informativo |
-| Subtítulo | Complementa el título |
-| Contexto geográfico/demográfico | Datos duros de encuadre |
-| Card de hallazgos clave | 3–4 bullets destacados |
-| Cuerpo + gráficos intercalados | Párrafos y viz alternados (ver formato abajo) |
-| Fuentes | **Obligatorio** — campo `fuentes` en Supabase, visible al pie del informe |
+- **SectionLabel**: etiqueta uppercase de 0.6rem con tracking amplio. Azul en
+  fondos claros, color de acento en fondos oscuros.
+- **SH**: encabezado de sección con número de área arriba y título abajo,
+  separados por una línea inferior del ancho completo.
+- **MC**: tarjeta de métrica blanca con borde izquierdo coloreado. Muestra
+  label pequeño, número grande y unidad. Usá `accent` en la más importante.
+- **ChartCard**: contenedor blanco con título y fuente para un gráfico de Chart.js.
+- **Tag**: badge de categoría. Variantes: amber (político), red (ambiental/crítico),
+  blue (técnico/estructural), green (productivo/social).
+- **DownloadableViz**: wrapper que agrega el botón "Descargar PNG" con branding
+  DatosPBA a cualquier gráfico. Todos los gráficos publicables van dentro.
 
-### Formato del campo `cuerpo` con visualizaciones intercaladas
+---
 
-El campo `cuerpo` es un array mixto: cada elemento puede ser un string (párrafo) o un objeto `{"viz": "viz-id"}` que inserta el gráfico inline en ese punto del texto.
+## Tipos de gráfico y cuándo usarlos
 
-```json
-[
-  "Primer párrafo introductorio...",
-  {"viz": "v-sectores-retroceso-pba-2025"},
-  "Párrafo que analiza ese gráfico...",
-  {"viz": "v-neumaticos-pba-2024-2025"},
-  "Párrafo siguiente..."
-]
-```
+- **Barras horizontales**: rankings entre entidades (municipios, cultivos, provincias).
+  Los datos van ordenados de mayor a menor.
+- **Barras verticales**: comparación entre pocos períodos (3–5 años) o entre dos grupos.
+- **Línea con área**: series temporales largas (10+ años), para mostrar tendencia.
+- **Donut**: composición porcentual con 4–8 categorías.
+- **Tabla**: más de 5 entidades con 3+ atributos. Cuando el usuario necesita buscar
+  un dato puntual en lugar de ver una tendencia.
+- **Tarjetas MC**: para los 3–4 números clave de una sección. Acompañan al gráfico,
+  no lo reemplazan.
 
-- Los gráficos referenciados en `cuerpo` se renderizan inline y **no** se repiten al pie.
-- Los gráficos que NO están referenciados en `cuerpo` se muestran al final en la sección "Visualizaciones".
-- Intercalar siempre el gráfico **después** del párrafo que lo presenta, no antes.
+Los tooltips siempre tienen fondo `#0a1628`, esquinas redondeadas y padding 12px.
+Las grillas son del color de borde estándar (`rgba(13,17,23,0.08)`).
 
-## Casos borde / Errores comunes
+---
 
-- **Datos insuficientes para el análisis:** Si el material provisto no alcanza
-  para armar un informe sólido, Claude debe avisar qué falta y qué tipo de
-  datos complementarios ayudarían (ej: "faltaría el total provincial para
-  comparar este número municipal").
+## Flujo antes de escribir código
 
-- **PNG de gráfico sin datos crudos:** No usar la imagen directamente. Extraer
-  los valores visibles del gráfico e informar al usuario que se está estimando
-  a partir de la imagen; pedir confirmación de los números si es posible.
+1. Analizá el material provisto. Identificá tema central, alcance geográfico y período.
+2. Preguntá qué color de acento corresponde al tema si no es obvio.
+3. Definí los 4 stats del hero (número + etiqueta corta + color sugerido).
+4. Listá las secciones con su número, área y título.
+5. Determiná qué gráfico va en cada sección y con qué datos.
+6. Confirmá fuentes antes de escribir. Nunca asumir ni inventar fuentes.
+7. Mostrá el resumen al usuario y esperá confirmación antes de crear el archivo.
 
-- **Fuentes sin origen claro:** Si el usuario pega datos sin aclarar la fuente,
-  Claude debe preguntar de dónde provienen antes de publicar. No inventar ni
-  asumir fuentes.
+---
 
-- **Tema fuera del ámbito de PBA:** Si la información refiere a CABA, otra
-  provincia o nivel nacional, aclarar el encuadre y preguntar si de todas
-  formas se quiere publicar en Datos PBA con esa aclaración contextual.
+## Registro en App.jsx
 
-- **Datos contradictorios entre fuentes:** Señalarlo explícitamente en el cuerpo
-  del informe o en una nota al pie, sin omitirlo.
+Una vez creado el archivo JSX en `src/pages/`, agregar en `App.jsx`:
+- Un import lazy junto a los demás: `const InformeNuevo = lazy(() => import('./pages/InformeNuevo'))`
+- Una ruta **antes** de la ruta genérica `informes/:id`:
+  `<Route path="informes/slug-del-informe" element={...} />`
 
-- **El usuario aprueba pero la subida falla:** Registrar el contenido final en
-  un archivo local y avisar el error al usuario con los pasos para reintentar.
+---
 
-## Notas adicionales / Variantes
+## Estándares que nunca se rompen
 
-- **Diseño visual:** Los gráficos deben seguir la identidad de Datos PBA
-  (paleta, tipografía, logo si corresponde). Si no se tiene la guía de estilos
-  actualizada, preguntar al usuario o usar los colores que se observan en el sitio.
-
-- **Variante corta:** Si el usuario pide solo un "resumen" o "tarjeta para redes",
-  producir únicamente el título, subtítulo y la card de hallazgos clave, sin
-  el cuerpo completo.
-
-- **Informes comparativos:** Si los datos abarcan varios municipios, considerar
-  una tabla comparativa además del gráfico principal.
-
-- **Encuadre político:** Por defecto, el análisis se enmarca desde la perspectiva
-  editorial de Datos PBA (provincia de Buenos Aires). Si el usuario pide un
-  encuadre específico (oposición, gestión, sector sindical, etc.), aplicarlo
-  explícitamente.
-
-- **Subida a la web:** El paso de publicación depende de que esté configurado
-  el conector o API de Datos PBA. Si no está disponible, entregar el archivo
-  final listo para subida manual.
+- Los gráficos siempre son Chart.js interactivos, nunca imágenes estáticas.
+- Todo gráfico descargable va dentro de `DownloadableViz`.
+- Las fuentes siempre son visibles: en el `ChartCard` y en el footer del informe.
+- Las animaciones siempre usan `fadeUp()` de framer-motion. Sin otras librerías.
+- Los párrafos de cuerpo siempre tienen `maxWidth: '72ch'`.
+- Los slugs van en minúsculas, sin acentos, sin espacios (guiones), con el año al final.
+- Si un dato viene de una imagen sin fuente, pedirle al usuario que confirme el origen.
