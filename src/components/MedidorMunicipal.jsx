@@ -619,7 +619,7 @@ export default function AtlasMunicipal() {
                 </div>
               </div>
               <p className="text-[11px] text-slate-400 mt-1.5">
-                Fuente: Ministerio de Economía de la Nación — Subsecretaría de Coordinación Fiscal Provincial, mar. 2025
+                Fuente: Ministerio de Economía de la Nación - Subsecretaría de Coordinación Fiscal Provincial, mar. 2025
               </p>
             </>
           )}

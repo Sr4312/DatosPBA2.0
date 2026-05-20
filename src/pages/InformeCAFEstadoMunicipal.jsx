@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { m } from 'framer-motion'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
 
-// palette — chrome/layout colors
+// palette - chrome/layout colors
 const C = {
   bg:       '#f7f6f2',
   ink:      '#0a1628',

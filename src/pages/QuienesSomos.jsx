@@ -79,8 +79,8 @@ export default function QuienesSomos() {
       supabase.from('datasets').select('id', { count: 'exact', head: true }),
     ]).then(([{ count: inf }, { count: dat }]) => {
       setStats([
-        { ...STAT_META[0], value: inf ? `${inf}` : '—' },
-        { ...STAT_META[1], value: dat ? `${dat}` : '—' },
+        { ...STAT_META[0], value: inf ? `${inf}` : '-' },
+        { ...STAT_META[1], value: dat ? `${dat}` : '-' },
         { ...STAT_META[2], value: '135' },
         { ...STAT_META[3], value: '17M+' },
       ])

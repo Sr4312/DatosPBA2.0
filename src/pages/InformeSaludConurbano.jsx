@@ -35,12 +35,12 @@ const C = {
   accent:   '#3d65b2',
 }
 
-// data palette — sobria, alineada con los otros informes
+// data palette - sobria, alineada con los otros informes
 const D = {
-  good:      '#0f766e',   // teal-700 — bien gestionado
+  good:      '#0f766e',   // teal-700 - bien gestionado
   goodSoft:  '#6ee7b7',   // emerald-300 (mate)
   goodBg:    '#d1fae5',
-  bad:       '#9f1239',   // rose-800 — mal gestionado (sobrio)
+  bad:       '#9f1239',   // rose-800 - mal gestionado (sobrio)
   badSoft:   '#fda4af',   // rose-300 (mate)
   badBg:     '#fee2e2',
   warn:      '#b45309',   // amber-700
@@ -110,11 +110,11 @@ const WORST = SORTED.slice(-5).reverse()
 const SORTED_PRE = [...MUNIS].sort((a, b) => a.carga - b.carga)
 const BRECHA = SORTED_PRE[SORTED_PRE.length - 1].carga / SORTED_PRE[0].carga
 
-// HERO stats — se calculan dinámicamente desde los datos
+// HERO stats - se calculan dinámicamente desde los datos
 const HERO_STATS = [
   { n: '4,1 M',                                          label: 'personas sin cobertura formal en el conurbano',           color: '#fda4af' },
   { n: TOT.est.toLocaleString('es-AR'),                  label: 'establecimientos públicos en los 24 partidos',           color: '#93c5fd' },
-  { n: Math.round(AVG_CARGA).toLocaleString('es-AR'),    label: 'personas por establecimiento — promedio conurbano',      color: '#fcd34d' },
+  { n: Math.round(AVG_CARGA).toLocaleString('es-AR'),    label: 'personas por establecimiento - promedio conurbano',      color: '#fcd34d' },
   { n: BRECHA.toFixed(1).replace('.', ',') + '×',        label: 'brecha entre el mejor y el peor partido',                color: '#6ee7b7' },
 ]
 
@@ -131,7 +131,7 @@ const fadeUp = (delay = 0) => ({
 const DL_PADDING = 60
 const DL_FOOTER_H = 56
 const DL_MIN_W = 1200
-const FUENTE_DEFAULT = 'PEC — Programa de Estudios del Conurbano'
+const FUENTE_DEFAULT = 'PEC - Programa de Estudios del Conurbano'
 
 function drawFooter(ctx, y, w) {
   ctx.fillStyle = '#0a1628'
@@ -330,7 +330,7 @@ function Hero() {
           }}
         >
           {[
-            { label: 'Fuente',     val: 'PEC — Programa de Estudios del Conurbano' },
+            { label: 'Fuente',     val: 'PEC - Programa de Estudios del Conurbano' },
             { label: 'Cobertura',  val: '24 partidos del Gran Buenos Aires' },
             { label: 'Período',    val: 'Censo 2022 + relevamiento PEC 2025' },
             { label: 'Actualizado',val: 'Abril 2026' },
@@ -407,7 +407,7 @@ function CoberturaDonut() {
 }
 
 // ───────────────── BARÓMETRO DE CARGA SANITARIA (custom SVG) ─────────────
-// Diverging dot plot — cada partido como punto sobre un eje horizontal,
+// Diverging dot plot - cada partido como punto sobre un eje horizontal,
 // con una línea que lo conecta al promedio del conurbano. Color por desvío.
 function BarometroCarga() {
   const W = 900, H = 640
@@ -456,7 +456,7 @@ function BarometroCarga() {
         <line x1={xScale(AVG_CARGA)} y1={padT - 6} x2={xScale(AVG_CARGA)} y2={H - padB + 4}
               stroke={D.warn} strokeWidth={2} strokeDasharray="5 4" />
 
-        {/* HEADER ROW: zone labels + promedio badge — alineados arriba del rect */}
+        {/* HEADER ROW: zone labels + promedio badge - alineados arriba del rect */}
         <text x={padL + 10} y={padT - 16} fontSize="9.5" fill={D.good}
               fontFamily="Poppins, sans-serif" fontWeight="700" letterSpacing="0.8">
           GESTIONA MEJOR
@@ -548,7 +548,7 @@ function CuadranteGestion() {
   const xScale = v => padL + (v / xMax) * innerW
   const yScale = v => padT + innerH - (v / yMax) * innerH
 
-  // Diagonal "óptimo" — y = x / AVG_CARGA
+  // Diagonal "óptimo" - y = x / AVG_CARGA
   // En xMax: y = xMax / AVG_CARGA = 1_000_000 / 3982 ≈ 251 (excede yMax)
   // Tomamos el punto donde la diagonal cruza yMax = 100
   const xWhereYmax = yMax * AVG_CARGA  // ≈ 398_200
@@ -609,7 +609,7 @@ function CuadranteGestion() {
         <line x1={diagX1} y1={diagY1} x2={diagX2} y2={diagY2}
               stroke={D.warn} strokeWidth={2.2} strokeDasharray="6 4" />
 
-        {/* zone labels — separados de la diagonal para evitar choques */}
+        {/* zone labels - separados de la diagonal para evitar choques */}
         <text x={padL + innerW * 0.18} y={padT + 22} fontSize="9.5" fontWeight="700"
               fill={D.good} letterSpacing="0.6" fontFamily="Poppins, sans-serif" textAnchor="middle">
           ✓ MEJOR GESTIÓN
@@ -627,7 +627,7 @@ function CuadranteGestion() {
           demanda no atendida
         </text>
 
-        {/* badge "promedio" — al lado del extremo superior de la diagonal, dentro del área */}
+        {/* badge "promedio" - al lado del extremo superior de la diagonal, dentro del área */}
         <g>
           <rect x={diagX2 + 8} y={diagY2 + 4} width={120} height={20}
                 fill={D.warn} rx={3} opacity={0.92} />
@@ -900,7 +900,7 @@ function RankingPodios() {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <Card
         title="Mejor gestión sanitaria"
-        label="Top 5 — gestionan bien"
+        label="Top 5 - gestionan bien"
         list={BEST}
         color={D.good}
         bg={D.goodBg}
@@ -908,7 +908,7 @@ function RankingPodios() {
       />
       <Card
         title="Peor gestión sanitaria"
-        label="Top 5 — gestionan mal"
+        label="Top 5 - gestionan mal"
         list={WORST}
         color={D.bad}
         bg={D.badBg}
@@ -1071,7 +1071,7 @@ export default function InformeSaludConurbano() {
 
       <Hero />
 
-      {/* SECCIÓN 1 — COBERTURA */}
+      {/* SECCIÓN 1 - COBERTURA */}
       <div style={{ background: C.card, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
           <m.div {...fadeUp(0)} className="mb-10">
@@ -1085,7 +1085,7 @@ export default function InformeSaludConurbano() {
               estatales (Incluir Salud, CUS, PROFE) que también operan sobre la red pública.
             </p>
           </m.div>
-          <DownloadableViz title="Cobertura de salud — Conurbano bonaerense">
+          <DownloadableViz title="Cobertura de salud - Conurbano bonaerense">
             <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
               <CoberturaDonut />
             </div>
@@ -1093,7 +1093,7 @@ export default function InformeSaludConurbano() {
         </div>
       </div>
 
-      {/* SECCIÓN 2 — DEPENDIENTES POR PARTIDO */}
+      {/* SECCIÓN 2 - DEPENDIENTES POR PARTIDO */}
       <div className="max-w-5xl mx-auto px-6 py-16">
         <m.div {...fadeUp(0)} className="mb-8">
           <SectionLabel>Sección 2 · Demanda territorial</SectionLabel>
@@ -1101,13 +1101,13 @@ export default function InformeSaludConurbano() {
             La demanda no se reparte por igual
           </h2>
           <p style={{ color: C.inkMid }} className="text-sm max-w-2xl">
-            Cantidad absoluta de habitantes sin cobertura formal en cada partido — los que dependen
+            Cantidad absoluta de habitantes sin cobertura formal en cada partido - los que dependen
             exclusivamente de la red pública. La Matanza concentra por sí sola el 21% de la demanda
             del conurbano: más de 846.000 personas.
           </p>
         </m.div>
         <m.div {...fadeUp(0.1)}>
-          <DownloadableViz title="Habitantes dependientes del sistema público — por partido del conurbano">
+          <DownloadableViz title="Habitantes dependientes del sistema público - por partido del conurbano">
             <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
               <DependientesBar />
             </div>
@@ -1115,7 +1115,7 @@ export default function InformeSaludConurbano() {
         </m.div>
       </div>
 
-      {/* SECCIÓN 3 — BARÓMETRO DE CARGA */}
+      {/* SECCIÓN 3 - BARÓMETRO DE CARGA */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-6xl mx-auto px-6 py-16">
           <m.div {...fadeUp(0)} className="mb-8 max-w-5xl mx-auto">
@@ -1130,14 +1130,14 @@ export default function InformeSaludConurbano() {
             </p>
           </m.div>
           <m.div {...fadeUp(0.1)}>
-            <DownloadableViz title="Barómetro de carga sanitaria — personas dependientes del sistema público por establecimiento">
+            <DownloadableViz title="Barómetro de carga sanitaria - personas dependientes del sistema público por establecimiento">
               <BarometroCarga />
             </DownloadableViz>
           </m.div>
         </div>
       </div>
 
-      {/* SECCIÓN 4 — CUADRANTE DE GESTIÓN */}
+      {/* SECCIÓN 4 - CUADRANTE DE GESTIÓN */}
       <div className="max-w-5xl mx-auto px-6 py-16">
         <m.div {...fadeUp(0)} className="mb-8">
           <SectionLabel>Sección 4 · Mapa de gestión</SectionLabel>
@@ -1152,13 +1152,13 @@ export default function InformeSaludConurbano() {
           </p>
         </m.div>
         <m.div {...fadeUp(0.1)}>
-          <DownloadableViz title="Cuadrante de gestión sanitaria — establecimientos vs. demanda por partido">
+          <DownloadableViz title="Cuadrante de gestión sanitaria - establecimientos vs. demanda por partido">
             <CuadranteGestion />
           </DownloadableViz>
         </m.div>
       </div>
 
-      {/* SECCIÓN 5 — BALANZA EXTREMA */}
+      {/* SECCIÓN 5 - BALANZA EXTREMA */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
           <m.div {...fadeUp(0)} className="mb-8">
@@ -1172,13 +1172,13 @@ export default function InformeSaludConurbano() {
               <strong style={{ color: D.bad }}>{BRECHA.toFixed(1).replace('.', ',')} veces más personas</strong> que uno en Vicente López.
             </p>
           </m.div>
-          <DownloadableViz title="Vicente López vs. La Matanza — los dos extremos de la gestión sanitaria">
+          <DownloadableViz title="Vicente López vs. La Matanza - los dos extremos de la gestión sanitaria">
             <BalanzaExtrema />
           </DownloadableViz>
         </div>
       </div>
 
-      {/* SECCIÓN 6 — RANKINGS */}
+      {/* SECCIÓN 6 - RANKINGS */}
       <div className="max-w-5xl mx-auto px-6 py-16">
         <m.div {...fadeUp(0)} className="mb-8">
           <SectionLabel>Sección 6 · Top 5 mejor y peor gestionados</SectionLabel>
@@ -1190,12 +1190,12 @@ export default function InformeSaludConurbano() {
             Cifras absolutas: cuanto más bajo, mejor. Cuanto más alto, peor.
           </p>
         </m.div>
-        <DownloadableViz title="Top 5 mejor y peor gestionados — carga sanitaria por establecimiento">
+        <DownloadableViz title="Top 5 mejor y peor gestionados - carga sanitaria por establecimiento">
           <RankingPodios />
         </DownloadableViz>
       </div>
 
-      {/* SECCIÓN 7 — TABLA */}
+      {/* SECCIÓN 7 - TABLA */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
           <m.div {...fadeUp(0)} className="mb-8">
@@ -1209,14 +1209,14 @@ export default function InformeSaludConurbano() {
             </p>
           </m.div>
           <m.div {...fadeUp(0.1)}>
-            <DownloadableViz title="Salud pública en el conurbano — los 24 partidos del GBA">
+            <DownloadableViz title="Salud pública en el conurbano - los 24 partidos del GBA">
               <TablaCompleta />
             </DownloadableViz>
           </m.div>
         </div>
       </div>
 
-      {/* SECCIÓN 8 — HIPÓTESIS Y LECTURA */}
+      {/* SECCIÓN 8 - HIPÓTESIS Y LECTURA */}
       <div className="max-w-5xl mx-auto px-6 py-16">
         <m.div {...fadeUp(0)} className="mb-8">
           <SectionLabel>Sección 8 · Hipótesis y lectura</SectionLabel>
@@ -1242,7 +1242,7 @@ export default function InformeSaludConurbano() {
             {
               n: '03',
               title: 'El sur del conurbano es la zona crítica',
-              body: 'La Matanza, Merlo, Moreno, Almirante Brown y Florencio Varela — todos en el primer y segundo cordón sur/oeste — concentran los peores ratios. Son también los partidos con mayor crecimiento poblacional de las últimas décadas.',
+              body: 'La Matanza, Merlo, Moreno, Almirante Brown y Florencio Varela - todos en el primer y segundo cordón sur/oeste - concentran los peores ratios. Son también los partidos con mayor crecimiento poblacional de las últimas décadas.',
               color: D.info,
             },
           ].map((h, i) => (
@@ -1320,7 +1320,7 @@ export default function InformeSaludConurbano() {
                   border: '1px solid rgba(255,255,255,0.15)',
                 }}
               >
-                PEC — Programa de Estudios del Conurbano <ExternalLink className="w-3.5 h-3.5" />
+                PEC - Programa de Estudios del Conurbano <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
           </div>
@@ -1335,7 +1335,7 @@ export default function InformeSaludConurbano() {
               Fuentes
             </p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>
-              PEC — Programa de Estudios del Conurbano · Censo Nacional 2022 · Elaboración propia DatosPBA · 2026
+              PEC - Programa de Estudios del Conurbano · Censo Nacional 2022 · Elaboración propia DatosPBA · 2026
             </p>
           </div>
           <Link to="/informes" className="text-sm no-underline font-medium" style={{ color: C.inkLight }}>

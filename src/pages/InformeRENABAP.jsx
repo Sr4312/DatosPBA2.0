@@ -68,7 +68,7 @@ const EVOL_BARRIOS = {
   data:   [1650,   1780,   1890,   2010,   2160,   2260,   2327],
 }
 
-// Top municipios por cantidad de barrios populares — datos oficiales RENABAP (top 15 para el bar chart)
+// Top municipios por cantidad de barrios populares - datos oficiales RENABAP (top 15 para el bar chart)
 const TOP_MUNICIPIOS = [
   { name: 'La Matanza',        n: 141 },
   { name: 'Moreno',            n: 108 },
@@ -87,7 +87,7 @@ const TOP_MUNICIPIOS = [
   { name: 'Ezeiza',            n: 44  },
 ]
 
-// Dataset ampliado para el mapa — cubre ~80 partidos con barrios populares RENABAP
+// Dataset ampliado para el mapa - cubre ~80 partidos con barrios populares RENABAP
 // incluye conurbano completo + interior (GBA Norte, Sur, Costa atlántica, interior agrícola, sur-oeste)
 const BARRIOS_POR_MUNI = [
   // Conurbano - top
@@ -733,7 +733,7 @@ function BarriosMap() {
         </div>
       </div>
       <p className="text-[10px] text-slate-400 mt-3 leading-snug">
-        Fuente: Ministerio de Desarrollo Social de la Nación — RENABAP. Se muestran los partidos con barrios populares
+        Fuente: Ministerio de Desarrollo Social de la Nación - RENABAP. Se muestran los partidos con barrios populares
         registrados (más de 80 partidos de la PBA, conurbano e interior).
       </p>
     </div>
@@ -913,7 +913,7 @@ export default function InformeRENABAP() {
             </h2>
             <p style={{ color: C.inkMid }} className="text-sm max-w-xl">
               Entre 2017 y 2023, el RENABAP pasó de registrar 1.650 a 2.327 barrios populares en la PBA:
-              un crecimiento del 41% en el relevamiento — no necesariamente en la realidad, que ya estaba ahí.
+              un crecimiento del 41% en el relevamiento - no necesariamente en la realidad, que ya estaba ahí.
             </p>
           </m.div>
           <m.div {...fadeUp(0.1)}>
@@ -1015,7 +1015,7 @@ export default function InformeRENABAP() {
           </h2>
           <p style={{ color: C.inkMid }} className="text-sm max-w-xl">
             El 61% de los barrios populares de la PBA se fundaron después del año 2000. Casi 4 de cada 10 barrios
-            nacieron ya en el siglo XXI — prueba de que la urbanización informal no terminó con la crisis de 2001.
+            nacieron ya en el siglo XXI - prueba de que la urbanización informal no terminó con la crisis de 2001.
           </p>
         </m.div>
         <m.div {...fadeUp(0.1)}>
@@ -1032,7 +1032,7 @@ export default function InformeRENABAP() {
               FISU, OPISU y el freno de 2024
             </h2>
             <p style={{ color: C.inkMid }} className="text-sm max-w-xl">
-              La herramienta principal para cerrar la brecha — el Fondo de Integración Socio-Urbana —
+              La herramienta principal para cerrar la brecha - el Fondo de Integración Socio-Urbana -
               invirtió USD 1.244 millones entre 2019 y 2023. En 2024 se desfinanció prácticamente por completo.
             </p>
           </m.div>

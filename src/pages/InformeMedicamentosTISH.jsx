@@ -165,7 +165,7 @@ export default function InformeMedicamentosTISH() {
               className="text-base sm:text-lg leading-relaxed">
               La Tasa de Inspección, Seguridad e Higiene grava los medicamentos de manera radicalmente
               distinta según el municipio. Pilar lidera con una presión del 3,73% sobre el precio
-              final — casi el triple que Bahía Blanca. Mismo producto, reglas muy distintas.
+              final - casi el triple que Bahía Blanca. Mismo producto, reglas muy distintas.
             </p>
           </m.div>
 
@@ -173,8 +173,8 @@ export default function InformeMedicamentosTISH() {
             className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
             {[
               { n: '34,8%', label: 'Presión tributaria total sobre la cadena de medicamentos en Argentina', color: D.red },
-              { n: '3,73%', label: 'Carga TISH en Pilar — la más alta entre todos los municipios analizados', color: D.teal },
-              { n: '×2,7',  label: 'Diferencia entre Pilar y Bahía Blanca — mismo producto, distinta carga', color: '#f59e0b' },
+              { n: '3,73%', label: 'Carga TISH en Pilar - la más alta entre todos los municipios analizados', color: D.teal },
+              { n: '×2,7',  label: 'Diferencia entre Pilar y Bahía Blanca - mismo producto, distinta carga', color: '#f59e0b' },
               { n: '6,9 pp',label: 'Puntos de IIBB provincial sobre medicamentos en la Prov. de Buenos Aires', color: C.accent },
             ].map((s, i) => (
               <m.div key={i} {...fadeUp} transition={dur(0.45, 0.1 * i + 0.3)}
@@ -321,7 +321,7 @@ export default function InformeMedicamentosTISH() {
             {[
               { icon: '📊', title: 'TISH sobre facturación', desc: 'La tasa se aplica sobre cada transacción a lo largo de la cadena, acumulándose en laboratorio, droguería y farmacia. Genera el 1,44% en droguerías y el 1,24% en farmacias.' },
               { icon: '🔒', title: 'Monto fijo anual > $2,4 M', desc: 'Independientemente del nivel de ingresos, el municipio cobra un monto fijo anual superior a $2,4 millones bajo el concepto de TISH.' },
-              { icon: '⚙️', title: 'DIPE — triple variable', desc: 'La "Tasa para el Desarrollo de la Infraestructura y Promoción del Empleo local" determina la carga combinando superficie del establecimiento, cantidad de empleados e ingresos brutos generados en el partido.' },
+              { icon: '⚙️', title: 'DIPE - triple variable', desc: 'La "Tasa para el Desarrollo de la Infraestructura y Promoción del Empleo local" determina la carga combinando superficie del establecimiento, cantidad de empleados e ingresos brutos generados en el partido.' },
               { icon: '📈', title: 'Módulos fiscales y complejidad', desc: 'Cada variable se transforma en índices y categorías que determinan módulos fiscales a pagar. El diseño "agrega un alto grado de complejidad y puede resultar en cargas significativas para contribuyentes de gran escala".' },
             ].map((s, i) => (
               <m.div key={i} {...fadeUp} transition={dur(0.45, 0.1 * i + 0.15)}
@@ -364,9 +364,9 @@ export default function InformeMedicamentosTISH() {
 
           <div className="grid sm:grid-cols-3 gap-5 mb-8">
             {[
-              { label: 'IIBB provincial (PBA)', value: '4,0%', sub: 'Sobre medicamentos — por debajo de Córdoba, Chubut y Río Negro', color: D.red },
+              { label: 'IIBB provincial (PBA)', value: '4,0%', sub: 'Sobre medicamentos - por debajo de Córdoba, Chubut y Río Negro', color: D.red },
               { label: 'TISH máxima (Pilar)',   value: '3,73%', sub: 'La más alta del país entre los municipios analizados en el informe', color: D.blue },
-              { label: 'Carga combinada estimada', value: '~7,7%', sub: 'IIBB + TISH solo en Pilar — sin contar tributos nacionales', color: C.accent },
+              { label: 'Carga combinada estimada', value: '~7,7%', sub: 'IIBB + TISH solo en Pilar - sin contar tributos nacionales', color: C.accent },
             ].map((s, i) => (
               <m.div key={i} {...fadeUp} transition={dur(0.45, 0.08 * i)}
                 style={{ background: '#f8f9fc', border: `1px solid ${C.rule}`, borderLeft: `4px solid ${s.color}`, borderRadius: 12 }}
@@ -398,7 +398,7 @@ export default function InformeMedicamentosTISH() {
           <div>
             <p className="text-xs font-semibold" style={{ color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Fuente</p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>
-              CEFIP-UNLP (Garriga, Puig, Rosales) — Análisis de la presión tributaria sobre medicamentos en Argentina · CILFA · Mayo 2025
+              CEFIP-UNLP (Garriga, Puig, Rosales) - Análisis de la presión tributaria sobre medicamentos en Argentina · CILFA · Mayo 2025
             </p>
           </div>
           <Link to="/informes" className="text-sm no-underline font-medium" style={{ color: C.inkLight }}>

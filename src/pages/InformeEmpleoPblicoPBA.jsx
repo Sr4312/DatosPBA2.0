@@ -85,17 +85,17 @@ const IMPLICANCIAS = [
   {
     icon: '📊', color: B[600], variant: 'blue',
     title: 'La brecha es estructural, no ideológica', tag: 'Estructural',
-    body: 'Texas —agenda de estado mínimo, baja regulación— y Nueva York —el estado más intervencionista de EE.UU.— tienen ratios casi idénticos: 22,8 y 22,4 empleados cada 1.000 hab. respectivamente. Buenos Aires los supera en más de un 30%. La diferencia no depende de la orientación política del gobierno: es un problema de estructura.',
+    body: 'Texas -agenda de estado mínimo, baja regulación- y Nueva York -el estado más intervencionista de EE.UU.- tienen ratios casi idénticos: 22,8 y 22,4 empleados cada 1.000 hab. respectivamente. Buenos Aires los supera en más de un 30%. La diferencia no depende de la orientación política del gobierno: es un problema de estructura.',
   },
   {
     icon: '💰', color: B[500], variant: 'blue',
     title: '185.000 cargos de diferencia con Minas Gerais', tag: 'Fiscal',
-    body: 'Si PBA operara con el ratio de Minas Gerais —el comparador más robusto y estructuralmente más similar— tendría aproximadamente 185.000 cargos menos que los actualmente presupuestados. Ese es el tamaño de la sobre-dotación relativa cuando se controla por funciones y escala poblacional.',
+    body: 'Si PBA operara con el ratio de Minas Gerais -el comparador más robusto y estructuralmente más similar- tendría aproximadamente 185.000 cargos menos que los actualmente presupuestados. Ese es el tamaño de la sobre-dotación relativa cuando se controla por funciones y escala poblacional.',
   },
   {
     icon: '📉', color: '#d97706', variant: 'amber',
     title: 'Más empleados, peores resultados', tag: 'Productividad',
-    body: 'El caso de Florida es el más ilustrativo: su PBI per cápita es aproximadamente cuatro veces superior al de PBA, y sus servicios públicos —educación, infraestructura, salud— tienen indicadores objetivos comparables o superiores. El Estado bonaerense tiene más empleados en proporción a su población y produce peores resultados medibles.',
+    body: 'El caso de Florida es el más ilustrativo: su PBI per cápita es aproximadamente cuatro veces superior al de PBA, y sus servicios públicos -educación, infraestructura, salud- tienen indicadores objetivos comparables o superiores. El Estado bonaerense tiene más empleados en proporción a su población y produce peores resultados medibles.',
   },
   {
     icon: '🔍', color: '#dc2626', variant: 'red',
@@ -450,7 +450,7 @@ function ChartEEUU() {
         }} />
       </div>
       <p className="text-[11px] mt-3 px-1" style={{ color: C.inkLight, fontStyle: 'italic' }}>
-        Referencia: PBA = 30,2 emp./1.000 hab. — Fuente: Dept. de Administración de Florida (2021-22) · Empire Center NY (oct. 2024) · State Auditor's Office Texas, rep. 24-703 (feb. 2024).
+        Referencia: PBA = 30,2 emp./1.000 hab. - Fuente: Dept. de Administración de Florida (2021-22) · Empire Center NY (oct. 2024) · State Auditor's Office Texas, rep. 24-703 (feb. 2024).
       </p>
     </div>
   )
@@ -594,8 +594,8 @@ export default function InformeEmpleoPblicoPBA() {
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El Presupuesto 2026 de la Provincia de Buenos Aires fija 530.922 cargos en la
             administración central, organismos descentralizados e instituciones de previsión social.
-            Con una población de aproximadamente 17,6 millones de habitantes —el 38% del total del
-            país según el INDEC— eso arroja 30,2 empleados provinciales cada 1.000 habitantes.
+            Con una población de aproximadamente 17,6 millones de habitantes -el 38% del total del
+            país según el INDEC- eso arroja 30,2 empleados provinciales cada 1.000 habitantes.
             Si se suma el empleo municipal bonaerense, el número consolidado sube a alrededor de
             47 cada 1.000, de acuerdo con estimaciones de la Fundación Ecosur de la Bolsa de
             Comercio de Córdoba para 2024.
@@ -650,9 +650,9 @@ export default function InformeEmpleoPblicoPBA() {
             básica pública, la policía, la red hospitalaria y la administración general.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-            <MC label="Minas Gerais — 20,5 M hab." value="19,7" unit="emp./1.000 hab. — PBA tiene un 53% más" accent />
-            <MC label="Rio Grande do Sul — 11,4 M hab." value="17,5" unit="emp./1.000 hab. — referencia regional de eficiencia" />
-            <MC label="Bahia — 14,8 M hab." value="11,7" unit="emp./1.000 hab. — el más bajo de la serie brasileña" />
+            <MC label="Minas Gerais - 20,5 M hab." value="19,7" unit="emp./1.000 hab. - PBA tiene un 53% más" accent />
+            <MC label="Rio Grande do Sul - 11,4 M hab." value="17,5" unit="emp./1.000 hab. - referencia regional de eficiencia" />
+            <MC label="Bahia - 14,8 M hab." value="11,7" unit="emp./1.000 hab. - el más bajo de la serie brasileña" />
           </div>
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Minas Gerais es el comparador más robusto: segundo estado más poblado de Brasil, con
@@ -670,10 +670,10 @@ export default function InformeEmpleoPblicoPBA() {
               por debajo del bonaerense."
             </p>
             <cite style={{ fontSize: '0.6875rem', color: B[400], fontStyle: 'normal', fontWeight: 500, display: 'block', marginTop: '0.5rem' }}>
-              — Gobierno del Estado de Rio Grande do Sul, comunicado oficial, junio 2024
+              - Gobierno del Estado de Rio Grande do Sul, comunicado oficial, junio 2024
             </cite>
           </div>
-          <DownloadableViz title="Empleados estaduales cada 1.000 habitantes — PBA y estados brasileños" fuente="Presupuesto PBA 2026 · Gobierno de Minas Gerais · SAEB Bahia · Gobierno RS (jun. 2024)">
+          <DownloadableViz title="Empleados estaduales cada 1.000 habitantes - PBA y estados brasileños" fuente="Presupuesto PBA 2026 · Gobierno de Minas Gerais · SAEB Bahia · Gobierno RS (jun. 2024)">
             <ChartBrasil />
           </DownloadableViz>
         </m.div>
@@ -689,13 +689,13 @@ export default function InformeEmpleoPblicoPBA() {
             quedan por debajo de Buenos Aires.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="Florida — 22,6 M hab." value="15,3" unit="emp./1.000 hab. (ajustado con K-12)" />
-            <MC label="Nueva York — 19,6 M hab." value="22,4" unit="emp./1.000 hab. (ajustado con K-12)" />
-            <MC label="Texas — 30 M hab." value="22,8" unit="emp./1.000 hab. (ajustado con K-12)" />
+            <MC label="Florida - 22,6 M hab." value="15,3" unit="emp./1.000 hab. (ajustado con K-12)" />
+            <MC label="Nueva York - 19,6 M hab." value="22,4" unit="emp./1.000 hab. (ajustado con K-12)" />
+            <MC label="Texas - 30 M hab." value="22,8" unit="emp./1.000 hab. (ajustado con K-12)" />
           </div>
           <p className="text-base leading-relaxed" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            Lo más significativo es la convergencia entre Texas —agenda de estado mínimo, baja
-            regulación— y Nueva York —el estado más intervencionista de EE.UU., con gasto social
+            Lo más significativo es la convergencia entre Texas -agenda de estado mínimo, baja
+            regulación- y Nueva York -el estado más intervencionista de EE.UU., con gasto social
             alto y fuerte presencia sindical. Ambos tienen ratios casi idénticos: 22,8 y 22,4
             respectivamente. Buenos Aires los supera en más del 30%. La brecha no depende de la
             orientación política del gobierno.
@@ -707,7 +707,7 @@ export default function InformeEmpleoPblicoPBA() {
 
       </div>
 
-      {/* 05 — CUADRO COMPLETO (fondo blanco) */}
+      {/* 05 - CUADRO COMPLETO (fondo blanco) */}
       <div style={{ background: '#ffffff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
           <m.div {...fadeUp(0)} className="mb-8">
@@ -723,7 +723,7 @@ export default function InformeEmpleoPblicoPBA() {
 
           <m.div {...fadeUp(0.1)}>
             <DownloadableViz
-              title="Empleados estatales cada 1.000 habitantes — PBA vs. jurisdicciones de escala similar"
+              title="Empleados estatales cada 1.000 habitantes - PBA vs. jurisdicciones de escala similar"
               fuente="Presupuesto PBA 2026 · Fuentes primarias oficiales de cada jurisdicción · Elaboración propia DatosPBA"
             >
               <ChartComparacion />
@@ -742,7 +742,7 @@ export default function InformeEmpleoPblicoPBA() {
                 </thead>
                 <tbody>
                   {[
-                    ['Provincia de Buenos Aires', '17,6 M', '30,2', '—'],
+                    ['Provincia de Buenos Aires', '17,6 M', '30,2', '-'],
                     ['Minas Gerais',              '20,5 M', '19,7', '65% de PBA'],
                     ['Rio Grande do Sul',         '11,4 M', '17,5', '58% de PBA'],
                     ['Bahia',                     '14,8 M', '11,7', '39% de PBA'],
@@ -767,7 +767,7 @@ export default function InformeEmpleoPblicoPBA() {
         </div>
       </div>
 
-      {/* 06 — DIAGNÓSTICO */}
+      {/* 06 - DIAGNÓSTICO */}
       <div className="max-w-5xl mx-auto px-6 py-16">
         <m.div {...fadeUp(0.05)}>
           <SH num="06 · Diagnóstico" title="Qué dice y qué no dice este número" />

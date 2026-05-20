@@ -100,7 +100,7 @@ const DESAFIOS = [
   {
     icon: '👷', color: '#d97706', variant: 'amber',
     title: 'Generación de empleo insuficiente', tag: 'Social',
-    body: 'El modelo extensivo de commodities —soja, trigo, maíz— genera muy poco empleo por hectárea (6–11 personas/1.000 ha) en comparación con la horticultura intensiva (1.209 personas/1.000 ha). La concentración de la tierra y la mecanización agudizaron la expulsión de trabajadores rurales: un 18,5% menos de permanentes entre 2008 y 2018.',
+    body: 'El modelo extensivo de commodities -soja, trigo, maíz- genera muy poco empleo por hectárea (6–11 personas/1.000 ha) en comparación con la horticultura intensiva (1.209 personas/1.000 ha). La concentración de la tierra y la mecanización agudizaron la expulsión de trabajadores rurales: un 18,5% menos de permanentes entre 2008 y 2018.',
   },
   {
     icon: '🌱', color: '#dc2626', variant: 'red',
@@ -128,7 +128,7 @@ const RECOMENDACIONES = [
   {
     num: 'Recomendación 1 · Fiscal',
     title: 'Continuar la reducción gradual y predecible de retenciones',
-    body: 'La eliminación progresiva de los derechos de exportación —especialmente para los complejos con mayor generación de empleo en origen, como trigo y cebada— debe estar acompañada de mecanismos de compensación fiscal. La previsibilidad de reglas es tan importante como el nivel de la alícuota.',
+    body: 'La eliminación progresiva de los derechos de exportación -especialmente para los complejos con mayor generación de empleo en origen, como trigo y cebada- debe estar acompañada de mecanismos de compensación fiscal. La previsibilidad de reglas es tan importante como el nivel de la alícuota.',
   },
   {
     num: 'Recomendación 2 · Tierras',
@@ -539,7 +539,7 @@ function Hero() {
           {[
             { label: 'Fuente principal',    val: 'FADA (2025) · Argendata · Tierra Viva' },
             { label: 'Superficie provincial', val: '23,7 millones de ha rurales' },
-            { label: 'EAP relevadas',       val: 'CNA 2018 — 36.700 explotaciones' },
+            { label: 'EAP relevadas',       val: 'CNA 2018 - 36.700 explotaciones' },
             { label: 'Actualización',       val: 'Mayo 2026' },
           ].map(item => (
             <div key={item.label}>
@@ -639,7 +639,7 @@ export default function InformeAgroindustriaPBA() {
         <m.div {...fadeUp(0.05)}>
           <SH num="04 · Estructura" title="La distribución de la tierra" />
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            El Censo Agropecuario 2018 reveló una concentración extrema de la propiedad de la tierra. El 16% de las explotaciones agropecuarias —aquellas con más de 1.000 hectáreas— controlan el 66,5% de la superficie total provincial. En el extremo opuesto, el 30% de las EAP con menos de 100 ha apenas posee el 1,8% del suelo.
+            El Censo Agropecuario 2018 reveló una concentración extrema de la propiedad de la tierra. El 16% de las explotaciones agropecuarias -aquellas con más de 1.000 hectáreas- controlan el 66,5% de la superficie total provincial. En el extremo opuesto, el 30% de las EAP con menos de 100 ha apenas posee el 1,8% del suelo.
           </p>
           <DownloadableViz title="Distribución de tierra por tamaño de explotación (PBA, 2018)" fuente="CNA 2018 · Agencia Tierra Viva (2022)">
             <ChartTierra />
@@ -653,14 +653,14 @@ export default function InformeAgroindustriaPBA() {
         <m.div {...fadeUp(0.05)}>
           <SH num="05 · Modelo productivo" title="El debate sobre el modelo productivo" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            La soja transgénica —aprobada en Argentina en 1996— transformó radicalmente el paisaje productivo bonaerense. En 2018, la oleaginosa representaba el 86,5% de las hectáreas sembradas con oleaginosas, con 3,9 millones de hectáreas. Sólo el cultivo de soja demandaba el 46% del total de plaguicidas utilizados, con el glifosato como producto más empleado.
+            La soja transgénica -aprobada en Argentina en 1996- transformó radicalmente el paisaje productivo bonaerense. En 2018, la oleaginosa representaba el 86,5% de las hectáreas sembradas con oleaginosas, con 3,9 millones de hectáreas. Sólo el cultivo de soja demandaba el 46% del total de plaguicidas utilizados, con el glifosato como producto más empleado.
           </p>
           <div style={{ borderLeft: `3px solid ${B[300]}`, padding: '0.875rem 1.25rem', background: B[50], borderRadius: '0 0.5rem 0.5rem 0', margin: '1.5rem 0', maxWidth: '72ch' }}>
             <p style={{ fontSize: '0.9rem', color: B[700], fontStyle: 'italic', lineHeight: 1.7 }}>
               "La agricultura dominante busca reducir al mínimo el empleo directo en las explotaciones."
             </p>
             <cite style={{ fontSize: '0.6875rem', color: B[400], fontStyle: 'normal', fontWeight: 500, display: 'block', marginTop: '0.5rem' }}>
-              — Informe PBA / OIT, citado en Agencia Tierra Viva (2022)
+              - Informe PBA / OIT, citado en Agencia Tierra Viva (2022)
             </cite>
           </div>
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
@@ -675,7 +675,7 @@ export default function InformeAgroindustriaPBA() {
         <m.div {...fadeUp(0.05)}>
           <SH num="06 · Comercio exterior" title="Exportaciones y rol en la economía nacional" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            Las cadenas agroindustriales generaron exportaciones por USD 52.900 millones en 2025, el 61% del total exportado por Argentina —6 de cada 10 dólares que ingresaron al país. Entre enero y octubre de 2025, los complejos de granos líderes sumaron USD 28.875 millones, un 5% más en valor y 10% en volumen respecto de 2024.
+            Las cadenas agroindustriales generaron exportaciones por USD 52.900 millones en 2025, el 61% del total exportado por Argentina -6 de cada 10 dólares que ingresaron al país. Entre enero y octubre de 2025, los complejos de granos líderes sumaron USD 28.875 millones, un 5% más en valor y 10% en volumen respecto de 2024.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
             <MC label="Exportaciones agroindustriales 2025" value="USD 52,9 B" unit="récord histórico en volumen" accent />
@@ -736,7 +736,7 @@ export default function InformeAgroindustriaPBA() {
           <div style={{ borderTop: `1px solid ${C.rule}`, marginTop: '3rem', paddingTop: '1.5rem' }}>
             <p style={{ fontSize: '0.6875rem', color: C.inkLight, lineHeight: 1.75 }}>
               <strong style={{ color: '#64748b' }}>Fuentes:</strong>{' '}
-              FADA (2025) — Empleo en las Cadenas Agroindustriales 2023; BCCBA — Informe Económico N° 453 (julio 2025); Agencia Tierra Viva (2022) — "Buenos Aires: pilar del agronegocio"; Ministerio de Economía Nación / CEP XXI; CNA 2018; BCR — Informativo Semanal (2024, 2026); Argentina.gob.ar / Secretaría de Agricultura; Chequeado (2024); Argendata / Fund.ar.
+              FADA (2025) - Empleo en las Cadenas Agroindustriales 2023; BCCBA - Informe Económico N° 453 (julio 2025); Agencia Tierra Viva (2022) - "Buenos Aires: pilar del agronegocio"; Ministerio de Economía Nación / CEP XXI; CNA 2018; BCR - Informativo Semanal (2024, 2026); Argentina.gob.ar / Secretaría de Agricultura; Chequeado (2024); Argendata / Fund.ar.
             </p>
           </div>
         </m.div>

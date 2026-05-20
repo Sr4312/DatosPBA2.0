@@ -66,7 +66,7 @@ const EMPLEO_MUNIS = [
   { nombre: 'Resto de PBA',      pct: 51 },
 ]
 
-// PBG explotación minas y canteras — millones de pesos 2004
+// PBG explotación minas y canteras - millones de pesos 2004
 // Fuente: DIPEC (estimaciones visuales del gráfico publicado)
 const PBG_AÑOS  = ['2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024']
 const PBG_VALS  = [380, 393, 398, 408, 418, 430, 445, 462, 488, 490, 518, 562, 553, 592, 584, 545, 468, 548, 692, 823, 618]
@@ -274,8 +274,8 @@ function Hero() {
         >
           {[
             { label: 'Fuente',      val: 'Dirección Provincial de Minería (DPM)' },
-            { label: 'Empleo',      val: 'SIACAM — abril 2025' },
-            { label: 'Cemento',     val: 'AFCP — Asociación de Fabricantes de Cemento Portland' },
+            { label: 'Empleo',      val: 'SIACAM - abril 2025' },
+            { label: 'Cemento',     val: 'AFCP - Asociación de Fabricantes de Cemento Portland' },
             { label: 'Actualizado', val: 'Mayo 2025' },
           ].map(item => (
             <div key={item.label}>
@@ -410,7 +410,7 @@ function PBGHistorico() {
           Datos preliminares (*)
         </div>
         <div className="ml-auto text-[11px]" style={{ color: C.inkLight }}>
-          Fuente: DIPEC — Dirección Provincial de Estadística
+          Fuente: DIPEC - Dirección Provincial de Estadística
         </div>
       </div>
     </div>
@@ -582,7 +582,7 @@ function DatosDestacados() {
           stat: '50%',
           label: 'del cemento nacional',
           desc: 'Sale de Olavarría. La planta de Loma Negra y el polo cementero del centro bonaerense abastece la mitad de la demanda argentina.',
-          fuente: 'AFCP — Asociación de Fabricantes de Cemento Portland',
+          fuente: 'AFCP - Asociación de Fabricantes de Cemento Portland',
           color: D.gold,
           bg: D.goldBg,
         },
@@ -659,7 +659,7 @@ export default function InformeMineriaPBA() {
 
       <Hero />
 
-      {/* SECCIÓN 1 — PRODUCCIÓN POR PROVINCIA */}
+      {/* SECCIÓN 1 - PRODUCCIÓN POR PROVINCIA */}
       <div style={{ background: C.card, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
           <m.div {...fadeUp(0)} className="mb-10">
@@ -681,7 +681,7 @@ export default function InformeMineriaPBA() {
         </div>
       </div>
 
-      {/* SECCIÓN 2 — PBG HISTÓRICO */}
+      {/* SECCIÓN 2 - PBG HISTÓRICO */}
       <div className="max-w-5xl mx-auto px-6 py-16">
         <m.div {...fadeUp(0)} className="mb-8">
           <SectionLabel>Sección 2 · Evolución económica del sector</SectionLabel>
@@ -696,13 +696,13 @@ export default function InformeMineriaPBA() {
           </p>
         </m.div>
         <m.div {...fadeUp(0.1)}>
-          <DownloadableViz title="PBG Buenos Aires — Explotación de minas y canteras 2004-2024" fuente="DIPEC — Dirección Provincial de Estadística">
+          <DownloadableViz title="PBG Buenos Aires - Explotación de minas y canteras 2004-2024" fuente="DIPEC - Dirección Provincial de Estadística">
             <PBGHistorico />
           </DownloadableViz>
         </m.div>
       </div>
 
-      {/* SECCIÓN 3 — DATOS DESTACADOS */}
+      {/* SECCIÓN 3 - DATOS DESTACADOS */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
           <m.div {...fadeUp(0)} className="mb-8">
@@ -721,7 +721,7 @@ export default function InformeMineriaPBA() {
         </div>
       </div>
 
-      {/* SECCIÓN 4 — EMPLEO TERRITORIAL */}
+      {/* SECCIÓN 4 - EMPLEO TERRITORIAL */}
       <div className="max-w-5xl mx-auto px-6 py-16">
         <m.div {...fadeUp(0)} className="mb-8">
           <SectionLabel>Sección 4 · Distribución territorial del empleo</SectionLabel>
@@ -735,13 +735,13 @@ export default function InformeMineriaPBA() {
           </p>
         </m.div>
         <m.div {...fadeUp(0.1)}>
-          <DownloadableViz title="Distribución del empleo minero por municipio — Provincia de Buenos Aires">
+          <DownloadableViz title="Distribución del empleo minero por municipio - Provincia de Buenos Aires">
             <EmpleoMunicipal />
           </DownloadableViz>
         </m.div>
       </div>
 
-      {/* SECCIÓN 5 — LOS MATERIALES */}
+      {/* SECCIÓN 5 - LOS MATERIALES */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
           <m.div {...fadeUp(0)} className="mb-8">
@@ -844,7 +844,7 @@ export default function InformeMineriaPBA() {
               Fuentes
             </p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>
-              DPM — Dirección Provincial de Minería · SIACAM (abr. 2025) · AFCP · DIPEC · UNPaz (2022) · Elaboración propia DatosPBA · 2025
+              DPM - Dirección Provincial de Minería · SIACAM (abr. 2025) · AFCP · DIPEC · UNPaz (2022) · Elaboración propia DatosPBA · 2025
             </p>
           </div>
           <Link to="/informes" className="text-sm no-underline font-medium" style={{ color: C.inkLight }}>
