@@ -1,0 +1,100 @@
+- generic [active] [ref=e1]:
+  - link "Saltar al contenido" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - link "Saltar al contenido" [ref=e5] [cursor=pointer]:
+      - /url: "#main-content"
+    - banner [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - link "Inicio" [ref=e9] [cursor=pointer]:
+            - /url: /
+            - heading "Dashboard PBA" [level=1] [ref=e10]
+          - navigation "Ruta de navegación" [ref=e11]:
+            - generic [ref=e12]: ›
+            - generic [ref=e13]: Conurbano
+        - generic [ref=e14]:
+          - button "Buscar (Ctrl+K)" [ref=e15] [cursor=pointer]:
+            - img [ref=e16]
+            - generic [ref=e19]: Buscar
+            - generic [ref=e20]: Ctrl K
+          - button "Cambiar a modo claro" [ref=e21]:
+            - img [ref=e23]
+    - complementary "Navegación de informes" [ref=e25]:
+      - navigation [ref=e26]:
+        - heading "Conurbano" [level=3] [ref=e27]
+        - link "15 Educación · Conurbano" [ref=e28] [cursor=pointer]:
+          - /url: /conurbano/educacion
+          - generic [ref=e29]: "15"
+          - generic [ref=e30]: Educación · Conurbano
+        - link "16 Seguridad · Conurbano" [ref=e31] [cursor=pointer]:
+          - /url: /conurbano/seguridad
+          - generic [ref=e32]: "16"
+          - generic [ref=e33]: Seguridad · Conurbano
+        - separator [ref=e34]
+        - heading "Población" [level=3] [ref=e35]
+        - link "01 Estructura Poblacional" [ref=e36] [cursor=pointer]:
+          - /url: /poblacion/estructura
+          - generic [ref=e37]: "01"
+          - generic [ref=e38]: Estructura Poblacional
+        - link "02 Hábitat Personas" [ref=e39] [cursor=pointer]:
+          - /url: /poblacion/habitacional-personas
+          - generic [ref=e40]: "02"
+          - generic [ref=e41]: Hábitat Personas
+        - link "03 Salud & Previsión" [ref=e42] [cursor=pointer]:
+          - /url: /poblacion/salud-prevision
+          - generic [ref=e43]: "03"
+          - generic [ref=e44]: Salud & Previsión
+        - link "04 Hábitat Hogares" [ref=e45] [cursor=pointer]:
+          - /url: /poblacion/habitacional-hogares
+          - generic [ref=e46]: "04"
+          - generic [ref=e47]: Hábitat Hogares
+        - link "05 Viviendas" [ref=e48] [cursor=pointer]:
+          - /url: /poblacion/viviendas
+          - generic [ref=e49]: "05"
+          - generic [ref=e50]: Viviendas
+        - link "06 Educación Censal" [ref=e51] [cursor=pointer]:
+          - /url: /poblacion/educacion-censal
+          - generic [ref=e52]: "06"
+          - generic [ref=e53]: Educación Censal
+        - link "07 Economía Poblacional" [ref=e54] [cursor=pointer]:
+          - /url: /poblacion/economia
+          - generic [ref=e55]: "07"
+          - generic [ref=e56]: Economía Poblacional
+        - link "08 Fecundidad" [ref=e57] [cursor=pointer]:
+          - /url: /poblacion/fecundidad
+          - generic [ref=e58]: "08"
+          - generic [ref=e59]: Fecundidad
+        - separator [ref=e60]
+        - heading "Sectorial" [level=3] [ref=e61]
+        - link "09 Educación" [ref=e62] [cursor=pointer]:
+          - /url: /educacion
+          - generic [ref=e63]: "09"
+          - generic [ref=e64]: Educación
+        - link "10 Salud" [ref=e65] [cursor=pointer]:
+          - /url: /salud
+          - generic [ref=e66]: "10"
+          - generic [ref=e67]: Salud
+        - link "11 Seguridad" [ref=e68] [cursor=pointer]:
+          - /url: /seguridad
+          - generic [ref=e69]: "11"
+          - generic [ref=e70]: Seguridad
+        - link "12 Economía & Fiscal" [ref=e71] [cursor=pointer]:
+          - /url: /economia-fiscal
+          - generic [ref=e72]: "12"
+          - generic [ref=e73]: Economía & Fiscal
+        - link "13 Agro & Pesca" [ref=e74] [cursor=pointer]:
+          - /url: /agricultura
+          - generic [ref=e75]: "13"
+          - generic [ref=e76]: Agro & Pesca
+        - link "14 Industria" [ref=e77] [cursor=pointer]:
+          - /url: /industria
+          - generic [ref=e78]: "14"
+          - generic [ref=e79]: Industria
+      - button "Colapsar menú" [ref=e80] [cursor=pointer]:
+        - img [ref=e81]
+    - main [ref=e84]:
+      - generic [ref=e85]: Cargando mapa…
+    - link "Abrir Asistente IA" [ref=e86] [cursor=pointer]:
+      - /url: /chat
+      - img [ref=e88]

@@ -1,0 +1,274 @@
+- generic [ref=e1]:
+  - link "Saltar al contenido" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - link "Saltar al contenido" [ref=e5] [cursor=pointer]:
+      - /url: "#main-content"
+    - banner [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - link "Inicio" [ref=e9] [cursor=pointer]:
+            - /url: /
+            - heading "Dashboard PBA" [level=1] [ref=e10]
+          - navigation "Ruta de navegación" [ref=e11]:
+            - generic [ref=e12]: ›
+            - generic [ref=e13]: Conurbano
+        - generic [ref=e14]:
+          - button "Buscar (Ctrl+K)" [ref=e15] [cursor=pointer]:
+            - img [ref=e16]
+            - generic [ref=e19]: Buscar
+            - generic [ref=e20]: Ctrl K
+          - button "Cambiar a modo claro" [ref=e21]:
+            - img [ref=e23]
+    - complementary "Navegación de informes" [ref=e25]:
+      - navigation [ref=e26]:
+        - heading "Conurbano" [level=3] [ref=e27]
+        - link "15 Educación · Conurbano" [ref=e28] [cursor=pointer]:
+          - /url: /conurbano/educacion
+          - generic [ref=e29]: "15"
+          - generic [ref=e30]: Educación · Conurbano
+        - link "16 Seguridad · Conurbano" [ref=e31] [cursor=pointer]:
+          - /url: /conurbano/seguridad
+          - generic [ref=e32]: "16"
+          - generic [ref=e33]: Seguridad · Conurbano
+        - separator [ref=e34]
+        - heading "Población" [level=3] [ref=e35]
+        - link "01 Estructura Poblacional" [ref=e36] [cursor=pointer]:
+          - /url: /poblacion/estructura
+          - generic [ref=e37]: "01"
+          - generic [ref=e38]: Estructura Poblacional
+        - link "02 Hábitat Personas" [ref=e39] [cursor=pointer]:
+          - /url: /poblacion/habitacional-personas
+          - generic [ref=e40]: "02"
+          - generic [ref=e41]: Hábitat Personas
+        - link "03 Salud & Previsión" [ref=e42] [cursor=pointer]:
+          - /url: /poblacion/salud-prevision
+          - generic [ref=e43]: "03"
+          - generic [ref=e44]: Salud & Previsión
+        - link "04 Hábitat Hogares" [ref=e45] [cursor=pointer]:
+          - /url: /poblacion/habitacional-hogares
+          - generic [ref=e46]: "04"
+          - generic [ref=e47]: Hábitat Hogares
+        - link "05 Viviendas" [ref=e48] [cursor=pointer]:
+          - /url: /poblacion/viviendas
+          - generic [ref=e49]: "05"
+          - generic [ref=e50]: Viviendas
+        - link "06 Educación Censal" [ref=e51] [cursor=pointer]:
+          - /url: /poblacion/educacion-censal
+          - generic [ref=e52]: "06"
+          - generic [ref=e53]: Educación Censal
+        - link "07 Economía Poblacional" [ref=e54] [cursor=pointer]:
+          - /url: /poblacion/economia
+          - generic [ref=e55]: "07"
+          - generic [ref=e56]: Economía Poblacional
+        - link "08 Fecundidad" [ref=e57] [cursor=pointer]:
+          - /url: /poblacion/fecundidad
+          - generic [ref=e58]: "08"
+          - generic [ref=e59]: Fecundidad
+        - separator [ref=e60]
+        - heading "Sectorial" [level=3] [ref=e61]
+        - link "09 Educación" [ref=e62] [cursor=pointer]:
+          - /url: /educacion
+          - generic [ref=e63]: "09"
+          - generic [ref=e64]: Educación
+        - link "10 Salud" [ref=e65] [cursor=pointer]:
+          - /url: /salud
+          - generic [ref=e66]: "10"
+          - generic [ref=e67]: Salud
+        - link "11 Seguridad" [ref=e68] [cursor=pointer]:
+          - /url: /seguridad
+          - generic [ref=e69]: "11"
+          - generic [ref=e70]: Seguridad
+        - link "12 Economía & Fiscal" [ref=e71] [cursor=pointer]:
+          - /url: /economia-fiscal
+          - generic [ref=e72]: "12"
+          - generic [ref=e73]: Economía & Fiscal
+        - link "13 Agro & Pesca" [ref=e74] [cursor=pointer]:
+          - /url: /agricultura
+          - generic [ref=e75]: "13"
+          - generic [ref=e76]: Agro & Pesca
+        - link "14 Industria" [ref=e77] [cursor=pointer]:
+          - /url: /industria
+          - generic [ref=e78]: "14"
+          - generic [ref=e79]: Industria
+      - button "Colapsar menú" [ref=e80] [cursor=pointer]:
+        - img [ref=e81]
+    - main [ref=e84]:
+      - generic [ref=e92]:
+        - generic [ref=e93]:
+          - generic [ref=e94]: 🛡️
+          - generic [ref=e95]:
+            - text: Nº
+            - heading "Inseguridad en el Conurbano (SNIC 2000-2024)" [level=2] [ref=e96]
+            - paragraph [ref=e97]: "Estadísticas oficiales del Sistema Nacional de Información Criminal para los 24 partidos del Gran Buenos Aires: tendencias, comparativas y panorama temporal."
+        - tablist "Vistas" [ref=e98]:
+          - tab "Panorama" [ref=e99] [cursor=pointer]
+          - tab "Vista 3D" [ref=e100] [cursor=pointer]
+          - tab "Comparador" [ref=e101] [cursor=pointer]
+          - tab "Informe" [active] [selected] [ref=e102] [cursor=pointer]
+        - generic [ref=e406]:
+          - generic [ref=e407]:
+            - generic [ref=e408]:
+              - generic [ref=e409]:
+                - generic [ref=e410]: Resumen ejecutivo
+                - heading "Cuatro cifras que ordenan la lectura" [level=2] [ref=e411]
+              - generic [ref=e412]: "Fuente: SNIC · elaboración propia"
+            - generic [ref=e413]:
+              - generic [ref=e414]:
+                - term [ref=e415]: Hechos totales registrados
+                - definition [ref=e416]: "318.089"
+                - definition [ref=e417]: 24 partidos · 2024
+              - generic [ref=e418]:
+                - term [ref=e419]: Partidos que explican ¼ del total
+                - definition [ref=e420]: "3"
+                - definition [ref=e421]: La Matanza, Quilmes y Lomas de Zamora (27.5%)
+              - generic [ref=e422]:
+                - term [ref=e423]: Homicidios dolosos (tasa /100k)
+                - definition [ref=e424]: "4.5"
+                - definition [ref=e425]: "-59% vs 2000"
+              - generic [ref=e426]:
+                - term [ref=e427]: Cambio total de hechos
+                - definition [ref=e428]: +44%
+                - definition [ref=e429]: 2000 → 2024
+          - generic [ref=e430]:
+            - generic [ref=e431]:
+              - generic [ref=e432]:
+                - generic [ref=e433]: § 1 · La escala
+                - heading "Más de 300.000 hechos al año en 24 partidos" [level=3] [ref=e434]
+                - generic [ref=e435]:
+                  - paragraph [ref=e436]:
+                    - text: El
+                    - strong [ref=e437]: Conurbano Bonaerense
+                    - text: concentra cerca de
+                    - strong [ref=e438]: 10 millones
+                    - text: de habitantes distribuidos en 24 partidos que rodean a la Ciudad de Buenos Aires. En el último año disponible del Sistema Nacional de Información Criminal (SNIC), se registraron
+                    - strong [ref=e439]: más de 318 mil hechos
+                    - text: delictivos en toda su superficie.
+                  - paragraph [ref=e440]: "Esta cifra reúne 32 categorías oficiales: desde homicidios dolosos y robos hasta delitos contra la administración pública y contravenciones. El mapa a la derecha muestra el peso absoluto de cada partido en ese universo."
+              - generic [ref=e441]:
+                - generic [ref=e442]: § 2 · Un cuarto de siglo
+                - 'heading "La serie larga: subas, caídas y un pico pre-pandemia" [level=3] [ref=e443]'
+                - generic [ref=e444]:
+                  - paragraph [ref=e445]:
+                    - text: Entre
+                    - strong [ref=e446]: 2000 y 2024
+                    - text: la inseguridad en el Conurbano creció un 44% en volumen total, pero no en línea recta. La serie muestra un valle entre 2005 y 2010, una recuperación hasta 2014, y una
+                    - strong [ref=e447]: aceleración sostenida
+                    - text: desde 2016 que alcanzó su punto máximo en
+                    - strong [ref=e448]: "2019"
+                    - text: con 324 mil hechos.
+                  - paragraph [ref=e449]:
+                    - text: La pandemia produjo una caída transitoria del 17% en 2020, pero los registros volvieron rápidamente al rango alto. Desde 2021, el Conurbano se estabilizó cerca del
+                    - strong [ref=e450]: máximo histórico
+                    - text: — sin superarlo, pero sin retroceder.
+              - generic [ref=e451]:
+                - generic [ref=e452]: § 3 · Concentración territorial
+                - heading "La Matanza explica 1 de cada 6 delitos del Conurbano" [level=3] [ref=e453]
+                - generic [ref=e454]:
+                  - paragraph [ref=e455]:
+                    - text: La carga delictiva no se distribuye de forma uniforme.
+                    - strong [ref=e456]: La Matanza
+                    - text: —el partido más poblado de la Argentina— concentra por sí sola el
+                    - strong [ref=e457]: 16% del total
+                    - text: ", con más de 50 mil hechos registrados en el último año."
+                  - paragraph [ref=e458]:
+                    - text: Si sumamos los tres partidos con mayor volumen (La Matanza, Quilmes y Lomas de Zamora), llegan al
+                    - strong [ref=e459]: 27,5% del Conurbano
+                    - text: . En el extremo opuesto, los cinco partidos con menor volumen absoluto aportan en conjunto menos del 10%.
+              - generic [ref=e460]:
+                - generic [ref=e461]: § 4 · Homicidios vs. total
+                - heading "Los homicidios dolosos cayeron mientras los delitos totales subían" [level=3] [ref=e462]
+                - generic [ref=e463]:
+                  - paragraph [ref=e464]:
+                    - text: Los
+                    - strong [ref=e465]: homicidios dolosos
+                    - text: mostraron una tendencia descendente a lo largo de estos 25 años. La tasa promedio del Conurbano pasó de
+                    - strong [ref=e466]: 14,4 por cada 100.000 habitantes
+                    - text: en 2001 a valores entre
+                    - strong [ref=e467]: 3,8 y 4,5
+                    - text: en el último lustro.
+                  - paragraph [ref=e468]:
+                    - text: "En términos absolutos, los homicidios cayeron un 43% respecto al año 2000. El descenso no es homogéneo: coexiste con"
+                    - strong [ref=e469]: picos locales
+                    - text: —como el ciclo 2012-2014— y con partidos que mantienen tasas entre 5 y 8 /100k (José C. Paz, General San Martín, Moreno).
+              - generic [ref=e470]:
+                - generic [ref=e471]: § 5 · La composición cambió
+                - heading "Lesiones, amenazas y ciberdelitos ganaron peso en la matriz delictiva" [level=3] [ref=e472]
+                - generic [ref=e473]:
+                  - paragraph [ref=e474]:
+                    - text: El mix delictivo del Conurbano se transformó desde 2000. Los
+                    - strong [ref=e475]: robos
+                    - text: "—la categoría con mayor volumen— crecieron un 26%, pero perdieron peso relativo: representan hoy el 27% del total, frente al 31% de entonces."
+                  - paragraph [ref=e476]:
+                    - text: "En paralelo, crecieron categorías antes más marginales:"
+                    - strong [ref=e477]: lesiones dolosas
+                    - text: (+94%),
+                    - strong [ref=e478]: amenazas
+                    - text: (+77%),
+                    - strong [ref=e479]: hurtos
+                    - text: (+61%) y, sobre todo, la canasta
+                    - strong [ref=e480]: otros delitos contra la propiedad
+                    - text: (+160%), donde el SNIC agrupa las estafas virtuales.
+              - generic [ref=e481]:
+                - generic [ref=e482]: § 6 · Heterogeneidad territorial
+                - heading "Berazategui, Hurlingham y Quilmes lideran la reducción de homicidios" [level=3] [ref=e483]
+                - generic [ref=e484]:
+                  - paragraph [ref=e485]:
+                    - text: Si tomamos
+                    - strong [ref=e486]: 2015 como línea de base
+                    - text: —último pico relevante de homicidios— y miramos hasta el último año disponible, aparecen patrones muy distintos entre partidos vecinos.
+                  - paragraph [ref=e487]:
+                    - strong [ref=e488]: Berazategui
+                    - text: (-60%),
+                    - strong [ref=e489]: Hurlingham
+                    - text: (-59%),
+                    - strong [ref=e490]: Quilmes
+                    - text: (-54%),
+                    - strong [ref=e491]: San Fernando
+                    - text: (-52%) y
+                    - strong [ref=e492]: Lanús
+                    - text: (-52%) registran las mayores caídas. En el otro extremo,
+                    - strong [ref=e493]: San Isidro
+                    - text: muestra un aumento del
+                    - strong [ref=e494]: +51%
+                    - text: .
+            - generic [ref=e497]:
+              - generic [ref=e498]:
+                - generic [ref=e499]: Suma de todas las categorías SNIC
+                - heading "Hechos totales · 2024" [level=4] [ref=e500]
+              - generic [ref=e502]:
+                - generic [ref=e503]:
+                  - region "Map" [ref=e504]
+                  - group [ref=e505]:
+                    - generic "Toggle attribution" [ref=e506] [cursor=pointer]
+                    - generic [ref=e507]:
+                      - link "MapLibre" [ref=e508] [cursor=pointer]:
+                        - /url: https://maplibre.org/
+                      - text: "|"
+                      - link "OpenFreeMap" [ref=e509] [cursor=pointer]:
+                        - /url: https://openfreemap.org
+                      - link "© OpenMapTiles" [ref=e510] [cursor=pointer]:
+                        - /url: https://www.openmaptiles.org/
+                      - text: Data from
+                      - link "OpenStreetMap" [ref=e511] [cursor=pointer]:
+                        - /url: https://www.openstreetmap.org/copyright
+                - generic [ref=e513]:
+                  - generic [ref=e514]: Hechos · 2024
+                  - generic "Todas las categorías SNIC" [ref=e515]
+                  - generic [ref=e516]:
+                    - generic [ref=e519]: 0.0 – 7.847
+                    - generic [ref=e522]: 7.847 – 11.392
+                    - generic [ref=e525]: 11.392 – 12.539
+                    - generic [ref=e528]: 12.539 – 15.949
+                    - generic [ref=e531]: 15.949 – 50.858
+          - generic [ref=e532]:
+            - generic [ref=e533]: Notas metodológicas
+            - list [ref=e534]:
+              - listitem [ref=e535]: Los totales suman las 32 categorías del SNIC a nivel parent-code (homicidios, robos, hurtos, amenazas, etc.), agrupando las subcategorías introducidas en 2023.
+              - listitem [ref=e536]: La tasa se informa por 100.000 habitantes según la población del departamento en cada año de la serie SNIC.
+              - listitem [ref=e537]: Un volumen creciente puede deberse tanto a más hechos como a mejor registro (especialmente en ciberdelitos y delitos sexuales).
+              - listitem [ref=e538]: Quilmes unifica los códigos INDEC 06058 (2023+) y 06658 (histórico) para mantener la serie continua.
+    - link "Abrir Asistente IA" [ref=e86] [cursor=pointer]:
+      - /url: /chat
+      - img [ref=e88]
+  - generic [ref=e405]: José C. Paz
