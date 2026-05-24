@@ -128,6 +128,51 @@ Una vez creado el archivo JSX en `src/pages/`, agregar en `App.jsx`:
 
 ---
 
+## Registro en Supabase
+
+Después de registrar la ruta, insertar una fila en la tabla `informes` de Supabase.
+La página `/informes` lee de esta tabla para mostrar las cards.
+
+**Campos de la tabla:**
+
+| Campo        | Tipo            | Descripción                                                  |
+|--------------|-----------------|--------------------------------------------------------------|
+| `id`         | text            | Slug del informe, igual al de la URL, ej. `"homicidios-pba-2025"` |
+| `titulo`     | text            | Título completo del informe                                  |
+| `bajada`     | text            | Resumen de 1-2 oraciones, se muestra en la card             |
+| `fecha`      | text            | Texto libre para mostrar, ej. `"Mayo 2026"`                 |
+| `fecha_orden`| date            | Fecha ISO para ordenar descendente, ej. `"2026-05-23"`      |
+| `tema`       | text            | Categoría. Debe coincidir exactamente con valores existentes |
+| `municipios` | jsonb           | Array JSON de strings, ej. `'["La Matanza", "Provincia de PBA"]'` |
+| `insights`   | jsonb           | Array JSON de strings. Solo los primeros 2 se muestran en la card |
+| `url`        | text            | Ruta interna, ej. `"/informes/slug-del-informe"`            |
+| `imagen`     | text (nullable) | URL de imagen de portada, o `null`                          |
+
+**SQL de inserción:**
+
+```sql
+INSERT INTO informes (id, titulo, bajada, fecha, fecha_orden, tema, municipios, insights, url, imagen)
+VALUES (
+  'slug-del-informe',
+  'Título del informe',
+  'Bajada de 1-2 oraciones.',
+  'Mayo 2026',
+  '2026-05-23',
+  'Tema',
+  '["Municipio o región"]',
+  '["Insight clave 1 (se muestra en la card)", "Insight clave 2 (se muestra en la card)"]',
+  '/informes/slug-del-informe',
+  NULL
+);
+```
+
+**Notas:**
+- El `url` debe coincidir exactamente con el slug registrado en `App.jsx`.
+- Verificar que el valor de `tema` ya existe en la tabla antes de insertar; si es nuevo, el filtro lo agrega automáticamente pero hay que decidir si corresponde una categoría nueva o una existente.
+- `insights` admite más de 2 strings pero la card solo muestra los primeros 2.
+
+---
+
 ## Estándares que nunca se rompen
 
 - Los gráficos siempre son Chart.js interactivos, nunca imágenes estáticas.
