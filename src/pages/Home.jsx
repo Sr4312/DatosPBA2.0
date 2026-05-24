@@ -19,11 +19,11 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointEleme
 
 function SectionHeader({ title, href }) {
   return (
-    <div className="mb-8 flex items-center justify-between border-b-2 border-[#0a1628] pb-3">
-      <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#0a1628] leading-none tracking-tight">
+    <div className="mb-8 flex items-center justify-between border-b-2 border-[#0a1628] dark:border-slate-700 pb-3">
+      <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#0a1628] dark:text-slate-100 leading-none tracking-tight">
         {title}
       </h2>
-      <Link to={href} className="text-sm font-medium text-slate-400 hover:text-[#0a1628] no-underline shrink-0 transition-colors">
+      <Link to={href} className="text-sm font-medium text-slate-400 hover:text-[#0a1628] dark:hover:text-slate-100 no-underline shrink-0 transition-colors">
         Ver todos →
       </Link>
     </div>
@@ -40,7 +40,7 @@ function PublicacionesTicker({ hilos }) {
   if (!hilos.length) return null
   const doubled = [...hilos, ...hilos]
   return (
-    <section className="mb-16 py-10 border-y border-slate-200/80 bg-gradient-to-b from-white/60 to-transparent">
+    <section className="mb-16 py-10 border-y border-slate-200/80 dark:border-slate-700/50 bg-gradient-to-b from-white/60 dark:from-slate-800/40 to-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-6">
         <SectionHeader title="Publicaciones" href="/hilos" />
       </div>
@@ -52,35 +52,35 @@ function PublicacionesTicker({ hilos }) {
               href={h.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-72 shrink-0 bg-white rounded-2xl border border-slate-200/60 border-l-4 border-l-purple-400 p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 no-underline"
+              className="w-72 shrink-0 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 border-l-4 border-l-purple-400 p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 no-underline"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <img src="/logo-icon.svg" alt="DatosPBA" className="w-7 h-7 rounded-full shrink-0 object-cover" />
                   <div className="leading-tight">
-                    <p className="text-xs font-bold text-slate-900">DatosPBA</p>
+                    <p className="text-xs font-bold text-slate-900 dark:text-slate-100">DatosPBA</p>
                     <p className="text-[10px] text-slate-400">@datospba</p>
                   </div>
                 </div>
                 <span className="text-slate-300"><XLogo /></span>
               </div>
-              <p className={`text-xs text-slate-700 leading-relaxed ${h.imagen ? 'line-clamp-3' : 'line-clamp-4 flex-1'}`}>{h.resumen}</p>
+              <p className={`text-xs text-slate-700 dark:text-slate-300 leading-relaxed ${h.imagen ? 'line-clamp-3' : 'line-clamp-4 flex-1'}`}>{h.resumen}</p>
               {h.imagen && (
                 <img
                   src={h.imagen}
                   alt=""
                   loading="lazy"
-                  className="w-full h-28 object-cover rounded-lg border border-slate-200/70"
+                  className="w-full h-28 object-cover rounded-lg border border-slate-200/70 dark:border-slate-700"
                 />
               )}
-              <div className="flex items-center justify-between pt-2 border-t border-slate-100 mt-auto">
+              <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700/50 mt-auto">
                 <span className="text-[10px] text-slate-400">{h.fecha}</span>
                 {h.tema && <Badge variant="secondary" className="text-[10px] py-0">{h.tema}</Badge>}
               </div>
             </a>
           ))}
         </div>
-        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white dark:from-transparent to-transparent pointer-events-none" />
       </div>
     </section>
   )
@@ -152,7 +152,7 @@ function FeaturedInformeCard({ inf, viz }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="bg-white rounded-xl border border-slate-200/60 overflow-hidden grid lg:grid-cols-5 mb-5 hover:shadow-md transition-all"
+      className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-700/50 overflow-hidden grid lg:grid-cols-5 mb-5 hover:shadow-md transition-all"
     >
       <div className="lg:col-span-3 p-6 sm:p-8 flex flex-col gap-4">
         <div className="flex items-center gap-2 flex-wrap">
@@ -163,10 +163,10 @@ function FeaturedInformeCard({ inf, viz }) {
             </span>
           )}
         </div>
-        <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#0a1628] leading-tight tracking-tight">
+        <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#0a1628] dark:text-slate-100 leading-tight tracking-tight">
           {inf.titulo}
         </h3>
-        {inf.bajada && <p className="text-sm text-slate-600 leading-relaxed line-clamp-4">{inf.bajada}</p>}
+        {inf.bajada && <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-4">{inf.bajada}</p>}
         <Link to={inf.url} className="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:text-brand-700 no-underline group pt-2">
           Leer informe
           <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />

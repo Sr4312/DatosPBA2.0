@@ -23,11 +23,11 @@ ChartJS.defaults.color = '#475569'
 // ─── COLORES ─────────────────────────────────────────────────
 
 const C = {
-  bg:       '#f7f6f2',
-  ink:      '#0a1628',
-  inkMid:   '#475569',
-  inkLight: '#94a3b8',
-  rule:     'rgba(13,17,23,0.08)',
+  bg:       'var(--c-bg)',
+  ink:      'var(--c-ink)',
+  inkMid:   'var(--c-ink-mid)',
+  inkLight: 'var(--c-ink-light)',
+  rule:     'var(--c-rule)',
   hero:     '#0a1628',
   accent:   '#3d65b2',
 }

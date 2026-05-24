@@ -4,17 +4,17 @@ import { ArrowLeft, ExternalLink } from 'lucide-react'
 
 // palette - chrome/layout colors
 const C = {
-  bg:       '#f7f6f2',
-  ink:      '#0a1628',
-  inkMid:   '#475569',
-  inkLight: '#94a3b8',
+  bg:       'var(--c-bg)',
+  ink:      'var(--c-ink)',
+  inkMid:   'var(--c-ink-mid)',
+  inkLight: 'var(--c-ink-light)',
   lean:     '#1a6b3a',
   leanBg:   '#e8f5ee',
   heavy:    '#0f2d5e',
   heavyBg:  '#e8eef7',
   mid:      '#b45309',
   midBg:    '#fef3c7',
-  rule:     'rgba(13,17,23,0.09)',
+  rule:     'var(--c-rule)',
   accent:   '#3d65b2',
 }
 

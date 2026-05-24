@@ -12,7 +12,7 @@ export default function FilterBar({ search, onSearchChange, filters = [], classN
             placeholder="Buscar..."
             value={search}
             onChange={e => onSearchChange(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-400/20 focus:border-brand-400"
+            className="w-full pl-9 pr-4 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 placeholder:text-slate-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-400/20 focus:border-brand-400"
           />
         </div>
       )}
@@ -21,7 +21,7 @@ export default function FilterBar({ search, onSearchChange, filters = [], classN
           key={f.key}
           value={f.value}
           onChange={e => f.onChange(e.target.value)}
-          className="px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg text-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-400/20 focus:border-brand-400"
+          className="px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-400/20 focus:border-brand-400"
         >
           <option value="all">{f.placeholder}</option>
           {f.options.map(opt => (

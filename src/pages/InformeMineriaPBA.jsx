@@ -25,12 +25,12 @@ ChartJS.defaults.font.size = 12
 ChartJS.defaults.color = '#475569'
 
 const C = {
-  bg:       '#f7f6f2',
-  ink:      '#0a1628',
-  inkMid:   '#475569',
-  inkLight: '#94a3b8',
-  rule:     'rgba(13,17,23,0.09)',
-  card:     '#ffffff',
+  bg:       'var(--c-bg)',
+  ink:      'var(--c-ink)',
+  inkMid:   'var(--c-ink-mid)',
+  inkLight: 'var(--c-ink-light)',
+  rule:     'var(--c-rule)',
+  card:     'var(--c-surface)',
   hero:     '#0a1628',
   accent:   '#3d65b2',
 }

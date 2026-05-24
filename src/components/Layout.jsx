@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
-import { Menu, X, ArrowUp, Mail, Twitter, Linkedin, Search } from 'lucide-react'
+import { Menu, X, ArrowUp, Mail, Twitter, Linkedin, Search, Sun, Moon } from 'lucide-react'
 import SearchOverlay from './SearchOverlay'
+import { useTheme } from '../context/ThemeContext'
 
 const NAV = [
   { to: '/informes',        label: 'Informes' },
@@ -17,6 +18,7 @@ export default function Layout() {
   const [searchOpen, setSearchOpen] = useState(false)
   const closeSearch = useCallback(() => setSearchOpen(false), [])
   const [scrolled, setScrolled] = useState(false)
+  const { isDark, toggle } = useTheme()
 
   useEffect(() => {
     const onScroll = () => {
@@ -30,12 +32,12 @@ export default function Layout() {
   return (
     <div className="min-h-screen">
       <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'py-2.5 px-3 sm:px-8 lg:px-16' : ''}`}>
-        <div className={`transition-all duration-300 ${scrolled ? 'max-w-7xl mx-auto rounded-2xl shadow-lg border border-slate-200/60 backdrop-blur-md bg-white/85 overflow-hidden' : 'bg-white border-b border-slate-200 shadow-sm'}`}>
+        <div className={`transition-all duration-300 ${scrolled ? 'max-w-7xl mx-auto rounded-2xl shadow-lg border border-slate-200/60 dark:border-slate-700/50 backdrop-blur-md bg-white/85 dark:bg-slate-900/90 overflow-hidden' : 'bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700/50 shadow-sm'}`}>
           <div className={`px-4 sm:px-6 flex items-center justify-between transition-all duration-300 ${scrolled ? 'h-14' : 'h-24'}`}>
             <NavLink to="/" className="flex items-center gap-2 no-underline shrink-0">
               <img src="/logo-bars.svg" alt="DatosPBA" style={{ height: scrolled ? '36px' : '56px', width: 'auto', transition: 'height 0.3s' }} />
               <div className="flex flex-col leading-tight overflow-hidden">
-                <span className="text-xl text-[#0a1628] tracking-tight">Datos<span className="font-bold">PBA</span></span>
+                <span className="text-xl text-[#0a1628] dark:text-slate-100 tracking-tight">Datos<span className="font-bold">PBA</span></span>
                 <span className={`text-[10px] text-slate-400 hidden sm:block leading-snug transition-all duration-300 ${scrolled ? 'max-h-0 opacity-0' : 'max-h-10 opacity-100'}`}>Análisis basado en evidencia<br />para la Provincia de Buenos Aires.</span>
               </div>
             </NavLink>
@@ -49,8 +51,8 @@ export default function Layout() {
                   className={({ isActive }) =>
                     `px-3 py-1.5 text-base font-medium rounded-lg transition-colors no-underline flex items-center gap-1.5 ${
                       isActive
-                        ? 'bg-brand-100 text-brand-700'
-                        : 'text-slate-500 hover:text-brand-600 hover:bg-brand-50'
+                        ? 'bg-brand-100 dark:bg-brand-700/30 text-brand-700 dark:text-brand-300'
+                        : 'text-slate-500 dark:text-slate-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-700/20 dark:hover:text-brand-300'
                     }`
                   }
                 >
@@ -60,29 +62,40 @@ export default function Layout() {
               ))}
             </nav>
 
-            {/* Search button */}
-            <button
-              onClick={() => setSearchOpen(true)}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-lg border border-slate-200 text-slate-500 hover:text-[#0a1628] hover:border-slate-300 hover:bg-slate-50 transition-all"
-              aria-label="Buscar"
-            >
-              <Search className="w-4 h-4" />
-              <span className="text-sm hidden sm:inline">Buscar</span>
-            </button>
+            <div className="flex items-center gap-2">
+              {/* Search button */}
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="flex items-center gap-2 px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-[#0a1628] dark:hover:text-slate-100 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+                aria-label="Buscar"
+              >
+                <Search className="w-4 h-4" />
+                <span className="text-sm hidden sm:inline">Buscar</span>
+              </button>
 
-            {/* Mobile hamburger */}
-            <button
-              className="lg:hidden p-2 text-slate-500 hover:text-brand-600 transition-colors"
-              onClick={() => setMenuOpen(o => !o)}
-              aria-label="Menú"
-            >
-              {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
+              {/* Dark mode toggle */}
+              <button
+                onClick={toggle}
+                className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-[#0a1628] dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+                aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+              >
+                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </button>
+
+              {/* Mobile hamburger */}
+              <button
+                className="lg:hidden p-2 text-slate-500 dark:text-slate-400 hover:text-brand-600 transition-colors"
+                onClick={() => setMenuOpen(o => !o)}
+                aria-label="Menú"
+              >
+                {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            </div>
           </div>
 
           {/* Mobile menu drawer */}
           {menuOpen && (
-            <nav className="lg:hidden border-t border-slate-100 px-4 pb-4 flex flex-col gap-1">
+            <nav className="lg:hidden border-t border-slate-100 dark:border-slate-700/50 px-4 pb-4 flex flex-col gap-1">
               {NAV.map(l => (
                 <NavLink
                   key={l.to}
@@ -91,8 +104,8 @@ export default function Layout() {
                   className={({ isActive }) =>
                     `px-3 py-2.5 text-sm font-medium rounded-lg transition-colors no-underline ${
                       isActive
-                        ? 'bg-brand-100 text-brand-700'
-                        : 'text-slate-500 hover:text-brand-600 hover:bg-brand-50'
+                        ? 'bg-brand-100 dark:bg-brand-700/30 text-brand-700 dark:text-brand-300'
+                        : 'text-slate-500 dark:text-slate-400 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-slate-800'
                     }`
                   }
                 >
@@ -111,28 +124,28 @@ export default function Layout() {
       </main>
 
       {/* Contact section */}
-      <section className="bg-white border-t-2 border-[#0a1628] mt-16">
+      <section className="bg-white dark:bg-slate-900 border-t-2 border-[#0a1628] dark:border-slate-700 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Brand */}
           <div className="md:col-span-1">
             <img src="/logo-bars.svg" alt="DatosPBA" className="h-10 w-auto mb-4" />
-            <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
+            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-xs">
               Repositorio de análisis político y datos abiertos sobre la Provincia de Buenos Aires.
             </p>
-            <p className="text-[11px] text-slate-300 uppercase tracking-widest mt-6 font-medium">
+            <p className="text-[11px] text-slate-300 dark:text-slate-600 uppercase tracking-widest mt-6 font-medium">
               Análisis basado en evidencia
             </p>
           </div>
 
           {/* Nav links */}
           <div>
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Contenido</p>
+            <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">Contenido</p>
             <ul className="space-y-2.5">
               {NAV.map(l => (
                 <li key={l.to}>
                   <NavLink
                     to={l.to}
-                    className="text-sm text-slate-600 hover:text-brand-600 transition-colors no-underline"
+                    className="text-sm text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors no-underline"
                   >
                     {l.label}
                   </NavLink>
@@ -143,12 +156,12 @@ export default function Layout() {
 
           {/* Contact */}
           <div>
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Contacto</p>
+            <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-4">Contacto</p>
             <ul className="space-y-3">
               <li>
                 <a
                   href="mailto:contacto@datospba.com"
-                  className="flex items-center gap-2 text-sm text-slate-600 hover:text-brand-600 transition-colors no-underline"
+                  className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors no-underline"
                 >
                   <Mail className="w-4 h-4 shrink-0 text-slate-400" />
                   contacto@datospba.com
@@ -159,7 +172,7 @@ export default function Layout() {
                   href="https://twitter.com/datospba"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-slate-600 hover:text-brand-600 transition-colors no-underline"
+                  className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors no-underline"
                 >
                   <Twitter className="w-4 h-4 shrink-0 text-slate-400" />
                   @datospba
@@ -170,7 +183,7 @@ export default function Layout() {
                   href="https://linkedin.com/in/datospba"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-slate-600 hover:text-brand-600 transition-colors no-underline"
+                  className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors no-underline"
                 >
                   <Linkedin className="w-4 h-4 shrink-0 text-slate-400" />
                   DatosPBA

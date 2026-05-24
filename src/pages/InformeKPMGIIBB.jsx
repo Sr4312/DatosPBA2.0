@@ -23,14 +23,14 @@ const D = {
 
 // chrome/layout colors
 const C = {
-  bg:       '#f7f6f2',
-  ink:      '#0a1628',
-  inkMid:   '#475569',
-  inkLight: '#94a3b8',
+  bg:       'var(--c-bg)',
+  ink:      'var(--c-ink)',
+  inkMid:   'var(--c-ink-mid)',
+  inkLight: 'var(--c-ink-light)',
   hero:     '#0a1628',
   accent:   '#3d65b2',
-  rule:     'rgba(13,17,23,0.09)',
-  card:     '#ffffff',
+  rule:     'var(--c-rule)',
+  card:     'var(--c-surface)',
 }
 
 const PROVINCIAS = [

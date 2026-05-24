@@ -3,17 +3,17 @@ import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
 
 function TendenciaIcon({ tendencia }) {
   if (tendencia === 'sube') return (
-    <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center shrink-0">
-      <TrendingUp className="w-4 h-4 text-green-600" />
+    <div className="w-8 h-8 rounded-full bg-green-50 dark:bg-green-900/30 flex items-center justify-center shrink-0">
+      <TrendingUp className="w-4 h-4 text-green-600 dark:text-green-400" />
     </div>
   )
   if (tendencia === 'baja') return (
-    <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center shrink-0">
-      <TrendingDown className="w-4 h-4 text-red-500" />
+    <div className="w-8 h-8 rounded-full bg-red-50 dark:bg-red-900/30 flex items-center justify-center shrink-0">
+      <TrendingDown className="w-4 h-4 text-red-500 dark:text-red-400" />
     </div>
   )
   return (
-    <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center shrink-0">
+    <div className="w-8 h-8 rounded-full bg-slate-50 dark:bg-slate-700 flex items-center justify-center shrink-0">
       <Minus className="w-4 h-4 text-slate-400" />
     </div>
   )
@@ -21,16 +21,16 @@ function TendenciaIcon({ tendencia }) {
 
 export default function ReporteCard({ reporte, index = 0 }) {
   const varColor = reporte.tendencia === 'sube'
-    ? 'text-green-600'
+    ? 'text-green-600 dark:text-green-400'
     : reporte.tendencia === 'baja'
-    ? 'text-red-500'
+    ? 'text-red-500 dark:text-red-400'
     : 'text-slate-400'
 
   const borderAccent = reporte.tendencia === 'sube'
     ? 'border-l-green-400'
     : reporte.tendencia === 'baja'
     ? 'border-l-red-400'
-    : 'border-l-slate-300'
+    : 'border-l-slate-300 dark:border-l-slate-600'
 
   return (
     <m.div
@@ -38,25 +38,25 @@ export default function ReporteCard({ reporte, index = 0 }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05, duration: 0.45 }}
-      className={`bg-white rounded-xl border border-slate-200/60 border-l-4 ${borderAccent} px-5 py-4 flex items-center gap-4 hover:shadow-md transition-shadow`}
+      className={`bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-700/50 border-l-4 ${borderAccent} px-5 py-4 flex items-center gap-4 hover:shadow-md transition-shadow`}
     >
       <TendenciaIcon tendencia={reporte.tendencia} />
 
       <div className="flex flex-col gap-0.5 shrink-0 w-24">
-        <span className="text-xl font-bold text-[#0a1628] leading-none">{reporte.dato}</span>
+        <span className="text-xl font-bold text-[#0a1628] dark:text-slate-100 leading-none">{reporte.dato}</span>
         {reporte.variacion && (
           <span className={`text-xs font-medium ${varColor}`}>{reporte.variacion}</span>
         )}
       </div>
 
-      <div className="flex-1 min-w-0 border-l border-slate-100 pl-4">
-        <p className="text-sm font-semibold text-slate-900 leading-snug truncate">{reporte.titulo}</p>
+      <div className="flex-1 min-w-0 border-l border-slate-100 dark:border-slate-700 pl-4">
+        <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 leading-snug truncate">{reporte.titulo}</p>
         {reporte.descripcion && (
-          <p className="text-xs text-slate-500 line-clamp-2 mt-0.5 leading-relaxed">{reporte.descripcion}</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-0.5 leading-relaxed">{reporte.descripcion}</p>
         )}
       </div>
 
-      <span className="text-[10px] text-slate-300 shrink-0 hidden sm:block">{reporte.fecha}</span>
+      <span className="text-[10px] text-slate-300 dark:text-slate-600 shrink-0 hidden sm:block">{reporte.fecha}</span>
     </m.div>
   )
 }

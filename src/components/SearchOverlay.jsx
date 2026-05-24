@@ -32,10 +32,10 @@ function match(item, q) {
 }
 
 const TIPO_COLOR = {
-  'Informe':        'bg-brand-100 text-brand-700',
-  'Publicación':    'bg-purple-100 text-purple-700',
-  'Reporte rápido': 'bg-amber-100 text-amber-700',
-  'Dataset':        'bg-slate-100 text-slate-600',
+  'Informe':        'bg-brand-100 text-brand-700 dark:bg-brand-700/30 dark:text-brand-300',
+  'Publicación':    'bg-purple-100 text-purple-700 dark:bg-purple-700/30 dark:text-purple-300',
+  'Reporte rápido': 'bg-amber-100 text-amber-700 dark:bg-amber-700/30 dark:text-amber-300',
+  'Dataset':        'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300',
 }
 
 export default function SearchOverlay({ open, onClose }) {
@@ -68,8 +68,8 @@ export default function SearchOverlay({ open, onClose }) {
       className="fixed inset-0 z-[100] bg-black/40 backdrop-blur-sm flex items-start justify-center pt-20 px-4"
       onClick={e => { if (e.target === e.currentTarget) onClose() }}
     >
-      <div className="w-full max-w-xl bg-white rounded-xl shadow-2xl overflow-hidden">
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-100">
+      <div className="w-full max-w-xl bg-white dark:bg-slate-800 rounded-xl shadow-2xl overflow-hidden">
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-100 dark:border-slate-700">
           <Search className="w-4 h-4 text-slate-400 shrink-0" />
           <input
             ref={inputRef}
@@ -77,15 +77,15 @@ export default function SearchOverlay({ open, onClose }) {
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Buscar en DatosPBA..."
-            className="flex-1 text-sm text-slate-800 placeholder:text-slate-400 outline-none bg-transparent"
+            className="flex-1 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 outline-none bg-transparent"
           />
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {results.length > 0 && (
-          <ul className="max-h-80 overflow-y-auto divide-y divide-slate-50">
+          <ul className="max-h-80 overflow-y-auto divide-y divide-slate-50 dark:divide-slate-700/50">
             {results.map(item => (
               <li key={`${item.tipo}-${item.id}`}>
                 {item.external ? (
@@ -94,7 +94,7 @@ export default function SearchOverlay({ open, onClose }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={onClose}
-                    className="flex items-start gap-3 px-4 py-3 hover:bg-slate-50 transition-colors no-underline"
+                    className="flex items-start gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors no-underline"
                   >
                     <ResultContent item={item} />
                   </a>
@@ -102,7 +102,7 @@ export default function SearchOverlay({ open, onClose }) {
                   <Link
                     to={item.url}
                     onClick={onClose}
-                    className="flex items-start gap-3 px-4 py-3 hover:bg-slate-50 transition-colors no-underline"
+                    className="flex items-start gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors no-underline"
                   >
                     <ResultContent item={item} />
                   </Link>
@@ -135,7 +135,7 @@ function ResultContent({ item }) {
         {item.tipo}
       </span>
       <div className="min-w-0">
-        <p className="text-sm font-medium text-slate-800 truncate">{item.titulo}</p>
+        <p className="text-sm font-medium text-slate-800 dark:text-slate-100 truncate">{item.titulo}</p>
         {item.subtitulo && (
           <p className="text-xs text-slate-400 truncate mt-0.5">{item.subtitulo}</p>
         )}
