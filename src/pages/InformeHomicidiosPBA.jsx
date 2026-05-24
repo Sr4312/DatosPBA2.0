@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { m } from 'framer-motion'
 import { ArrowLeft, ExternalLink, Download } from 'lucide-react'
@@ -328,6 +328,7 @@ function BrechaChart() {
       backgroundColor: [C.accent, '#64748b', '#94a3b8'],
       borderRadius: 6,
       borderSkipped: false,
+      maxBarThickness: 64,
     }],
   }
 
@@ -379,6 +380,7 @@ function RankingTasaChart() {
       backgroundColor: RANKING_TASA.map((_, i) => i === 0 ? C.accent : '#94a3b8'),
       borderRadius: 5,
       borderSkipped: false,
+      maxBarThickness: 28,
     }],
   }
 
@@ -426,6 +428,7 @@ function RankingAbsChart() {
       backgroundColor: RANKING_ABS.map((_, i) => i === 0 ? C.accent : '#94a3b8'),
       borderRadius: 5,
       borderSkipped: false,
+      maxBarThickness: 28,
     }],
   }
 
@@ -474,6 +477,7 @@ function MatanzaComparacionChart() {
       backgroundColor: COMPARACION.map(d => d.highlight ? C.accent : '#94a3b8'),
       borderRadius: 6,
       borderSkipped: false,
+      maxBarThickness: 56,
     }],
   }
 
@@ -559,6 +563,150 @@ function NotaMetodologica() {
         es consistente en ambas fuentes.
       </p>
     </m.div>
+  )
+}
+
+// ─── MAPA CHOROPLETH ─────────────────────────────────────────
+
+const TASA_POR_MUNI = {
+  'la matanza':         8.02,
+  'moreno':             7.66,
+  'general rodriguez':  7.66,
+  'lomas de zamora':    5.92,
+  'general san martin': 5.57,
+  'san martin':         5.57,
+  'quilmes':            4.50,
+}
+
+function HomicidiosMap() {
+  const mapRef     = useRef(null)
+  const mapInstRef = useRef(null)
+  const [loading, setLoading] = useState(true)
+
+  const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim()
+
+  const lookup = useMemo(() => {
+    const m = {}
+    for (const [k, v] of Object.entries(TASA_POR_MUNI)) m[k] = v
+    return m
+  }, [])
+
+  function getTasa(name) {
+    if (!name) return null
+    return lookup[norm(name)] ?? null
+  }
+
+  function fillFor(t) {
+    if (t === null) return '#e2e8f0'
+    if (t >= 7.5) return '#7f1d1d'
+    if (t >= 6)   return '#b91c1c'
+    if (t >= 5)   return '#dc2626'
+    if (t >= 3.5) return '#f87171'
+    return '#fecaca'
+  }
+
+  function styleFor(name, state) {
+    const t = getTasa(name)
+    if (t === null) return { fillColor: '#e2e8f0', fillOpacity: 0.35, color: '#94a3b8', weight: 0.4, opacity: 0.5 }
+    const fo = state === 'selected' ? 0.92 : state === 'hover' ? 0.82 : 0.70
+    return { fillColor: fillFor(t), fillOpacity: fo, color: '#450a0a', weight: state !== 'default' ? 1.5 : 0.6, opacity: 0.85 }
+  }
+
+  useEffect(() => {
+    let mounted = true
+    let map = null
+
+    async function init() {
+      const L = (await import('leaflet')).default
+      await import('leaflet/dist/leaflet.css')
+      if (!mounted || !mapRef.current) return
+
+      const bounds = L.latLngBounds(L.latLng(-43.5, -65.5), L.latLng(-32.5, -55.5))
+      map = L.map(mapRef.current, {
+        center: [-36.5, -60], zoom: 6, minZoom: 5, maxZoom: 9,
+        maxBounds: bounds, maxBoundsViscosity: 1.0,
+        zoomControl: true, attributionControl: false,
+      })
+      mapInstRef.current = map
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+        maxZoom: 15, opacity: 0.45,
+      }).addTo(map)
+
+      const IGN_URL =
+        'https://wfs.ign.gob.ar/geoserver/ign/ows?service=WFS&version=2.0.0&request=GetFeature' +
+        '&typeName=ign:departamento&CQL_FILTER=provincia_id%3D%2706%27' +
+        '&outputFormat=application/json&srsName=EPSG:4326'
+      const FALLBACK_URL = 'https://raw.githubusercontent.com/agburgos83/partidosBA/main/partidos.geojson'
+
+      let geojson
+      try {
+        const res = await fetch(IGN_URL)
+        if (!res.ok) throw new Error()
+        geojson = await res.json()
+      } catch {
+        const res = await fetch(FALLBACK_URL)
+        geojson = await res.json()
+      }
+      if (!mounted) return
+
+      L.geoJSON(geojson, {
+        style: f => styleFor(f.properties.nombre || f.properties.nam || '', 'default'),
+        onEachFeature(feature, layer) {
+          const name = feature.properties.nombre || feature.properties.nam || ''
+          const t = getTasa(name)
+          const label = t !== null ? `${name}: ${t} hom./100k hab.` : name
+          layer.bindTooltip(label, { sticky: true, direction: 'auto' })
+          layer._name = name
+          layer.on('mouseover', e => e.target.setStyle(styleFor(e.target._name, 'hover')))
+          layer.on('mouseout',  e => e.target.setStyle(styleFor(e.target._name, 'default')))
+        },
+      }).addTo(map)
+
+      if (mounted) setLoading(false)
+    }
+
+    init().catch(console.error)
+    return () => {
+      mounted = false
+      if (map) map.remove()
+    }
+  }, [])
+
+  return (
+    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, overflow: 'hidden' }}>
+      <div style={{ padding: '16px 20px 12px', borderBottom: `1px solid ${C.rule}` }}>
+        <p style={{ fontSize: '0.78rem', fontWeight: 700, color: C.ink, marginBottom: 4 }}>
+          Tasa de homicidios por municipio (datos disponibles)
+        </p>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          {[
+            { label: '≥ 7,5', color: '#7f1d1d' },
+            { label: '6 - 7,5', color: '#b91c1c' },
+            { label: '5 - 6', color: '#dc2626' },
+            { label: '3,5 - 5', color: '#f87171' },
+            { label: '< 3,5', color: '#fecaca' },
+            { label: 'Sin dato', color: '#e2e8f0' },
+          ].map(item => (
+            <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.68rem', color: C.inkMid }}>
+              <div style={{ width: 12, height: 12, borderRadius: 3, background: item.color, border: '1px solid rgba(0,0,0,0.1)' }} />
+              {item.label}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ position: 'relative' }}>
+        {loading && (
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, background: '#f8fafc' }}>
+            <p style={{ fontSize: '0.8rem', color: C.inkLight }}>Cargando mapa…</p>
+          </div>
+        )}
+        <div ref={mapRef} style={{ height: 420, width: '100%' }} />
+      </div>
+      <p style={{ padding: '8px 20px 12px', fontSize: '0.68rem', color: C.inkLight }}>
+        Fuente: Ministerio Público PBA 2025. Los municipios sin dato corresponden a departamentos judiciales sin desagregación disponible.
+      </p>
+    </div>
   )
 }
 
@@ -675,6 +823,9 @@ export default function InformeHomicidiosPBA() {
                 <RankingAbsChart />
               </div>
             </DownloadableViz>
+          </m.div>
+          <m.div {...fadeUp(0.15)} className="mt-6">
+            <HomicidiosMap />
           </m.div>
         </div>
       </div>
