@@ -891,4 +891,3 @@ export default function InformeHomicidiosPBA() {
     </div>
   )
 }
-}
