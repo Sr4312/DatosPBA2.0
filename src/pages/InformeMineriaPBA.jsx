@@ -324,7 +324,7 @@ function ProduccionChart() {
         beginAtZero: true,
         max: 60,
         title: { display: true, text: 'Millones de toneladas anuales', color: C.inkMid, font: { weight: 600 } },
-        grid: { color: C.rule },
+        grid: { color: 'rgba(13,17,23,0.09)' },
         ticks: { callback: v => `${v} Mtn` },
       },
       y: {
@@ -382,14 +382,14 @@ function PBGHistorico() {
     },
     scales: {
       x: {
-        grid: { color: C.rule },
+        grid: { color: 'rgba(13,17,23,0.09)' },
         ticks: { maxRotation: 45, font: { size: 11 } },
       },
       y: {
         beginAtZero: false,
         min: 300,
         title: { display: true, text: 'Millones de pesos (valores 2004)', color: C.inkMid, font: { weight: 600 } },
-        grid: { color: C.rule },
+        grid: { color: 'rgba(13,17,23,0.09)' },
         ticks: { callback: v => `$${v}M` },
       },
     },

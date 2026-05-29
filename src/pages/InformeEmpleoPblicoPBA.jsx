@@ -335,7 +335,7 @@ function ChartComparacion() {
                 beginAtZero: true,
                 max: 35,
                 title: { display: true, text: 'Empleados estatales cada 1.000 habitantes', color: C.inkMid, font: { weight: 600 } },
-                grid: { color: C.rule },
+                grid: { color: 'rgba(13,17,23,0.08)' },
               },
               y: { grid: { display: false }, ticks: { font: { weight: 600 } } },
             },
@@ -380,7 +380,7 @@ function ChartBrasil() {
             x: {
               beginAtZero: true, max: 35,
               title: { display: true, text: 'Empleados estaduales cada 1.000 habitantes', color: C.inkMid, font: { weight: 600 } },
-              grid: { color: C.rule },
+              grid: { color: 'rgba(13,17,23,0.08)' },
             },
             y: { grid: { display: false }, ticks: { font: { weight: 600 } } },
           },
@@ -443,7 +443,7 @@ function ChartEEUU() {
             y: {
               beginAtZero: true, max: 35,
               title: { display: true, text: 'Empleados estaduales cada 1.000 hab.', color: C.inkMid, font: { weight: 600 } },
-              grid: { color: C.rule },
+              grid: { color: 'rgba(13,17,23,0.08)' },
               ticks: { callback: v => v },
             },
           },
@@ -485,7 +485,7 @@ function ChartCargosEquivalentes() {
             x: {
               beginAtZero: true,
               title: { display: true, text: 'Cargos provinciales equivalentes (sobre 17,6 M hab.)', color: C.inkMid, font: { weight: 600 } },
-              grid: { color: C.rule },
+              grid: { color: 'rgba(13,17,23,0.08)' },
               ticks: { callback: v => v.toLocaleString('es-AR') },
             },
             y: { grid: { display: false }, ticks: { font: { weight: 600 } } },

@@ -372,7 +372,7 @@ function EvolucionChart() {
       y: {
         beginAtZero: false, min: 1500,
         title: { display: true, text: 'Barrios registrados', color: C.inkMid, font: { weight: 600 } },
-        grid: { color: C.rule },
+        grid: { color: 'rgba(13,17,23,0.09)' },
         ticks: { callback: v => v.toLocaleString('es-AR') },
       },
       x: {
@@ -420,7 +420,7 @@ function TopMunicipiosChart() {
       x: {
         beginAtZero: true,
         title: { display: true, text: 'Cantidad de barrios populares', color: C.inkMid, font: { weight: 600 } },
-        grid: { color: C.rule },
+        grid: { color: 'rgba(13,17,23,0.09)' },
       },
       y: {
         title: { display: true, text: 'Partido / Municipio', color: C.inkMid, font: { weight: 600 } },
@@ -526,7 +526,7 @@ function DecadasChart() {
       y: {
         beginAtZero: true,
         title: { display: true, text: '% sobre el total de barrios', color: C.inkMid, font: { weight: 600 } },
-        grid: { color: C.rule },
+        grid: { color: 'rgba(13,17,23,0.09)' },
         ticks: { callback: v => v + '%' },
       },
     },

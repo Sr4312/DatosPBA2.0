@@ -353,7 +353,7 @@ function ChartParticipacion() {
       <Bar data={data} options={{
         indexAxis: 'y', responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false }, tooltip: { backgroundColor: C.ink, titleColor: '#fff', bodyColor: '#cbd5e1', padding: 12, cornerRadius: 8, callbacks: { label: ctx => `  ${ctx.raw}%` } } },
-        scales: { x: { max: 100, ticks: { callback: v => v + '%' }, grid: { color: C.rule } }, y: { grid: { display: false } } },
+        scales: { x: { max: 100, ticks: { callback: v => v + '%' }, grid: { color: 'rgba(13,17,23,0.08)' }}, y: { grid: { display: false } } },
       }} />
     </ChartCard>
   )
@@ -410,7 +410,7 @@ function ChartEmpleoPorHa() {
               ticks: {
                 callback: v => [1, 10, 100, 1000].includes(v) ? (v >= 1000 ? v / 1000 + 'K' : v) : '',
               },
-              grid: { color: C.rule },
+              grid: { color: 'rgba(13,17,23,0.08)' },
             },
             x: { grid: { display: false } },
           },
@@ -438,7 +438,7 @@ function ChartTierra() {
       <Bar data={data} options={{
         responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false }, tooltip: { backgroundColor: C.ink, titleColor: '#fff', bodyColor: '#cbd5e1', padding: 12, cornerRadius: 8, callbacks: { label: ctx => `  ${ctx.dataset.label}: ${ctx.raw}%` } } },
-        scales: { y: { max: 100, ticks: { callback: v => v + '%' }, grid: { color: C.rule } }, x: { ticks: { font: { size: 10 }, maxRotation: 0 }, grid: { display: false } } },
+        scales: { y: { max: 100, ticks: { callback: v => v + '%' }, grid: { color: 'rgba(13,17,23,0.08)' }}, x: { ticks: { font: { size: 10 }, maxRotation: 0 }, grid: { display: false } } },
       }} />
     </ChartCard>
   )
@@ -458,7 +458,7 @@ function ChartEAP() {
       <Bar data={data} options={{
         responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false }, tooltip: { backgroundColor: C.ink, titleColor: '#fff', bodyColor: '#cbd5e1', padding: 12, cornerRadius: 8, callbacks: { label: ctx => `  ${ctx.raw.toLocaleString('es-AR')} EAP` } } },
-        scales: { y: { ticks: { callback: v => (v / 1000).toFixed(0) + 'K' }, grid: { color: C.rule } }, x: { grid: { display: false } } },
+        scales: { y: { ticks: { callback: v => (v / 1000).toFixed(0) + 'K' }, grid: { color: 'rgba(13,17,23,0.08)' }}, x: { grid: { display: false } } },
       }} />
     </ChartCard>
   )

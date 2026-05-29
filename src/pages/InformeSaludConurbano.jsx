@@ -948,7 +948,7 @@ function DependientesBar() {
       x: {
         beginAtZero: true,
         title: { display: true, text: 'Habitantes sin cobertura formal de salud', color: C.inkMid, font: { weight: 600, family: 'Poppins, sans-serif' } },
-        grid: { color: C.rule },
+        grid: { color: 'rgba(13,17,23,0.09)' },
         ticks: { font: { family: 'Poppins, sans-serif' }, callback: v => fmt(v) },
       },
       y: {

@@ -352,7 +352,7 @@ function BrechaChart() {
         beginAtZero: true,
         max: 7,
         title: { display: true, text: 'Tasa /100.000 habitantes', color: C.inkMid, font: { weight: 600 } },
-        grid: { color: C.rule },
+        grid: { color: 'rgba(13,17,23,0.09)' },
       },
     },
   }
@@ -401,7 +401,7 @@ function RankingTasaChart() {
         beginAtZero: true,
         max: 10,
         title: { display: true, text: 'Tasa /100.000 hab.', color: C.inkMid, font: { weight: 600 } },
-        grid: { color: C.rule },
+        grid: { color: 'rgba(13,17,23,0.09)' },
       },
       y: { grid: { display: false }, ticks: { font: { weight: 600 } } },
     },
@@ -448,7 +448,7 @@ function RankingAbsChart() {
       x: {
         beginAtZero: true,
         title: { display: true, text: 'Cantidad absoluta', color: C.inkMid, font: { weight: 600 } },
-        grid: { color: C.rule },
+        grid: { color: 'rgba(13,17,23,0.09)' },
       },
       y: { grid: { display: false }, ticks: { font: { weight: 600 } } },
     },
@@ -498,7 +498,7 @@ function MatanzaComparacionChart() {
         beginAtZero: true,
         max: 10,
         title: { display: true, text: 'Tasa /100.000 habitantes', color: C.inkMid, font: { weight: 600 } },
-        grid: { color: C.rule },
+        grid: { color: 'rgba(13,17,23,0.09)' },
       },
     },
   }
