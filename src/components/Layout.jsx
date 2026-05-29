@@ -73,15 +73,6 @@ export default function Layout() {
                 <span className="text-sm hidden sm:inline">Buscar</span>
               </button>
 
-              {/* Dark mode toggle */}
-              <button
-                onClick={toggle}
-                className="p-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-[#0a1628] dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
-                aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-              >
-                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </button>
-
               {/* Mobile hamburger */}
               <button
                 className="lg:hidden p-2 text-slate-500 dark:text-slate-400 hover:text-brand-600 transition-colors"
