@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
-import { Menu, X, ArrowUp, Mail, Twitter, Linkedin, Search, Sun, Moon } from 'lucide-react'
+import { Menu, X, ArrowUp, Mail, Twitter, Search, Sun, Moon } from 'lucide-react'
 import SearchOverlay from './SearchOverlay'
 import { useTheme } from '../context/ThemeContext'
 
@@ -169,17 +169,7 @@ export default function Layout() {
                   @datospba
                 </a>
               </li>
-              <li>
-                <a
-                  href="https://linkedin.com/in/datospba"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors no-underline"
-                >
-                  <Linkedin className="w-4 h-4 shrink-0 text-slate-400" />
-                  DatosPBA
-                </a>
-              </li>
+
             </ul>
           </div>
         </div>
