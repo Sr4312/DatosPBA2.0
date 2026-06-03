@@ -12,6 +12,7 @@
     "@fontsource/playfair-display": "^5.2.8",
     "@fontsource/poppins": "^5.2.7",
     "@supabase/supabase-js": "^2.102.1",
+    "@vercel/analytics": "^2.0.1",
     "chart.js": "^4.4.1",
     "framer-motion": "^11.3.0",
     "html2canvas": "^1.4.1",
