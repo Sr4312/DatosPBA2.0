@@ -1,36 +1,26 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect } from 'react'
 import { Chart as ChartJS } from 'chart.js'
 
 const ThemeContext = createContext(null)
 
 export function ThemeProvider({ children }) {
-  const [isDark, setIsDark] = useState(() => {
-    try {
-      const stored = localStorage.getItem('theme')
-      if (stored) return stored === 'dark'
-    } catch {}
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-  })
-
   useEffect(() => {
+    // Dark mode disabled site-wide: always force light and clear any
+    // previously stored preference so returning visitors are reset too.
     const root = document.documentElement
-    if (isDark) {
-      root.classList.add('dark')
-      localStorage.setItem('theme', 'dark')
-    } else {
-      root.classList.remove('dark')
-      localStorage.setItem('theme', 'light')
-    }
+    root.classList.remove('dark')
+    try {
+      localStorage.removeItem('theme')
+    } catch {}
 
-    // Update Chart.js global defaults so new chart renders pick them up
     if (ChartJS.defaults) {
-      ChartJS.defaults.color = isDark ? '#94a3b8' : '#475569'
-      ChartJS.defaults.borderColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(13,17,23,0.08)'
+      ChartJS.defaults.color = '#475569'
+      ChartJS.defaults.borderColor = 'rgba(13,17,23,0.08)'
     }
-  }, [isDark])
+  }, [])
 
   return (
-    <ThemeContext.Provider value={{ isDark, toggle: () => setIsDark(d => !d) }}>
+    <ThemeContext.Provider value={{ isDark: false, toggle: () => {} }}>
       {children}
     </ThemeContext.Provider>
   )

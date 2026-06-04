@@ -105,7 +105,8 @@
       "mcp__plugin_playwright_playwright__browser_click",
       "WebFetch(domain:www.lanacion.com.ar)",
       "Bash(rtk wc *)",
-      "Bash(rtk tsc *)"
+      "Bash(rtk tsc *)",
+      "WebFetch(domain:x.com)"
     ],
     "additionalDirectories": [
       "C:\\Users\\salva\\.claude"
