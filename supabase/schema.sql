@@ -154,6 +154,17 @@ INSERT INTO informes VALUES (
   '/informes/salud-conurbano-pec-2026', null, true
 );
 
+INSERT INTO informes VALUES (
+  'ranking-fiscal-provincial-2025',
+  'Ranking fiscal provincial 2025: el regreso del déficit subnacional',
+  'Por primera vez en 25 años la Nación tiene superávit y las provincias, en conjunto, déficit. Buenos Aires ocupa el puesto 15 del ranking de Empiria, con déficit fiscal y la mayor deuda del país.',
+  '22 jun. 2026', '2026-06-22', 'Fiscal',
+  '["Provincia de Buenos Aires"]',
+  $$["Por primera vez en 25 años, la Nación registra superávit mientras el conjunto de las provincias presenta déficit. Las administraciones provinciales pasaron de un superávit primario equivalente al 0,4% del PBI en 2024 a un déficit de 0,1% en 2025, mientras que el resultado financiero consolidado también se deterioró, alcanzando un rojo de 0,4% del producto.","Solamente cuatro provincias lograron mejorar sus cuentas fiscales respecto del año anterior. El gasto total provincial aumentó 6% real interanual, liderado por el gasto en personal (+7% real en todas las provincias) y en jubilaciones (+11%), mientras los ingresos crecieron apenas 3%. En contraste, la administración nacional redujo su gasto real en torno al 2%.","El gasto en obra pública creció 3% real en el agregado, pero de forma heterogénea: 10 provincias aumentaron su gasto en capital (Río Negro +93%, Santa Cruz +78%) y 12 lo redujeron (San Luis -49%, Chaco -37%).","La provincia de Buenos Aires aparece como una de las principales alertas: ocupa el puesto 15 del ranking general de Empiria, a pesar de concentrar cerca del 38% de la población argentina. Cerró 2025 con un déficit primario de 0,3% del PBG y un déficit financiero de 0,8%. Su deuda representa el 52% de los ingresos totales, la exposición financiera más alta del país, y muestra un desempeño negativo en calidad del gasto."]$$::jsonb,
+  $$["Las provincias pasaron de superávit primario (+0,4% del PBI en 2024) a déficit (-0,1% en 2025); la Nación, al revés.","Solo 4 de 24 provincias mejoraron sus cuentas fiscales en 2025.","Buenos Aires: puesto 15° del ranking fiscal, déficit de 0,3% del PBG y la deuda más alta del país (52% de sus ingresos)."]$$::jsonb,
+  '/informes/ranking-fiscal-provincial-2025', null, true
+);
+
 -- ── Seed: datasets ──────────────────────────────────────────
 
 INSERT INTO datasets VALUES (
