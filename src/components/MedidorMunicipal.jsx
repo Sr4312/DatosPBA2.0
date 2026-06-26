@@ -87,6 +87,178 @@ function getTasaVial(name) {
   return TASA_VIAL_RAW[normName(name)] ?? null
 }
 
+/* ── Transparencia Fiscal Municipal data (ASAP, Filial PBA) ────────────── */
+function buildTransparencia(rows) {
+  return rows.map(([municipio, cumplimiento, transparencia, presupuesto, sitEcFciera, ejecTrimestral, gastosFinFunc, deuda]) => ({
+    municipio, cumplimiento, transparencia, presupuesto, sitEcFciera, ejecTrimestral, gastosFinFunc, deuda,
+    indice: transparencia + presupuesto + sitEcFciera + ejecTrimestral + gastosFinFunc + deuda,
+  }))
+}
+
+const TRANSPARENCIA_RAW = buildTransparencia([
+  ['Adolfo Alsina', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Adolfo Gonzales Chaves', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Alberti', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Ayacucho', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Balcarce', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Benito Juárez', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Berisso', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Bolívar', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Bragado', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Capitán Sarmiento', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Carlos Casares', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Carlos Tejedor', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Chascomús', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Chivilcoy', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Coronel Dorrego', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Coronel Pringles', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Coronel Suárez', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Florentino Ameghino', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['General Alvarado', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['General Alvear', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['General Belgrano', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['General La Madrid', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['General Madariaga', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['General Pinto', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['General Pueyrredón', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['General San Martín', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['General Viamonte', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['General Villegas', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Hipólito Yrigoyen', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Junín', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['La Matanza', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['La Plata', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Lanús', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Laprida', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Lincoln', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Lobería', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Lobos', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Luján', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Magdalena', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Malvinas Argentinas', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Mercedes', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Monte Hermoso', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Moreno', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Necochea', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Pergamino', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Pinamar', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Puan', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Rauch', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Rivadavia', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Rojas', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Saavedra', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Saladillo', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Salto', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['San Andrés de Giles', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['San Cayetano', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['San Isidro', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['San Miguel', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['San Miguel del Monte', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['San Pedro', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Tandil', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Trenque Lauquen', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Tres Arroyos', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Tres de Febrero', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Villarino', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Zárate', 'Estricto', 5, 30, 35, 10, 10, 10],
+  ['Brandsen', 'Alto', 5, 30, 35, 10, 10, 5],
+  ['Azul', 'Alto', 5, 30, 35, 10, 10, 3],
+  ['Arrecifes', 'Alto', 5, 30, 35, 0, 10, 10],
+  ['Coronel de Marina Leonardo Rosales', 'Alto', 5, 30, 35, 5, 3, 3],
+  ['Colón', 'Alto', 5, 30, 15, 10, 10, 10],
+  ['Almirante Brown', 'Medio', 5, 0, 35, 10, 10, 10],
+  ['Carmen de Areco', 'Medio', 5, 30, 25, 5, 5, 0],
+  ['Chacabuco', 'Medio', 5, 30, 35, 0, 0, 0],
+  ['General Guido', 'Medio', 5, 0, 35, 10, 10, 10],
+  ['Tapalqué', 'Medio', 5, 0, 35, 10, 10, 10],
+  ['Bahía Blanca', 'Medio', 5, 30, 25, 0, 0, 5],
+  ['Avellaneda', 'Medio', 5, 30, 25, 0, 0, 0],
+  ['Berazategui', 'Medio', 5, 30, 25, 0, 0, 0],
+  ['Las Flores', 'Medio', 5, 20, 35, 0, 0, 0],
+  ['Pila', 'Medio', 5, 30, 25, 0, 0, 0],
+  ['Tornquist', 'Medio', 5, 30, 25, 0, 0, 0],
+  ['Baradero', 'Medio', 5, 0, 35, 0, 10, 0],
+  ['Daireaux', 'Medio', 5, 0, 25, 0, 10, 10],
+  ['Olavarría', 'Medio', 5, 0, 25, 5, 5, 5],
+  ['Pellegrini', 'Medio', 5, 0, 25, 5, 5, 5],
+  ['Vicente López', 'Medio', 5, 0, 25, 5, 5, 5],
+  ['Nueve de Julio', 'Medio', 5, 0, 25, 3, 5, 5],
+  ['Patagones', 'Medio', 5, 0, 25, 10, 0, 0],
+  ['Exaltación de la Cruz', 'Bajo', 5, 0, 25, 5, 0, 0],
+  ['San Antonio de Areco', 'Bajo', 5, 0, 25, 5, 0, 0],
+  ['Dolores', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Ensenada', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Escobar', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Ezeiza', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Florencio Varela', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['General Las Heras', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['General Lavalle', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['General Rodríguez', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Ituzaingó', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['José C. Paz', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Maipú', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Morón', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Navarro', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Pehuajó', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Quilmes', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Ramallo', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Roque Pérez', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Salliqueló', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['San Fernando', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['San Vicente', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Suipacha', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Tres Lomas', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Veinticinco de Mayo', 'Bajo', 5, 0, 25, 0, 0, 0],
+  ['Pilar', 'Bajo', 5, 0, 0, 10, 0, 0],
+  ['Campana', 'Nulo', 5, 0, 0, 0, 0, 0],
+  ['General Arenales', 'Nulo', 5, 0, 0, 0, 0, 0],
+  ['General Paz', 'Nulo', 5, 0, 0, 0, 0, 0],
+  ['Hurlingham', 'Nulo', 5, 0, 0, 0, 0, 0],
+  ['Leandro N. Alem', 'Nulo', 5, 0, 0, 0, 0, 0],
+  ['Lezama', 'Nulo', 5, 0, 0, 0, 0, 0],
+  ['Mar Chiquita', 'Nulo', 5, 0, 0, 0, 0, 0],
+  ['Merlo', 'Nulo', 5, 0, 0, 0, 0, 0],
+  ['Punta Indio', 'Nulo', 5, 0, 0, 0, 0, 0],
+  ['Tigre', 'Nulo', 5, 0, 0, 0, 0, 0],
+  ['Tordillo', 'Nulo', 5, 0, 0, 0, 0, 0],
+  ['Villa Gesell', 'Nulo', 5, 0, 0, 0, 0, 0],
+  ['Cañuelas', 'Nulo', 0, 0, 0, 0, 0, 0],
+  ['Castelli', 'Nulo', 0, 0, 0, 0, 0, 0],
+  ['Esteban Echeverría', 'Nulo', 0, 0, 0, 0, 0, 0],
+  ['Guaminí', 'Nulo', 0, 0, 0, 0, 0, 0],
+  ['La Costa', 'Nulo', 0, 0, 0, 0, 0, 0],
+  ['Lomas de Zamora', 'Nulo', 0, 0, 0, 0, 0, 0],
+  ['Marcos Paz', 'Nulo', 0, 0, 0, 0, 0, 0],
+  ['Presidente Perón', 'Nulo', 0, 0, 0, 0, 0, 0],
+  ['San Nicolás', 'Nulo', 0, 0, 0, 0, 0, 0],
+])
+
+const TRANSPARENCIA_DATA = {}
+TRANSPARENCIA_RAW.forEach(d => { TRANSPARENCIA_DATA[normName(d.municipio)] = d })
+
+const CUMPLIMIENTO_COLORS = {
+  Estricto: '#166534',
+  Alto:     '#4d7c0f',
+  Medio:    '#b45309',
+  Bajo:     '#c2410c',
+  Nulo:     '#991b1b',
+}
+
+function transparenciaFill(indice) {
+  const t = Math.max(0, Math.min(1, indice / 100))
+  const hue = Math.round(120 * t)
+  return `hsl(${hue},70%,42%)`
+}
+
+function transparenciaStyle(data, state) {
+  const w = state !== 'default' ? 1.5 : 0.6
+  if (!data) {
+    return { fillColor: '#cbd5e1', fillOpacity: 0.25, color: '#94a3b8', weight: 0.4, opacity: 0.6 }
+  }
+  const fo = state === 'selected' ? 0.88 : state === 'hover' ? 0.78 : 0.62
+  return { fillColor: transparenciaFill(data.indice), fillOpacity: fo, color: '#1e293b', weight: w, opacity: 0.75 }
+}
+
 function tasaFill(valor) {
   const t = (valor - 0.8) / 2.2
   const h = Math.round(45 * (1 - t))
@@ -151,6 +323,7 @@ const TEMAS = [
   { id: 'produccion', label: 'Índice de producción' },
   { id: 'tasas',      label: 'Tasas municipales'   },
   { id: 'tasavial',   label: 'Tasa vial'           },
+  { id: 'transparencia', label: 'Transparencia fiscal' },
   { id: 'concejales', label: 'Gasto concejales'    },
 ]
 
@@ -181,6 +354,7 @@ const INDICATORS = {
   ],
   tasas: null,
   tasavial: 'tasa',
+  transparencia: 'transparencia',
   concejales: 'custom',
 }
 
@@ -257,6 +431,8 @@ export default function AtlasMunicipal() {
         layer.setStyle(cd ? concejalesStyle(cd.por_habitante, 'default') : HIDDEN_STYLE)
       } else if (t === 'tasavial') {
         layer.setStyle(tasaVialStyle(layer._tasaData, 'default'))
+      } else if (t === 'transparencia') {
+        layer.setStyle(transparenciaStyle(layer._transparenciaData, 'default'))
       } else {
         layer.setStyle(THEMES[t]?.default || THEMES.general.default)
       }
@@ -273,6 +449,8 @@ export default function AtlasMunicipal() {
         selectedRef.current.setStyle(cd ? concejalesStyle(cd.por_habitante, 'default') : HIDDEN_STYLE)
       } else if (t === 'tasavial') {
         selectedRef.current.setStyle(tasaVialStyle(selectedRef.current._tasaData, 'default'))
+      } else if (t === 'transparencia') {
+        selectedRef.current.setStyle(transparenciaStyle(selectedRef.current._transparenciaData, 'default'))
       } else {
         selectedRef.current.setStyle(THEMES[t]?.default || THEMES.general.default)
       }
@@ -327,10 +505,11 @@ export default function AtlasMunicipal() {
             const name   = p.nombre || p.nam || ''
             const codigo = in1 ? in1ToCode(in1) : null
 
-            layer._municipiosData   = codigo ? dataByCode[codigo] : null
-            layer._concejalesData   = CONCEJALES_DATA[normName(name)] || null
-            layer._tasaData         = getTasaVial(name)
-            layer._featureName      = name
+            layer._municipiosData    = codigo ? dataByCode[codigo] : null
+            layer._concejalesData    = CONCEJALES_DATA[normName(name)] || null
+            layer._tasaData          = getTasaVial(name)
+            layer._transparenciaData = TRANSPARENCIA_DATA[normName(name)] || null
+            layer._featureName       = name
 
             layer.bindTooltip(name, { sticky: true, direction: 'auto', className: 'muni-tooltip' })
 
@@ -342,6 +521,8 @@ export default function AtlasMunicipal() {
                 if (cd) e.target.setStyle(concejalesStyle(cd.por_habitante, 'hover'))
               } else if (t === 'tasavial') {
                 e.target.setStyle(tasaVialStyle(e.target._tasaData, 'hover'))
+              } else if (t === 'transparencia') {
+                e.target.setStyle(transparenciaStyle(e.target._transparenciaData, 'hover'))
               } else {
                 e.target.setStyle(THEMES[t]?.hover || THEMES.general.hover)
               }
@@ -355,6 +536,8 @@ export default function AtlasMunicipal() {
                 e.target.setStyle(cd ? concejalesStyle(cd.por_habitante, 'default') : HIDDEN_STYLE)
               } else if (t === 'tasavial') {
                 e.target.setStyle(tasaVialStyle(e.target._tasaData, 'default'))
+              } else if (t === 'transparencia') {
+                e.target.setStyle(transparenciaStyle(e.target._transparenciaData, 'default'))
               } else {
                 e.target.setStyle(THEMES[t]?.default || THEMES.general.default)
               }
@@ -371,6 +554,10 @@ export default function AtlasMunicipal() {
                 const prevCd = prev._concejalesData
                 if (t === 'concejales') {
                   prev.setStyle(prevCd ? concejalesStyle(prevCd.por_habitante, 'default') : HIDDEN_STYLE)
+                } else if (t === 'tasavial') {
+                  prev.setStyle(tasaVialStyle(prev._tasaData, 'default'))
+                } else if (t === 'transparencia') {
+                  prev.setStyle(transparenciaStyle(prev._transparenciaData, 'default'))
                 } else {
                   prev.setStyle(THEMES[t]?.default || THEMES.general.default)
                 }
@@ -385,7 +572,8 @@ export default function AtlasMunicipal() {
                 ...(muniData || {}),
                 _concejales: cd || null,
                 _tasa: layer._tasaData || null,
-                _noData: t !== 'tasavial' && !muniData && !cd,
+                _transparencia: layer._transparenciaData || null,
+                _noData: t !== 'tasavial' && t !== 'transparencia' && !muniData && !cd,
               })
             })
           },
@@ -438,7 +626,7 @@ export default function AtlasMunicipal() {
         {/* Header */}
         <div className="px-5 pt-5 pb-4 border-b border-slate-100 shrink-0">
           <h3 className="text-lg font-bold text-[#0a1628] leading-tight">{selected.nombre}</h3>
-          {tema !== 'concejales' && (
+          {tema !== 'concejales' && tema !== 'transparencia' && (
             <div className="flex flex-wrap gap-4 mt-3">
               {selected.poblacion && (
                 <div>
@@ -470,6 +658,22 @@ export default function AtlasMunicipal() {
                 <p className="text-xl font-bold text-orange-600 leading-none">{selected._concejales.pct_total}%</p>
                 <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Del presupuesto</p>
               </div>
+            </div>
+          )}
+          {tema === 'transparencia' && selected._transparencia && (
+            <div className="flex flex-wrap items-center gap-3 mt-3">
+              <div>
+                <p className="text-2xl font-bold leading-none" style={{ color: transparenciaFill(selected._transparencia.indice) }}>
+                  {selected._transparencia.indice}
+                </p>
+                <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Índice (0–100)</p>
+              </div>
+              <span
+                className="text-xs font-semibold px-2.5 py-1 rounded-full text-white"
+                style={{ backgroundColor: CUMPLIMIENTO_COLORS[selected._transparencia.cumplimiento] }}
+              >
+                {selected._transparencia.cumplimiento}
+              </span>
             </div>
           )}
         </div>
@@ -514,6 +718,41 @@ export default function AtlasMunicipal() {
               </div>
             ) : (
               <p className="text-xs text-slate-400">Sin datos de tasa vial para este partido en el relevamiento 2025.</p>
+            )}
+          </div>
+        ) : indicators === 'transparencia' ? (
+          /* Transparencia fiscal detail */
+          <div className="flex-1 overflow-y-auto px-5 py-4">
+            {selected._transparencia ? (() => {
+              const d = selected._transparencia
+              const rows = [
+                { label: 'Transparencia',                 value: d.transparencia,  max: 5  },
+                { label: 'Presupuesto',                   value: d.presupuesto,    max: 30 },
+                { label: 'Situación económica financiera', value: d.sitEcFciera,    max: 35 },
+                { label: 'Ejecución trimestral',           value: d.ejecTrimestral, max: 10 },
+                { label: 'Gastos en función financiera',   value: d.gastosFinFunc,  max: 10 },
+                { label: 'Deuda',                          value: d.deuda,          max: 10 },
+              ]
+              return (
+                <div className="flex flex-col gap-3">
+                  {rows.map(r => (
+                    <div key={r.label} className="flex flex-col gap-1">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-slate-500">{r.label}</span>
+                        <span className="text-xs font-semibold text-slate-900">{r.value}/{r.max}</span>
+                      </div>
+                      <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full rounded-full transition-all duration-500"
+                          style={{ width: `${(r.value / r.max) * 100}%`, backgroundColor: transparenciaFill((r.value / r.max) * 100) }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )
+            })() : (
+              <p className="text-xs text-slate-400">Sin datos de transparencia fiscal para este partido.</p>
             )}
           </div>
         ) : indicators === 'custom' ? (
@@ -580,6 +819,7 @@ export default function AtlasMunicipal() {
                 produccion: tema === t.id ? 'bg-[#063d2f] text-white border-[#063d2f]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#0a5240] hover:text-[#0a5240]',
                 tasas:      tema === t.id ? 'bg-[#4c1d95] text-white border-[#4c1d95]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#6d28d9] hover:text-[#6d28d9]',
                 tasavial:   tema === t.id ? 'bg-[#991b1b] text-white border-[#991b1b]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#7f1d1d] hover:text-[#7f1d1d]',
+                transparencia: tema === t.id ? 'bg-[#14532d] text-white border-[#14532d]' : 'bg-white text-slate-500 border-slate-200 hover:border-[#15803d] hover:text-[#15803d]',
                 concejales: tema === t.id ? 'bg-[#7b2d00] text-white border-[#7b2d00]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#5c2000] hover:text-[#5c2000]',
               }
               return (
@@ -620,6 +860,17 @@ export default function AtlasMunicipal() {
               </div>
               <p className="text-[11px] text-slate-400 mt-1.5">
                 Fuente: Ministerio de Economía de la Nación - Subsecretaría de Coordinación Fiscal Provincial, mar. 2025
+              </p>
+            </>
+          )}
+          {tema === 'transparencia' && (
+            <>
+              <div className="flex items-center gap-1.5 mt-3">
+                <div className="flex-shrink-0 w-20 h-2 rounded-full" style={{ background: 'linear-gradient(to right, hsl(0,70%,42%), hsl(60,70%,42%), hsl(120,70%,42%))' }} />
+                <span className="text-[10px] text-slate-400">Índice 0 (Nulo) → 100 (Estricto)</span>
+              </div>
+              <p className="text-[11px] text-slate-400 mt-1.5">
+                Fuente: ASAP - Asociación Argentina de Presupuesto y Administración Financiera Pública, Filial Provincia de Buenos Aires
               </p>
             </>
           )}
