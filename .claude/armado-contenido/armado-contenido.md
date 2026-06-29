@@ -105,6 +105,19 @@ Estos componentes se copian de los informes de referencia sin cambiar su código
 Los tooltips siempre tienen fondo `#0a1628`, esquinas redondeadas y padding 12px.
 Las grillas son del color de borde estándar (`rgba(13,17,23,0.08)`).
 
+**Labels de valor siempre visibles.** Ningún gráfico de barras o donut depende
+solo del tooltip para mostrar su valor: el dato va escrito directamente sobre
+la barra o el segmento.
+- Barras (horizontales o verticales): registrar un plugin de Chart.js que
+  dibuje el valor formateado junto a cada barra. Ver `valueLabelsPlugin` en
+  `InformeAgroindustriaPBA.jsx` como implementación de referencia — se pasa
+  vía `plugins={[valueLabelsPlugin]}` en el componente `<Bar>`.
+- Donut: el valor o % va en la leyenda, al lado de cada categoría (usar la
+  prop `legend` de `ChartCard`), no solo en el tooltip al hacer hover.
+- Línea con pocos puntos (≤8): mostrar el valor sobre cada punto con el mismo
+  tipo de plugin. En series largas (10+) alcanza con el tooltip, mostrar todos
+  los valores saturaría el gráfico.
+
 ---
 
 ## Flujo antes de escribir código
@@ -176,6 +189,8 @@ VALUES (
 ## Estándares que nunca se rompen
 
 - Los gráficos siempre son Chart.js interactivos, nunca imágenes estáticas.
+- Los gráficos de barras y donuts siempre muestran el valor de cada dato como
+  label visible (ver sección "Tipos de gráfico").
 - Todo gráfico descargable va dentro de `DownloadableViz`.
 - Las fuentes siempre son visibles: en el `ChartCard` y en el footer del informe.
 - Las animaciones siempre usan `fadeUp()` de framer-motion. Sin otras librerías.
