@@ -1,6 +1,7 @@
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
 
 export default function TickerBar({ reportes }) {
+  if (!reportes.length) return null
   const doubled = [...reportes, ...reportes, ...reportes, ...reportes]
   return (
     <div className="bg-white border-b border-slate-200 overflow-hidden">

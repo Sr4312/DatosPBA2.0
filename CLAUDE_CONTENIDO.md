@@ -5,11 +5,30 @@ Tu rol
 ------
 Sos el editor de contenido de este sitio. Tu trabajo es guiar la creación
 de informes nuevos en el estilo visual y estructural de los informes de referencia:
-"La agroindustria en la Provincia de Buenos Aires" (InformeAgroindustriaPBA.jsx)
-y "La minería que nadie mira en Buenos Aires" (InformeMineriaPBA.jsx).
+"La agroindustria en la Provincia de Buenos Aires" (InformeAgroindustriaPBA.jsx, paleta azul)
+y "La minería que nadie mira en Buenos Aires" (InformeMineriaPBA.jsx, paleta dorada).
+
+Para el contexto general del sitio (stack, rutas, tablas de Supabase,
+componentes compartidos), leé CLAUDE_WEB.md.
 
 Antes de escribir una sola línea de código, hacé las preguntas del FLUJO DE CARGA.
 No omitas pasos. Si algo no quedó claro, preguntá de nuevo.
+
+Informes ya publicados (usá el más parecido como referencia adicional)
+-----------------------------------------------------------------------
+| Slug                            | Archivo                        | Tema                    |
+|---------------------------------|--------------------------------|-------------------------|
+| kpmg-iibb-2025                  | InformeKPMGIIBB.jsx            | Presión fiscal IIBB     |
+| caf-estado-municipal-pba        | InformeCAFEstadoMunicipal.jsx  | Estado municipal        |
+| renabap-pba-2026                | InformeRENABAP.jsx             | Barrios populares       |
+| salud-conurbano-pec-2026        | InformeSaludConurbano.jsx      | Salud                   |
+| mineria-pba-2025                | InformeMineriaPBA.jsx          | Minería (ref. dorada)   |
+| medicamentos-tish-pba-2025      | InformeMedicamentosTISH.jsx    | Tasas municipales       |
+| agroindustria-pba-2026          | InformeAgroindustriaPBA.jsx    | Agroindustria (ref. azul)|
+| empleo-publico-pba-2026         | InformeEmpleoPblicoPBA.jsx     | Empleo público          |
+| homicidios-pba-2025             | InformeHomicidiosPBA.jsx       | Seguridad               |
+| ranking-fiscal-provincial-2025  | InformeRankingFiscalPBA.jsx    | Ranking fiscal          |
+| presupuesto-genero-pba-2026     | InformePresupuestoGeneroPBA.jsx| Presupuesto y género    |
 
 
 ════════════════════════════════════════════════════════════════
@@ -294,6 +313,16 @@ ESTRUCTURA DEL ARCHIVO JSX
 Nombre del archivo: Informe[NombrePascalCase].jsx
 Ubicación: src/pages/
 
+Imports típicos
+----------------
+import { Link } from 'react-router-dom'
+import { m } from 'framer-motion'          ← siempre `m`, nunca `motion` (la app usa LazyMotion)
+import { ArrowLeft, ExternalLink } from 'lucide-react'
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement,
+  LineElement, PointElement, ArcElement, Tooltip, Legend, Filler } from 'chart.js'
+import { Bar, Line, Doughnut } from 'react-chartjs-2'
+import html2canvas from 'html2canvas'      ← para DownloadableViz
+
 Orden interno del archivo
 --------------------------
 1. Imports
@@ -521,11 +550,11 @@ Estándares de gráficos
 
 
 ════════════════════════════════════════════════════════════════
-REGISTRO DE LA RUTA
+PUBLICACIÓN — RUTA + SUPABASE
 ════════════════════════════════════════════════════════════════
 
-Después de crear el archivo JSX, hay que agregar dos cosas en App.jsx:
-
+Paso A — Registrar la ruta en App.jsx
+--------------------------------------
 1. Import lazy al inicio (con los demás lazy imports):
    const InformeNuevo = lazy(() => import('./pages/InformeNuevo'))
 
@@ -533,6 +562,32 @@ Después de crear el archivo JSX, hay que agregar dos cosas en App.jsx:
    <Route path="informes/slug-del-informe" element={<Suspense fallback={null}><InformeNuevo /></Suspense>} />
 
 La ruta genérica `informes/:id` debe quedar siempre al final.
+
+Paso B — Insertar la fila en Supabase (tabla `informes`)
+---------------------------------------------------------
+IMPORTANTE: sin este paso el informe NO aparece en el índice /informes,
+ni en el buscador (SearchOverlay), ni en /beta, ni en la home.
+El índice se arma leyendo la tabla, no las rutas.
+
+Campos de la fila:
+  titulo        → título del informe
+  bajada        → la bajada del hero
+  tema          → temática (usar una existente si aplica: ver filtro en /informes)
+  fecha         → fecha legible (ej: "Julio 2026")
+  fecha_orden   → YYYY-MM-DD (define el orden en el índice)
+  url           → /informes/slug-del-informe
+  imagen        → portada para la card (opcional)
+  municipios    → array de municipios mencionados (opcional)
+  insights      → puntos destacados para la card (opcional)
+
+Recordale al usuario este paso si no tenés acceso a Supabase.
+
+Paso C — Verificación antes de dar por terminado
+-------------------------------------------------
+· npm run build compila sin errores
+· La ruta /informes/slug-del-informe carga el informe
+· El informe aparece en el índice /informes (si ya se insertó la fila)
+· Los gráficos descargan bien el PNG (botón de DownloadableViz)
 
 
 ════════════════════════════════════════════════════════════════
@@ -558,6 +613,12 @@ ESTÁNDARES QUE NUNCA SE ROMPEN
 · Animaciones: siempre con fadeUp(). No usar CSS animations ni otras librerías.
 · Máximo de ancho de texto: maxWidth: '72ch' en los párrafos de cuerpo.
 · Fechas internas: formato YYYY-MM-DD.
-· Tipografía: Poppins (ya cargada globalmente). No introducir otras fuentes.
+· Tipografía: Poppins en todo el sitio (cuerpo y títulos). No introducir
+  otras fuentes ni serifs.
 · Paleta base C: nunca modificarla. Agregar paleta de acento si hace falta.
 · Download: siempre con el footer de DatosPBA (drawFooter ya resuelve esto).
+· Guiones: nunca usar em-dash (—) en el contenido. Siempre guión simple (-).
+· Dark mode: está deshabilitado en todo el sitio. Los informes usan estilos
+  inline sobre fondo claro; no agregar clases dark: ni lógica de tema.
+· Los informes son autocontenidos: cada JSX define sus propios componentes
+  UI y datos. No importar componentes de otros informes ni crear shared/.

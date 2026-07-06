@@ -807,7 +807,7 @@ export default function AtlasMunicipal() {
         {/* Header + tabs */}
         <div className="mb-6">
           <div className="flex items-center border-b-2 border-[#0a1628] pb-3 mb-5">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#0a1628] leading-none tracking-tight">
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#0a1628] leading-none tracking-tight">
               Atlas Municipal
             </h2>
           </div>

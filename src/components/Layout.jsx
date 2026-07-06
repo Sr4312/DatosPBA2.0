@@ -29,6 +29,17 @@ export default function Layout() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    const onKey = e => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setSearchOpen(true)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   return (
     <div className="min-h-screen">
       <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'py-2.5 px-3 sm:px-8 lg:px-16' : ''}`}>
@@ -71,6 +82,9 @@ export default function Layout() {
               >
                 <Search className="w-4 h-4" />
                 <span className="text-sm hidden sm:inline">Buscar</span>
+                <kbd className="hidden lg:inline-flex items-center gap-0.5 text-[10px] font-medium text-slate-400 border border-slate-200 dark:border-slate-700 rounded px-1.5 py-0.5">
+                  Ctrl K
+                </kbd>
               </button>
 
               {/* Mobile hamburger */}
@@ -176,9 +190,9 @@ export default function Layout() {
       </section>
 
       <footer className="bg-[#0a1628] py-5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center text-xs text-slate-500">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center text-xs text-slate-400">
           <span>© {new Date().getFullYear()} DatosPBA</span>
-          <span className="text-brand-600 font-medium tracking-widest uppercase text-[10px]">Provincia de Buenos Aires</span>
+          <span className="text-brand-300 font-medium tracking-widest uppercase text-[10px]">Provincia de Buenos Aires</span>
         </div>
       </footer>
 

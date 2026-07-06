@@ -311,26 +311,27 @@ export default function Home() {
               transition={{ duration: 0.5 }}
             >
               <p className="text-brand-400 text-xs font-semibold tracking-[0.2em] uppercase mb-6">
-                Provincia de Buenos Aires
+                DatosPBA · Provincia de Buenos Aires
               </p>
-              <h1 className="font-display text-5xl sm:text-7xl font-normal text-white tracking-tight leading-none">
-                Datos<span className="text-brand-400 font-bold">PBA</span>
+              <h1 className="font-display text-4xl sm:text-6xl font-bold text-white tracking-tight leading-[1.08]">
+                La provincia,<br />
+                contada con <span className="text-brand-400">datos</span>.
               </h1>
               <p className="text-slate-400 text-sm sm:text-base leading-relaxed mt-5 max-w-sm">
-                Datos, análisis e informes sobre política, economía y territorio bonaerense.
+                Análisis e informes sobre política, economía y territorio bonaerense, basados en evidencia.
               </p>
               <div className="flex gap-8 sm:gap-12 mt-10 pt-8 border-t border-white/10">
                 <div>
                   <p className="text-3xl font-bold text-white tabular-nums leading-none">135</p>
-                  <p className="text-[11px] text-slate-500 mt-2 uppercase tracking-widest">municipios</p>
+                  <p className="text-[11px] text-slate-400 mt-2 uppercase tracking-widest">municipios</p>
                 </div>
                 <div>
                   <p className="text-3xl font-bold text-white tabular-nums leading-none">17M+</p>
-                  <p className="text-[11px] text-slate-500 mt-2 uppercase tracking-widest">habitantes</p>
+                  <p className="text-[11px] text-slate-400 mt-2 uppercase tracking-widest">habitantes</p>
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-white tabular-nums leading-none">2026</p>
-                  <p className="text-[11px] text-slate-500 mt-2 uppercase tracking-widest">actualizado</p>
+                  <p className="text-3xl font-bold text-white tabular-nums leading-none">{new Date().getFullYear()}</p>
+                  <p className="text-[11px] text-slate-400 mt-2 uppercase tracking-widest">actualizado</p>
                 </div>
               </div>
             </m.div>

@@ -9,12 +9,13 @@ export default function HiloCard({ hilo, index = 0 }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.06, duration: 0.5 }}
-      className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-700/50 border-l-4 border-l-purple-400 flex flex-col hover:shadow-md hover:border-l-purple-500 transition-all overflow-hidden"
+      className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-700/50 border-l-4 border-l-purple-400 flex flex-col hover:shadow-md hover:-translate-y-0.5 hover:border-l-purple-500 transition-all overflow-hidden"
     >
       {hilo.imagen && (
         <img
           src={hilo.imagen}
           alt={hilo.titulo}
+          loading="lazy"
           className="w-full h-36 object-cover"
         />
       )}

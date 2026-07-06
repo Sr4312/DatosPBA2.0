@@ -23,7 +23,7 @@ export default function ReportesRapidos() {
           transition={{ duration: 0.5 }}
           className="mb-10"
         >
-          <h1 className="text-4xl font-bold text-[#0a1628] dark:text-slate-100 tracking-tight mb-3">Reportes rápidos</h1>
+          <h1 className="font-display text-4xl font-bold text-[#0a1628] dark:text-slate-100 tracking-tight mb-3">Reportes rápidos</h1>
           <p className="text-lg text-slate-600 dark:text-slate-400">Datos puntuales, comparativas y hallazgos concisos</p>
         </m.div>
 
