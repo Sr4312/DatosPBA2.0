@@ -641,6 +641,8 @@ export default function AtlasMunicipal() {
             layer.on('click', () => {
               const t  = temaRef.current
               const cd = layer._concejalesData
+              // 'tasas' is a "próx." placeholder with no panel data — clicking would crash on indicators.map(null)
+              if (t === 'tasas') return
               // In concejales mode, ignore clicks on hidden municipalities
               if (t === 'concejales' && !cd) return
 
