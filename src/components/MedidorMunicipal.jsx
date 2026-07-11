@@ -259,6 +259,90 @@ function transparenciaStyle(data, state) {
   return { fillColor: transparenciaFill(data.indice), fillOpacity: fo, color: '#1e293b', weight: w, opacity: 0.75 }
 }
 
+/* ── Economía municipal — Cadenas Productivas (Lodola, Senado PBA) ────────── */
+const CADENA_CATEGORIAS = {
+  MADUROS: {
+    label: 'Maduros', vab: '15,8%', color: '#E8641E', largo: 'up', corto: 'down',
+    desc: 'Buena trayectoria de largo plazo pero desaceleración en 2025. Municipios industriales o con base productiva diversificada, de menor volatilidad positiva reciente.',
+  },
+  LIDERES: {
+    label: 'Líderes', vab: '14,3%', color: '#3F9C4A', largo: 'up', corto: 'up',
+    desc: 'Crecimiento sólido en el largo plazo y recuperación fuerte en 2025. Perfil exportador agropecuario (maní, soja, trigo) y turístico.',
+  },
+  REZAGADOS: {
+    label: 'Rezagados', vab: '52,2%', color: '#C0453A', largo: 'down', corto: 'down',
+    desc: 'Bajo crecimiento en ambos planos. Concentra gran parte del Conurbano bonaerense y economías urbanas de gran tamaño, con inercia estructural y alta ponderación provincial.',
+  },
+  EMERGENTES: {
+    label: 'Emergentes', vab: '17,8%', color: '#3F6FAE', largo: 'down', corto: 'up',
+    desc: 'Crecimiento 2025 por encima de la mediana pero trayectoria de largo plazo rezagada. Predomina el rebote cíclico sobre el dinamismo estructural.',
+  },
+}
+
+const CADENA_MUNICIPIOS = {
+  MADUROS: [
+    'Chascomús', 'Dolores', 'Malvinas Argentinas', 'Florencio Varela', 'Salto', 'Tigre',
+    'Magdalena', 'Laprida', 'Cañuelas', 'Alberti', 'Carlos Casares', 'San Antonio de Areco',
+    'Roque Pérez', 'Monte', 'Saladillo', 'Hipólito Yrigoyen', 'Escobar', 'Maipú', 'Bragado',
+    'General Paz', 'Pilar', 'Bolívar', 'General Alvear', 'Pergamino', 'Brandsen', 'Adolfo Alsina',
+    'Baradero', 'Ramallo', 'Zárate', 'Las Flores',
+  ],
+  LIDERES: [
+    'Carlos Tejedor', 'Rivadavia', 'Florentino Ameghino', 'Monte Hermoso', 'Villa Gesell',
+    'Pehuajó', 'La Costa', 'Pinamar', 'General Pinto', 'General Villegas', 'Marcos Paz',
+    '9 de Julio', 'Tordillo', 'Tornquist', 'Punta Indio', 'General Juan Madariaga', 'San Vicente',
+    'San Andrés de Giles', 'General Viamonte', 'General Arenales', 'Exaltación de la Cruz',
+    'General Belgrano', 'Coronel de Marina Leonardo Rosales', 'Berazategui', 'Leandro N. Alem',
+    'Junín', 'Ezeiza', 'Presidente Perón', 'Esteban Echeverría', 'Chacabuco', 'Ayacucho',
+    'Carmen de Areco', 'Pila', 'Mar Chiquita', 'Rauch', 'Balcarce', 'Moreno', 'Rojas',
+  ],
+  REZAGADOS: [
+    'Avellaneda', 'San Miguel', 'Almirante Brown', 'Bahía Blanca', 'Lobos', 'General Rodríguez',
+    'Morón', 'Villarino', 'La Matanza', 'General San Martín', 'Lomas de Zamora', 'La Plata',
+    'Lanús', 'Merlo', 'Luján', 'San Nicolás', 'Azul', 'San Isidro', 'Quilmes', 'General Lavalle',
+    'San Fernando', 'Olavarría', 'Tres Arroyos', 'Mercedes', 'Colón', 'Campana', 'San Pedro',
+    'Suipacha', 'José C. Paz', 'Berisso', 'Capitán Sarmiento', 'General Las Heras', 'Benito Juárez',
+    'Salliqueló', 'San Cayetano', 'Daireaux', 'Coronel Suárez',
+  ],
+  EMERGENTES: [
+    'Lezama', 'Guaminí', 'Coronel Dorrego', 'Patagones', 'Puán', 'Trenque Lauquen',
+    'General Alvarado', 'Ensenada', 'General Pueyrredón', 'General Guido', 'Castelli',
+    'General La Madrid', 'Saavedra', 'Tres Lomas', 'Pellegrini', 'Necochea', 'Tapalqué',
+    'Arrecifes', 'Coronel Pringles', 'Navarro', 'Tres de Febrero', 'Lincoln', '25 de Mayo',
+    'Lobería', 'Adolfo Gonzales Chaves', 'Vicente López', 'Chivilcoy', 'Ituzaingó', 'Hurlingham',
+    'Tandil',
+  ],
+}
+
+const CADENA_CAT = {}
+Object.entries(CADENA_MUNICIPIOS).forEach(([cat, arr]) => {
+  arr.forEach(n => { CADENA_CAT[normName(n)] = cat })
+})
+
+// Match by código (like the general theme) so every partido colors; name as fallback.
+const CADENA_BY_CODE = {}
+MUNICIPIOS_DATA.forEach(d => {
+  const cat = CADENA_CAT[normName(d.nombre)]
+  if (cat) CADENA_BY_CODE[d.codigo] = cat
+})
+
+// ponytail: dev sanity — every partido must land in exactly one categoría (catches name typos)
+if (import.meta.env?.DEV) {
+  const missing = MUNICIPIOS_DATA
+    .filter(d => d.nombre !== 'Buenos Aires' && !CADENA_CAT[normName(d.nombre)])
+    .map(d => d.nombre)
+  if (missing.length) console.warn('[Economía municipal] partidos sin categoría:', missing)
+}
+
+function cadenaStyle(cat, state) {
+  const w = state !== 'default' ? 1.5 : 0.6
+  if (!cat) {
+    return { fillColor: '#cbd5e1', fillOpacity: 0.25, color: '#94a3b8', weight: 0.4, opacity: 0.6 }
+  }
+  const fo = state === 'selected' ? 0.9 : state === 'hover' ? 0.8 : 0.62
+  return { fillColor: CADENA_CATEGORIAS[cat].color, fillOpacity: fo, color: '#1e293b', weight: w, opacity: 0.8 }
+}
+
 function tasaFill(valor) {
   const t = (valor - 0.8) / 2.2
   const h = Math.round(45 * (1 - t))
@@ -321,6 +405,7 @@ const THEMES = {
 const TEMAS = [
   { id: 'general',    label: 'Información general' },
   { id: 'produccion', label: 'Índice de producción' },
+  { id: 'economia',   label: 'Economía municipal' },
   { id: 'tasas',      label: 'Tasas municipales'   },
   { id: 'tasavial',   label: 'Tasa vial'           },
   { id: 'transparencia', label: 'Transparencia fiscal' },
@@ -355,6 +440,7 @@ const INDICATORS = {
   tasas: null,
   tasavial: 'tasa',
   transparencia: 'transparencia',
+  economia: 'economia',
   concejales: 'custom',
 }
 
@@ -433,6 +519,8 @@ export default function AtlasMunicipal() {
         layer.setStyle(tasaVialStyle(layer._tasaData, 'default'))
       } else if (t === 'transparencia') {
         layer.setStyle(transparenciaStyle(layer._transparenciaData, 'default'))
+      } else if (t === 'economia') {
+        layer.setStyle(cadenaStyle(layer._cadenaCat, 'default'))
       } else {
         layer.setStyle(THEMES[t]?.default || THEMES.general.default)
       }
@@ -451,6 +539,8 @@ export default function AtlasMunicipal() {
         selectedRef.current.setStyle(tasaVialStyle(selectedRef.current._tasaData, 'default'))
       } else if (t === 'transparencia') {
         selectedRef.current.setStyle(transparenciaStyle(selectedRef.current._transparenciaData, 'default'))
+      } else if (t === 'economia') {
+        selectedRef.current.setStyle(cadenaStyle(selectedRef.current._cadenaCat, 'default'))
       } else {
         selectedRef.current.setStyle(THEMES[t]?.default || THEMES.general.default)
       }
@@ -509,6 +599,7 @@ export default function AtlasMunicipal() {
             layer._concejalesData    = CONCEJALES_DATA[normName(name)] || null
             layer._tasaData          = getTasaVial(name)
             layer._transparenciaData = TRANSPARENCIA_DATA[normName(name)] || null
+            layer._cadenaCat         = (codigo && CADENA_BY_CODE[codigo]) || CADENA_CAT[normName(name)] || null
             layer._featureName       = name
 
             layer.bindTooltip(name, { sticky: true, direction: 'auto', className: 'muni-tooltip' })
@@ -523,6 +614,8 @@ export default function AtlasMunicipal() {
                 e.target.setStyle(tasaVialStyle(e.target._tasaData, 'hover'))
               } else if (t === 'transparencia') {
                 e.target.setStyle(transparenciaStyle(e.target._transparenciaData, 'hover'))
+              } else if (t === 'economia') {
+                e.target.setStyle(cadenaStyle(e.target._cadenaCat, 'hover'))
               } else {
                 e.target.setStyle(THEMES[t]?.hover || THEMES.general.hover)
               }
@@ -538,6 +631,8 @@ export default function AtlasMunicipal() {
                 e.target.setStyle(tasaVialStyle(e.target._tasaData, 'default'))
               } else if (t === 'transparencia') {
                 e.target.setStyle(transparenciaStyle(e.target._transparenciaData, 'default'))
+              } else if (t === 'economia') {
+                e.target.setStyle(cadenaStyle(e.target._cadenaCat, 'default'))
               } else {
                 e.target.setStyle(THEMES[t]?.default || THEMES.general.default)
               }
@@ -558,6 +653,8 @@ export default function AtlasMunicipal() {
                   prev.setStyle(tasaVialStyle(prev._tasaData, 'default'))
                 } else if (t === 'transparencia') {
                   prev.setStyle(transparenciaStyle(prev._transparenciaData, 'default'))
+                } else if (t === 'economia') {
+                  prev.setStyle(cadenaStyle(prev._cadenaCat, 'default'))
                 } else {
                   prev.setStyle(THEMES[t]?.default || THEMES.general.default)
                 }
@@ -573,7 +670,8 @@ export default function AtlasMunicipal() {
                 _concejales: cd || null,
                 _tasa: layer._tasaData || null,
                 _transparencia: layer._transparenciaData || null,
-                _noData: t !== 'tasavial' && t !== 'transparencia' && !muniData && !cd,
+                _cadena: layer._cadenaCat || null,
+                _noData: t !== 'tasavial' && t !== 'transparencia' && t !== 'economia' && !muniData && !cd,
               })
             })
           },
@@ -626,7 +724,7 @@ export default function AtlasMunicipal() {
         {/* Header */}
         <div className="px-5 pt-5 pb-4 border-b border-slate-100 shrink-0">
           <h3 className="text-lg font-bold text-[#0a1628] leading-tight">{selected.nombre}</h3>
-          {tema !== 'concejales' && tema !== 'transparencia' && (
+          {tema !== 'concejales' && tema !== 'transparencia' && tema !== 'economia' && (
             <div className="flex flex-wrap gap-4 mt-3">
               {selected.poblacion && (
                 <div>
@@ -674,6 +772,25 @@ export default function AtlasMunicipal() {
               >
                 {selected._transparencia.cumplimiento}
               </span>
+            </div>
+          )}
+          {tema === 'economia' && selected._cadena && (
+            <div className="mt-3">
+              <div className="flex flex-wrap items-center gap-3">
+                <span
+                  className="text-sm font-bold px-3 py-1 rounded-full text-white"
+                  style={{ backgroundColor: CADENA_CATEGORIAS[selected._cadena].color }}
+                >
+                  {CADENA_CATEGORIAS[selected._cadena].label}
+                </span>
+                <div>
+                  <p className="text-lg font-bold text-slate-900 leading-none">{CADENA_CATEGORIAS[selected._cadena].vab}</p>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-0.5">del VAB provincial</p>
+                </div>
+              </div>
+              {selected.poblacion && (
+                <p className="text-xs text-slate-400 mt-2">{selected.poblacion.toLocaleString('es-AR')} habitantes</p>
+              )}
             </div>
           )}
         </div>
@@ -755,6 +872,38 @@ export default function AtlasMunicipal() {
               <p className="text-xs text-slate-400">Sin datos de transparencia fiscal para este partido.</p>
             )}
           </div>
+        ) : indicators === 'economia' ? (
+          /* Economía municipal detail */
+          <div className="flex-1 overflow-y-auto px-5 py-4">
+            {selected._cadena ? (() => {
+              const c = CADENA_CATEGORIAS[selected._cadena]
+              const arrow = dir => (
+                <span className="text-xs font-semibold flex items-center gap-1" style={{ color: dir === 'up' ? '#15803d' : '#b91c1c' }}>
+                  {dir === 'up' ? '↑ Por encima del promedio' : '↓ Por debajo del promedio'}
+                </span>
+              )
+              return (
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-2.5">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-xs text-slate-500">Largo plazo (2016-2025)</span>
+                      {arrow(c.largo)}
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-xs text-slate-500">Corto plazo (2025)</span>
+                      {arrow(c.corto)}
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">{c.desc}</p>
+                  <p className="text-[11px] text-slate-400 leading-snug border-t border-slate-100 pt-3">
+                    Fuente: "Cadenas Productivas en los Municipios de la Provincia de Buenos Aires 2016/2025" — A. Lodola, Comisión de Asuntos Municipales, Senado PBA.
+                  </p>
+                </div>
+              )
+            })() : (
+              <p className="text-xs text-slate-400">Sin datos de clasificación económica para este partido.</p>
+            )}
+          </div>
         ) : indicators === 'custom' ? (
           /* Concejales detail */
           <div className="flex-1 overflow-y-auto px-5 py-4">
@@ -817,6 +966,7 @@ export default function AtlasMunicipal() {
               const colors = {
                 general:    tema === t.id ? 'bg-[#0a1628] text-white border-[#0a1628]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#1a3d7c] hover:text-[#1a3d7c]',
                 produccion: tema === t.id ? 'bg-[#063d2f] text-white border-[#063d2f]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#0a5240] hover:text-[#0a5240]',
+                economia:   tema === t.id ? 'bg-[#334155] text-white border-[#334155]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#475569] hover:text-[#475569]',
                 tasas:      tema === t.id ? 'bg-[#4c1d95] text-white border-[#4c1d95]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#6d28d9] hover:text-[#6d28d9]',
                 tasavial:   tema === t.id ? 'bg-[#991b1b] text-white border-[#991b1b]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#7f1d1d] hover:text-[#7f1d1d]',
                 transparencia: tema === t.id ? 'bg-[#14532d] text-white border-[#14532d]' : 'bg-white text-slate-500 border-slate-200 hover:border-[#15803d] hover:text-[#15803d]',
@@ -871,6 +1021,21 @@ export default function AtlasMunicipal() {
               </div>
               <p className="text-[11px] text-slate-400 mt-1.5">
                 Fuente: ASAP - Asociación Argentina de Presupuesto y Administración Financiera Pública, Filial Provincia de Buenos Aires
+              </p>
+            </>
+          )}
+          {tema === 'economia' && (
+            <>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3">
+                {Object.values(CADENA_CATEGORIAS).map(c => (
+                  <div key={c.label} className="flex items-center gap-1.5">
+                    <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: c.color }} />
+                    <span className="text-[10px] text-slate-500">{c.label} · {c.vab}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[11px] text-slate-400 mt-1.5">
+                Fuente: A. Lodola, "Cadenas Productivas en los Municipios de la PBA 2016/2025" - Comisión de Asuntos Municipales, Senado PBA
               </p>
             </>
           )}
