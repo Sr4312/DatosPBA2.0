@@ -495,8 +495,8 @@ function Hero() {
           className="font-display"
           style={{ fontSize: 'clamp(2rem, 4.6vw, 3.2rem)', fontWeight: 700, color: '#fff', lineHeight: 1.12, marginBottom: 20, maxWidth: 820 }}
         >
-          El Estado se queda con el 59% de<br />
-          <span style={{ color: '#93c5fd' }}>la renta agrícola bonaerense</span>
+          El Estado se queda con el 59%<br />
+          <span style={{ color: '#93c5fd' }}>de la renta agrícola bonaerense</span>
         </m.h1>
 
         <m.p
