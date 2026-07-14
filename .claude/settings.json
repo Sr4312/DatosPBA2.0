@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rtk npm *)",
+      "Bash(rtk git *)",
+      "Bash(rtk ls *)",
+      "Bash(rtk wc *)",
+      "Bash(rtk curl *)",
+      "Read(//tmp/**)",
+      "Bash(netstat -ano)",
+      "mcp__plugin_playwright_playwright__browser_console_messages",
+      "Bash(git checkout *)",
+      "PowerShell(npm run build 2>&1)",
+      "Bash(git clean *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\salva\\Desktop\\Web Observatorio"
+    ]
+  }
+}

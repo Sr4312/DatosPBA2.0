@@ -106,7 +106,23 @@
       "WebFetch(domain:www.lanacion.com.ar)",
       "Bash(rtk wc *)",
       "Bash(rtk tsc *)",
-      "WebFetch(domain:x.com)"
+      "WebFetch(domain:x.com)",
+      "Bash(claude --version)",
+      "Bash(npm view *)",
+      "Bash(where claude *)",
+      "Bash(npm list *)",
+      "Bash(\"C:\\\\Users\\\\salva\\\\.local\\\\bin\\\\claude.exe\" --version)",
+      "Bash(\"C:\\\\Users\\\\salva\\\\.local\\\\bin\\\\claude.exe\" update *)",
+      "Bash(npm -g uninstall @anthropic-ai/claude-code)",
+      "mcp__plugin_playwright_playwright__browser_run_code_unsafe",
+      "mcp__plugin_playwright_playwright__browser_navigate_back",
+      "Bash(git check-ignore *)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(git checkout *)",
+      "Bash(git ls-remote *)",
+      "Bash(node -e ' *)",
+      "Bash(node \"C:\\\\Users\\\\salva\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-salva-Desktop-Datos-PBA\\\\aaca6915-9257-41be-9d71-a8fcdd80ce19\\\\scratchpad\\\\insert_informe.mjs\")",
+      "Bash(node __tmp_insert_informe.mjs)"
     ],
     "additionalDirectories": [
       "C:\\Users\\salva\\.claude"
