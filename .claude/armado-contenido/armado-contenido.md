@@ -120,6 +120,65 @@ la barra o el segmento.
 
 ---
 
+## Redacción: voz propia, no prosa de máquina
+
+El texto de un informe se escribe como una gacetilla económica firmada por un
+analista, no como un resumen automático de la fuente. Reglas de forma:
+
+**Cada cifra clave protagoniza una sola vez.** El número fuerte del informe
+aparece con todo su peso en el hero y en una única sección. En el resto del
+texto se lo alude sin repetirlo ("esa brecha", "el salto de la subocupación",
+"el repunte"). Antes de entregar, contá las apariciones del dato estrella:
+si está en más de 3 lugares del cuerpo, reescribí.
+
+**Un solo remate retórico por informe.** La construcción de contraste
+("no fue X, fue Y", "creció A pero a costa de B") es efectiva una vez.
+Elegí dónde va — casi siempre la conclusión — y en el resto del texto
+presentá los datos en afirmativo directo.
+
+**Títulos de sección con el dato adentro.** El estilo de la casa es el de
+InformeMineriaPBA: "Olavarría concentra el 32%, pero el 49% está en el resto
+de la provincia". El título afirma algo verificable. Si el título podría
+encabezar cualquier informe del mismo tema ("Los motores del crecimiento",
+"La recuperación de 2025"), todavía no es un título.
+
+**Anatomía variable.** La secuencia intro → tarjetas MC → gráfico → cierre es
+una opción, no la receta de toda sección. Alterná: una sección que abre con la
+tabla, otra que es solo gráfico con un párrafo, otra con dos párrafos seguidos
+y las tarjetas al final. Dos secciones consecutivas no repiten estructura.
+
+**Ritmo de oraciones.** Después de dos frases largas va una corta. Los dos
+puntos y las rayas se usan a lo sumo una vez por párrafo. Punto y seguido
+antes que subordinada encadenada.
+
+**Reemplazos directos** — donde el borrador diga lo de la izquierda,
+reescribí como la derecha:
+
+| Borrador típico | Reescritura |
+|---|---|
+| "no debe leerse de manera aislada" | decir directamente qué otra cosa explica el dato |
+| "más allá de las tasas / cifras" | "En personas, ..." / entrar al dato sin preámbulo |
+| "resulta útil dimensionar" | mostrar la comparación sin anunciarla |
+| "cabe señalar que" | borrar y afirmar |
+| "en línea con el promedio" | "igual que el promedio" / "como en los últimos X años" |
+| "de base amplia" | "14 de los 16 sectores subieron" |
+| "en términos de participación" | "pesa el X% del total" |
+
+**Tres textos, tres frases distintas.** La bajada del hero, la `bajada` de la
+card de Supabase y la tesis de la conclusión dicen cosas complementarias, no
+la misma oración reordenada. Hero: qué pasó. Card: por qué importa. Conclusión:
+qué significa (la lectura política o económica del analista).
+
+**Los insights de la card son titulares.** Se escriben como título de diario
+(sujeto + verbo + dato), sin dos puntos ni construcción "X: explicación de X".
+
+**Encuadre del analista.** El rol de este skill es analista político: además
+de describir la serie, cada informe dice al menos una vez qué implica el dato
+para la Provincia, los municipios o la discusión pública — con la prudencia
+metodológica en su sección, no diluyendo cada afirmación.
+
+---
+
 ## Flujo antes de escribir código
 
 1. Analizá el material provisto. Identificá tema central, alcance geográfico y período.
@@ -129,6 +188,10 @@ la barra o el segmento.
 5. Determiná qué gráfico va en cada sección y con qué datos.
 6. Confirmá fuentes antes de escribir. Nunca asumir ni inventar fuentes.
 7. Mostrá el resumen al usuario y esperá confirmación antes de crear el archivo.
+8. Después de escribir los textos, pasá el filtro de la sección "Redacción":
+   apariciones de la cifra estrella, un solo contraste retórico, títulos con
+   dato, reemplazos de muletillas, y que hero / card / conclusión no repitan
+   la misma frase.
 
 ---
 
