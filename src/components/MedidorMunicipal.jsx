@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { MUNICIPIOS_DATA } from '@/lib/municipiosData'
+import { getColorVariacion, colorEscalaValoracion } from '@/lib/variacion'
 import 'leaflet/dist/leaflet.css'
 
 /* ── Concejales data ────────────────────────────────────────────────────── */
@@ -237,17 +238,15 @@ const TRANSPARENCIA_DATA = {}
 TRANSPARENCIA_RAW.forEach(d => { TRANSPARENCIA_DATA[normName(d.municipio)] = d })
 
 const CUMPLIMIENTO_COLORS = {
-  Estricto: '#166534',
-  Alto:     '#4d7c0f',
-  Medio:    '#b45309',
-  Bajo:     '#c2410c',
-  Nulo:     '#991b1b',
+  Estricto: colorEscalaValoracion(1),
+  Alto:     colorEscalaValoracion(0.75),
+  Medio:    colorEscalaValoracion(0.5),
+  Bajo:     colorEscalaValoracion(0.25),
+  Nulo:     colorEscalaValoracion(0),
 }
 
 function transparenciaFill(indice) {
-  const t = Math.max(0, Math.min(1, indice / 100))
-  const hue = Math.round(120 * t)
-  return `hsl(${hue},70%,42%)`
+  return colorEscalaValoracion(indice / 100)
 }
 
 function transparenciaStyle(data, state) {
@@ -260,21 +259,23 @@ function transparenciaStyle(data, state) {
 }
 
 /* ── Economía municipal — Cadenas Productivas (Lodola, Senado PBA) ────────── */
+/* Colores de categoría tomados del sistema: valoración para los extremos
+   (líderes/rezagados) y paleta de dato para las categorías mixtas. */
 const CADENA_CATEGORIAS = {
   MADUROS: {
-    label: 'Maduros', vab: '15,8%', color: '#E8641E', largo: 'up', corto: 'down',
+    label: 'Maduros', vab: '15,8%', color: '#0F172A', largo: 'up', corto: 'down',
     desc: 'Buena trayectoria de largo plazo pero desaceleración en 2025. Municipios industriales o con base productiva diversificada, de menor volatilidad positiva reciente.',
   },
   LIDERES: {
-    label: 'Líderes', vab: '14,3%', color: '#3F9C4A', largo: 'up', corto: 'up',
+    label: 'Líderes', vab: '14,3%', color: '#0D9488', largo: 'up', corto: 'up',
     desc: 'Crecimiento sólido en el largo plazo y recuperación fuerte en 2025. Perfil exportador agropecuario (maní, soja, trigo) y turístico.',
   },
   REZAGADOS: {
-    label: 'Rezagados', vab: '52,2%', color: '#C0453A', largo: 'down', corto: 'down',
+    label: 'Rezagados', vab: '52,2%', color: '#B4234C', largo: 'down', corto: 'down',
     desc: 'Bajo crecimiento en ambos planos. Concentra gran parte del Conurbano bonaerense y economías urbanas de gran tamaño, con inercia estructural y alta ponderación provincial.',
   },
   EMERGENTES: {
-    label: 'Emergentes', vab: '17,8%', color: '#3F6FAE', largo: 'down', corto: 'up',
+    label: 'Emergentes', vab: '17,8%', color: '#22D3EE', largo: 'down', corto: 'up',
     desc: 'Crecimiento 2025 por encima de la mediana pero trayectoria de largo plazo rezagada. Predomina el rebote cíclico sobre el dinamismo estructural.',
   },
 }
@@ -343,12 +344,10 @@ function cadenaStyle(cat, state) {
   return { fillColor: CADENA_CATEGORIAS[cat].color, fillOpacity: fo, color: '#1e293b', weight: w, opacity: 0.8 }
 }
 
+/* Tasa más alta = peor para el contribuyente: escala de valoración invertida */
 function tasaFill(valor) {
   const t = (valor - 0.8) / 2.2
-  const h = Math.round(45 * (1 - t))
-  const s = Math.round(97 - 24 * t)
-  const l = Math.round(55 - 14 * t)
-  return `hsl(${h},${s}%,${l}%)`
+  return colorEscalaValoracion(1 - t)
 }
 
 function tasaVialStyle(tasa, state) {
@@ -357,12 +356,13 @@ function tasaVialStyle(tasa, state) {
     return { fillColor: '#cbd5e1', fillOpacity: 0.25, color: '#94a3b8', weight: 0.4, opacity: 0.6 }
   }
   if (tasa.tipo === 'pesos') {
+    /* categoría aparte (monto fijo, no alícuota): navy de la paleta de dato */
     const fo = state === 'selected' ? 0.82 : state === 'hover' ? 0.65 : 0.45
-    return { fillColor: '#0d9488', fillOpacity: fo, color: '#0f766e', weight: w, opacity: 0.9 }
+    return { fillColor: '#0F172A', fillOpacity: fo, color: '#0F172A', weight: w, opacity: 0.9 }
   }
   const base = 0.28 + ((tasa.valor - 0.8) / 2.2) * 0.52
   const fo = state === 'selected' ? 0.90 : state === 'hover' ? Math.min(base + 0.22, 0.92) : base
-  return { fillColor: tasaFill(tasa.valor), fillOpacity: fo, color: '#7f1d1d', weight: w, opacity: 0.8 }
+  return { fillColor: tasaFill(tasa.valor), fillOpacity: fo, color: '#1e293b', weight: w, opacity: 0.8 }
 }
 
 function concejalesStyle(porHabitante, state) {
@@ -456,10 +456,11 @@ function IndicatorBar({ ind, data }) {
   if (value == null) return null
   const pct    = value * 100
   const barPct = Math.min(pct, 100)
+  /* nivel → valoración según la dirección deseable del indicador */
   const color  =
     ind.good === 'high'
-      ? pct > 70 ? '#1a3d7c' : pct > 40 ? '#3d65b2' : '#94a3b8'
-      : pct < 10 ? '#1a3d7c' : pct < 25 ? '#f59e0b' : '#ef4444'
+      ? colorEscalaValoracion(pct > 70 ? 1 : pct > 40 ? 0.5 : 0)
+      : colorEscalaValoracion(pct < 10 ? 1 : pct < 25 ? 0.5 : 0)
   return (
     <div className="flex flex-col gap-1">
       <div className="flex justify-between items-center">
@@ -810,7 +811,10 @@ export default function AtlasMunicipal() {
             {selected._tasa ? (
               <div className="flex flex-col gap-4">
                 <div className="bg-slate-50 rounded-xl p-4 text-center">
-                  <p className={`text-3xl font-bold leading-none ${selected._tasa.tipo === 'pesos' ? 'text-teal-700' : 'text-red-700'}`}>
+                  <p
+                    className="text-3xl font-bold leading-none tabular-nums"
+                    style={{ color: selected._tasa.tipo === 'pesos' ? 'var(--c-ink)' : 'var(--worse-text)' }}
+                  >
                     {selected._tasa.tipo === 'pct'
                       ? `${selected._tasa.valor.toFixed(2).replace('.', ',')}%`
                       : selected._tasa.label}
@@ -880,7 +884,10 @@ export default function AtlasMunicipal() {
             {selected._cadena ? (() => {
               const c = CADENA_CATEGORIAS[selected._cadena]
               const arrow = dir => (
-                <span className="text-xs font-semibold flex items-center gap-1" style={{ color: dir === 'up' ? '#15803d' : '#b91c1c' }}>
+                <span
+                  className="text-xs font-semibold flex items-center gap-1"
+                  style={{ color: getColorVariacion({ variacion: dir === 'up' ? 1 : -1, polaridad: 'mayor-es-mejor', texto: true }) }}
+                >
                   {dir === 'up' ? '↑ Por encima del promedio' : '↓ Por debajo del promedio'}
                 </span>
               )
@@ -998,11 +1005,11 @@ export default function AtlasMunicipal() {
             <>
               <div className="flex items-center gap-3 mt-3">
                 <div className="flex items-center gap-1.5">
-                  <div className="flex-shrink-0 w-20 h-2 rounded-full" style={{ background: 'linear-gradient(to right, hsl(45,97%,55%), hsl(22,88%,51%), hsl(0,73%,41%))' }} />
+                  <div className="flex-shrink-0 w-20 h-2 rounded-full" style={{ background: `linear-gradient(to right, ${colorEscalaValoracion(1)}, ${colorEscalaValoracion(0.5)}, ${colorEscalaValoracion(0)})` }} />
                   <span className="text-[10px] text-slate-400">0,8% → 3%</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded-sm shrink-0" style={{ background: '#0d9488', opacity: 0.7 }} />
+                  <div className="w-3 h-3 rounded-sm shrink-0" style={{ background: '#0F172A', opacity: 0.7 }} />
                   <span className="text-[10px] text-slate-400">Pesos fijos/l</span>
                 </div>
                 <div className="flex items-center gap-1.5">
@@ -1018,7 +1025,7 @@ export default function AtlasMunicipal() {
           {tema === 'transparencia' && (
             <>
               <div className="flex items-center gap-1.5 mt-3">
-                <div className="flex-shrink-0 w-20 h-2 rounded-full" style={{ background: 'linear-gradient(to right, hsl(0,70%,42%), hsl(60,70%,42%), hsl(120,70%,42%))' }} />
+                <div className="flex-shrink-0 w-20 h-2 rounded-full" style={{ background: `linear-gradient(to right, ${colorEscalaValoracion(0)}, ${colorEscalaValoracion(0.5)}, ${colorEscalaValoracion(1)})` }} />
                 <span className="text-[10px] text-slate-400">Índice 0 (Nulo) → 100 (Estricto)</span>
               </div>
               <p className="text-[11px] text-slate-400 mt-1.5">

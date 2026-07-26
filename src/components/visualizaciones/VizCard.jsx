@@ -109,18 +109,18 @@ function TableContent({ tableData }) {
       <div className="grid grid-cols-3 gap-3">
         {tableData.summary.map((s, i) => (
           <div key={i} className="bg-slate-50 rounded-lg p-3 text-center">
-            <div className={`text-xl font-bold ${s.highlight ? 'text-amber-600' : 'text-slate-900'}`}>{s.value}</div>
+            <div className="text-xl font-bold text-slate-900 tabular-nums">{s.value}</div>
             <div className="text-xs text-slate-500 mt-0.5 leading-tight">{s.label}</div>
           </div>
         ))}
       </div>
 
-      <div className="border border-red-200 bg-red-50/50 rounded-lg p-3">
-        <p className="text-xs font-bold text-red-700 mb-2">{tableData.highlight.label}</p>
+      <div className="border border-slate-200 bg-slate-50 rounded-lg p-3">
+        <p className="text-xs font-bold mb-2" style={{ color: 'var(--worse-text)' }}>{tableData.highlight.label}</p>
         <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
           {tableData.highlight.stats.map((s, i) => (
             <div key={i} className="text-center">
-              <div className={`text-lg font-bold ${s.color === 'blue' ? 'text-brand-700' : s.color === 'red' ? 'text-red-600' : 'text-slate-900'}`}>{s.value}</div>
+              <div className="text-lg font-bold tabular-nums" style={{ color: s.color === 'red' ? 'var(--worse-text)' : 'var(--c-ink)' }}>{s.value}</div>
               <div className="text-xs text-slate-500 leading-tight">{s.label}</div>
               {s.note && <div className="text-xs text-slate-400">{s.note}</div>}
             </div>
@@ -142,14 +142,16 @@ function TableContent({ tableData }) {
               <tr key={i} className={`border-b border-slate-100 ${row.provincia === 'Buenos Aires' ? 'bg-brand-50/80' : i % 2 === 0 ? 'bg-white' : 'bg-slate-50/30'}`}>
                 <td className="py-1.5 px-3 font-medium text-slate-800 whitespace-nowrap">
                   {row.provincia}
-                  {row.distVal > 0 && <span className="ml-1 text-brand-400 text-[10px]">subrep.</span>}
-                  {row.distVal < 0 && <span className="ml-1 text-red-400 text-[10px]">sobrerrep.</span>}
+                  {row.distVal > 0 && <span className="ml-1 text-slate-400 text-[10px]">subrep.</span>}
+                  {row.distVal < 0 && <span className="ml-1 text-slate-400 text-[10px]">sobrerrep.</span>}
                 </td>
                 <td className="py-1.5 px-3 text-right text-slate-600">{row.hab.toLocaleString('es-AR')}</td>
                 <td className="py-1.5 px-3 text-right text-slate-700 font-medium">{row.dip}</td>
                 <td className="py-1.5 px-3 text-right text-slate-600">{row.habDip.toLocaleString('es-AR')}</td>
                 <td className="py-1.5 px-3 text-right font-semibold text-brand-700">{row.ideal}</td>
-                <td className={`py-1.5 px-3 text-right font-semibold ${row.distVal > 0 ? 'text-brand-700' : 'text-red-600'}`}>
+                {/* la distorsión no tiene dirección deseable universal → neutro;
+                    el signo y la etiqueta subrep./sobrerrep. llevan la dirección */}
+                <td className="py-1.5 px-3 text-right font-semibold tabular-nums" style={{ color: 'var(--neutral-text)' }}>
                   {row.distVal > 0 ? '+' : ''}{row.distVal.toFixed(1).replace('.', ',')}%
                 </td>
               </tr>
