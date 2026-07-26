@@ -13,6 +13,8 @@ import {
   Legend,
 } from 'chart.js'
 import { Bar, Doughnut } from 'react-chartjs-2'
+import Cifra from '@/components/shared/Cifra'
+import { DATA } from '@/lib/variacion'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend)
 ChartJS.defaults.font.family = 'Poppins, sans-serif'
@@ -67,23 +69,27 @@ const JURISDICCIONES = [
   { jur: 'Otros 16 organismos',                 ini: 37,  monto: 14902.8,   pct: 0.8  },
 ]
 
+/* Categorías del gasto neto: colores categóricos de la paleta DATA
+   (identidad de serie, sin valoración). */
 const GENERO_NETO = [
-  { label: 'Salud sexual y (no) reproductiva', value: 154128.1, color: V[700] },
-  { label: 'Prevención de violencia',          value: 71918.7,  color: V[500] },
-  { label: 'Transversalización institucional', value: 66435.1,  color: V[300] },
-  { label: 'Empleo e ingresos focalizado',     value: 60957.4,  color: V[200] },
+  { label: 'Salud sexual y (no) reproductiva', value: 154128.1, color: DATA[1] },
+  { label: 'Prevención de violencia',          value: 71918.7,  color: DATA[2] },
+  { label: 'Transversalización institucional', value: 66435.1,  color: DATA[3] },
+  { label: 'Empleo e ingresos focalizado',     value: 60957.4,  color: DATA[4] },
 ]
 
 const COMPARATIVA = [
-  { label: 'Presentado como "género" (PPG total)', value: 4.2, color: '#94a3b8' },
-  { label: 'Específicamente focalizado (neto)',    value: 0.82, color: V[500] },
+  { label: 'Presentado como "género" (PPG total)', value: 4.2, color: DATA[2] },
+  { label: 'Específicamente focalizado (neto)',    value: 0.82, color: DATA[1] },
 ]
 
+/* Cifras de nivel (composición presupuestaria, sin variación interanual):
+   no hay valoración que codificar, el contexto va en `periodo`. */
 const HERO_STATS = [
-  { n: '4,2%',  label: 'del presupuesto presentado como "de género"', color: '#cbd5e1' },
-  { n: '0,82%', label: 'corresponde efectivamente a brechas de género', color: V[200] },
-  { n: '80,2%', label: 'del PPG es gasto social reetiquetado (TYC)',    color: '#fda4af' },
-  { n: '1,2%',  label: 'del PPG ejecuta el Min. de Mujeres y Diversidad', color: '#93c5fd' },
+  { valor: '4,2%',  periodo: 'del presupuesto presentado como "de género"' },
+  { valor: '0,82%', periodo: 'corresponde efectivamente a brechas de género' },
+  { valor: '80,2%', periodo: 'del PPG es gasto social reetiquetado (TYC)' },
+  { valor: '1,2%',  periodo: 'del PPG ejecuta el Min. de Mujeres y Diversidad' },
 ]
 
 // ─── ANIMACIÓN ───────────────────────────────────────────────
@@ -212,18 +218,15 @@ function SH({ num, title }) {
   )
 }
 
-function MC({ label, value, unit, accent = false }) {
+function CifraCard(props) {
   return (
     <div style={{
       background: '#fff', borderRadius: 14,
       border: `1px solid ${C.rule}`,
-      borderLeft: `4px solid ${accent ? V[600] : V[400]}`,
       padding: '1.125rem 1.125rem 1rem',
       boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
     }}>
-      <div style={{ fontSize: '0.625rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>{label}</div>
-      <div style={{ fontSize: '1.875rem', fontWeight: 800, color: accent ? V[600] : C.ink, lineHeight: 1, marginBottom: '0.375rem' }}>{value}</div>
-      <div style={{ fontSize: '0.6875rem', color: '#94a3b8', lineHeight: 1.4 }}>{unit}</div>
+      <Cifra size="md" {...props} />
     </div>
   )
 }
@@ -274,7 +277,7 @@ function ChartBrechas() {
     labels: BRECHAS.map(d => d.label),
     datasets: [{
       data: BRECHAS.map(d => d.value),
-      backgroundColor: [V[700], V[500], V[400], V[300], V[200]],
+      backgroundColor: DATA[1],
       borderRadius: 4, barPercentage: 0.65,
     }],
   }
@@ -393,8 +396,7 @@ function Hero() {
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16 }}
               className="p-5"
             >
-              <div className="font-display text-4xl font-bold mb-1" style={{ color: s.color }}>{s.n}</div>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', lineHeight: 1.45 }}>{s.label}</p>
+              <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
             </m.div>
           ))}
         </m.div>
@@ -481,10 +483,10 @@ export default function InformePresupuestoGeneroPBA() {
             políticas legítimas, pero el Estado las financiaría igual sin ese rótulo.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-            <MC label="PPG total 2026" value="$1,79 B" unit="1.787.636,8 millones" accent />
-            <MC label="Iniciativas" value="158" unit="ejecutadas en el ejercicio" />
-            <MC label="Organismos" value="26" unit="jurisdicciones ejecutoras" />
-            <MC label="Concentración en TYC" value="80,2%" unit="del PPG total" />
+            <CifraCard label="PPG total 2026" valor="$1,79 B" periodo="1.787.636,8 millones" />
+            <CifraCard label="Iniciativas" valor="158" periodo="ejecutadas en el ejercicio" />
+            <CifraCard label="Organismos" valor="26" periodo="jurisdicciones ejecutoras" />
+            <CifraCard label="Concentración en TYC" valor="80,2%" periodo="del PPG total" />
           </div>
           <DownloadableViz title="Distribución del PPG 2026 por brecha de impacto" fuente="Presupuesto 2026 PBA, Planilla 35">
             <ChartBrechas />
@@ -501,9 +503,9 @@ export default function InformePresupuestoGeneroPBA() {
             creada específicamente para coordinar la política de género— apenas ejecuta el 1,2%.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="Min. Desarrollo de la Comunidad" value="60,0%" unit="$1.072.626,8 M del PPG" accent />
-            <MC label="Min. Mujeres y Diversidad" value="1,2%" unit="$21.660,3 M del PPG" />
-            <MC label="Min. Mujeres / presupuesto total" value="0,050%" unit="1 de cada 2.000 pesos provinciales" />
+            <CifraCard label="Min. Desarrollo de la Comunidad" valor="60,0%" periodo="$1.072.626,8 M del PPG" />
+            <CifraCard label="Min. Mujeres y Diversidad" valor="1,2%" periodo="$21.660,3 M del PPG" />
+            <CifraCard label="Min. Mujeres / presupuesto total" valor="0,050%" periodo="1 de cada 2.000 pesos provinciales" />
           </div>
           <div style={{ background: '#fff', borderRadius: 14, border: `1px solid ${C.rule}`, overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', margin: '1.25rem 0', overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 560 }}>
@@ -541,9 +543,9 @@ export default function InformePresupuestoGeneroPBA() {
             <ChartComparativa />
           </DownloadableViz>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5 mt-5">
-            <MC label="Género neto" value="$353.439 M" unit="0,82% del presupuesto provincial" accent />
-            <MC label="Brecha discursiva" value="5,1x" unit="entre el 4,2% anunciado y el 0,82% real" />
-            <MC label="Categorías que componen el neto" value="4" unit="SAL · PEV · TPG · EMP/ING" />
+            <CifraCard label="Género neto" valor="$353.439 M" periodo="0,82% del presupuesto provincial" />
+            <CifraCard label="Brecha discursiva" valor="5,1x" periodo="entre el 4,2% anunciado y el 0,82% real" />
+            <CifraCard label="Categorías que componen el neto" valor="4" periodo="SAL · PEV · TPG · EMP/ING" />
           </div>
           <DownloadableViz title="Composición del gasto en género neto" fuente="Presupuesto 2026 PBA, Planilla 35">
             <ChartGeneroNeto />

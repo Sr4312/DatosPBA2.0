@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { m } from 'framer-motion'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
+import { colorEscalaValoracion } from '@/lib/variacion'
 
 // palette - chrome/layout colors
 const C = {
@@ -8,12 +9,6 @@ const C = {
   ink:      'var(--c-ink)',
   inkMid:   'var(--c-ink-mid)',
   inkLight: 'var(--c-ink-light)',
-  lean:     '#1a6b3a',
-  leanBg:   '#e8f5ee',
-  heavy:    '#0f2d5e',
-  heavyBg:  '#e8eef7',
-  mid:      '#b45309',
-  midBg:    '#fef3c7',
   rule:     'var(--c-rule)',
   accent:   '#3d65b2',
 }
@@ -29,8 +24,23 @@ const MUNICIPIOS = [
 ]
 
 const MAX = 42
-const ZONE_COLOR = { lean: C.lean, mid: C.mid, heavy: C.heavy }
-const ZONE_BG    = { lean: C.leanBg, mid: C.midBg, heavy: C.heavyBg }
+
+/* Rampa de valoración por nivel de empleo público municipal: el informe
+   asume menos = mejor, así que t alto = valor bajo. Las tres zonas son
+   cortes discretos sobre la escala worse → neutral → better; ningún
+   color de zona se elige a mano. */
+const ZONE_T = { lean: 1, mid: 0.5, heavy: 0 }
+const conAlfa = (rgb, a) => rgb.replace('rgb(', 'rgba(').replace(')', `,${a})`)
+const ZONE_COLOR = {
+  lean:  colorEscalaValoracion(ZONE_T.lean),
+  mid:   colorEscalaValoracion(ZONE_T.mid),
+  heavy: colorEscalaValoracion(ZONE_T.heavy),
+}
+const ZONE_BG = {
+  lean:  conAlfa(ZONE_COLOR.lean, 0.1),
+  mid:   conAlfa(ZONE_COLOR.mid, 0.1),
+  heavy: conAlfa(ZONE_COLOR.heavy, 0.1),
+}
 const ZONE_LABEL = { lean: 'Estado liviano', mid: 'Estado intermedio', heavy: 'Estado pesado' }
 
 const fadeUp = (delay = 0) => ({
@@ -65,15 +75,15 @@ function SpectrumChart() {
       <div style={{ position: 'relative', height: 120 }}>
         <div style={{
           position: 'absolute', left: 0, width: `${(10 / MAX) * 100}%`,
-          top: 0, bottom: 0, background: C.leanBg, borderRadius: '8px 0 0 8px',
+          top: 0, bottom: 0, background: ZONE_BG.lean, borderRadius: '8px 0 0 8px',
         }} />
         <div style={{
           position: 'absolute', left: `${(10 / MAX) * 100}%`, width: `${(20 / MAX) * 100}%`,
-          top: 0, bottom: 0, background: '#fffbf0',
+          top: 0, bottom: 0, background: conAlfa(ZONE_COLOR.mid, 0.06),
         }} />
         <div style={{
           position: 'absolute', left: `${(30 / MAX) * 100}%`, right: 0,
-          top: 0, bottom: 0, background: C.heavyBg, borderRadius: '0 8px 8px 0',
+          top: 0, bottom: 0, background: ZONE_BG.heavy, borderRadius: '0 8px 8px 0',
         }} />
         <div style={{
           position: 'absolute', left: 0, right: 0, top: '50%',
@@ -126,7 +136,7 @@ function SpectrumChart() {
                 position: 'absolute',
                 left: '50%', transform: 'translateX(-50%)',
                 width: 1, height: 14,
-                background: ZONE_COLOR[muni.zona] + '60',
+                background: conAlfa(ZONE_COLOR[muni.zona], 0.38),
                 bottom: isTop ? 14 : 'auto',
                 top: isTop ? 'auto' : 14,
               }} />
@@ -224,7 +234,7 @@ function Dumbbell() {
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
         <div style={{ textAlign: 'center', minWidth: 120 }}>
-          <div className="font-display" style={{ fontSize: '3.5rem', fontWeight: 700, color: C.lean, lineHeight: 1 }}>
+          <div className="font-display" style={{ fontSize: '3.5rem', fontWeight: 700, color: ZONE_COLOR.lean, lineHeight: 1 }}>
             {lean.pct}%
           </div>
           <div style={{ fontWeight: 600, color: C.ink, fontSize: '0.85rem', marginTop: 6 }}>{lean.name}</div>
@@ -232,7 +242,7 @@ function Dumbbell() {
         </div>
 
         <div style={{ flex: 1, position: 'relative', height: 4, margin: '0 16px', marginTop: -12 }}>
-          <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(90deg, ${C.lean}, ${C.heavy})`, borderRadius: 999 }} />
+          <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(90deg, ${ZONE_COLOR.lean}, ${ZONE_COLOR.mid}, ${ZONE_COLOR.heavy})`, borderRadius: 999 }} />
           <div style={{
             position: 'absolute', left: '50%', top: '50%',
             transform: 'translate(-50%, -50%)',
@@ -245,7 +255,7 @@ function Dumbbell() {
         </div>
 
         <div style={{ textAlign: 'center', minWidth: 120 }}>
-          <div className="font-display" style={{ fontSize: '3.5rem', fontWeight: 700, color: C.heavy, lineHeight: 1 }}>
+          <div className="font-display" style={{ fontSize: '3.5rem', fontWeight: 700, color: ZONE_COLOR.heavy, lineHeight: 1 }}>
             {heavy.pct}%
           </div>
           <div style={{ fontWeight: 600, color: C.ink, fontSize: '0.85rem', marginTop: 6 }}>{heavy.name}</div>
@@ -367,8 +377,8 @@ export default function InformeCAFEstadoMunicipal() {
           {/* LEAN */}
           <m.div {...fadeUp(0)} className="mb-8">
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-              <div style={{ width: 12, height: 12, borderRadius: '50%', background: C.lean }} />
-              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: C.lean, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+              <div style={{ width: 12, height: 12, borderRadius: '50%', background: ZONE_COLOR.lean }} />
+              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: ZONE_COLOR.lean, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
                 Modelo 1 - Estado liviano
               </span>
             </div>
@@ -385,8 +395,8 @@ export default function InformeCAFEstadoMunicipal() {
           {/* HEAVY */}
           <m.div {...fadeUp(0)} className="mb-8">
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-              <div style={{ width: 12, height: 12, borderRadius: '50%', background: C.heavy }} />
-              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: C.heavy, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+              <div style={{ width: 12, height: 12, borderRadius: '50%', background: ZONE_COLOR.heavy }} />
+              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: ZONE_COLOR.heavy, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
                 Modelo 2 - Estado pesado
               </span>
             </div>
@@ -403,8 +413,8 @@ export default function InformeCAFEstadoMunicipal() {
           {/* INTERMEDIATE */}
           <m.div {...fadeUp(0)} className="mt-14 mb-8">
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-              <div style={{ width: 12, height: 12, borderRadius: '50%', background: C.mid }} />
-              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: C.mid, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+              <div style={{ width: 12, height: 12, borderRadius: '50%', background: ZONE_COLOR.mid }} />
+              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: ZONE_COLOR.mid, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
                 Zona intermedia
               </span>
             </div>

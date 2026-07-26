@@ -14,6 +14,8 @@ import {
   Legend,
 } from 'chart.js'
 import { Bar, Doughnut } from 'react-chartjs-2'
+import Cifra from '@/components/shared/Cifra'
+import { DATA, DATA_BORDES } from '@/lib/variacion'
 
 ChartJS.register(CategoryScale, LinearScale, LogarithmicScale, BarElement, ArcElement, Tooltip, Legend)
 ChartJS.defaults.font.family = 'Poppins, sans-serif'
@@ -73,52 +75,58 @@ const EAP_EVOLUCION = [
   { year: '2018', eap: 36700 },
 ]
 
+/* Colores categóricos (participación por complejo, no valoración): los cuatro
+   complejos principales usan la paleta DATA; los menores y "Resto", neutros. */
 const EXPORTACIONES = [
-  { label: 'Soja y subprod.',  value: 29, color: B[700] },
-  { label: 'Maíz',             value: 14, color: B[500] },
-  { label: 'Bovinos',          value: 9,  color: B[600] },
-  { label: 'Trigo',            value: 8,  color: B[400] },
-  { label: 'Pesquero',         value: 4,  color: B[300] },
-  { label: 'Girasol',          value: 4,  color: B[200] },
-  { label: 'Lácteos / cebada', value: 5,  color: B[100] },
-  { label: 'Resto',            value: 27, color: '#cbd5e1' },
+  { label: 'Soja y subprod.',  value: 29, color: DATA[1] },
+  { label: 'Maíz',             value: 14, color: DATA[2] },
+  { label: 'Bovinos',          value: 9,  color: DATA[3] },
+  { label: 'Trigo',            value: 8,  color: DATA[4] },
+  { label: 'Pesquero',         value: 4,  color: '#64748b' },
+  { label: 'Girasol',          value: 4,  color: '#94a3b8' },
+  { label: 'Lácteos / cebada', value: 5,  color: '#cbd5e1' },
+  { label: 'Resto',            value: 27, color: '#e2e8f0' },
 ]
 
+/* Cifras de nivel sin variación: el contexto va en `periodo` y el color del
+   valor lo pone <Cifra> (blanco sobre el hero), nunca la posición. */
 const HERO_STATS = [
-  { n: '26%',   label: 'de la producción agroindustrial nacional', color: '#93c5fd' },
-  { n: '35%',   label: 'de las exportaciones totales del país',    color: '#a5f3fc' },
-  { n: '4,2 M', label: 'puestos de trabajo generados (2023)',      color: '#6ee7b7' },
-  { n: '61%',   label: 'de las exportaciones son agroindustriales',color: '#fde68a' },
+  { valor: '26%',   periodo: 'de la producción agroindustrial nacional' },
+  { valor: '35%',   periodo: 'de las exportaciones totales del país' },
+  { valor: '4,2 M', periodo: 'puestos de trabajo generados (2023)' },
+  { valor: '61%',   periodo: 'de las exportaciones son agroindustriales' },
 ]
 
+/* Acentos puramente categóricos (dimensión del desafío, no valoración):
+   se mapean a la paleta DATA vía DATA_BORDES (variantes AA sobre blanco). */
 const DESAFIOS = [
   {
-    icon: '🏛️', color: '#d97706', variant: 'amber',
+    icon: '🏛️', color: DATA_BORDES[1], variant: 'data1',
     title: 'Presión fiscal y retenciones', tag: 'Político',
     body: 'Argentina mantiene retenciones a las exportaciones agropecuarias que no tienen equivalente en los principales competidores globales. Aunque el gobierno Milei las redujo (soja de 26% a 24%; trigo de 9,5% a 7,5% en dic. 2025), el reclamo histórico del sector es su eliminación total. El costo fiscal acumulado en más de 20 años se estima en USD 209.000 millones según la SRA.',
   },
   {
-    icon: '👷', color: '#d97706', variant: 'amber',
+    icon: '👷', color: DATA_BORDES[1], variant: 'data1',
     title: 'Generación de empleo insuficiente', tag: 'Social',
     body: 'El modelo extensivo de commodities -soja, trigo, maíz- genera muy poco empleo por hectárea (6–11 personas/1.000 ha) en comparación con la horticultura intensiva (1.209 personas/1.000 ha). La concentración de la tierra y la mecanización agudizaron la expulsión de trabajadores rurales: un 18,5% menos de permanentes entre 2008 y 2018.',
   },
   {
-    icon: '🌱', color: '#dc2626', variant: 'red',
+    icon: '🌱', color: DATA_BORDES[2], variant: 'data2',
     title: 'Impacto ambiental y agroquímicos', tag: 'Ambiental',
     body: 'Argentina registra la tasa más alta del mundo en uso de plaguicidas: 12 litros por habitante por año. En Buenos Aires, la soja demandaba el 46% del total de plaguicidas utilizados. Sólo 71 de los 135 municipios cuentan con ordenanzas que regulan distancias de aplicación; 28 no tienen regulación alguna.',
   },
   {
-    icon: '📐', color: '#dc2626', variant: 'red',
+    icon: '📐', color: DATA_BORDES[2], variant: 'data2',
     title: 'Concentración de la tierra y escala', tag: 'Estructural',
     body: 'El 16% de las EAP controla el 66,5% de la superficie bonaerense. Esta concentración limita el acceso a la tierra para nuevos productores, empuja a la informalidad y dificulta políticas de diversificación productiva. El número de EAP cayó un 51% entre 1988 y 2018.',
   },
   {
-    icon: '🌦️', color: '#16a34a', variant: 'green',
+    icon: '🌦️', color: DATA_BORDES[3], variant: 'data3',
     title: 'Vulnerabilidad climática y sequía', tag: 'Productivo',
     body: 'La dependencia de las lluvias es estructural en la Pampa Bonaerense. La sequía de 2022/23 redujo las exportaciones agroindustriales en un 36%, golpeando fuertemente al sector. El cambio climático amenaza con volver más frecuentes estos eventos extremos, sin mecanismos de cobertura suficientemente desarrollados para pequeños y medianos productores.',
   },
   {
-    icon: '🔄', color: '#d97706', variant: 'amber',
+    icon: '🔄', color: DATA_BORDES[1], variant: 'data1',
     title: 'Escasa diversificación productiva', tag: 'Estratégico',
     body: 'La hegemonía de cuatro commodities (soja, maíz, trigo, girasol) hace al sector muy dependiente de los ciclos de precios internacionales. La horticultura, a pesar de abastecer de alimentos frescos a las grandes ciudades, representaba apenas el 0,2% de la superficie cultivada provincial según el CNA 2018.',
   },
@@ -283,18 +291,15 @@ function SH({ num, title }) {
   )
 }
 
-function MC({ label, value, unit, accent = false }) {
+function CifraCard(props) {
   return (
     <div style={{
       background: '#fff', borderRadius: 14,
       border: `1px solid ${C.rule}`,
-      borderLeft: `4px solid ${accent ? B[600] : B[400]}`,
       padding: '1.125rem 1.125rem 1rem',
       boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
     }}>
-      <div style={{ fontSize: '0.625rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>{label}</div>
-      <div style={{ fontSize: '1.875rem', fontWeight: 800, color: accent ? B[600] : C.ink, lineHeight: 1, marginBottom: '0.375rem' }}>{value}</div>
-      <div style={{ fontSize: '0.6875rem', color: '#94a3b8', lineHeight: 1.4 }}>{unit}</div>
+      <Cifra size="md" {...props} />
     </div>
   )
 }
@@ -319,12 +324,12 @@ function ChartCard({ title, fuente, legend, height = 220, children }) {
   )
 }
 
-function Tag({ children, variant = 'amber' }) {
+function Tag({ children, variant = 'data1' }) {
   const s = {
-    amber: { background: '#fef3c7', color: '#92400e' },
-    red:   { background: '#fee2e2', color: '#991b1b' },
-    blue:  { background: B[50],     color: B[600]    },
-    green: { background: '#dcfce7', color: '#166534' },
+    data1: { background: `${DATA[1]}1a`, color: DATA_BORDES[1] },
+    data2: { background: `${DATA[2]}1a`, color: DATA_BORDES[2] },
+    data3: { background: `${DATA[3]}1a`, color: DATA_BORDES[3] },
+    data4: { background: `${DATA[4]}14`, color: DATA_BORDES[4] },
   }
   return (
     <span style={{ ...s[variant], display: 'inline-flex', alignItems: 'center', fontSize: '0.6rem', fontWeight: 700, padding: '0.2rem 0.55rem', borderRadius: '0.3rem', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
@@ -340,7 +345,7 @@ function ChartParticipacion() {
     labels: PRODUCCION_CULTIVOS.map(d => d.label),
     datasets: [{
       data: PRODUCCION_CULTIVOS.map(d => d.value),
-      backgroundColor: [B[700], B[500], B[400], B[300], B[200]],
+      backgroundColor: DATA[1],
       borderRadius: 4, barPercentage: 0.65,
     }],
   }
@@ -383,7 +388,7 @@ function ChartEmpleoPorHa() {
     labels: EMPLEO_POR_HA.map(d => d.label),
     datasets: [{
       data: EMPLEO_POR_HA.map(d => d.value),
-      backgroundColor: EMPLEO_POR_HA.map(d => d.tipo === 'intensivo' ? B[600] : '#f59e0b'),
+      backgroundColor: EMPLEO_POR_HA.map(d => d.tipo === 'intensivo' ? DATA[1] : DATA[2]),
       borderRadius: 4, barPercentage: 0.6,
     }],
   }
@@ -391,7 +396,7 @@ function ChartEmpleoPorHa() {
     <ChartCard
       title="Empleos por cada 1.000 hectáreas según tipo de producción"
       fuente="Gobierno PBA / OIT (en Agencia Tierra Viva, 2022)"
-      legend={[{ label: 'Intensivos / diversificados', color: B[600] }, { label: 'Extensivos / commodities', color: '#f59e0b' }]}
+      legend={[{ label: 'Intensivos / diversificados', color: DATA[1] }, { label: 'Extensivos / commodities', color: DATA[2] }]}
       height={260}
     >
       <Bar
@@ -424,15 +429,15 @@ function ChartTierra() {
   const data = {
     labels: TIERRA_GRUPOS.map(d => d.label),
     datasets: [
-      { label: '% de EAP',        data: TIERRA_GRUPOS.map(d => d.eap), backgroundColor: B[400], borderRadius: 4, barPercentage: 0.5 },
-      { label: '% de superficie', data: TIERRA_GRUPOS.map(d => d.sup), backgroundColor: B[700], borderRadius: 4, barPercentage: 0.5 },
+      { label: '% de EAP',        data: TIERRA_GRUPOS.map(d => d.eap), backgroundColor: DATA[2], borderRadius: 4, barPercentage: 0.5 },
+      { label: '% de superficie', data: TIERRA_GRUPOS.map(d => d.sup), backgroundColor: DATA[1], borderRadius: 4, barPercentage: 0.5 },
     ],
   }
   return (
     <ChartCard
       title="Distribución de tierra por tamaño de explotación (PBA, 2018)"
       fuente="CNA 2018 · Agencia Tierra Viva (2022)"
-      legend={[{ label: '% de EAP', color: B[400] }, { label: '% de superficie', color: B[700] }]}
+      legend={[{ label: '% de EAP', color: DATA[2] }, { label: '% de superficie', color: DATA[1] }]}
       height={195}
     >
       <Bar data={data} options={{
@@ -447,7 +452,7 @@ function ChartTierra() {
 function ChartEAP() {
   const data = {
     labels: EAP_EVOLUCION.map(d => d.year),
-    datasets: [{ data: EAP_EVOLUCION.map(d => d.eap), backgroundColor: [B[500], B[400], B[300]], borderRadius: 4, barPercentage: 0.55 }],
+    datasets: [{ data: EAP_EVOLUCION.map(d => d.eap), backgroundColor: DATA[1], borderRadius: 4, barPercentage: 0.55 }],
   }
   return (
     <ChartCard
@@ -526,8 +531,7 @@ function Hero() {
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16 }}
               className="p-5"
             >
-              <div className="font-display text-4xl font-bold mb-1" style={{ color: s.color }}>{s.n}</div>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', lineHeight: 1.45 }}>{s.label}</p>
+              <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
             </m.div>
           ))}
         </m.div>
@@ -569,10 +573,10 @@ export default function InformeAgroindustriaPBA() {
             Buenos Aires es la jurisdicción con mayor peso económico del país y el corazón de su sistema agroindustrial. Con más de 30,7 millones de hectáreas totales y aproximadamente 23,7 millones de superficie rural, concentra el 26% de la producción agroindustrial nacional y el 35% de las exportaciones totales del país.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-            <MC label="Participación en agroindustria nacional" value="26%" unit="de la producción del país" accent />
-            <MC label="Exportaciones provinciales" value="35%" unit="del total exportado" />
-            <MC label="Establecimientos agropecuarios" value="36.700" unit="EAP (CNA 2018)" />
-            <MC label="Superficie rural" value="23,7 M" unit="hectáreas" />
+            <CifraCard label="Participación en agroindustria nacional" valor="26%" periodo="de la producción del país" />
+            <CifraCard label="Exportaciones provinciales" valor="35%" periodo="del total exportado" />
+            <CifraCard label="Establecimientos agropecuarios" valor="36.700" periodo="EAP (CNA 2018)" />
+            <CifraCard label="Superficie rural" valor="23,7 M" unidad="hectáreas" />
           </div>
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             La producción provincial en promedio decenal (2009/10–2018/19) representó el 93,1% de la cebada nacional, el 56% del girasol, el 49,5% del trigo, el 33,1% de la soja y el 28,9% del maíz.
@@ -623,9 +627,9 @@ export default function InformeAgroindustriaPBA() {
             Las cadenas agroindustriales generaron 4,2 millones de puestos de trabajo en Argentina en 2023, equivalentes al 22,4% del empleo privado nacional (FADA, 2025). Buenos Aires concentra cerca del 28% de los establecimientos agropecuarios del país y es la primera jurisdicción generadora de empleo con el 31,2% del total nacional.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="Empleo en CAI (Argentina)" value="4,2 M" unit="puestos, 2023" accent />
-            <MC label="Cadenas trigo y cebada (PBA)" value="+200 K" unit="empleos directos" />
-            <MC label="EAP lideradas por PBA" value="28%" unit="del total nacional" />
+            <CifraCard label="Empleo en CAI (Argentina)" valor="4,2 M" periodo="puestos, 2023" />
+            <CifraCard label="Cadenas trigo y cebada (PBA)" valor="+200 K" periodo="empleos directos" />
+            <CifraCard label="EAP lideradas por PBA" valor="28%" periodo="del total nacional" />
           </div>
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Sin embargo, existe una brecha estructural entre empleo y modelo productivo: cada 1.000 hectáreas, los cultivos extensivos generan muy poco empleo directo comparado con las producciones intensivas.
@@ -678,9 +682,9 @@ export default function InformeAgroindustriaPBA() {
             Las cadenas agroindustriales generaron exportaciones por USD 52.900 millones en 2025, el 61% del total exportado por Argentina -6 de cada 10 dólares que ingresaron al país. Entre enero y octubre de 2025, los complejos de granos líderes sumaron USD 28.875 millones, un 5% más en valor y 10% en volumen respecto de 2024.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="Exportaciones agroindustriales 2025" value="USD 52,9 B" unit="récord histórico en volumen" accent />
-            <MC label="Participación en exportaciones" value="61%" unit="del total exportado por Argentina" />
-            <MC label="Retenciones agro (ARCA 2024)" value="USD 5,99 B" unit="91% proviene de las CAI" />
+            <CifraCard label="Exportaciones agroindustriales 2025" valor="USD 52,9 B" periodo="récord histórico en volumen" />
+            <CifraCard label="Participación en exportaciones" valor="61%" periodo="del total exportado por Argentina" />
+            <CifraCard label="Retenciones agro (ARCA 2024)" valor="USD 5,99 B" periodo="91% proviene de las CAI" />
           </div>
           <DownloadableViz title="Principales complejos exportadores de Argentina (2025)" fuente="FADA (2026) · BCR · Secretaría de Agricultura">
             <ChartExportaciones />

@@ -1,6 +1,12 @@
 -- ============================================================
 -- DatosPBA – Schema + Seed
 -- Pegar y ejecutar en el SQL Editor de Supabase
+--
+-- OJO: este archivo es seed/documentación y puede estar detrás de
+-- la base viva. Después de correrlo, ejecutar también
+-- migracion-fase1-semantica.sql (agrega `polaridad` a
+-- reportes_rapidos y migra los colores de series a la paleta del
+-- sistema de diseño).
 -- ============================================================
 
 -- ── Tablas ──────────────────────────────────────────────────

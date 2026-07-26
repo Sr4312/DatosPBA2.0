@@ -15,6 +15,8 @@ import {
   Filler,
 } from 'chart.js'
 import { Bar, Line } from 'react-chartjs-2'
+import Cifra from '@/components/shared/Cifra'
+import { DATA } from '@/lib/variacion'
 
 ChartJS.register(
   CategoryScale, LinearScale, BarElement, LineElement, PointElement, Tooltip, Legend, Filler
@@ -41,7 +43,6 @@ const D = {
   goldBg:   '#fffbeb',
   stone:    '#57534e',
   stoneBg:  '#f5f5f4',
-  teal:     '#0f766e',
   tealBg:   '#d1fae5',
   slate:    '#1e3a8a',
   warn:     '#b45309',
@@ -72,11 +73,14 @@ const PBG_AÑOS  = ['2004','2005','2006','2007','2008','2009','2010','2011','201
 const PBG_VALS  = [380, 393, 398, 408, 418, 430, 445, 462, 488, 490, 518, 562, 553, 592, 584, 545, 468, 548, 692, 823, 618]
 const PBG_PROV  = [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,false]
 
+/* La valoración de cada cifra se declara acá y el color lo deriva <Cifra>:
+   nunca se asigna un color a mano. Todas son niveles sin variación:
+   el contexto va en `periodo`. */
 const HERO_STATS = [
-  { n: '50 M',    label: 'toneladas de minerales extraídas por año',      color: D.goldSoft  },
-  { n: '4.419',   label: 'trabajadores registrados (SIACAM, abr. 2025)',  color: '#93c5fd'   },
-  { n: '53',      label: 'municipios con actividad minera (de 135)',       color: '#6ee7b7'   },
-  { n: '+130',    label: 'años de industria minera en la provincia',       color: '#fda4af'   },
+  { valor: '50 M',  periodo: 'toneladas de minerales extraídas por año' },
+  { valor: '4.419', periodo: 'trabajadores registrados (SIACAM, abr. 2025)' },
+  { valor: '53',    periodo: 'municipios con actividad minera (de 135)' },
+  { valor: '+130',  periodo: 'años de industria minera en la provincia' },
 ]
 
 // ─── ANIMACIÓN ───────────────────────────────────────────────
@@ -258,8 +262,7 @@ function Hero() {
               }}
               className="p-5"
             >
-              <div className="font-display text-4xl font-bold mb-1" style={{ color: s.color }}>{s.n}</div>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', lineHeight: 1.45 }}>{s.label}</p>
+              <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
             </m.div>
           ))}
         </m.div>
@@ -298,7 +301,7 @@ function ProduccionChart() {
       label: 'Millones de toneladas anuales',
       data: PROD_PROVINCIAS.map(p => p.mtn),
       backgroundColor: PROD_PROVINCIAS.map(p =>
-        p.provincia === 'Buenos Aires' ? D.gold : p.robusta ? '#94a3b8' : '#cbd5e1'
+        p.provincia === 'Buenos Aires' ? DATA[1] : p.robusta ? '#94a3b8' : '#cbd5e1'
       ),
       borderRadius: 5,
       borderSkipped: false,
@@ -354,9 +357,9 @@ function PBGHistorico() {
     datasets: [{
       label: 'VAB explotación minas y canteras (mill. $ 2004)',
       data: PBG_VALS,
-      borderColor: D.gold,
-      backgroundColor: 'rgba(217,119,6,0.08)',
-      pointBackgroundColor: PBG_VALS.map((_, i) => PBG_PROV[i] ? 'rgba(217,119,6,0.5)' : D.gold),
+      borderColor: DATA[1],
+      backgroundColor: 'rgba(225,29,116,0.08)',
+      pointBackgroundColor: PBG_VALS.map((_, i) => PBG_PROV[i] ? 'rgba(225,29,116,0.5)' : DATA[1]),
       pointRadius: PBG_VALS.map((_, i) => PBG_PROV[i] ? 4 : 5),
       pointBorderColor: '#fff',
       pointBorderWidth: 2,
@@ -402,11 +405,11 @@ function PBGHistorico() {
       </div>
       <div className="flex items-center gap-6 mt-3 px-1 flex-wrap">
         <div className="flex items-center gap-1.5 text-[11px]" style={{ color: C.inkMid }}>
-          <span style={{ width: 24, height: 3, background: D.gold, borderRadius: 2, display: 'inline-block' }} />
+          <span style={{ width: 24, height: 3, background: DATA[1], borderRadius: 2, display: 'inline-block' }} />
           Valores en pesos constantes 2004
         </div>
         <div className="flex items-center gap-1.5 text-[11px]" style={{ color: C.inkLight }}>
-          <span style={{ width: 8, height: 8, background: 'rgba(217,119,6,0.4)', borderRadius: '50%', display: 'inline-block' }} />
+          <span style={{ width: 8, height: 8, background: 'rgba(225,29,116,0.4)', borderRadius: '50%', display: 'inline-block' }} />
           Datos preliminares (*)
         </div>
         <div className="ml-auto text-[11px]" style={{ color: C.inkLight }}>
@@ -430,8 +433,8 @@ function EmpleoMunicipal() {
   const xScale = v => padL + (v / maxPct) * innerW
 
   const colorFor = (nombre) => {
-    if (nombre === 'Olavarría')   return D.gold
-    if (nombre === 'Resto de PBA') return C.accent
+    if (nombre === 'Olavarría')   return DATA[1]
+    if (nombre === 'Resto de PBA') return DATA[4]
     return '#94a3b8'
   }
 
@@ -487,13 +490,13 @@ function EmpleoMunicipal() {
 
         {/* Callout: 49% fuera de Olavarría */}
         <rect x={padL + innerW - 10} y={padT + 2} width={padR - 4} height={34}
-              fill={C.accent + '15'} rx={6} />
+              fill={DATA[4] + '15'} rx={6} />
         <text x={padL + innerW + (padR - 4) / 2 - 8} y={padT + 14} textAnchor="middle"
-              fontSize="9" fill={C.accent} fontWeight="700" fontFamily="Poppins, sans-serif">
+              fontSize="9" fill={DATA[4]} fontWeight="700" fontFamily="Poppins, sans-serif">
           49% fuera
         </text>
         <text x={padL + innerW + (padR - 4) / 2 - 8} y={padT + 26} textAnchor="middle"
-              fontSize="9" fill={C.accent} fontFamily="Poppins, sans-serif">
+              fontSize="9" fill={DATA[4]} fontFamily="Poppins, sans-serif">
           de Olavarría
         </text>
       </svg>
@@ -535,7 +538,7 @@ const MINERALES = [
     nombre: 'Arcillas y dolomitas',
     uso: 'Cerámica, industria química',
     desc: 'Materias primas para la industria cerámica, refractarios y usos industriales. Distribuidas en múltiples distritos del interior provincial.',
-    color: D.teal,
+    color: DATA[2],
     bg: D.tealBg,
     n: '04',
   },

@@ -9,10 +9,12 @@ import {
   Legend,
 } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2'
+import Cifra from '@/components/shared/Cifra'
+import { DATA, VALORACION_HEX, colorEscalaValoracion } from '@/lib/variacion'
 
 ChartJS.register(ArcElement, DoughnutController, Tooltip, Legend)
 
-// data colors (semánticos para las visualizaciones)
+// acentos decorativos (titular, gradientes) — las series de dato usan DATA de @/lib/variacion
 const D = {
   magenta:   '#e91e8c',
   blue:      '#1565C0',
@@ -33,28 +35,45 @@ const C = {
   card:     'var(--c-surface)',
 }
 
+/* Ranking de jurisdicciones: PBA es la serie principal (DATA[1]);
+   el resto son términos de comparación y comparten DATA[2]. */
 const PROVINCIAS = [
-  { rank: 1, name: 'Prov. de Buenos Aires', color: D.magenta,   pct: 100 },
-  { rank: 2, name: 'Misiones',              color: D.blue,      pct: 82  },
-  { rank: 3, name: 'CABA',                  color: D.cyan,      pct: 68  },
-  { rank: 4, name: 'Córdoba',               color: D.purple,    pct: 56  },
-  { rank: 5, name: 'Tucumán',               color: D.lightblue, pct: 44  },
+  { rank: 1, name: 'Prov. de Buenos Aires', color: DATA[1], pct: 100 },
+  { rank: 2, name: 'Misiones',              color: DATA[2], pct: 82  },
+  { rank: 3, name: 'CABA',                  color: DATA[2], pct: 68  },
+  { rank: 4, name: 'Córdoba',               color: DATA[2], pct: 56  },
+  { rank: 5, name: 'Tucumán',               color: DATA[2], pct: 44  },
 ]
 
+/* Categorías de la encuesta: IIBB es la serie principal (DATA[1]); los demás
+   impuestos nombrados siguen la paleta DATA y el bucket residual "Otros"
+   usa el gris neutral del sistema. */
 const IMPUESTOS = [
-  { label: 'Ingresos Brutos',  pct: 61, color: D.magenta   },
-  { label: 'Otros',            pct: 14, color: D.cyan      },
-  { label: 'IVA',              pct: 12, color: D.blue      },
-  { label: 'Ganancias',        pct:  8, color: D.purple    },
-  { label: 'Déb. y Créd.',     pct:  5, color: D.lightblue },
+  { label: 'Ingresos Brutos',  pct: 61, color: DATA[1] },
+  { label: 'Otros',            pct: 14, color: VALORACION_HEX.neutral.base },
+  { label: 'IVA',              pct: 12, color: DATA[2] },
+  { label: 'Ganancias',        pct:  8, color: DATA[3] },
+  { label: 'Déb. y Créd.',     pct:  5, color: DATA[4] },
 ]
 
+/* Rampa por nivel de valoración: los saldos a favor inmovilizados son
+   'menor-es-mejor', así que t = 1 (mejor) es "sin saldo" y t = 0 (peor)
+   el tramo de mayor inmovilización. */
 const SALDOS = [
-  { label: 'Sin saldo a favor', pct: 16, color: C.inkLight               },
-  { label: '< $100 M',          pct: 30, color: D.lightblue              },
-  { label: '$100 - $250 M',     pct: 15, color: D.cyan                   },
-  { label: '$250 - $500 M',     pct: 16, color: D.blue                   },
-  { label: '> $500 M',          pct: 23, color: D.magenta                },
+  { label: 'Sin saldo a favor', pct: 16, color: colorEscalaValoracion(1)    },
+  { label: '< $100 M',          pct: 30, color: colorEscalaValoracion(0.75) },
+  { label: '$100 - $250 M',     pct: 15, color: colorEscalaValoracion(0.5)  },
+  { label: '$250 - $500 M',     pct: 16, color: colorEscalaValoracion(0.25) },
+  { label: '> $500 M',          pct: 23, color: colorEscalaValoracion(0)    },
+]
+
+/* La valoración de cada cifra se declara acá y el color lo deriva <Cifra>:
+   nunca se asigna un color a mano. */
+const HERO_STATS = [
+  { label: 'Menciones a IIBB como el impuesto que más encarece precios', valor: '61%', variacion: '+7 pp', polaridad: 'menor-es-mejor', periodo: 'vs. 54% en 2024' },
+  { label: 'Empresas con saldos a favor de IIBB provincial', valor: '84%', variacion: '+2 pp', polaridad: 'menor-es-mejor', periodo: 'vs. 2024' },
+  { label: 'Opinión pública: IIBB lo paga el consumidor', valor: '91%', periodo: 'consulta abierta en LinkedIn' },
+  { label: 'La jurisdicción más gravosa', valor: '#1', periodo: 'Provincia de Buenos Aires' },
 ]
 
 const doughnutData = {
@@ -133,20 +152,14 @@ export default function InformeKPMGIIBB() {
             {...fadeUp} transition={dur(0.5, 0.2)}
             className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12"
           >
-            {[
-              { n: '61%',  label: 'de las menciones al impuesto que más encarece precios', color: D.magenta },
-              { n: '84%',  label: 'de las empresas tiene saldos a favor de IIBB provincial', color: D.cyan },
-              { n: '91%',  label: 'de la opinión pública confirma que IIBB lo paga el consumidor', color: C.accent },
-              { n: '#1',   label: 'Provincia de Buenos Aires - la jurisdicción más gravosa', color: D.purple },
-            ].map((s, i) => (
+            {HERO_STATS.map((s, i) => (
               <m.div
                 key={i}
                 {...fadeUp} transition={dur(0.45, 0.1 * i + 0.3)}
                 style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16 }}
                 className="p-5"
               >
-                <div className="font-display text-4xl font-bold mb-1" style={{ color: s.color }}>{s.n}</div>
-                <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', lineHeight: 1.45 }}>{s.label}</p>
+                <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
               </m.div>
             ))}
           </m.div>
@@ -172,7 +185,7 @@ export default function InformeKPMGIIBB() {
             <m.div {...fadeUp} transition={dur(0.6, 0.15)} className="relative shrink-0" style={{ width: 260, height: 260 }}>
               <Doughnut data={doughnutData} options={doughnutOpts} />
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                <span className="font-display text-5xl font-bold" style={{ color: D.magenta }}>61%</span>
+                <span className="font-display text-5xl font-bold" style={{ color: DATA[1] }}>61%</span>
                 <span style={{ color: C.inkLight, fontSize: '0.72rem', marginTop: 2 }}>Ing. Brutos</span>
               </div>
             </m.div>
@@ -295,7 +308,7 @@ export default function InformeKPMGIIBB() {
 
           <m.div {...fadeUp} transition={dur(0.6, 0.1)} className="flex flex-col sm:flex-row items-center gap-10 mb-12">
             <div className="text-center shrink-0">
-              <div className="font-display font-bold" style={{ fontSize: 'clamp(5rem, 15vw, 9rem)', color: D.cyan, lineHeight: 1 }}>
+              <div className="font-display font-bold" style={{ fontSize: 'clamp(5rem, 15vw, 9rem)', color: '#fff', lineHeight: 1 }}>
                 84%
               </div>
               <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.8rem', marginTop: 8 }}>

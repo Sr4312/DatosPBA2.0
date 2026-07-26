@@ -12,6 +12,8 @@ import {
   Legend,
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
+import Cifra from '@/components/shared/Cifra'
+import { DATA } from '@/lib/variacion'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 ChartJS.defaults.font.family = 'Poppins, sans-serif'
@@ -53,11 +55,14 @@ const COMPARACION = [
   { label: 'Bahia',                 ratio: 11.7, region: 'BRA', hab: '14,8 M', ajustado: false },
 ]
 
+/* La valoración de cada cifra se declara acá y el color lo deriva <Cifra>:
+   nunca se asigna un color a mano. Son niveles/comparaciones sin variación
+   temporal, por eso van sin `variacion` y con el contexto en `periodo`. */
 const HERO_STATS = [
-  { n: '530.922', label: 'cargos en el Presupuesto provincial 2026',       color: '#93c5fd' },
-  { n: '30,2',    label: 'empleados provinciales cada 1.000 habitantes',    color: '#fde68a' },
-  { n: '~47',     label: 'cada 1.000 hab. sumando municipios bonaerenses',  color: '#fda4af' },
-  { n: '+53%',    label: 'más que Minas Gerais, el comparador más robusto', color: '#6ee7b7' },
+  { valor: '530.922', periodo: 'cargos en el Presupuesto provincial 2026' },
+  { valor: '30,2',    periodo: 'empleados provinciales cada 1.000 habitantes' },
+  { valor: '~47',     periodo: 'cada 1.000 hab. sumando municipios bonaerenses' },
+  { valor: '+53%',    periodo: 'más que Minas Gerais, el comparador más robusto' },
 ]
 
 const CRITERIOS = [
@@ -98,7 +103,7 @@ const IMPLICANCIAS = [
     body: 'El caso de Florida es el más ilustrativo: su PBI per cápita es aproximadamente cuatro veces superior al de PBA, y sus servicios públicos -educación, infraestructura, salud- tienen indicadores objetivos comparables o superiores. El Estado bonaerense tiene más empleados en proporción a su población y produce peores resultados medibles.',
   },
   {
-    icon: '🔍', color: '#dc2626', variant: 'red',
+    icon: '🔍', color: DATA[1], variant: 'red',
     title: 'El número consolidado amplía la brecha', tag: 'Metodológico',
     body: 'Los 30,2 empleados provinciales cada 1.000 habitantes no incluyen el empleo municipal bonaerense. Con los municipios, el número consolidado sube a alrededor de 47 cada 1.000 (Fundación Ecosur / Bolsa de Comercio de Córdoba, 2024). Ningún comparador de la serie se acerca a ese nivel cuando se agrega el nivel sub-provincial de gobierno.',
   },
@@ -115,14 +120,17 @@ const EEUU_LABELS = ['Florida', 'Nueva York', 'Texas']
 const EEUU_RAW    = [9.6,  11.4, 11.4]
 const EEUU_ADJ    = [15.3, 22.4, 22.8]
 
+/* Colores categóricos de serie: DATA[1] = PBA (principal), DATA[2] = escenarios
+   con ratios de EE.UU., DATA[3] = escenarios con ratios de Brasil — mismo mapeo
+   regional que ChartComparacion. */
 const CARGOS_EQUIV = [
-  { label: 'PBA actual',                    cargos: 530922, color: B[600] },
-  { label: 'Con ratio Texas (22,8)',         cargos: 401280, color: B[300] },
-  { label: 'Con ratio Nueva York (22,4)',    cargos: 394240, color: B[300] },
-  { label: 'Con ratio Minas Gerais (19,7)', cargos: 346720, color: '#94a3b8' },
-  { label: 'Con ratio Río Gr. do Sul (17,5)', cargos: 308000, color: '#94a3b8' },
-  { label: 'Con ratio Florida (15,3)',       cargos: 269280, color: B[300] },
-  { label: 'Con ratio Bahia (11,7)',         cargos: 205920, color: '#94a3b8' },
+  { label: 'PBA actual',                    cargos: 530922, color: DATA[1] },
+  { label: 'Con ratio Texas (22,8)',         cargos: 401280, color: DATA[2] },
+  { label: 'Con ratio Nueva York (22,4)',    cargos: 394240, color: DATA[2] },
+  { label: 'Con ratio Minas Gerais (19,7)', cargos: 346720, color: DATA[3] },
+  { label: 'Con ratio Río Gr. do Sul (17,5)', cargos: 308000, color: DATA[3] },
+  { label: 'Con ratio Florida (15,3)',       cargos: 269280, color: DATA[2] },
+  { label: 'Con ratio Bahia (11,7)',         cargos: 205920, color: DATA[3] },
 ]
 
 // ─── ANIMACIÓN ───────────────────────────────────────────────
@@ -251,28 +259,27 @@ function SH({ num, title }) {
   )
 }
 
-function MC({ label, value, unit, accent = false }) {
+function CifraCard(props) {
   return (
     <div style={{
       background: '#fff', borderRadius: 14,
       border: `1px solid ${C.rule}`,
-      borderLeft: `4px solid ${accent ? B[600] : B[400]}`,
       padding: '1.125rem 1.125rem 1rem',
       boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
     }}>
-      <div style={{ fontSize: '0.625rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>{label}</div>
-      <div style={{ fontSize: '1.875rem', fontWeight: 800, color: accent ? B[600] : C.ink, lineHeight: 1, marginBottom: '0.375rem' }}>{value}</div>
-      <div style={{ fontSize: '0.6875rem', color: '#94a3b8', lineHeight: 1.4 }}>{unit}</div>
+      <Cifra size="md" {...props} />
     </div>
   )
 }
 
 function Tag({ children, variant = 'blue' }) {
   const s = {
+    /* 'red' y 'green' son chips categóricos, no valoraciones: se re-tintan
+       con la paleta DATA para no usar rojo/verde semántico. */
     amber: { background: '#fef3c7', color: '#92400e' },
-    red:   { background: '#fee2e2', color: '#991b1b' },
+    red:   { background: DATA[1] + '1A', color: DATA[1] },
     blue:  { background: B[50],     color: B[600]    },
-    green: { background: '#dcfce7', color: '#166534' },
+    green: { background: DATA[2] + '1A', color: DATA[2] },
   }
   return (
     <span style={{ ...s[variant], display: 'inline-flex', alignItems: 'center', fontSize: '0.6rem', fontWeight: 700, padding: '0.2rem 0.55rem', borderRadius: '0.3rem', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
@@ -289,8 +296,8 @@ function ChartComparacion() {
     datasets: [{
       data: COMPARACION.map(d => d.ratio),
       backgroundColor: COMPARACION.map(d =>
-        d.region === 'PBA' ? B[600] :
-        d.region === 'USA' ? B[400] : '#94a3b8'
+        d.region === 'PBA' ? DATA[1] :
+        d.region === 'USA' ? DATA[2] : DATA[3]
       ),
       borderRadius: 4,
       barPercentage: 0.68,
@@ -300,9 +307,9 @@ function ChartComparacion() {
     <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
       <div style={{ display: 'flex', gap: '1.25rem', marginBottom: '0.875rem', flexWrap: 'wrap' }}>
         {[
-          { color: B[600],    label: 'Buenos Aires' },
-          { color: B[400],    label: 'Estados Unidos (ajustado con K-12)' },
-          { color: '#94a3b8', label: 'Brasil' },
+          { color: DATA[1], label: 'Buenos Aires' },
+          { color: DATA[2], label: 'Estados Unidos (ajustado con K-12)' },
+          { color: DATA[3], label: 'Brasil' },
         ].map(l => (
           <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.6875rem', color: '#64748b', fontWeight: 500 }}>
             <span style={{ width: 10, height: 10, borderRadius: 2, background: l.color, flexShrink: 0 }} />
@@ -356,7 +363,7 @@ function ChartBrasil() {
     labels: BRASIL_CHART.map(d => d.label),
     datasets: [{
       data: BRASIL_CHART.map(d => d.ratio),
-      backgroundColor: BRASIL_CHART.map(d => d.pba ? B[600] : '#94a3b8'),
+      backgroundColor: BRASIL_CHART.map(d => d.pba ? DATA[1] : DATA[2]),
       borderRadius: 4,
       barPercentage: 0.65,
     }],
@@ -400,14 +407,14 @@ function ChartEEUU() {
       {
         label: 'Sin docentes K-12',
         data: EEUU_RAW,
-        backgroundColor: B[200],
+        backgroundColor: DATA[2],
         borderRadius: 4,
         barPercentage: 0.7,
       },
       {
         label: 'Ajustado con K-12',
         data: EEUU_ADJ,
-        backgroundColor: B[400],
+        backgroundColor: DATA[1],
         borderRadius: 4,
         barPercentage: 0.7,
       },
@@ -417,8 +424,8 @@ function ChartEEUU() {
     <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
       <div style={{ display: 'flex', gap: '1.25rem', marginBottom: '0.875rem', flexWrap: 'wrap' }}>
         {[
-          { color: B[400], label: 'Ajustado con K-12' },
-          { color: B[200], label: 'Solo gobierno estadual (sin K-12)' },
+          { color: DATA[1], label: 'Ajustado con K-12' },
+          { color: DATA[2], label: 'Solo gobierno estadual (sin K-12)' },
         ].map(l => (
           <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.6875rem', color: '#64748b', fontWeight: 500 }}>
             <span style={{ width: 10, height: 10, borderRadius: 2, background: l.color, flexShrink: 0 }} />
@@ -552,8 +559,7 @@ function Hero() {
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16 }}
               className="p-5"
             >
-              <div className="font-display text-4xl font-bold mb-1" style={{ color: s.color }}>{s.n}</div>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', lineHeight: 1.45 }}>{s.label}</p>
+              <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
             </m.div>
           ))}
         </m.div>
@@ -601,9 +607,9 @@ export default function InformeEmpleoPblicoPBA() {
             Comercio de Córdoba para 2024.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="Cargos presupuestados 2026" value="530.922" unit="adm. central + organismos + previsión social" accent />
-            <MC label="Ratio provincial" value="30,2" unit="empleados provinciales cada 1.000 hab." />
-            <MC label="Ratio consolidado" value="~47" unit="incluyendo empleo municipal bonaerense" />
+            <CifraCard label="Cargos presupuestados 2026" valor="530.922" periodo="adm. central + organismos + previsión social" />
+            <CifraCard label="Ratio provincial" valor="30,2" periodo="empleados provinciales cada 1.000 hab." />
+            <CifraCard label="Ratio consolidado" valor="~47" periodo="incluyendo empleo municipal bonaerense" />
           </div>
           <p className="text-base leading-relaxed" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Para evaluar si esa cifra es alta, media o baja, el ejercicio correcto es comparar con
@@ -650,9 +656,9 @@ export default function InformeEmpleoPblicoPBA() {
             básica pública, la policía, la red hospitalaria y la administración general.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-            <MC label="Minas Gerais - 20,5 M hab." value="19,7" unit="emp./1.000 hab. - PBA tiene un 53% más" accent />
-            <MC label="Rio Grande do Sul - 11,4 M hab." value="17,5" unit="emp./1.000 hab. - referencia regional de eficiencia" />
-            <MC label="Bahia - 14,8 M hab." value="11,7" unit="emp./1.000 hab. - el más bajo de la serie brasileña" />
+            <CifraCard label="Minas Gerais - 20,5 M hab." valor="19,7" periodo="emp./1.000 hab. - PBA tiene un 53% más" />
+            <CifraCard label="Rio Grande do Sul - 11,4 M hab." valor="17,5" periodo="emp./1.000 hab. - referencia regional de eficiencia" />
+            <CifraCard label="Bahia - 14,8 M hab." valor="11,7" periodo="emp./1.000 hab. - el más bajo de la serie brasileña" />
           </div>
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Minas Gerais es el comparador más robusto: segundo estado más poblado de Brasil, con
@@ -689,9 +695,9 @@ export default function InformeEmpleoPblicoPBA() {
             quedan por debajo de Buenos Aires.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="Florida - 22,6 M hab." value="15,3" unit="emp./1.000 hab. (ajustado con K-12)" />
-            <MC label="Nueva York - 19,6 M hab." value="22,4" unit="emp./1.000 hab. (ajustado con K-12)" />
-            <MC label="Texas - 30 M hab." value="22,8" unit="emp./1.000 hab. (ajustado con K-12)" />
+            <CifraCard label="Florida - 22,6 M hab." valor="15,3" periodo="emp./1.000 hab. (ajustado con K-12)" />
+            <CifraCard label="Nueva York - 19,6 M hab." valor="22,4" periodo="emp./1.000 hab. (ajustado con K-12)" />
+            <CifraCard label="Texas - 30 M hab." valor="22,8" periodo="emp./1.000 hab. (ajustado con K-12)" />
           </div>
           <p className="text-base leading-relaxed" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Lo más significativo es la convergencia entre Texas -agenda de estado mínimo, baja

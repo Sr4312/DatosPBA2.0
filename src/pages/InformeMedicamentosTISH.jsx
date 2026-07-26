@@ -9,6 +9,8 @@ import {
   Tooltip, Legend,
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
+import Cifra from '@/components/shared/Cifra'
+import { DATA, colorEscalaValoracion } from '@/lib/variacion'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
@@ -25,18 +27,18 @@ const C = {
 }
 
 // ── Paleta de datos ──────────────────────────────────────────────
+// D.red queda solo como acento del titular y de la conclusión (no es color de dato).
 const D = {
-  red:   '#dc2626',   // Buenos Aires
-  blue:  '#2563eb',   // Córdoba
-  teal:  '#0891b2',   // Santa Fe
-  amber: '#d97706',   // Mendoza
+  red: '#dc2626',
 }
 
+/* Colores categóricos por provincia: paleta DATA del sistema
+   (Buenos Aires = serie principal DATA[1]). */
 const PROV_COLORS = {
-  'Buenos Aires': D.red,
-  'Córdoba':      D.blue,
-  'Santa Fe':     D.teal,
-  'Mendoza':      D.amber,
+  'Buenos Aires': DATA[1],
+  'Córdoba':      DATA[2],
+  'Santa Fe':     DATA[3],
+  'Mendoza':      DATA[4],
 }
 
 const MUNICIPIOS = [
@@ -52,6 +54,22 @@ const MUNICIPIOS = [
   { municipio: 'Luján de Cuyo',    provincia: 'Mendoza',      base: 'Monto fijo',                drog: 0.0096, farm: 0.096, total: 1.107 },
 ]
 
+/* Escala de valoración por nivel para la carga acumulada:
+   presión tributaria es 'menor-es-mejor' → t = 1 en el municipio de menor carga. */
+const TOTAL_MIN = Math.min(...MUNICIPIOS.map(m => m.total))
+const TOTAL_MAX = Math.max(...MUNICIPIOS.map(m => m.total))
+const escalaTotal = total => (TOTAL_MAX - total) / (TOTAL_MAX - TOTAL_MIN)
+
+/* La valoración de cada cifra se declara acá y el color lo deriva <Cifra>:
+   nunca se asigna un color a mano. Todas son niveles sin variación,
+   con el contexto en `periodo`. */
+const HERO_STATS = [
+  { label: 'Presión tributaria total',            valor: '34,8%', periodo: 'sobre la cadena de medicamentos en Argentina' },
+  { label: 'Carga TISH en Pilar',                 valor: '3,73%', periodo: 'la más alta entre todos los municipios analizados' },
+  { label: 'Diferencia entre Pilar y B. Blanca',  valor: '×2,7',  periodo: 'mismo producto, distinta carga' },
+  { label: 'IIBB provincial sobre medicamentos',  valor: '6,9 pp', periodo: 'en la Prov. de Buenos Aires' },
+]
+
 // ── Helpers ──────────────────────────────────────────────────────
 const fmt = n => n.toFixed(2).replace('.', ',')
 
@@ -64,6 +82,19 @@ function SectionLabel({ children, dark = false }) {
       className="text-xs font-semibold tracking-[0.18em] uppercase mb-3">
       {children}
     </p>
+  )
+}
+
+function CifraCard(props) {
+  return (
+    <div style={{
+      background: '#fff', borderRadius: 14,
+      border: `1px solid ${C.rule}`,
+      padding: '1.125rem 1.125rem 1rem',
+      boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+    }}>
+      <Cifra size="md" {...props} />
+    </div>
   )
 }
 
@@ -120,7 +151,7 @@ export default function InformeMedicamentosTISH() {
         backgroundColor: C.ink,
         titleColor: '#fff',
         bodyColor: '#cbd5e1',
-        footerColor: D.red,
+        footerColor: DATA[1],
         footerFont: { weight: 'bold' },
         padding: 10,
         cornerRadius: 8,
@@ -171,17 +202,11 @@ export default function InformeMedicamentosTISH() {
 
           <m.div {...fadeUp} transition={dur(0.5, 0.2)}
             className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
-            {[
-              { n: '34,8%', label: 'Presión tributaria total sobre la cadena de medicamentos en Argentina', color: D.red },
-              { n: '3,73%', label: 'Carga TISH en Pilar - la más alta entre todos los municipios analizados', color: D.teal },
-              { n: '×2,7',  label: 'Diferencia entre Pilar y Bahía Blanca - mismo producto, distinta carga', color: '#f59e0b' },
-              { n: '6,9 pp',label: 'Puntos de IIBB provincial sobre medicamentos en la Prov. de Buenos Aires', color: C.accent },
-            ].map((s, i) => (
+            {HERO_STATS.map((s, i) => (
               <m.div key={i} {...fadeUp} transition={dur(0.45, 0.1 * i + 0.3)}
                 style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16 }}
                 className="p-5">
-                <div className="font-display text-3xl sm:text-4xl font-bold mb-1" style={{ color: s.color }}>{s.n}</div>
-                <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', lineHeight: 1.45 }}>{s.label}</p>
+                <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
               </m.div>
             ))}
           </m.div>
@@ -283,10 +308,13 @@ export default function InformeMedicamentosTISH() {
                   <td style={{ padding: '11px 16px', textAlign: 'right', fontFamily: 'monospace', color: C.ink }}>{fmt(row.drog)}%</td>
                   <td style={{ padding: '11px 16px', textAlign: 'right', fontFamily: 'monospace', color: C.ink }}>{fmt(row.farm)}%</td>
                   <td style={{ padding: '11px 16px', textAlign: 'right' }}>
+                    {/* Rampa por nivel: valoración continua (menor carga = mejor), nunca color a mano */}
                     <span style={{
                       fontWeight: 700, fontFamily: 'monospace',
-                      color: row.total >= 3 ? D.red : row.total >= 2 ? D.blue : C.ink,
-                      background: row.total >= 3 ? '#fef2f2' : row.total >= 2 ? '#eff6ff' : 'transparent',
+                      color: colorEscalaValoracion(escalaTotal(row.total)),
+                      background: row.total >= 2
+                        ? colorEscalaValoracion(escalaTotal(row.total)).replace('rgb(', 'rgba(').replace(')', ',0.08)')
+                        : 'transparent',
                       padding: row.total >= 2 ? '2px 8px' : undefined,
                       borderRadius: row.total >= 2 ? 6 : undefined,
                     }}>
@@ -364,16 +392,12 @@ export default function InformeMedicamentosTISH() {
 
           <div className="grid sm:grid-cols-3 gap-5 mb-8">
             {[
-              { label: 'IIBB provincial (PBA)', value: '4,0%', sub: 'Sobre medicamentos - por debajo de Córdoba, Chubut y Río Negro', color: D.red },
-              { label: 'TISH máxima (Pilar)',   value: '3,73%', sub: 'La más alta del país entre los municipios analizados en el informe', color: D.blue },
-              { label: 'Carga combinada estimada', value: '~7,7%', sub: 'IIBB + TISH solo en Pilar - sin contar tributos nacionales', color: C.accent },
+              { label: 'IIBB provincial (PBA)',    valor: '4,0%',  periodo: 'Sobre medicamentos - por debajo de Córdoba, Chubut y Río Negro' },
+              { label: 'TISH máxima (Pilar)',      valor: '3,73%', periodo: 'La más alta del país entre los municipios analizados en el informe' },
+              { label: 'Carga combinada estimada', valor: '~7,7%', periodo: 'IIBB + TISH solo en Pilar - sin contar tributos nacionales' },
             ].map((s, i) => (
-              <m.div key={i} {...fadeUp} transition={dur(0.45, 0.08 * i)}
-                style={{ background: '#f8f9fc', border: `1px solid ${C.rule}`, borderLeft: `4px solid ${s.color}`, borderRadius: 12 }}
-                className="p-5">
-                <div className="font-display text-3xl font-bold mb-2" style={{ color: s.color }}>{s.value}</div>
-                <p className="text-sm font-semibold mb-1" style={{ color: C.ink }}>{s.label}</p>
-                <p className="text-xs leading-relaxed" style={{ color: C.inkMid }}>{s.sub}</p>
+              <m.div key={i} {...fadeUp} transition={dur(0.45, 0.08 * i)}>
+                <CifraCard label={s.label} valor={s.valor} periodo={s.periodo} />
               </m.div>
             ))}
           </div>
