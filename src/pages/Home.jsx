@@ -1,7 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
-import { Calendar, ChevronRight } from 'lucide-react'
 import {
   Chart as ChartJS,
   CategoryScale, LinearScale,
@@ -40,7 +38,7 @@ function PublicacionesTicker({ hilos }) {
   if (!hilos.length) return null
   const doubled = [...hilos, ...hilos]
   return (
-    <section className="mb-16 py-10 border-y border-slate-200/80 dark:border-slate-700/50 bg-gradient-to-b from-white/60 dark:from-slate-800/40 to-transparent">
+    <section className="mb-16 py-10 border-y" style={{ borderColor: 'var(--rule)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-6">
         <SectionHeader title="Publicaciones" href="/hilos" />
       </div>
@@ -52,7 +50,8 @@ function PublicacionesTicker({ hilos }) {
               href={h.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-72 shrink-0 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 border-l-4 border-l-purple-400 p-4 flex flex-col gap-3 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 no-underline"
+              className="w-72 shrink-0 bg-white border p-4 flex flex-col gap-3 no-underline hover:border-slate-300 transition-colors"
+              style={{ borderColor: 'var(--rule)' }}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -80,7 +79,6 @@ function PublicacionesTicker({ hilos }) {
             </a>
           ))}
         </div>
-        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white dark:from-transparent to-transparent pointer-events-none" />
       </div>
     </section>
   )
@@ -147,36 +145,22 @@ function FeaturedInformeCard({ inf, viz }) {
   } : null
 
   return (
-    <m.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-700/50 overflow-hidden grid lg:grid-cols-5 mb-5 hover:shadow-md transition-all"
-    >
+    <div className="bg-white border overflow-hidden grid lg:grid-cols-5 mb-5" style={{ borderColor: 'var(--rule)' }}>
       <div className="lg:col-span-3 p-6 sm:p-8 flex flex-col gap-4">
         <div className="flex items-center gap-2 flex-wrap">
-          {inf.tema && <Badge variant="secondary">{inf.tema}</Badge>}
-          {inf.fecha && (
-            <span className="flex items-center gap-1 text-xs text-slate-500">
-              <Calendar className="w-3 h-3" />{inf.fecha}
-            </span>
-          )}
+          {inf.tema && <Badge>{inf.tema}</Badge>}
+          {inf.fecha && <span className="text-xs text-slate-500">{inf.fecha}</span>}
         </div>
-        <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#0F172A] dark:text-slate-100 leading-tight tracking-tight">
+        <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#0F172A] leading-tight tracking-tight">
           {inf.titulo}
         </h3>
-        {inf.bajada && <p className="text-sm text-slate-600 dark:text-slate-500 leading-relaxed line-clamp-4">{inf.bajada}</p>}
-        <Link to={inf.url} className="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:text-brand-700 no-underline group pt-2">
-          Leer informe
-          <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+        {inf.bajada && <p className="text-sm text-slate-600 leading-relaxed line-clamp-4">{inf.bajada}</p>}
+        <Link to={inf.url} className="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:text-brand-700 no-underline pt-2">
+          Leer informe →
         </Link>
       </div>
 
-      <div className="lg:col-span-2 bg-[#0F172A] bg-pattern-dark p-6 sm:p-7 flex flex-col">
-        <p className="text-brand-400 text-[10px] font-semibold tracking-[0.2em] uppercase mb-4">
-          Destacado
-        </p>
+      <div className="lg:col-span-2 bg-[#0F172A] p-6 sm:p-7 flex flex-col">
         {viz && ChartComponent ? (
           <div className="flex-1 min-h-[240px]">
             <ChartComponent ref={chartRef} data={chartData} options={options} />
@@ -185,7 +169,7 @@ function FeaturedInformeCard({ inf, viz }) {
           <p className="text-white/70 text-sm leading-relaxed">{inf.bajada}</p>
         )}
       </div>
-    </m.div>
+    </div>
   )
 }
 
@@ -227,18 +211,8 @@ function HeroVizPanel({ informe, viz }) {
   }
 
   return (
-    <m.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.25 }}
-      className="w-full flex flex-col"
-    >
-      <div className="flex items-center gap-2 mb-3">
-        <span className="w-1.5 h-1.5 rounded-full bg-brand-400" />
-        <span className="text-[10px] font-semibold text-brand-400 uppercase tracking-[0.18em]">
-          Último informe
-        </span>
-      </div>
+    <div className="w-full flex flex-col">
+      <p className="text-caption text-slate-400 mb-3">Último informe</p>
 
       <p className="text-base font-semibold text-white leading-snug mb-4 line-clamp-2">
         {informe.titulo}
@@ -259,7 +233,7 @@ function HeroVizPanel({ informe, viz }) {
           Ver informe completo →
         </Link>
       </div>
-    </m.div>
+    </div>
   )
 }
 
@@ -300,41 +274,19 @@ export default function Home() {
       <TickerBar reportes={reportes} />
 
       {/* Hero */}
-      <section className="bg-[#0F172A] bg-pattern-dark py-10 sm:py-14">
+      <section className="bg-[#0F172A] py-10 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col lg:flex-row items-start lg:items-center lg:justify-between gap-10 lg:gap-16">
 
-            <m.div
-              className="flex-1"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <p className="text-brand-400 text-xs font-semibold tracking-[0.2em] uppercase mb-6">
-                DatosPBA · Provincia de Buenos Aires
-              </p>
+            <div className="flex-1">
               <h1 className="font-display text-4xl sm:text-6xl font-bold text-white tracking-tight leading-[1.08]">
-                La provincia,<br />
-                contada con <span className="text-brand-400">datos</span>.
+                Periodismo de datos sobre la provincia de Buenos Aires.
               </h1>
-              <p className="text-slate-500 text-sm sm:text-base leading-relaxed mt-5 max-w-sm">
-                Análisis e informes sobre política, economía y territorio bonaerense, basados en evidencia.
+              <p className="text-slate-400 text-sm sm:text-base leading-relaxed mt-5 max-w-md">
+                Informes sobre economía, trabajo y gestión pública de los 135 municipios.
+                Cada cifra publica su fuente, su período y su nota metodológica.
               </p>
-              <div className="flex gap-8 sm:gap-12 mt-10 pt-8 border-t border-white/10">
-                <div>
-                  <p className="text-3xl font-bold text-white tabular-nums leading-none">135</p>
-                  <p className="text-[11px] text-slate-500 mt-2 uppercase tracking-widest">municipios</p>
-                </div>
-                <div>
-                  <p className="text-3xl font-bold text-white tabular-nums leading-none">17M+</p>
-                  <p className="text-[11px] text-slate-500 mt-2 uppercase tracking-widest">habitantes</p>
-                </div>
-                <div>
-                  <p className="text-3xl font-bold text-white tabular-nums leading-none">{new Date().getFullYear()}</p>
-                  <p className="text-[11px] text-slate-500 mt-2 uppercase tracking-widest">actualizado</p>
-                </div>
-              </div>
-            </m.div>
+            </div>
 
             {heroData && (
               <div className="w-full lg:flex-1 lg:max-w-[500px]">

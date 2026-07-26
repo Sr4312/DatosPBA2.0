@@ -1,16 +1,11 @@
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
-import { Calendar, MapPin, ChevronRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 
-export default function EntryCard({ titulo, resumen, fecha, tema, municipio, insights, url, imagen, index = 0 }) {
+export default function EntryCard({ titulo, resumen, fecha, tema, municipio, insights, url, imagen }) {
   return (
-    <m.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.06, duration: 0.5 }}
-      className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200/60 dark:border-slate-700/50 border-l-4 border-l-brand-400 flex flex-col hover:shadow-md hover:-translate-y-0.5 hover:border-l-brand-500 transition-all overflow-hidden"
+    <div
+      className="bg-white border flex flex-col overflow-hidden hover:border-slate-300 transition-colors"
+      style={{ borderColor: 'var(--rule)' }}
     >
       {imagen && (
         <img
@@ -23,29 +18,22 @@ export default function EntryCard({ titulo, resumen, fecha, tema, municipio, ins
 
       <div className="p-6 flex flex-col gap-3 flex-1">
         <div className="flex items-center gap-2 flex-wrap">
-          {tema && <Badge variant="secondary">{tema}</Badge>}
-          {fecha && (
-            <span className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-500">
-              <Calendar className="w-3 h-3" />{fecha}
-            </span>
-          )}
+          {tema && <Badge>{tema}</Badge>}
+          {fecha && <span className="text-xs text-slate-500">{fecha}</span>}
         </div>
 
-        <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100 leading-snug">{titulo}</h3>
+        <h3 className="text-base font-semibold text-slate-900 leading-snug">{titulo}</h3>
 
-        {resumen && <p className="text-sm text-slate-500 dark:text-slate-500 line-clamp-3">{resumen}</p>}
+        {resumen && <p className="text-sm text-slate-500 line-clamp-3">{resumen}</p>}
 
         {municipio && (
-          <span className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-500">
-            <MapPin className="w-3 h-3" />{municipio}
-          </span>
+          <span className="text-xs text-slate-500">{municipio}</span>
         )}
 
         {insights && insights.length > 0 && (
           <ul className="mt-1 space-y-1.5">
             {insights.slice(0, 2).map((ins, i) => (
-              <li key={i} className="text-xs text-slate-500 dark:text-slate-500 flex items-start gap-2">
-                <span className="mt-1.5 w-1 h-1 rounded-full bg-brand-400 shrink-0" />
+              <li key={i} className="text-xs text-slate-500 leading-relaxed">
                 {ins}
               </li>
             ))}
@@ -53,12 +41,11 @@ export default function EntryCard({ titulo, resumen, fecha, tema, municipio, ins
         )}
 
         {url && (
-          <Link to={url} className="mt-auto inline-flex items-center gap-1 text-xs font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 no-underline group">
-            Ver informe
-            <ChevronRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+          <Link to={url} className="mt-auto text-xs font-semibold text-brand-600 hover:text-brand-700 no-underline">
+            Ver informe →
           </Link>
         )}
       </div>
-    </m.div>
+    </div>
   )
 }

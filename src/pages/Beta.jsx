@@ -94,7 +94,7 @@ export default function Beta() {
             <span className="text-xs font-semibold text-brand-400 uppercase tracking-[0.2em]">Beta</span>
           </div>
           <h1 className="text-3xl font-bold text-white mb-1">Explorador de contenido</h1>
-          <p className="text-slate-500 text-sm">Todo el contenido de DatosPBA en un solo lugar.</p>
+          <p className="text-slate-500 text-sm">Buscá informes, publicaciones, reportes y datasets por tema o palabra clave.</p>
         </div>
       </div>
 

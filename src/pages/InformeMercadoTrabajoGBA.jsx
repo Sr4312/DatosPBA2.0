@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ArrowLeft, Download, ExternalLink } from 'lucide-react'
 import html2canvas from 'html2canvas'
 import {
@@ -85,15 +84,6 @@ const HERO_STATS = [
   { label: 'Población subocupada', valor: '770 mil', variacion: '+76 mil', polaridad: 'menor-es-mejor', periodo: 'vs. 1T2025' },
   { label: 'Tasa de actividad',    valor: '48,0%',  variacion: '−0,5 pp', polaridad: 'mayor-es-mejor', periodo: 'desde 48,5% en 1T2025' },
 ]
-
-// ─── ANIMACIÓN ───────────────────────────────────────────────
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
-})
 
 // ─── DOWNLOAD ────────────────────────────────────────────────
 
@@ -203,10 +193,9 @@ function SectionLabel({ children, dark = false, color }) {
   )
 }
 
-function SH({ num, title }) {
+function SH({ title }) {
   return (
     <div style={{ borderBottom: `2px solid ${C.ink}`, paddingBottom: '0.75rem', marginBottom: '1.75rem', marginTop: '3rem' }}>
-      <p style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: B[400], marginBottom: '0.2rem' }}>{num}</p>
       <h2 style={{ fontSize: 'clamp(1.4rem, 2.8vw, 1.875rem)', fontWeight: 700, color: C.ink, lineHeight: 1.05, letterSpacing: '-0.015em' }}>{title}</h2>
     </div>
   )
@@ -436,51 +425,44 @@ function ChartContexto() {
 
 function Hero() {
   return (
-    <div className="bg-pattern-dark" style={{ background: C.hero }}>
+    <div style={{ background: C.hero }}>
       <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
         <Link to="/informes" className="inline-flex items-center gap-1.5 text-sm no-underline mb-10" style={{ color: 'rgba(255,255,255,0.62)' }}>
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
 
-        <m.div {...fadeUp(0)}>
-          <SectionLabel dark color="#93c5fd">INDEC · EPH · Primer trimestre 2026</SectionLabel>
-        </m.div>
+        <SectionLabel dark color="rgba(255,255,255,0.62)">INDEC · EPH · Primer trimestre 2026</SectionLabel>
 
-        <m.h1
-          {...fadeUp(0.05)}
+        <h1
           className="font-display"
           style={{ fontSize: 'clamp(2rem, 4.6vw, 3.2rem)', fontWeight: 700, color: '#fff', lineHeight: 1.12, marginBottom: 20, maxWidth: 820 }}
         >
           Mercado de trabajo en<br />
-          <span style={{ color: '#93c5fd' }}>los partidos del GBA</span>
-        </m.h1>
+          los partidos del GBA
+        </h1>
 
-        <m.p
-          {...fadeUp(0.1)}
+        <p
           style={{ color: 'rgba(255,255,255,0.60)', maxWidth: 720, lineHeight: 1.7, fontSize: '1.05rem' }}
         >
           En el primer trimestre de 2026 la desocupación en los 24 partidos del conurbano se mantuvo en{' '}
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>9,7%</strong>, pero con menos actividad, menos empleo
           y un salto de la subocupación horaria: el ajuste del mercado laboral se dio por reducción de horas
           trabajadas, no por despidos hacia la desocupación abierta.
-        </m.p>
+        </p>
 
-        <m.div {...fadeUp(0.15)} className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
           {HERO_STATS.map((s, i) => (
-            <m.div
+            <div
               key={i}
-              {...fadeUp(0.1 * i + 0.2)}
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
               className="p-5"
             >
               <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
-            </m.div>
+            </div>
           ))}
-        </m.div>
+        </div>
 
-        <m.div
-          {...fadeUp(0.3)}
-          style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}
+        <div style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}
         >
           {[
             { label: 'Fuente',        val: 'INDEC — EPH, informes técnicos' },
@@ -493,7 +475,7 @@ function Hero() {
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
-        </m.div>
+        </div>
       </div>
     </div>
   )
@@ -503,17 +485,13 @@ function Hero() {
 
 function NotaMetodologica() {
   return (
-    <m.div
-      {...fadeUp(0)}
-      style={{
-        background: '#fffbeb',
-        border: '1px solid #d9770630',
-        borderLeft: '3px solid #d97706',
-        borderRadius: 2,
+    <div style={{
+        background: 'var(--surface-2)',
+        borderTop: '2px solid var(--ink)',
         padding: '18px 20px',
       }}
     >
-      <p style={{ fontSize: '0.72rem', fontWeight: 700, color: '#d97706', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 8 }}>
+      <p style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--ink)', marginBottom: 8 }}>
         Nota metodológica
       </p>
       <p style={{ fontSize: '0.82rem', color: C.inkMid, lineHeight: 1.6, marginBottom: 8 }}>
@@ -530,7 +508,7 @@ function NotaMetodologica() {
         Los datos no permiten atribuir causalidad a los movimientos sin información adicional sobre rama de actividad,
         categoría ocupacional o política económica.
       </p>
-    </m.div>
+    </div>
   )
 }
 
@@ -543,8 +521,8 @@ export default function InformeMercadoTrabajoGBA() {
 
       {/* 01 — PANORAMA GENERAL */}
       <div className="max-w-5xl mx-auto px-6 pt-2 pb-12">
-        <m.div {...fadeUp()}>
-          <SH num="01 · Panorama general" title="Las tasas principales" />
+        <div >
+          <SH title="Las tasas principales" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Los partidos del Gran Buenos Aires concentran la mayor densidad poblacional de la Provincia y son,
             según la propia EPH, la subregión bonaerense con peor desempeño relativo del mercado de trabajo.
@@ -567,14 +545,14 @@ export default function InformeMercadoTrabajoGBA() {
             pasó a la inactividad, lo que morigera el efecto sobre la tasa de desocupación aun cuando el empleo
             también retrocedió.
           </p>
-        </m.div>
+        </div>
       </div>
 
       {/* 02 — SUBOCUPACIÓN (fondo blanco alternado) */}
       <div style={{ background: '#fff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 pb-12">
-          <m.div {...fadeUp(0.05)}>
-            <SH num="02 · Subocupación" title="El ajuste por horas" />
+          <div >
+            <SH title="El ajuste por horas" />
             <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
               El indicador que más se movió en la comparación interanual es la subocupación horaria, que agrupa
               a las personas ocupadas que trabajan menos de 35 horas semanales por causas involuntarias y están
@@ -594,14 +572,14 @@ export default function InformeMercadoTrabajoGBA() {
               empleo pero están disponibles para trabajar más horas—, que creció de 3,3% a 4,9%, mientras que la
               subocupación demandante descendió levemente, de 7,7% a 7,2%.
             </p>
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* 03 — MAGNITUDES ABSOLUTAS */}
       <div className="max-w-5xl mx-auto px-6 pb-12">
-        <m.div {...fadeUp(0.05)}>
-          <SH num="03 · Magnitudes absolutas" title="De tasas a personas" />
+        <div >
+          <SH title="De tasas a personas" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Más allá de las tasas, la EPH permite dimensionar estos cambios en términos de personas. El dato más
             relevante: el incremento de la población subocupada (+76.000 personas) superó ampliamente al de la
@@ -638,14 +616,14 @@ export default function InformeMercadoTrabajoGBA() {
               </tbody>
             </table>
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* 04 — CONTEXTO (fondo blanco alternado) */}
       <div style={{ background: '#fff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 pb-12">
-          <m.div {...fadeUp(0.05)}>
-            <SH num="04 · Contexto" title="La brecha con CABA" />
+          <div >
+            <SH title="La brecha con CABA" />
             <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
               La desocupación en los partidos del GBA (9,7%) continúa siendo considerablemente más alta que la de
               la Ciudad Autónoma de Buenos Aires (4,8%) y que el promedio del total de 31 aglomerados urbanos
@@ -664,7 +642,7 @@ export default function InformeMercadoTrabajoGBA() {
               Esta diferencia es estructural: se repite, con oscilaciones menores, en los sucesivos informes
               trimestrales de la EPH desde que existe esta desagregación geográfica.
             </p>
-          </m.div>
+          </div>
         </div>
       </div>
 
@@ -675,67 +653,42 @@ export default function InformeMercadoTrabajoGBA() {
 
       {/* CONCLUSIÓN */}
       <div className="max-w-5xl mx-auto px-6 pb-16">
-        <m.div
-          {...fadeUp(0)}
-          className="bg-pattern-dark"
-          style={{
-            background: C.hero, borderRadius: 2,
-            padding: '44px 48px', position: 'relative', overflow: 'hidden',
-          }}
-        >
-          <div style={{
-            position: 'absolute', right: -80, top: -80,
-            width: 280, height: 280, borderRadius: '50%',
-            border: '40px solid rgba(255,255,255,0.04)',
-          }} />
-          <div style={{
-            position: 'absolute', right: 60, bottom: -100,
-            width: 180, height: 180, borderRadius: '50%',
-            border: '30px solid rgba(255,255,255,0.03)',
-          }} />
-
-          <div className="relative z-10">
-            <p style={{
-              color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem',
-              textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16,
-            }}>
-              El argumento
-            </p>
-            <p style={{
-              color: '#fff', fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)',
-              lineHeight: 1.6, fontWeight: 500, maxWidth: 800,
-            }}>
-              La desocupación del conurbano no subió, pero el mercado de trabajo se deterioró igual:
-              cayeron la actividad y el empleo, y{' '}
-              <span style={{ color: '#93c5fd', fontWeight: 700 }}>76.000 personas más</span>{' '}
-              pasaron a trabajar menos horas de las que necesitan.{' '}
-              <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
-                El ajuste fue por horas, no por despidos — y la brecha con CABA sigue duplicando la desocupación.
-              </span>
-            </p>
-            <div style={{ marginTop: 32, display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-              <a
-                href="https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-31-58"
-                target="_blank" rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'rgba(255,255,255,0.1)', color: '#fff', textDecoration: 'none',
-                  borderRadius: 2, padding: '10px 20px',
-                  fontSize: '0.82rem', fontWeight: 600,
-                  border: '1px solid rgba(255,255,255,0.15)',
-                }}
-              >
-                INDEC — Mercado de trabajo (EPH) <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            </div>
+        <div style={{ background: C.hero, padding: '44px 48px' }}>
+          <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
+            El argumento
+          </p>
+          <p style={{
+            color: '#fff', fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)',
+            lineHeight: 1.6, fontWeight: 500, maxWidth: 800,
+          }}>
+            La desocupación del conurbano no subió, pero el mercado de trabajo se deterioró igual:
+            cayeron la actividad y el empleo, y{' '}
+            <span style={{ fontWeight: 700 }}>76.000 personas más</span>{' '}
+            pasaron a trabajar menos horas de las que necesitan.{' '}
+            <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
+              El ajuste fue por horas, no por despidos. La brecha con CABA sigue duplicando la desocupación.
+            </span>
+          </p>
+          <div style={{ marginTop: 32 }}>
+            <a
+              href="https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-31-58"
+              target="_blank" rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
+                fontSize: '0.82rem', fontWeight: 600,
+              }}
+            >
+              INDEC — Mercado de trabajo (EPH) <ExternalLink className="w-3.5 h-3.5" />
+            </a>
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8">
-          <p className="text-xs font-semibold" style={{ color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+          <p className="text-sm font-semibold" style={{ color: C.ink }}>
             Fuentes
           </p>
           <p className="text-sm mt-1" style={{ color: C.inkMid }}>

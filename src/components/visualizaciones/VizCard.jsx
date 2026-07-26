@@ -1,6 +1,5 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { Badge } from '@/components/ui/badge'
 import { Download } from 'lucide-react'
 import html2canvas from 'html2canvas'
@@ -259,14 +258,11 @@ export default function VizCard({ viz, index = 0 }) {
   }
 
   return (
-    <m.div
+    <div
       ref={cardRef}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.08, duration: 0.5 }}
       id={viz.id}
-      className="bg-white rounded-xl border border-slate-200/60 p-6"
+      className="bg-white border p-6"
+      style={{ borderColor: 'var(--rule)' }}
     >
       <div className="flex items-start justify-between mb-4 gap-4">
         <div>
@@ -310,6 +306,6 @@ export default function VizCard({ viz, index = 0 }) {
         ) : <span />}
         {viz.fecha && <p className="text-xs text-slate-500">{viz.fecha}</p>}
       </div>
-    </m.div>
+    </div>
   )
 }

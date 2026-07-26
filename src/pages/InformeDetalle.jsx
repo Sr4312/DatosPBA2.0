@@ -1,7 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { m } from 'framer-motion'
-import { Calendar, MapPin, ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { supabase } from '@/lib/supabase'
 import VizCard from '@/components/visualizaciones/VizCard'
@@ -38,7 +37,7 @@ export default function InformeDetalle() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+      <div>
 
         <Link
           to="/informes"
@@ -51,9 +50,7 @@ export default function InformeDetalle() {
           <div className="flex items-center gap-2 mb-3 flex-wrap">
             {informe.tema && <Badge variant="secondary">{informe.tema}</Badge>}
             {informe.fecha && (
-              <span className="flex items-center gap-1 text-xs text-slate-500">
-                <Calendar className="w-3 h-3" />{informe.fecha}
-              </span>
+              <span className="text-xs text-slate-500">{informe.fecha}</span>
             )}
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-[#0F172A] leading-tight tracking-tight mb-4">
@@ -64,7 +61,6 @@ export default function InformeDetalle() {
 
         {informe.municipios?.length > 0 && (
           <div className="flex items-center gap-2 mb-8 flex-wrap">
-            <MapPin className="w-4 h-4 text-slate-500 shrink-0" />
             {informe.municipios.map(m => (
               <span key={m} className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">{m}</span>
             ))}
@@ -72,7 +68,7 @@ export default function InformeDetalle() {
         )}
 
         {informe.insights?.length > 0 && (
-          <div className="bg-brand-50 border border-brand-100 rounded-2xl p-6 mb-10">
+          <div className="p-6 mb-10" style={{ background: 'var(--surface-2)', borderTop: '2px solid var(--ink)' }}>
             <h2 className="text-sm font-semibold text-brand-800 mb-3 uppercase tracking-wide">Hallazgos clave</h2>
             <ul className="space-y-2.5">
               {informe.insights.map((ins, i) => (
@@ -125,7 +121,7 @@ export default function InformeDetalle() {
           ) : null
         })()}
 
-      </m.div>
+      </div>
     </div>
   )
 }
