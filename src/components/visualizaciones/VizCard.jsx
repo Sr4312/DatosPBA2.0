@@ -29,14 +29,14 @@ const BASE_OPTIONS = {
   },
   scales: {
     x: {
-      ticks: { font: { family: 'Poppins', size: 11 }, color: '#64748b' },
+      ticks: { font: { family: 'Archivo', size: 11 }, color: '#64748b' },
       grid:  { color: 'rgba(0,0,0,0.04)' },
-      title: { display: true, font: { family: 'Poppins', size: 11 }, color: '#94a3b8' },
+      title: { display: true, font: { family: 'Archivo', size: 11 }, color: '#94a3b8' },
     },
     y: {
-      ticks: { font: { family: 'Poppins', size: 11 }, color: '#64748b' },
+      ticks: { font: { family: 'Archivo', size: 11 }, color: '#64748b' },
       grid:  { color: 'rgba(0,0,0,0.04)' },
-      title: { display: true, font: { family: 'Poppins', size: 11 }, color: '#94a3b8' },
+      title: { display: true, font: { family: 'Archivo', size: 11 }, color: '#94a3b8' },
     },
   },
 }
@@ -46,7 +46,7 @@ const FOOTER_H = 56
 const MIN_W = 1200
 
 function drawFooter(ctx, y, w) {
-  ctx.fillStyle = '#0a1628'
+  ctx.fillStyle = '#0F172A'
   ctx.fillRect(0, y, w, FOOTER_H)
   ctx.fillStyle = '#ffffff'
   ctx.font = `bold ${Math.round(w * 0.018)}px Roboto, system-ui, sans-serif`
@@ -74,7 +74,7 @@ function drawBrandedCanvas(sourceCanvas, title, fuente) {
   ctx.fillRect(0, 0, W, H)
 
   // Title
-  ctx.fillStyle = '#0a1628'
+  ctx.fillStyle = '#0F172A'
   ctx.font = `bold ${Math.round(W * 0.022)}px Roboto, system-ui, sans-serif`
   ctx.fillText(title, PADDING, Math.round(titleH * 0.52), W - PADDING * 2)
 
@@ -122,7 +122,7 @@ function TableContent({ tableData }) {
             <div key={i} className="text-center">
               <div className="text-lg font-bold tabular-nums" style={{ color: s.color === 'red' ? 'var(--worse-text)' : 'var(--c-ink)' }}>{s.value}</div>
               <div className="text-xs text-slate-500 leading-tight">{s.label}</div>
-              {s.note && <div className="text-xs text-slate-400">{s.note}</div>}
+              {s.note && <div className="text-xs text-slate-500">{s.note}</div>}
             </div>
           ))}
         </div>
@@ -142,8 +142,8 @@ function TableContent({ tableData }) {
               <tr key={i} className={`border-b border-slate-100 ${row.provincia === 'Buenos Aires' ? 'bg-brand-50/80' : i % 2 === 0 ? 'bg-white' : 'bg-slate-50/30'}`}>
                 <td className="py-1.5 px-3 font-medium text-slate-800 whitespace-nowrap">
                   {row.provincia}
-                  {row.distVal > 0 && <span className="ml-1 text-slate-400 text-[10px]">subrep.</span>}
-                  {row.distVal < 0 && <span className="ml-1 text-slate-400 text-[10px]">sobrerrep.</span>}
+                  {row.distVal > 0 && <span className="ml-1 text-slate-500 text-[10px]">subrep.</span>}
+                  {row.distVal < 0 && <span className="ml-1 text-slate-500 text-[10px]">sobrerrep.</span>}
                 </td>
                 <td className="py-1.5 px-3 text-right text-slate-600">{row.hab.toLocaleString('es-AR')}</td>
                 <td className="py-1.5 px-3 text-right text-slate-700 font-medium">{row.dip}</td>
@@ -168,7 +168,7 @@ function TableContent({ tableData }) {
         </table>
       </div>
 
-      {tableData.footer && <p className="text-[10px] text-slate-400 leading-snug">{tableData.footer}</p>}
+      {tableData.footer && <p className="text-[10px] text-slate-500 leading-snug">{tableData.footer}</p>}
     </div>
   )
 }
@@ -272,7 +272,7 @@ export default function VizCard({ viz, index = 0 }) {
         <div>
           <h3 className="text-sm font-semibold text-slate-900 leading-snug">{viz.titulo}</h3>
           {viz.fuente && (
-            <p className="text-xs text-slate-400 mt-0.5">Fuente: {viz.fuente}</p>
+            <p className="text-xs text-slate-500 mt-0.5">Fuente: {viz.fuente}</p>
           )}
         </div>
         <div ref={actionsRef} className="flex items-center gap-2 shrink-0">
@@ -280,7 +280,7 @@ export default function VizCard({ viz, index = 0 }) {
           <button
             onClick={handleDownload}
             title="Descargar PNG para Twitter"
-            className="p-1.5 rounded-lg text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-colors"
+            className="p-1.5 rounded-lg text-slate-500 hover:text-brand-600 hover:bg-brand-50 transition-colors"
           >
             <Download className="w-4 h-4" />
           </button>
@@ -308,7 +308,7 @@ export default function VizCard({ viz, index = 0 }) {
             Ver informe →
           </Link>
         ) : <span />}
-        {viz.fecha && <p className="text-xs text-slate-400">{viz.fecha}</p>}
+        {viz.fecha && <p className="text-xs text-slate-500">{viz.fecha}</p>}
       </div>
     </m.div>
   )

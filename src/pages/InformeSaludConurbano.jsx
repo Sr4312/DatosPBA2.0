@@ -21,7 +21,7 @@ ChartJS.register(
   ArcElement, DoughnutController, CategoryScale, LinearScale, BarElement, Tooltip, Legend
 )
 
-ChartJS.defaults.font.family = 'Poppins, sans-serif'
+ChartJS.defaults.font.family = 'Archivo, sans-serif'
 ChartJS.defaults.font.size = 12
 ChartJS.defaults.color = '#475569'
 
@@ -33,7 +33,7 @@ const C = {
   inkLight: 'var(--c-ink-light)',
   rule:     'var(--c-rule)',
   card:     'var(--c-surface)',
-  hero:     '#0a1628',
+  hero:     '#0F172A',
   accent:   '#3d65b2',
 }
 
@@ -143,15 +143,15 @@ const DL_MIN_W = 1200
 const FUENTE_DEFAULT = 'PEC - Programa de Estudios del Conurbano'
 
 function drawFooter(ctx, y, w) {
-  ctx.fillStyle = '#0a1628'
+  ctx.fillStyle = '#0F172A'
   ctx.fillRect(0, y, w, DL_FOOTER_H)
   ctx.fillStyle = '#ffffff'
-  ctx.font = `bold ${Math.round(w * 0.018)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.font = `bold ${Math.round(w * 0.018)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText('Datos', DL_PADDING, y + DL_FOOTER_H * 0.65)
   ctx.fillStyle = '#60a5fa'
   ctx.fillText('PBA', DL_PADDING + Math.round(w * 0.06), y + DL_FOOTER_H * 0.65)
   ctx.fillStyle = '#94a3b8'
-  ctx.font = `${Math.round(w * 0.013)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.font = `${Math.round(w * 0.013)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText('datospba.com', w - DL_PADDING - Math.round(w * 0.11), y + DL_FOOTER_H * 0.65)
 }
 
@@ -184,13 +184,13 @@ async function downloadVizContainer(node, title, fuente) {
   ctx.fillRect(0, 0, W, H)
 
   // Title
-  ctx.fillStyle = '#0a1628'
-  ctx.font = `bold ${Math.round(W * 0.020)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.fillStyle = '#0F172A'
+  ctx.font = `bold ${Math.round(W * 0.020)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText(title, DL_PADDING, Math.round(titleH * 0.52), W - DL_PADDING * 2)
 
   if (fuente) {
     ctx.fillStyle = '#94a3b8'
-    ctx.font = `${Math.round(W * 0.014)}px Poppins, Roboto, system-ui, sans-serif`
+    ctx.font = `${Math.round(W * 0.014)}px Archivo, Roboto, system-ui, sans-serif`
     ctx.fillText(`Fuente: ${fuente}`, DL_PADDING, Math.round(titleH * 0.82))
   }
 
@@ -228,7 +228,7 @@ function DownloadableViz({ title, fuente = FUENTE_DEFAULT, children }) {
           style={{
             background: '#fff',
             border: `1px solid ${C.rule}`,
-            borderRadius: 8,
+            borderRadius: 2,
             padding: '6px 10px',
             cursor: busy ? 'wait' : 'pointer',
             color: C.inkMid,
@@ -271,7 +271,7 @@ function Hero() {
         <Link
           to="/informes"
           className="inline-flex items-center gap-1.5 text-sm no-underline mb-10"
-          style={{ color: 'rgba(255,255,255,0.45)' }}
+          style={{ color: 'rgba(255,255,255,0.62)' }}
         >
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
@@ -320,7 +320,7 @@ function Hero() {
               style={{
                 background: 'rgba(255,255,255,0.06)',
                 border: '1px solid rgba(255,255,255,0.10)',
-                borderRadius: 16,
+                borderRadius: 2,
               }}
               className="p-5"
             >
@@ -344,7 +344,7 @@ function Hero() {
             { label: 'Actualizado',val: 'Abril 2026' },
           ].map(item => (
             <div key={item.label}>
-              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
+              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
@@ -442,7 +442,7 @@ function BarometroCarga() {
   const ticks = [0, 2000, 4000, 6000, 8000, 10000]
 
   return (
-    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: 16, overflowX: 'auto' }}>
+    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: 16, overflowX: 'auto' }}>
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', minWidth: 640, height: 'auto', display: 'block' }}>
         {/* grid + ticks */}
         {ticks.map(t => (
@@ -450,7 +450,7 @@ function BarometroCarga() {
             <line x1={xScale(t)} y1={padT} x2={xScale(t)} y2={H - padB}
                   stroke={C.rule} strokeWidth={1} strokeDasharray={t === 0 ? 'none' : '2 4'} />
             <text x={xScale(t)} y={H - padB + 22} textAnchor="middle"
-                  fontSize="11" fill={C.inkLight} fontFamily="Poppins, sans-serif">
+                  fontSize="11" fill={C.inkLight} fontFamily="Archivo, sans-serif">
               {fmt(t)}
             </text>
           </g>
@@ -468,33 +468,33 @@ function BarometroCarga() {
 
         {/* HEADER ROW: zone labels + promedio badge - alineados arriba del rect */}
         <text x={padL + 10} y={padT - 16} fontSize="9.5" fill={VALORACION_HEX.better.text}
-              fontFamily="Poppins, sans-serif" fontWeight="700" letterSpacing="0.8">
+              fontFamily="Archivo, sans-serif" fontWeight="700" letterSpacing="0.8">
           GESTIONA MEJOR
         </text>
         <text x={padL + 10} y={padT - 4} fontSize="8.5" fill={VALORACION_HEX.better.text}
-              fontFamily="Poppins, sans-serif" opacity={0.75}>
+              fontFamily="Archivo, sans-serif" opacity={0.75}>
           menos carga por establecimiento
         </text>
 
         <rect x={xScale(AVG_CARGA) - 55} y={padT - 26} width={110} height={20}
               fill={D.warn} rx={4} />
         <text x={xScale(AVG_CARGA)} y={padT - 11} textAnchor="middle"
-              fontSize="11" fill="#fff" fontWeight="700" fontFamily="Poppins, sans-serif">
+              fontSize="11" fill="#fff" fontWeight="700" fontFamily="Archivo, sans-serif">
           PROMEDIO {fmt(AVG_CARGA)}
         </text>
 
         <text x={padL + innerW - 10} y={padT - 16} fontSize="9.5" fill={VALORACION_HEX.worse.text}
-              fontFamily="Poppins, sans-serif" fontWeight="700" letterSpacing="0.8" textAnchor="end">
+              fontFamily="Archivo, sans-serif" fontWeight="700" letterSpacing="0.8" textAnchor="end">
           GESTIONA PEOR
         </text>
         <text x={padL + innerW - 10} y={padT - 4} fontSize="8.5" fill={VALORACION_HEX.worse.text}
-              fontFamily="Poppins, sans-serif" opacity={0.75} textAnchor="end">
+              fontFamily="Archivo, sans-serif" opacity={0.75} textAnchor="end">
           más carga por establecimiento
         </text>
 
         {/* axis title */}
         <text x={padL + innerW / 2} y={H - 4} textAnchor="middle"
-              fontSize="11" fill={C.inkMid} fontFamily="Poppins, sans-serif" fontWeight="600">
+              fontSize="11" fill={C.inkMid} fontFamily="Archivo, sans-serif" fontWeight="600">
           personas dependientes del sistema público por establecimiento
         </text>
 
@@ -509,7 +509,7 @@ function BarometroCarga() {
             <g key={mu.name}>
               {/* label */}
               <text x={padL - 12} y={y + 4} textAnchor="end"
-                    fontSize="11.5" fontFamily="Poppins, sans-serif"
+                    fontSize="11.5" fontFamily="Archivo, sans-serif"
                     fill={C.inkMid} fontWeight="500">
                 {mu.name}
               </text>
@@ -522,7 +522,7 @@ function BarometroCarga() {
               <text x={x + (isWorse ? 11 : -11)} y={y + 3.5}
                     textAnchor={isWorse ? 'start' : 'end'}
                     fontSize="11" fill={c} fontWeight="700"
-                    fontFamily="Poppins, sans-serif">
+                    fontFamily="Archivo, sans-serif">
                 {fmt(mu.carga)}
               </text>
             </g>
@@ -576,7 +576,7 @@ function CuadranteGestion() {
   const ticksY = [0, 20, 40, 60, 80, 100]
 
   return (
-    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: 16 }}>
+    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: 16 }}>
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: 'auto', display: 'block' }}>
         {/* zona BIEN gestionado (arriba de la diagonal) */}
         <polygon
@@ -595,7 +595,7 @@ function CuadranteGestion() {
             <line x1={xScale(t)} y1={padT} x2={xScale(t)} y2={H - padB}
                   stroke={C.rule} strokeWidth={1} strokeDasharray="2 4" />
             <text x={xScale(t)} y={H - padB + 16} textAnchor="middle"
-                  fontSize="10.5" fill={C.inkLight} fontFamily="Poppins, sans-serif">
+                  fontSize="10.5" fill={C.inkLight} fontFamily="Archivo, sans-serif">
               {t === 0 ? '0' : (t/1000)+'k'}
             </text>
           </g>
@@ -605,7 +605,7 @@ function CuadranteGestion() {
             <line x1={padL} y1={yScale(t)} x2={padL + innerW} y2={yScale(t)}
                   stroke={C.rule} strokeWidth={1} strokeDasharray="2 4" />
             <text x={padL - 8} y={yScale(t) + 4} textAnchor="end"
-                  fontSize="10.5" fill={C.inkLight} fontFamily="Poppins, sans-serif">
+                  fontSize="10.5" fill={C.inkLight} fontFamily="Archivo, sans-serif">
               {t}
             </text>
           </g>
@@ -621,19 +621,19 @@ function CuadranteGestion() {
 
         {/* zone labels - separados de la diagonal para evitar choques */}
         <text x={padL + innerW * 0.18} y={padT + 22} fontSize="9.5" fontWeight="700"
-              fill={VALORACION_HEX.better.text} letterSpacing="0.6" fontFamily="Poppins, sans-serif" textAnchor="middle">
+              fill={VALORACION_HEX.better.text} letterSpacing="0.6" fontFamily="Archivo, sans-serif" textAnchor="middle">
           ✓ MEJOR GESTIÓN
         </text>
         <text x={padL + innerW * 0.18} y={padT + 36} fontSize="8.5"
-              fill={VALORACION_HEX.better.text} fontFamily="Poppins, sans-serif" textAnchor="middle" opacity="0.7">
+              fill={VALORACION_HEX.better.text} fontFamily="Archivo, sans-serif" textAnchor="middle" opacity="0.7">
           más oferta para la demanda
         </text>
         <text x={padL + innerW - 14} y={padT + innerH - 24} fontSize="9.5" fontWeight="700"
-              fill={VALORACION_HEX.worse.text} letterSpacing="0.6" fontFamily="Poppins, sans-serif" textAnchor="end">
+              fill={VALORACION_HEX.worse.text} letterSpacing="0.6" fontFamily="Archivo, sans-serif" textAnchor="end">
           ✗ PEOR GESTIÓN
         </text>
         <text x={padL + innerW - 14} y={padT + innerH - 10} fontSize="8.5"
-              fill={VALORACION_HEX.worse.text} fontFamily="Poppins, sans-serif" textAnchor="end" opacity="0.7">
+              fill={VALORACION_HEX.worse.text} fontFamily="Archivo, sans-serif" textAnchor="end" opacity="0.7">
           demanda no atendida
         </text>
 
@@ -643,7 +643,7 @@ function CuadranteGestion() {
                 fill={D.warn} rx={3} opacity={0.92} />
           <text x={diagX2 + 68} y={diagY2 + 18} textAnchor="middle"
                 fontSize="9.5" fill="#fff" fontWeight="700"
-                fontFamily="Poppins, sans-serif">
+                fontFamily="Archivo, sans-serif">
             promedio: {fmt(AVG_CARGA)} / est.
           </text>
         </g>
@@ -651,12 +651,12 @@ function CuadranteGestion() {
         {/* axis titles */}
         <text x={padL + innerW / 2} y={H - 8} textAnchor="middle"
               fontSize="11.5" fontWeight="600" fill={C.inkMid}
-              fontFamily="Poppins, sans-serif">
+              fontFamily="Archivo, sans-serif">
           Habitantes dependientes del sistema público
         </text>
         <text x={18} y={padT + innerH / 2} textAnchor="middle"
               fontSize="11.5" fontWeight="600" fill={C.inkMid}
-              fontFamily="Poppins, sans-serif"
+              fontFamily="Archivo, sans-serif"
               transform={`rotate(-90 18 ${padT + innerH / 2})`}>
           Establecimientos públicos de salud
         </text>
@@ -694,7 +694,7 @@ function CuadranteGestion() {
             <g key={mu.name + '-l'}>
               <text x={cx} y={cy - r - 6} textAnchor="middle"
                     fontSize="10" fontWeight="700" fill={C.ink}
-                    fontFamily="Poppins, sans-serif"
+                    fontFamily="Archivo, sans-serif"
                     style={{ paintOrder: 'stroke', stroke: '#fff', strokeWidth: 3 }}>
                 {mu.name}
               </text>
@@ -712,14 +712,14 @@ function CuadranteGestion() {
               <rect x={tx} y={ty} width={210} height={64} rx={6}
                     fill={C.ink} opacity={0.95} />
               <text x={tx + 10} y={ty + 18} fontSize="11.5" fontWeight="700"
-                    fill="#fff" fontFamily="Poppins, sans-serif">{mu.name}</text>
+                    fill="#fff" fontFamily="Archivo, sans-serif">{mu.name}</text>
               <text x={tx + 10} y={ty + 34} fontSize="10" fill="#cbd5e1"
-                    fontFamily="Poppins, sans-serif">
+                    fontFamily="Archivo, sans-serif">
                 {fmt(mu.depPublico)} dependientes · {mu.est} establec.
               </text>
               <text x={tx + 10} y={ty + 50} fontSize="10" fontWeight="600"
                     fill={mu.carga > AVG_CARGA ? VALORACION_HEX.worse.dark : VALORACION_HEX.better.dark}
-                    fontFamily="Poppins, sans-serif">
+                    fontFamily="Archivo, sans-serif">
                 {fmt(mu.carga)} personas / establecimiento
               </text>
             </g>
@@ -727,7 +727,7 @@ function CuadranteGestion() {
         })()}
       </svg>
 
-      <p className="text-[11px] text-slate-400 mt-2 px-2 leading-snug">
+      <p className="text-[11px] text-slate-500 mt-2 px-2 leading-snug">
         El tamaño de cada círculo es proporcional a la población total del partido. Pasá el mouse sobre cualquier burbuja para ver su detalle.
       </p>
     </div>
@@ -751,7 +751,7 @@ function BalanzaExtrema() {
           {...fadeUp(0.08 * i)}
           style={{
             background: '#fff', border: `1px solid ${C.rule}`,
-            borderRadius: 20, overflow: 'hidden',
+            borderRadius: 2, overflow: 'hidden',
           }}
         >
           <div style={{ height: 5, background: b.color }} />
@@ -768,7 +768,7 @@ function BalanzaExtrema() {
             </h3>
 
             {/* la métrica clave */}
-            <div style={{ background: b.bg, borderRadius: 14, padding: '18px 18px 16px', marginBottom: 16 }}>
+            <div style={{ background: b.bg, borderRadius: 2, padding: '18px 18px 16px', marginBottom: 16 }}>
               <p style={{ fontSize: '0.7rem', color: b.color, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4 }}>
                 personas dependientes / establecimiento
               </p>
@@ -789,7 +789,7 @@ function BalanzaExtrema() {
               </p>
               <div style={{
                 display: 'flex', flexWrap: 'wrap', gap: 2.5,
-                background: '#f8fafc', borderRadius: 8, padding: 10, minHeight: 60,
+                background: '#f8fafc', borderRadius: 2, padding: 10, minHeight: 60,
               }}>
                 <div style={{
                   width: 14, height: 14, borderRadius: 4, background: b.color,
@@ -843,7 +843,7 @@ function RankingPodios() {
       {...fadeUp()}
       style={{
         background: '#fff', border: `1px solid ${C.rule}`,
-        borderRadius: 18, overflow: 'hidden',
+        borderRadius: 2, overflow: 'hidden',
       }}
     >
       <div style={{ height: 4, background: color }} />
@@ -957,16 +957,16 @@ function DependientesBar() {
     scales: {
       x: {
         beginAtZero: true,
-        title: { display: true, text: 'Habitantes sin cobertura formal de salud', color: C.inkMid, font: { weight: 600, family: 'Poppins, sans-serif' } },
+        title: { display: true, text: 'Habitantes sin cobertura formal de salud', color: C.inkMid, font: { weight: 600, family: 'Archivo, sans-serif' } },
         grid: { color: 'rgba(13,17,23,0.09)' },
-        ticks: { font: { family: 'Poppins, sans-serif' }, callback: v => fmt(v) },
+        ticks: { font: { family: 'Archivo, sans-serif' }, callback: v => fmt(v) },
       },
       y: {
-        title: { display: true, text: 'Partido del conurbano', color: C.inkMid, font: { weight: 600, family: 'Poppins, sans-serif' } },
+        title: { display: true, text: 'Partido del conurbano', color: C.inkMid, font: { weight: 600, family: 'Archivo, sans-serif' } },
         grid: { display: false },
         ticks: {
           autoSkip: false,
-          font: { family: 'Poppins, sans-serif', size: 11 },
+          font: { family: 'Archivo, sans-serif', size: 11 },
         },
       },
     },
@@ -1014,7 +1014,7 @@ function TablaCompleta() {
   )
 
   return (
-    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, overflow: 'hidden' }}>
+    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, overflow: 'hidden' }}>
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 760 }}>
           <thead>
@@ -1096,7 +1096,7 @@ export default function InformeSaludConurbano() {
             </p>
           </m.div>
           <DownloadableViz title="Cobertura de salud - Conurbano bonaerense">
-            <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
+            <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
               <CoberturaDonut />
             </div>
           </DownloadableViz>
@@ -1118,7 +1118,7 @@ export default function InformeSaludConurbano() {
         </m.div>
         <m.div {...fadeUp(0.1)}>
           <DownloadableViz title="Habitantes dependientes del sistema público - por partido del conurbano">
-            <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
+            <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
               <DependientesBar />
             </div>
           </DownloadableViz>
@@ -1261,7 +1261,7 @@ export default function InformeSaludConurbano() {
               {...fadeUp(0.08 * i)}
               style={{
                 background: '#fff', border: `1px solid ${C.rule}`,
-                borderRadius: 16, padding: '24px 24px 22px',
+                borderRadius: 2, padding: '24px 24px 22px',
               }}
             >
               <div className="flex items-center gap-3 mb-3">
@@ -1283,7 +1283,7 @@ export default function InformeSaludConurbano() {
           {...fadeUp(0)}
           className="bg-pattern-dark"
           style={{
-            background: C.hero, borderRadius: 20,
+            background: C.hero, borderRadius: 2,
             padding: '44px 48px', position: 'relative', overflow: 'hidden',
           }}
         >
@@ -1300,7 +1300,7 @@ export default function InformeSaludConurbano() {
 
           <div className="relative z-10">
             <p style={{
-              color: 'rgba(255,255,255,0.45)', fontSize: '0.72rem',
+              color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem',
               textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16,
             }}>
               La conclusión
@@ -1325,7 +1325,7 @@ export default function InformeSaludConurbano() {
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   background: 'rgba(255,255,255,0.1)', color: '#fff', textDecoration: 'none',
-                  borderRadius: 999, padding: '10px 20px',
+                  borderRadius: 2, padding: '10px 20px',
                   fontSize: '0.82rem', fontWeight: 600,
                   border: '1px solid rgba(255,255,255,0.15)',
                 }}

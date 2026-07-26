@@ -27,13 +27,13 @@ function BetaCard({ item }) {
         <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${s.bg} ${s.text}`}>
           {item.type}
         </span>
-        {item.external && <ExternalLink className="w-3.5 h-3.5 text-slate-300 shrink-0 mt-0.5" />}
+        {item.external && <ExternalLink className="w-3.5 h-3.5 text-slate-500 shrink-0 mt-0.5" />}
       </div>
       <p className="text-sm font-semibold text-slate-800 leading-snug flex-1">{item.title}</p>
       <p className="text-xs text-slate-500 leading-relaxed line-clamp-3">{item.description}</p>
       <div className="flex items-center justify-between mt-auto pt-2 border-t border-slate-100">
-        <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wide">{item.theme}</span>
-        <span className="text-[10px] text-slate-400">{item.date}</span>
+        <span className="text-[10px] text-slate-500 font-medium uppercase tracking-wide">{item.theme}</span>
+        <span className="text-[10px] text-slate-500">{item.date}</span>
       </div>
     </div>
   )
@@ -87,21 +87,21 @@ export default function Beta() {
 
   return (
     <div className="min-h-screen bg-[#f7f6f2]">
-      <div className="bg-[#0a1628] py-12">
+      <div className="bg-[#0F172A] py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-2">
             <img src="/logo-bars.svg" alt="DatosPBA" className="h-8 w-8 object-contain" />
             <span className="text-xs font-semibold text-brand-400 uppercase tracking-[0.2em]">Beta</span>
           </div>
           <h1 className="text-3xl font-bold text-white mb-1">Explorador de contenido</h1>
-          <p className="text-slate-400 text-sm">Todo el contenido de DatosPBA en un solo lugar.</p>
+          <p className="text-slate-500 text-sm">Todo el contenido de DatosPBA en un solo lugar.</p>
         </div>
       </div>
 
       <div className="sticky top-14 z-40 bg-white border-b border-slate-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
           <div className="relative w-full sm:w-80">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
             <input
               type="text"
               placeholder="Buscar por palabra clave..."
@@ -118,7 +118,7 @@ export default function Beta() {
                 onClick={() => setTheme(t)}
                 className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
                   theme === t
-                    ? 'bg-[#0a1628] text-white'
+                    ? 'bg-[#0F172A] text-white'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -130,14 +130,14 @@ export default function Beta() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <p className="text-xs text-slate-400 mb-5">
+        <p className="text-xs text-slate-500 mb-5">
           {filtered.length} resultado{filtered.length !== 1 ? 's' : ''}
           {theme !== 'Todos' ? ` en "${theme}"` : ''}
           {query.trim().length >= 2 ? ` para "${query.trim()}"` : ''}
         </p>
 
         {filtered.length === 0 ? (
-          <div className="text-center py-20 text-slate-400 text-sm">
+          <div className="text-center py-20 text-slate-500 text-sm">
             No se encontraron resultados.
           </div>
         ) : (

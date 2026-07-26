@@ -16,7 +16,7 @@ import Cifra from '@/components/shared/Cifra'
 import { DATA, getColorVariacion } from '@/lib/variacion'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
-ChartJS.defaults.font.family = 'Poppins, sans-serif'
+ChartJS.defaults.font.family = 'Archivo, sans-serif'
 ChartJS.defaults.font.size = 12
 ChartJS.defaults.color = '#475569'
 
@@ -28,7 +28,7 @@ const C = {
   inkMid:   'var(--c-ink-mid)',
   inkLight: 'var(--c-ink-light)',
   rule:     'var(--c-rule)',
-  hero:     '#0a1628',
+  hero:     '#0F172A',
   accent:   '#3d65b2',
 }
 
@@ -102,15 +102,15 @@ const DL_FOOTER_H = 56
 const DL_MIN_W    = 1200
 
 function drawFooter(ctx, y, w) {
-  ctx.fillStyle = '#0a1628'
+  ctx.fillStyle = '#0F172A'
   ctx.fillRect(0, y, w, DL_FOOTER_H)
   ctx.fillStyle = '#ffffff'
-  ctx.font = `bold ${Math.round(w * 0.018)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.font = `bold ${Math.round(w * 0.018)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText('Datos', DL_PADDING, y + DL_FOOTER_H * 0.65)
   ctx.fillStyle = '#60a5fa'
   ctx.fillText('PBA', DL_PADDING + Math.round(w * 0.06), y + DL_FOOTER_H * 0.65)
   ctx.fillStyle = '#94a3b8'
-  ctx.font = `${Math.round(w * 0.013)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.font = `${Math.round(w * 0.013)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText('datospba.com', w - DL_PADDING - Math.round(w * 0.11), y + DL_FOOTER_H * 0.65)
 }
 
@@ -134,12 +134,12 @@ async function downloadVizContainer(node, title, fuente) {
   const ctx = out.getContext('2d')
   ctx.fillStyle = '#ffffff'
   ctx.fillRect(0, 0, W, H)
-  ctx.fillStyle = '#0a1628'
-  ctx.font = `bold ${Math.round(W * 0.020)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.fillStyle = '#0F172A'
+  ctx.font = `bold ${Math.round(W * 0.020)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText(title, DL_PADDING, Math.round(titleH * 0.52), W - DL_PADDING * 2)
   if (fuente) {
     ctx.fillStyle = '#94a3b8'
-    ctx.font = `${Math.round(W * 0.014)}px Poppins, Roboto, system-ui, sans-serif`
+    ctx.font = `${Math.round(W * 0.014)}px Archivo, Roboto, system-ui, sans-serif`
     ctx.fillText(`Fuente: ${fuente}`, DL_PADDING, Math.round(titleH * 0.82))
   }
   ctx.drawImage(captured, 0, titleH, innerW, innerH)
@@ -170,11 +170,11 @@ function DownloadableViz({ title, fuente, children }) {
           disabled={busy}
           title="Descargar PNG con marca DatosPBA"
           style={{
-            background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 8,
+            background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2,
             padding: '6px 10px', cursor: busy ? 'wait' : 'pointer', color: C.inkMid,
             display: 'inline-flex', alignItems: 'center', gap: 6,
             fontSize: '0.72rem', fontWeight: 600, transition: 'color 0.15s, border-color 0.15s',
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: 'Archivo, sans-serif',
           }}
           onMouseEnter={e => { e.currentTarget.style.color = C.accent; e.currentTarget.style.borderColor = C.accent }}
           onMouseLeave={e => { e.currentTarget.style.color = C.inkMid; e.currentTarget.style.borderColor = C.rule }}
@@ -215,10 +215,10 @@ function SH({ num, title }) {
 function CifraCard(props) {
   return (
     <div style={{
-      background: '#fff', borderRadius: 14,
+      background: '#fff', borderRadius: 2,
       border: `1px solid ${C.rule}`,
       padding: '1.125rem 1.125rem 1rem',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+      
     }}>
       <Cifra size="md" {...props} />
     </div>
@@ -227,7 +227,7 @@ function CifraCard(props) {
 
 function ChartCard({ title, fuente, legend, height = 220, children }) {
   return (
-    <div style={{ background: '#fff', borderRadius: 14, border: `1px solid ${C.rule}`, padding: '1.25rem 1.25rem 0.875rem', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', margin: '1.25rem 0' }}>
+    <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, padding: '1.25rem 1.25rem 0.875rem', margin: '1.25rem 0' }}>
       {title && <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#334155', marginBottom: '0.75rem' }}>{title}</p>}
       {legend && (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.875rem', marginBottom: '0.625rem' }}>
@@ -258,7 +258,7 @@ const valueLabelsPct = {
       chart.getDatasetMeta(di).data.forEach((bar, i) => {
         ctx.save()
         ctx.fillStyle = '#334155'
-        ctx.font = 'bold 11px Poppins, sans-serif'
+        ctx.font = 'bold 11px Archivo, sans-serif'
         ctx.textAlign = 'center'
         ctx.fillText(fmtPct(dataset.data[i]), bar.x, bar.y - 7)
         ctx.restore()
@@ -277,7 +277,7 @@ function makeHValueLabels(fmt) {
         chart.getDatasetMeta(di).data.forEach((bar, i) => {
           ctx.save()
           ctx.fillStyle = '#334155'
-          ctx.font = 'bold 11px Poppins, sans-serif'
+          ctx.font = 'bold 11px Archivo, sans-serif'
           ctx.textAlign = 'left'
           ctx.textBaseline = 'middle'
           ctx.fillText(fmt(dataset.data[i]), bar.x + 8, bar.y)
@@ -290,7 +290,7 @@ function makeHValueLabels(fmt) {
 
 // ─── CHART COMPONENTS ────────────────────────────────────────
 
-const tooltipBase = { backgroundColor: '#0a1628', titleColor: '#fff', bodyColor: '#cbd5e1', padding: 12, cornerRadius: 8 }
+const tooltipBase = { backgroundColor: '#0F172A', titleColor: '#fff', bodyColor: '#cbd5e1', padding: 12, cornerRadius: 8 }
 
 function ChartTasas() {
   const data = {
@@ -438,7 +438,7 @@ function Hero() {
   return (
     <div className="bg-pattern-dark" style={{ background: C.hero }}>
       <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
-        <Link to="/informes" className="inline-flex items-center gap-1.5 text-sm no-underline mb-10" style={{ color: 'rgba(255,255,255,0.45)' }}>
+        <Link to="/informes" className="inline-flex items-center gap-1.5 text-sm no-underline mb-10" style={{ color: 'rgba(255,255,255,0.62)' }}>
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
 
@@ -470,7 +470,7 @@ function Hero() {
             <m.div
               key={i}
               {...fadeUp(0.1 * i + 0.2)}
-              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16 }}
+              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
               className="p-5"
             >
               <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
@@ -489,7 +489,7 @@ function Hero() {
             { label: 'Actualización', val: 'Julio 2026' },
           ].map(item => (
             <div key={item.label}>
-              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
+              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
@@ -509,7 +509,7 @@ function NotaMetodologica() {
         background: '#fffbeb',
         border: '1px solid #d9770630',
         borderLeft: '3px solid #d97706',
-        borderRadius: 12,
+        borderRadius: 2,
         padding: '18px 20px',
       }}
     >
@@ -612,12 +612,12 @@ export default function InformeMercadoTrabajoGBA() {
           <DownloadableViz title="Variación interanual de población por condición de actividad — Partidos del GBA" fuente="INDEC, EPH — 1T2025 vs. 1T2026">
             <ChartVariacionAbsoluta />
           </DownloadableViz>
-          <div style={{ background: '#fff', borderRadius: 14, border: `1px solid ${C.rule}`, overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', margin: '1.25rem 0', overflowX: 'auto' }}>
+          <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, overflow: 'hidden', margin: '1.25rem 0', overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 480 }}>
               <thead>
                 <tr style={{ background: '#f8fafc' }}>
-                  {['Indicador', '1° trim. 2025 (miles)', '1° trim. 2026 (miles)', 'Variación (miles)'].map(h => (
-                    <th key={h} style={{ textAlign: 'left', fontSize: '0.625rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0.75rem 1rem', borderBottom: `1px solid ${C.rule}` }}>{h}</th>
+                  {['Indicador', '1° trim. 2025 (miles)', '1° trim. 2026 (miles)', 'Variación (miles)'].map((h, i) => (
+                    <th key={h} style={{ textAlign: i === 0 ? 'left' : 'right', fontSize: '0.625rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0.75rem 1rem', borderBottom: `1px solid ${C.rule}` }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -625,11 +625,11 @@ export default function InformeMercadoTrabajoGBA() {
                 {POBLACION_TABLA.map((r, i, arr) => (
                   <tr key={i} style={{ borderBottom: i < arr.length - 1 ? `0.5px solid #f1f5f9` : 'none' }}>
                     <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.ink, fontWeight: 600 }}>{r.ind}</td>
-                    <td className="tabular-nums" style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.inkMid }}>{r.t2025}</td>
-                    <td className="tabular-nums" style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.inkMid }}>{r.t2026}</td>
+                    <td className="tabular-nums" style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.inkMid, textAlign: 'right' }}>{r.t2025}</td>
+                    <td className="tabular-nums" style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.inkMid, textAlign: 'right' }}>{r.t2026}</td>
                     <td
                       className="tabular-nums"
-                      style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', fontWeight: 600, color: getColorVariacion({ variacion: r.variacion, polaridad: r.polaridad, texto: true }) }}
+                      style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', fontWeight: 600, textAlign: 'right', color: getColorVariacion({ variacion: r.variacion, polaridad: r.polaridad, texto: true }) }}
                     >
                       {r.variacion}
                     </td>
@@ -679,7 +679,7 @@ export default function InformeMercadoTrabajoGBA() {
           {...fadeUp(0)}
           className="bg-pattern-dark"
           style={{
-            background: C.hero, borderRadius: 20,
+            background: C.hero, borderRadius: 2,
             padding: '44px 48px', position: 'relative', overflow: 'hidden',
           }}
         >
@@ -696,7 +696,7 @@ export default function InformeMercadoTrabajoGBA() {
 
           <div className="relative z-10">
             <p style={{
-              color: 'rgba(255,255,255,0.45)', fontSize: '0.72rem',
+              color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem',
               textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16,
             }}>
               El argumento
@@ -720,7 +720,7 @@ export default function InformeMercadoTrabajoGBA() {
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   background: 'rgba(255,255,255,0.1)', color: '#fff', textDecoration: 'none',
-                  borderRadius: 999, padding: '10px 20px',
+                  borderRadius: 2, padding: '10px 20px',
                   fontSize: '0.82rem', fontWeight: 600,
                   border: '1px solid rgba(255,255,255,0.15)',
                 }}

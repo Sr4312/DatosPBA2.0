@@ -22,11 +22,11 @@ export default function ReporteCard({ reporte, index = 0 }) {
       <div className="flex-1 min-w-0 border-l border-slate-100 dark:border-slate-700 pl-4">
         <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 leading-snug truncate">{reporte.titulo}</p>
         {reporte.descripcion && (
-          <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-0.5 leading-relaxed">{reporte.descripcion}</p>
+          <p className="text-xs text-slate-500 dark:text-slate-500 line-clamp-2 mt-0.5 leading-relaxed">{reporte.descripcion}</p>
         )}
       </div>
 
-      <span className="text-[10px] text-slate-400 dark:text-slate-500 shrink-0 hidden sm:block">{reporte.fecha}</span>
+      <span className="text-[10px] text-slate-500 dark:text-slate-500 shrink-0 hidden sm:block">{reporte.fecha}</span>
     </m.div>
   )
 }

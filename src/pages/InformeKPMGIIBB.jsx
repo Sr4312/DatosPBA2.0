@@ -29,7 +29,7 @@ const C = {
   ink:      'var(--c-ink)',
   inkMid:   'var(--c-ink-mid)',
   inkLight: 'var(--c-ink-light)',
-  hero:     '#0a1628',
+  hero:     '#0F172A',
   accent:   '#3d65b2',
   rule:     'var(--c-rule)',
   card:     'var(--c-surface)',
@@ -95,7 +95,7 @@ const doughnutOpts = {
     legend: { display: false },
     tooltip: {
       callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}%` },
-      backgroundColor: '#0a1628',
+      backgroundColor: '#0F172A',
       titleColor: '#fff',
       bodyColor: '#cbd5e1',
       padding: 10,
@@ -128,7 +128,7 @@ export default function InformeKPMGIIBB() {
           <Link
             to="/informes"
             className="inline-flex items-center gap-1.5 text-sm no-underline mb-10"
-            style={{ color: 'rgba(255,255,255,0.45)' }}
+            style={{ color: 'rgba(255,255,255,0.62)' }}
           >
             <ArrowLeft className="w-4 h-4" /> Volver a informes
           </Link>
@@ -156,7 +156,7 @@ export default function InformeKPMGIIBB() {
               <m.div
                 key={i}
                 {...fadeUp} transition={dur(0.45, 0.1 * i + 0.3)}
-                style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16 }}
+                style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
                 className="p-5"
               >
                 <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
@@ -198,13 +198,13 @@ export default function InformeKPMGIIBB() {
                     <span className="text-sm font-medium" style={{ color: C.ink }}>{imp.label}</span>
                     <span className="font-bold text-sm" style={{ color: imp.color }}>{imp.pct}%</span>
                   </div>
-                  <div style={{ background: 'rgba(13,17,23,0.08)', borderRadius: 999, height: 8, overflow: 'hidden' }}>
+                  <div style={{ background: 'rgba(13,17,23,0.08)', borderRadius: 2, height: 8, overflow: 'hidden' }}>
                     <m.div
                       initial={{ width: 0 }}
                       whileInView={{ width: `${imp.pct}%` }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.8, delay: 0.1 * i + 0.3, ease: 'easeOut' }}
-                      style={{ height: '100%', borderRadius: 999, background: imp.color }}
+                      style={{ height: '100%', borderRadius: 2, background: imp.color }}
                     />
                   </div>
                 </m.div>
@@ -214,7 +214,7 @@ export default function InformeKPMGIIBB() {
 
           <m.div
             {...fadeUp} transition={dur(0.5, 0.4)}
-            style={{ background: '#edf1f8', border: `1px solid #d0daf0`, borderRadius: 12, marginTop: 40 }}
+            style={{ background: '#edf1f8', border: `1px solid #d0daf0`, borderRadius: 2, marginTop: 40 }}
             className="p-5"
           >
             <p className="text-sm leading-relaxed" style={{ color: C.inkMid }}>
@@ -258,7 +258,7 @@ export default function InformeKPMGIIBB() {
                     {p.name}
                   </span>
                 </div>
-                <div style={{ background: 'rgba(13,17,23,0.07)', borderRadius: 999, height: p.rank === 1 ? 14 : 10, overflow: 'hidden' }}>
+                <div style={{ background: 'rgba(13,17,23,0.07)', borderRadius: 2, height: p.rank === 1 ? 14 : 10, overflow: 'hidden' }}>
                   <m.div
                     initial={{ width: 0 }}
                     whileInView={{ width: `${p.pct}%` }}
@@ -266,11 +266,11 @@ export default function InformeKPMGIIBB() {
                     transition={{ duration: 1, delay: i * 0.1 + 0.2, ease: [0.22, 1, 0.36, 1] }}
                     style={{
                       height: '100%',
-                      borderRadius: 999,
+                      borderRadius: 2,
                       background: p.rank === 1
                         ? `linear-gradient(90deg, ${D.magenta}, #ff6abf)`
                         : p.color,
-                      boxShadow: p.rank === 1 ? `0 0 20px ${D.magenta}55` : 'none',
+                      
                     }}
                   />
                 </div>
@@ -281,7 +281,7 @@ export default function InformeKPMGIIBB() {
 
         <m.div
           {...fadeUp} transition={dur(0.5, 0.6)}
-          style={{ background: C.card, border: `1px solid ${C.rule}`, borderRadius: 12, marginTop: 40 }}
+          style={{ background: C.card, border: `1px solid ${C.rule}`, borderRadius: 2, marginTop: 40 }}
           className="p-5"
         >
           <p className="text-sm leading-relaxed" style={{ color: C.inkMid }}>
@@ -300,7 +300,7 @@ export default function InformeKPMGIIBB() {
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2 text-white">
               El dinero inmovilizado: saldos a favor de IIBB
             </h2>
-            <p style={{ color: 'rgba(255,255,255,0.45)' }} className="text-sm max-w-xl">
+            <p style={{ color: 'rgba(255,255,255,0.62)' }} className="text-sm max-w-xl">
               Solo el 16% de los consultados no posee saldos a favor del gravamen. El 84% restante
               acumula créditos inmovilizados de magnitudes diversas - un 2% más que el año pasado.
             </p>
@@ -311,7 +311,7 @@ export default function InformeKPMGIIBB() {
               <div className="font-display font-bold" style={{ fontSize: 'clamp(5rem, 15vw, 9rem)', color: '#fff', lineHeight: 1 }}>
                 84%
               </div>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.8rem', marginTop: 8 }}>
+              <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.8rem', marginTop: 8 }}>
                 de las empresas tiene<br />saldos a favor de IIBB
               </p>
             </div>
@@ -323,13 +323,13 @@ export default function InformeKPMGIIBB() {
                     <span className="text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>{s.label}</span>
                     <span className="font-bold text-sm" style={{ color: s.color }}>{s.pct}%</span>
                   </div>
-                  <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 999, height: 8, overflow: 'hidden' }}>
+                  <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 2, height: 8, overflow: 'hidden' }}>
                     <m.div
                       initial={{ width: 0 }}
                       whileInView={{ width: `${s.pct * 2.5}%` }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.8, delay: 0.08 * i + 0.3, ease: 'easeOut' }}
-                      style={{ height: '100%', borderRadius: 999, background: s.color }}
+                      style={{ height: '100%', borderRadius: 2, background: s.color }}
                     />
                   </div>
                 </m.div>
@@ -338,10 +338,10 @@ export default function InformeKPMGIIBB() {
           </m.div>
 
           <m.div {...fadeUp} transition={dur(0.6, 0.3)}>
-            <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.72rem', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.72rem', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
               Distribución total
             </p>
-            <div style={{ display: 'flex', borderRadius: 8, overflow: 'hidden', height: 28 }}>
+            <div style={{ display: 'flex', borderRadius: 2, overflow: 'hidden', height: 28 }}>
               {SALDOS.map((s, i) => (
                 <m.div
                   key={i}
@@ -366,7 +366,7 @@ export default function InformeKPMGIIBB() {
 
           <m.div
             {...fadeUp} transition={dur(0.5, 0.5)}
-            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12, marginTop: 32 }}
+            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 2, marginTop: 32 }}
             className="p-5"
           >
             <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.75)' }}>
@@ -394,7 +394,7 @@ export default function InformeKPMGIIBB() {
             </p>
           </m.div>
 
-          <m.div {...fadeUp} transition={dur(0.6, 0.15)} className="relative overflow-hidden" style={{ borderRadius: 20, minHeight: 280 }}>
+          <m.div {...fadeUp} transition={dur(0.6, 0.15)} className="relative overflow-hidden" style={{ borderRadius: 2, minHeight: 280 }}>
             <div style={{ display: 'flex', height: '100%', minHeight: 280 }}>
               {/* 9% */}
               <m.div
@@ -403,7 +403,7 @@ export default function InformeKPMGIIBB() {
                 viewport={{ once: true }}
                 transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                 style={{
-                  background: `linear-gradient(135deg, #0a1628, #162040)`,
+                  background: `linear-gradient(135deg, #0F172A, #162040)`,
                   border: `1px solid rgba(255,255,255,0.12)`,
                   borderRight: 'none',
                   borderRadius: '20px 0 0 20px',
@@ -457,7 +457,7 @@ export default function InformeKPMGIIBB() {
 
           <m.div
             {...fadeUp} transition={dur(0.5, 0.4)}
-            style={{ background: '#edf1f8', border: `1px solid #d0daf0`, borderRadius: 12, marginTop: 32 }}
+            style={{ background: '#edf1f8', border: `1px solid #d0daf0`, borderRadius: 2, marginTop: 32 }}
             className="p-5"
           >
             <p className="text-sm leading-relaxed" style={{ color: C.inkMid }}>

@@ -28,7 +28,7 @@ export default function InformeDetalle() {
   if (!informe) {
     return (
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-24 text-center">
-        <p className="text-slate-400 text-sm mb-4">Informe no encontrado.</p>
+        <p className="text-slate-500 text-sm mb-4">Informe no encontrado.</p>
         <Link to="/informes" className="text-brand-600 hover:text-brand-700 text-sm no-underline">
           ← Volver a informes
         </Link>
@@ -42,7 +42,7 @@ export default function InformeDetalle() {
 
         <Link
           to="/informes"
-          className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-600 no-underline mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-600 no-underline mb-8"
         >
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
@@ -51,12 +51,12 @@ export default function InformeDetalle() {
           <div className="flex items-center gap-2 mb-3 flex-wrap">
             {informe.tema && <Badge variant="secondary">{informe.tema}</Badge>}
             {informe.fecha && (
-              <span className="flex items-center gap-1 text-xs text-slate-400">
+              <span className="flex items-center gap-1 text-xs text-slate-500">
                 <Calendar className="w-3 h-3" />{informe.fecha}
               </span>
             )}
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-[#0a1628] leading-tight tracking-tight mb-4">
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#0F172A] leading-tight tracking-tight mb-4">
             {informe.titulo}
           </h1>
           <p className="text-lg text-slate-600 leading-relaxed">{informe.bajada}</p>
@@ -64,7 +64,7 @@ export default function InformeDetalle() {
 
         {informe.municipios?.length > 0 && (
           <div className="flex items-center gap-2 mb-8 flex-wrap">
-            <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
+            <MapPin className="w-4 h-4 text-slate-500 shrink-0" />
             {informe.municipios.map(m => (
               <span key={m} className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">{m}</span>
             ))}
@@ -99,7 +99,7 @@ export default function InformeDetalle() {
 
         {informe.fuentes?.length > 0 && (
           <div className="border-t border-slate-200 pt-6 mb-10">
-            <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">Fuentes</h2>
+            <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">Fuentes</h2>
             <ul className="space-y-1">
               {informe.fuentes.map((f, i) => (
                 <li key={i} className="text-sm text-slate-500 leading-relaxed">{f}</li>
@@ -115,7 +115,7 @@ export default function InformeDetalle() {
           const remaining = vizRelacionadas.filter(v => !embeddedIds.has(v.id))
           return remaining.length > 0 ? (
             <div>
-              <h2 className="text-xl font-bold text-[#0a1628] mb-5">Visualizaciones</h2>
+              <h2 className="text-xl font-bold text-[#0F172A] mb-5">Visualizaciones</h2>
               <div className="flex flex-col gap-6">
                 {remaining.map((viz, i) => (
                   <VizCard key={viz.id} viz={viz} index={i} />

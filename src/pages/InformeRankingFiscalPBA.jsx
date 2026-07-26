@@ -22,7 +22,7 @@ ChartJS.register(
   CategoryScale, LinearScale, BarElement, LineElement, PointElement, Tooltip, Legend, Filler
 )
 
-ChartJS.defaults.font.family = 'Poppins, sans-serif'
+ChartJS.defaults.font.family = 'Archivo, sans-serif'
 ChartJS.defaults.font.size = 12
 ChartJS.defaults.color = '#475569'
 
@@ -33,7 +33,7 @@ const C = {
   inkLight: 'var(--c-ink-light)',
   rule:     'var(--c-rule)',
   card:     'var(--c-surface)',
-  hero:     '#0a1628',
+  hero:     '#0F172A',
   accent:   '#3d65b2',
 }
 
@@ -108,15 +108,15 @@ const DL_FOOTER_H = 56
 const DL_MIN_W    = 1200
 
 function drawFooter(ctx, y, w) {
-  ctx.fillStyle = '#0a1628'
+  ctx.fillStyle = '#0F172A'
   ctx.fillRect(0, y, w, DL_FOOTER_H)
   ctx.fillStyle = '#ffffff'
-  ctx.font = `bold ${Math.round(w * 0.018)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.font = `bold ${Math.round(w * 0.018)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText('Datos', DL_PADDING, y + DL_FOOTER_H * 0.65)
   ctx.fillStyle = '#60a5fa'
   ctx.fillText('PBA', DL_PADDING + Math.round(w * 0.06), y + DL_FOOTER_H * 0.65)
   ctx.fillStyle = '#94a3b8'
-  ctx.font = `${Math.round(w * 0.013)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.font = `${Math.round(w * 0.013)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText('datospba.com', w - DL_PADDING - Math.round(w * 0.11), y + DL_FOOTER_H * 0.65)
 }
 
@@ -142,13 +142,13 @@ async function downloadVizContainer(node, title, fuente) {
   ctx.fillStyle = '#ffffff'
   ctx.fillRect(0, 0, W, H)
 
-  ctx.fillStyle = '#0a1628'
-  ctx.font = `bold ${Math.round(W * 0.020)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.fillStyle = '#0F172A'
+  ctx.font = `bold ${Math.round(W * 0.020)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText(title, DL_PADDING, Math.round(titleH * 0.52), W - DL_PADDING * 2)
 
   if (fuente) {
     ctx.fillStyle = '#94a3b8'
-    ctx.font = `${Math.round(W * 0.014)}px Poppins, Roboto, system-ui, sans-serif`
+    ctx.font = `${Math.round(W * 0.014)}px Archivo, Roboto, system-ui, sans-serif`
     ctx.fillText(`Fuente: ${fuente}`, DL_PADDING, Math.round(titleH * 0.82))
   }
 
@@ -180,7 +180,7 @@ function DownloadableViz({ title, fuente = 'Empiria en base a MECON y DNAP', chi
           disabled={busy}
           title="Descargar PNG con marca DatosPBA"
           style={{
-            background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 8,
+            background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2,
             padding: '6px 10px', cursor: busy ? 'wait' : 'pointer', color: C.inkMid,
             display: 'inline-flex', alignItems: 'center', gap: 6,
             fontSize: '0.72rem', fontWeight: 600, transition: 'color 0.15s, border-color 0.15s',
@@ -213,10 +213,10 @@ function SectionLabel({ children, dark = false, color }) {
 function CifraCard(props) {
   return (
     <div style={{
-      background: '#fff', borderRadius: 14,
+      background: '#fff', borderRadius: 2,
       border: `1px solid ${C.rule}`,
       padding: '1.125rem 1.125rem 1rem',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+      
     }}>
       <Cifra size="md" {...props} />
     </div>
@@ -232,7 +232,7 @@ function Hero() {
         <Link
           to="/informes"
           className="inline-flex items-center gap-1.5 text-sm no-underline mb-10"
-          style={{ color: 'rgba(255,255,255,0.45)' }}
+          style={{ color: 'rgba(255,255,255,0.62)' }}
         >
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
@@ -279,7 +279,7 @@ function Hero() {
               style={{
                 background: 'rgba(255,255,255,0.06)',
                 border: '1px solid rgba(255,255,255,0.10)',
-                borderRadius: 16,
+                borderRadius: 2,
               }}
               className="p-5"
             >
@@ -303,7 +303,7 @@ function Hero() {
             { label: 'Publicado',   val: '22 de junio de 2026' },
           ].map(item => (
             <div key={item.label}>
-              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
+              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
@@ -335,7 +335,7 @@ function ResultadoPrimarioQuadrante() {
   const colSuperavit = getColorVariacion({ variacion: 1, polaridad: 'mayor-es-mejor', texto: true })
 
   return (
-    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: 16, overflowX: 'auto' }}>
+    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: 16, overflowX: 'auto' }}>
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', minWidth: 600, height: 'auto', display: 'block' }}>
         {/* Grid */}
         {gridX.map(v => (
@@ -350,40 +350,40 @@ function ResultadoPrimarioQuadrante() {
         {/* Axis ticks */}
         {gridX.map(v => (
           <text key={`xt${v}`} x={xScale(v)} y={H - padB + 18} textAnchor="middle"
-                fontSize="11" fill={C.inkLight} fontFamily="Poppins, sans-serif">
+                fontSize="11" fill={C.inkLight} fontFamily="Archivo, sans-serif">
             {v > 0 ? `+${v}%` : `${v}%`}
           </text>
         ))}
         {gridY.map(v => (
           <text key={`yt${v}`} x={padL - 10} y={yScale(v) + 4} textAnchor="end"
-                fontSize="11" fill={C.inkLight} fontFamily="Poppins, sans-serif">
+                fontSize="11" fill={C.inkLight} fontFamily="Archivo, sans-serif">
             {v > 0 ? `+${v.toFixed(1)}%`.replace('.', ',') : `${v.toFixed(1)}%`.replace('.', ',')}
           </text>
         ))}
 
         {/* Axis titles */}
         <text x={padL + innerW / 2} y={H - 8} textAnchor="middle"
-              fontSize="11.5" fontWeight="700" fill={C.inkMid} fontFamily="Poppins, sans-serif">
+              fontSize="11.5" fontWeight="700" fill={C.inkMid} fontFamily="Archivo, sans-serif">
           Nación
         </text>
         <text x={18} y={padT + innerH / 2} textAnchor="middle"
-              fontSize="11.5" fontWeight="700" fill={C.inkMid} fontFamily="Poppins, sans-serif"
+              fontSize="11.5" fontWeight="700" fill={C.inkMid} fontFamily="Archivo, sans-serif"
               transform={`rotate(-90, 18, ${padT + innerH / 2})`}>
           Provincias
         </text>
 
         {/* Quadrant labels */}
-        <text x={padL + 8} y={padT + 16} fontSize="10.5" fontWeight="700" fill={colDeficit} fontFamily="Poppins, sans-serif">Déficit Nación</text>
-        <text x={padL + 8} y={padT + 30} fontSize="10.5" fontWeight="700" fill={colDeficit} fontFamily="Poppins, sans-serif">Superávit Provincias</text>
+        <text x={padL + 8} y={padT + 16} fontSize="10.5" fontWeight="700" fill={colDeficit} fontFamily="Archivo, sans-serif">Déficit Nación</text>
+        <text x={padL + 8} y={padT + 30} fontSize="10.5" fontWeight="700" fill={colDeficit} fontFamily="Archivo, sans-serif">Superávit Provincias</text>
 
-        <text x={W - padR - 8} y={padT + 16} textAnchor="end" fontSize="10.5" fontWeight="700" fill={colSuperavit} fontFamily="Poppins, sans-serif">Superávit Nación</text>
-        <text x={W - padR - 8} y={padT + 30} textAnchor="end" fontSize="10.5" fontWeight="700" fill={colSuperavit} fontFamily="Poppins, sans-serif">Superávit Provincias</text>
+        <text x={W - padR - 8} y={padT + 16} textAnchor="end" fontSize="10.5" fontWeight="700" fill={colSuperavit} fontFamily="Archivo, sans-serif">Superávit Nación</text>
+        <text x={W - padR - 8} y={padT + 30} textAnchor="end" fontSize="10.5" fontWeight="700" fill={colSuperavit} fontFamily="Archivo, sans-serif">Superávit Provincias</text>
 
-        <text x={padL + 8} y={H - padB - 24} fontSize="10.5" fontWeight="700" fill={colDeficit} fontFamily="Poppins, sans-serif">Déficit Nación</text>
-        <text x={padL + 8} y={H - padB - 10} fontSize="10.5" fontWeight="700" fill={colDeficit} fontFamily="Poppins, sans-serif">Déficit Provincias</text>
+        <text x={padL + 8} y={H - padB - 24} fontSize="10.5" fontWeight="700" fill={colDeficit} fontFamily="Archivo, sans-serif">Déficit Nación</text>
+        <text x={padL + 8} y={H - padB - 10} fontSize="10.5" fontWeight="700" fill={colDeficit} fontFamily="Archivo, sans-serif">Déficit Provincias</text>
 
-        <text x={W - padR - 8} y={H - padB - 24} textAnchor="end" fontSize="10.5" fontWeight="700" fill={colSuperavit} fontFamily="Poppins, sans-serif">Superávit Nación</text>
-        <text x={W - padR - 8} y={H - padB - 10} textAnchor="end" fontSize="10.5" fontWeight="700" fill={colSuperavit} fontFamily="Poppins, sans-serif">Déficit Provincias</text>
+        <text x={W - padR - 8} y={H - padB - 24} textAnchor="end" fontSize="10.5" fontWeight="700" fill={colSuperavit} fontFamily="Archivo, sans-serif">Superávit Nación</text>
+        <text x={W - padR - 8} y={H - padB - 10} textAnchor="end" fontSize="10.5" fontWeight="700" fill={colSuperavit} fontFamily="Archivo, sans-serif">Déficit Provincias</text>
 
         {/* Puntos */}
         {PUNTOS_CUADRANTE.map(p => {
@@ -396,7 +396,7 @@ function ResultadoPrimarioQuadrante() {
               <circle cx={cx} cy={cy} r={r} fill={color} fillOpacity={p.destacado ? 0.95 : 0.55} stroke="#fff" strokeWidth={1.4} />
               <text x={cx + r + 5} y={cy + 3.5} fontSize={p.destacado ? '11.5' : '10'}
                     fontWeight={p.destacado ? '700' : '500'}
-                    fill={p.destacado ? DATA[1] : C.inkMid} fontFamily="Poppins, sans-serif">
+                    fill={p.destacado ? DATA[1] : C.inkMid} fontFamily="Archivo, sans-serif">
                 {p.year}
               </text>
             </g>
@@ -452,7 +452,7 @@ function GastoIngresosChart() {
   }
 
   return (
-    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
+    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
       <div style={{ height: 300 }}>
         <Bar data={data} options={opts} />
       </div>
@@ -507,7 +507,7 @@ function ObraPublicaChart() {
   }
 
   return (
-    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
+    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
       <div style={{ height: 220 }}>
         <Bar data={data} options={opts} />
       </div>
@@ -529,7 +529,7 @@ function NotaMetodologica() {
         background: D.warnBg,
         border: `1px solid ${D.warn}30`,
         borderLeft: `3px solid ${D.warn}`,
-        borderRadius: 12,
+        borderRadius: 2,
         padding: '18px 20px',
       }}
     >
@@ -659,7 +659,7 @@ export default function InformeRankingFiscalPBA() {
           {...fadeUp(0)}
           className="bg-pattern-dark"
           style={{
-            background: C.hero, borderRadius: 20,
+            background: C.hero, borderRadius: 2,
             padding: '44px 48px', position: 'relative', overflow: 'hidden',
           }}
         >
@@ -676,7 +676,7 @@ export default function InformeRankingFiscalPBA() {
 
           <div className="relative z-10">
             <p style={{
-              color: 'rgba(255,255,255,0.45)', fontSize: '0.72rem',
+              color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem',
               textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16,
             }}>
               El argumento

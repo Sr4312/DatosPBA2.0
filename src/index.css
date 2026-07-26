@@ -2,15 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Theme tokens ── */
+/* ── Theme tokens ──
+   Paleta de interfaz del sistema de diseño. --focus es el único azul de
+   interfaz y no se usa para datos. Los alias --c-* mantienen compatibilidad
+   con el código existente y apuntan a los tokens nuevos. */
 :root {
-  --c-bg:        #f7f6f2;
-  --c-ink:       #0a1628;
-  --c-ink-mid:   #475569;
-  --c-ink-light: #94a3b8;
-  --c-rule:      rgba(13,17,23,0.08);
-  --c-surface:   #ffffff;
-  --c-surface-2: #f8fafc;
+  --ink:       #0F172A;
+  --ink-2:     #3F4A5A;
+  --ink-3:     #64748B;
+  --rule:      #E2E5EA;
+  --surface:   #FFFFFF;
+  --surface-2: #F7F8FA;
+  --focus:     #2563EB;
+
+  /* espaciado vertical: tres niveles, no uno */
+  --space-dense:  32px;
+  --space-normal: 64px;
+  --space-air:    112px;
+
+  /* anchos separados para lectura y para datos */
+  --w-read: 68ch;
+  --w-data: 1080px;
+  --w-full: 1280px;
+
+  /* alias legacy */
+  --c-bg:        var(--surface);
+  --c-ink:       var(--ink);
+  --c-ink-mid:   var(--ink-2);
+  --c-ink-light: var(--ink-3);
+  --c-rule:      var(--rule);
+  --c-surface:   var(--surface);
+  --c-surface-2: var(--surface-2);
 
   /* ── Semántica de variación ──
      El color codifica valoración, nunca dirección. Se deriva SIEMPRE de
@@ -24,7 +46,7 @@
   --better-text:  #0F766E;
   --worse-text:   #B4234C;
   --neutral-text: #64748B;
-  /* variantes para bloques oscuros (--c-ink): verificadas ≥4.5:1 sobre #0a1628 */
+  /* variantes para bloques oscuros (--c-ink): verificadas ≥4.5:1 sobre #0F172A */
   --better-dark:  #2DD4BF;
   --worse-dark:   #FB7185;
   --neutral-dark: #94A3B8;
@@ -52,12 +74,23 @@ html {
 }
 
 ::selection {
-  background-color: #d0daf0;
-  color: #152952;
+  background-color: #DBEAFE;
+  color: #0F172A;
+}
+
+/* Toda cifra alinea: numerales tabulares en tablas y datos, sin excepción */
+table {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Foco visible en todo elemento interactivo */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Archivo', sans-serif;
   overflow-x: hidden;
   background-color: var(--c-bg);
   background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900'><polygon points='0,0 230,0 470,900 0,900' fill='%231e3a8a' opacity='0.048'/><polygon points='185,0 370,0 610,900 425,900' fill='%231d4ed8' opacity='0.036'/><polygon points='330,0 500,0 740,900 570,900' fill='%232563eb' opacity='0.038'/><polygon points='470,0 635,0 875,900 710,900' fill='%233b82f6' opacity='0.032'/><polygon points='605,0 770,0 1010,900 845,900' fill='%2360a5fa' opacity='0.028'/><polygon points='740,0 910,0 1150,900 980,900' fill='%2393c5fd' opacity='0.036'/><polygon points='875,0 1055,0 1295,900 1115,900' fill='%23bfdbfe' opacity='0.042'/><polygon points='1010,0 1230,0 1440,840 1255,900' fill='%23dbeafe' opacity='0.048'/></svg>");

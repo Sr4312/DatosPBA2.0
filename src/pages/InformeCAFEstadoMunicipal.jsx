@@ -59,7 +59,7 @@ function Chip({ zona }) {
       fontWeight: 700,
       letterSpacing: '0.06em',
       padding: '2px 8px',
-      borderRadius: 999,
+      borderRadius: 2,
       textTransform: 'uppercase',
     }}>
       {ZONE_LABEL[zona]}
@@ -178,7 +178,7 @@ function MuniCard({ m: muni, delay = 0 }) {
       style={{
         background: '#fff',
         border: `1px solid ${C.rule}`,
-        borderRadius: 16,
+        borderRadius: 2,
         overflow: 'hidden',
       }}
     >
@@ -199,13 +199,13 @@ function MuniCard({ m: muni, delay = 0 }) {
           </div>
           <Chip zona={muni.zona} />
         </div>
-        <div style={{ marginTop: 16, background: bg, borderRadius: 999, height: 6, overflow: 'hidden' }}>
+        <div style={{ marginTop: 16, background: bg, borderRadius: 2, height: 6, overflow: 'hidden' }}>
           <m.div
             initial={{ width: 0 }}
             whileInView={{ width: `${(muni.pct / MAX) * 100}%` }}
             viewport={{ once: true }}
             transition={{ duration: 1, delay: delay + 0.3, ease: [0.22, 1, 0.36, 1] }}
-            style={{ height: '100%', background: col, borderRadius: 999 }}
+            style={{ height: '100%', background: col, borderRadius: 2 }}
           />
         </div>
         <div style={{ fontSize: '0.68rem', color: C.inkLight, marginTop: 6, textAlign: 'right' }}>
@@ -225,7 +225,7 @@ function Dumbbell() {
     <m.div {...fadeUp(0.1)} style={{
       background: '#fff',
       border: `1px solid ${C.rule}`,
-      borderRadius: 20,
+      borderRadius: 2,
       padding: '32px 36px',
     }}>
       <p style={{ fontSize: '0.72rem', color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 24 }}>
@@ -242,12 +242,12 @@ function Dumbbell() {
         </div>
 
         <div style={{ flex: 1, position: 'relative', height: 4, margin: '0 16px', marginTop: -12 }}>
-          <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(90deg, ${ZONE_COLOR.lean}, ${ZONE_COLOR.mid}, ${ZONE_COLOR.heavy})`, borderRadius: 999 }} />
+          <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(90deg, ${ZONE_COLOR.lean}, ${ZONE_COLOR.mid}, ${ZONE_COLOR.heavy})`, borderRadius: 2 }} />
           <div style={{
             position: 'absolute', left: '50%', top: '50%',
             transform: 'translate(-50%, -50%)',
             background: C.ink, color: '#fff',
-            borderRadius: 999, padding: '4px 12px',
+            borderRadius: 2, padding: '4px 12px',
             fontSize: '0.72rem', fontWeight: 700, whiteSpace: 'nowrap',
           }}>
             {ratio}× más
@@ -282,13 +282,13 @@ export default function InformeCAFEstadoMunicipal() {
       {/* HERO OSCURO */}
       <div
         className="bg-pattern-dark"
-        style={{ background: '#0a1628' }}
+        style={{ background: '#0F172A' }}
       >
         <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
           <Link
             to="/informes"
             className="inline-flex items-center gap-1.5 text-sm no-underline mb-10"
-            style={{ color: 'rgba(255,255,255,0.45)' }}
+            style={{ color: 'rgba(255,255,255,0.62)' }}
           >
             <ArrowLeft className="w-4 h-4" /> Volver a informes
           </Link>
@@ -332,7 +332,7 @@ export default function InformeCAFEstadoMunicipal() {
               { label: 'Indicador', val: '% empleo en adm. pública' },
             ].map(item => (
               <div key={item.label}>
-                <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
+                <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
                 <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
               </div>
             ))}
@@ -432,8 +432,8 @@ export default function InformeCAFEstadoMunicipal() {
           {...fadeUp(0)}
           className="bg-pattern-dark"
           style={{
-            background: '#0a1628',
-            borderRadius: 20,
+            background: '#0F172A',
+            borderRadius: 2,
             padding: '40px 44px',
             position: 'relative',
             overflow: 'hidden',
@@ -451,7 +451,7 @@ export default function InformeCAFEstadoMunicipal() {
           }} />
 
           <div className="relative z-10">
-            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16 }}>
+            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16 }}>
               La conclusión
             </p>
             <p style={{ color: '#fff', fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 680 }}>
@@ -471,7 +471,7 @@ export default function InformeCAFEstadoMunicipal() {
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   background: 'rgba(255,255,255,0.1)',
                   color: '#fff', textDecoration: 'none',
-                  borderRadius: 999, padding: '8px 18px',
+                  borderRadius: 2, padding: '8px 18px',
                   fontSize: '0.78rem', fontWeight: 600,
                   border: '1px solid rgba(255,255,255,0.15)',
                 }}

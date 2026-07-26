@@ -1,19 +1,16 @@
 import { cn } from '@/lib/utils'
 
-const variants = {
-  default:   'bg-brand-600 text-white',
-  secondary: 'bg-brand-50 text-brand-700 border border-brand-100',
-  outline:   'border border-brand-200 text-brand-600 bg-transparent',
-}
-
-export function Badge({ className, variant = 'default', ...props }) {
+/* Badge de tema: el único radius-pill del sistema. Sin fondo, texto en
+   --ink-2, delimitado por borde de 1px. Las variantes previas colapsan
+   en este único estilo. */
+export function Badge({ className, variant, ...props }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium',
-        variants[variant],
+        'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium',
         className
       )}
+      style={{ borderColor: 'var(--rule)', color: 'var(--ink-2)', background: 'transparent' }}
       {...props}
     />
   )

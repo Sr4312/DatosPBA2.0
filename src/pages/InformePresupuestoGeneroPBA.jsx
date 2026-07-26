@@ -17,7 +17,7 @@ import Cifra from '@/components/shared/Cifra'
 import { DATA } from '@/lib/variacion'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend)
-ChartJS.defaults.font.family = 'Poppins, sans-serif'
+ChartJS.defaults.font.family = 'Archivo, sans-serif'
 ChartJS.defaults.font.size = 12
 ChartJS.defaults.color = '#475569'
 
@@ -29,7 +29,7 @@ const C = {
   inkMid:   'var(--c-ink-mid)',
   inkLight: 'var(--c-ink-light)',
   rule:     'var(--c-rule)',
-  hero:     '#0a1628',
+  hero:     '#0F172A',
   accent:   '#7c3aed',
 }
 
@@ -108,15 +108,15 @@ const DL_FOOTER_H = 56
 const DL_MIN_W    = 1200
 
 function drawFooter(ctx, y, w) {
-  ctx.fillStyle = '#0a1628'
+  ctx.fillStyle = '#0F172A'
   ctx.fillRect(0, y, w, DL_FOOTER_H)
   ctx.fillStyle = '#ffffff'
-  ctx.font = `bold ${Math.round(w * 0.018)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.font = `bold ${Math.round(w * 0.018)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText('Datos', DL_PADDING, y + DL_FOOTER_H * 0.65)
   ctx.fillStyle = '#60a5fa'
   ctx.fillText('PBA', DL_PADDING + Math.round(w * 0.06), y + DL_FOOTER_H * 0.65)
   ctx.fillStyle = '#94a3b8'
-  ctx.font = `${Math.round(w * 0.013)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.font = `${Math.round(w * 0.013)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText('datospba.com', w - DL_PADDING - Math.round(w * 0.11), y + DL_FOOTER_H * 0.65)
 }
 
@@ -140,12 +140,12 @@ async function downloadVizContainer(node, title, fuente) {
   const ctx = out.getContext('2d')
   ctx.fillStyle = '#ffffff'
   ctx.fillRect(0, 0, W, H)
-  ctx.fillStyle = '#0a1628'
-  ctx.font = `bold ${Math.round(W * 0.020)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.fillStyle = '#0F172A'
+  ctx.font = `bold ${Math.round(W * 0.020)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText(title, DL_PADDING, Math.round(titleH * 0.52), W - DL_PADDING * 2)
   if (fuente) {
     ctx.fillStyle = '#94a3b8'
-    ctx.font = `${Math.round(W * 0.014)}px Poppins, Roboto, system-ui, sans-serif`
+    ctx.font = `${Math.round(W * 0.014)}px Archivo, Roboto, system-ui, sans-serif`
     ctx.fillText(`Fuente: ${fuente}`, DL_PADDING, Math.round(titleH * 0.82))
   }
   ctx.drawImage(captured, 0, titleH, innerW, innerH)
@@ -176,11 +176,11 @@ function DownloadableViz({ title, fuente, children }) {
           disabled={busy}
           title="Descargar PNG con marca DatosPBA"
           style={{
-            background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 8,
+            background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2,
             padding: '6px 10px', cursor: busy ? 'wait' : 'pointer', color: C.inkMid,
             display: 'inline-flex', alignItems: 'center', gap: 6,
             fontSize: '0.72rem', fontWeight: 600, transition: 'color 0.15s, border-color 0.15s',
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: 'Archivo, sans-serif',
           }}
           onMouseEnter={e => { e.currentTarget.style.color = C.accent; e.currentTarget.style.borderColor = C.accent }}
           onMouseLeave={e => { e.currentTarget.style.color = C.inkMid; e.currentTarget.style.borderColor = C.rule }}
@@ -221,10 +221,10 @@ function SH({ num, title }) {
 function CifraCard(props) {
   return (
     <div style={{
-      background: '#fff', borderRadius: 14,
+      background: '#fff', borderRadius: 2,
       border: `1px solid ${C.rule}`,
       padding: '1.125rem 1.125rem 1rem',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+      
     }}>
       <Cifra size="md" {...props} />
     </div>
@@ -233,7 +233,7 @@ function CifraCard(props) {
 
 function ChartCard({ title, fuente, legend, height = 220, children }) {
   return (
-    <div style={{ background: '#fff', borderRadius: 14, border: `1px solid ${C.rule}`, padding: '1.25rem 1.25rem 0.875rem', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', margin: '1.25rem 0' }}>
+    <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, padding: '1.25rem 1.25rem 0.875rem', margin: '1.25rem 0' }}>
       {title && <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#334155', marginBottom: '0.75rem' }}>{title}</p>}
       {legend && (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.875rem', marginBottom: '0.625rem' }}>
@@ -262,7 +262,7 @@ const pctLabelsPlugin = {
         const v = dataset.data[i]
         ctx.save()
         ctx.fillStyle = '#334155'
-        ctx.font = 'bold 11px Poppins, sans-serif'
+        ctx.font = 'bold 11px Archivo, sans-serif'
         ctx.textAlign = 'left'
         ctx.textBaseline = 'middle'
         ctx.fillText(`${v}%`, bar.x + 8, bar.y)
@@ -361,7 +361,7 @@ function Hero() {
   return (
     <div className="bg-pattern-dark" style={{ background: C.hero }}>
       <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
-        <Link to="/informes" className="inline-flex items-center gap-1.5 text-sm no-underline mb-10" style={{ color: 'rgba(255,255,255,0.45)' }}>
+        <Link to="/informes" className="inline-flex items-center gap-1.5 text-sm no-underline mb-10" style={{ color: 'rgba(255,255,255,0.62)' }}>
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
 
@@ -393,7 +393,7 @@ function Hero() {
             <m.div
               key={i}
               {...fadeUp(0.1 * i + 0.2)}
-              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16 }}
+              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
               className="p-5"
             >
               <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
@@ -412,7 +412,7 @@ function Hero() {
             { label: 'Actualización',   val: 'Junio 2026' },
           ].map(item => (
             <div key={item.label}>
-              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
+              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
@@ -440,7 +440,7 @@ export default function InformePresupuestoGeneroPBA() {
             metodología está alineada con estándares de ONU Mujeres y es técnicamente válida: el
             problema no es la herramienta, sino su aplicación política.
           </p>
-          <div style={{ background: '#fff', borderRadius: 14, border: `1px solid ${C.rule}`, overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', margin: '1.25rem 0', overflowX: 'auto' }}>
+          <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, overflow: 'hidden', margin: '1.25rem 0', overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 480 }}>
               <thead>
                 <tr style={{ background: '#f8fafc' }}>
@@ -507,7 +507,7 @@ export default function InformePresupuestoGeneroPBA() {
             <CifraCard label="Min. Mujeres y Diversidad" valor="1,2%" periodo="$21.660,3 M del PPG" />
             <CifraCard label="Min. Mujeres / presupuesto total" valor="0,050%" periodo="1 de cada 2.000 pesos provinciales" />
           </div>
-          <div style={{ background: '#fff', borderRadius: 14, border: `1px solid ${C.rule}`, overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', margin: '1.25rem 0', overflowX: 'auto' }}>
+          <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, overflow: 'hidden', margin: '1.25rem 0', overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 560 }}>
               <thead>
                 <tr style={{ background: '#f8fafc' }}>
@@ -574,12 +574,12 @@ export default function InformePresupuestoGeneroPBA() {
         <m.div
           {...fadeUp(0.05)}
           className="bg-pattern-dark"
-          style={{ background: C.hero, borderRadius: 20, padding: '44px 48px', position: 'relative', overflow: 'hidden', margin: '2rem 0' }}
+          style={{ background: C.hero, borderRadius: 2, padding: '44px 48px', position: 'relative', overflow: 'hidden', margin: '2rem 0' }}
         >
           <div style={{ position: 'absolute', right: -80, top: -80, width: 280, height: 280, borderRadius: '50%', border: '40px solid rgba(255,255,255,0.04)' }} />
           <div style={{ position: 'absolute', right: 60, bottom: -100, width: 180, height: 180, borderRadius: '50%', border: '30px solid rgba(255,255,255,0.03)' }} />
           <div className="relative z-10">
-            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16 }}>
+            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16 }}>
               El argumento
             </p>
             <p style={{ color: '#fff', fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>

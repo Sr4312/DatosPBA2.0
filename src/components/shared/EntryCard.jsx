@@ -25,7 +25,7 @@ export default function EntryCard({ titulo, resumen, fecha, tema, municipio, ins
         <div className="flex items-center gap-2 flex-wrap">
           {tema && <Badge variant="secondary">{tema}</Badge>}
           {fecha && (
-            <span className="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500">
+            <span className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-500">
               <Calendar className="w-3 h-3" />{fecha}
             </span>
           )}
@@ -33,10 +33,10 @@ export default function EntryCard({ titulo, resumen, fecha, tema, municipio, ins
 
         <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100 leading-snug">{titulo}</h3>
 
-        {resumen && <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-3">{resumen}</p>}
+        {resumen && <p className="text-sm text-slate-500 dark:text-slate-500 line-clamp-3">{resumen}</p>}
 
         {municipio && (
-          <span className="flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500">
+          <span className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-500">
             <MapPin className="w-3 h-3" />{municipio}
           </span>
         )}
@@ -44,7 +44,7 @@ export default function EntryCard({ titulo, resumen, fecha, tema, municipio, ins
         {insights && insights.length > 0 && (
           <ul className="mt-1 space-y-1.5">
             {insights.slice(0, 2).map((ins, i) => (
-              <li key={i} className="text-xs text-slate-500 dark:text-slate-400 flex items-start gap-2">
+              <li key={i} className="text-xs text-slate-500 dark:text-slate-500 flex items-start gap-2">
                 <span className="mt-1.5 w-1 h-1 rounded-full bg-brand-400 shrink-0" />
                 {ins}
               </li>

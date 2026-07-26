@@ -19,11 +19,11 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointEleme
 
 function SectionHeader({ title, href }) {
   return (
-    <div className="mb-8 flex items-center justify-between border-b-2 border-[#0a1628] dark:border-slate-700 pb-3">
-      <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#0a1628] dark:text-slate-100 leading-none tracking-tight">
+    <div className="mb-8 flex items-center justify-between border-b-2 border-[#0F172A] dark:border-slate-700 pb-3">
+      <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#0F172A] dark:text-slate-100 leading-none tracking-tight">
         {title}
       </h2>
-      <Link to={href} className="text-sm font-medium text-slate-400 hover:text-[#0a1628] dark:hover:text-slate-100 no-underline shrink-0 transition-colors">
+      <Link to={href} className="text-sm font-medium text-slate-500 hover:text-[#0F172A] dark:hover:text-slate-100 no-underline shrink-0 transition-colors">
         Ver todos →
       </Link>
     </div>
@@ -59,12 +59,12 @@ function PublicacionesTicker({ hilos }) {
                   <img src="/logo-icon.svg" alt="DatosPBA" className="w-7 h-7 rounded-full shrink-0 object-cover" />
                   <div className="leading-tight">
                     <p className="text-xs font-bold text-slate-900 dark:text-slate-100">DatosPBA</p>
-                    <p className="text-[10px] text-slate-400">@datospba</p>
+                    <p className="text-[10px] text-slate-500">@datospba</p>
                   </div>
                 </div>
-                <span className="text-slate-300"><XLogo /></span>
+                <span className="text-slate-500"><XLogo /></span>
               </div>
-              <p className={`text-xs text-slate-700 dark:text-slate-300 leading-relaxed ${h.imagen ? 'line-clamp-3' : 'line-clamp-4 flex-1'}`}>{h.resumen}</p>
+              <p className={`text-xs text-slate-700 dark:text-slate-500 leading-relaxed ${h.imagen ? 'line-clamp-3' : 'line-clamp-4 flex-1'}`}>{h.resumen}</p>
               {h.imagen && (
                 <img
                   src={h.imagen}
@@ -74,7 +74,7 @@ function PublicacionesTicker({ hilos }) {
                 />
               )}
               <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700/50 mt-auto">
-                <span className="text-[10px] text-slate-400">{h.fecha}</span>
+                <span className="text-[10px] text-slate-500">{h.fecha}</span>
                 {h.tema && <Badge variant="secondary" className="text-[10px] py-0">{h.tema}</Badge>}
               </div>
             </a>
@@ -115,7 +115,7 @@ function FeaturedInformeCard({ inf, viz }) {
   const chartData = viz?.chart_data ?? viz?.chartData
   const chartOptions = viz?.chart_options ?? viz?.chartOptions
 
-  const darkTicks = { color: 'rgba(255,255,255,0.45)', font: { family: 'Poppins', size: 10 } }
+  const darkTicks = { color: 'rgba(255,255,255,0.62)', font: { family: 'Archivo', size: 10 } }
   const darkGrid = { color: 'rgba(255,255,255,0.07)' }
 
   const options = viz ? {
@@ -126,7 +126,7 @@ function FeaturedInformeCard({ inf, viz }) {
       legend: {
         display: (chartData?.datasets?.length ?? 0) > 1,
         position: 'bottom',
-        labels: { font: { family: 'Poppins', size: 10 }, color: 'rgba(255,255,255,0.55)', boxWidth: 10, padding: 10 },
+        labels: { font: { family: 'Archivo', size: 10 }, color: 'rgba(255,255,255,0.55)', boxWidth: 10, padding: 10 },
       },
       tooltip: { enabled: true },
     },
@@ -135,13 +135,13 @@ function FeaturedInformeCard({ inf, viz }) {
         ...(chartOptions?.scales?.x ?? {}),
         ticks: { ...(chartOptions?.scales?.x?.ticks ?? {}), ...darkTicks },
         grid: darkGrid,
-        title: { ...(chartOptions?.scales?.x?.title ?? {}), color: 'rgba(255,255,255,0.3)' },
+        title: { ...(chartOptions?.scales?.x?.title ?? {}), color: 'rgba(255,255,255,0.45)' },
       },
       y: {
         ...(chartOptions?.scales?.y ?? {}),
         ticks: { ...(chartOptions?.scales?.y?.ticks ?? {}), ...darkTicks },
         grid: darkGrid,
-        title: { ...(chartOptions?.scales?.y?.title ?? {}), color: 'rgba(255,255,255,0.3)' },
+        title: { ...(chartOptions?.scales?.y?.title ?? {}), color: 'rgba(255,255,255,0.45)' },
       },
     },
   } : null
@@ -158,22 +158,22 @@ function FeaturedInformeCard({ inf, viz }) {
         <div className="flex items-center gap-2 flex-wrap">
           {inf.tema && <Badge variant="secondary">{inf.tema}</Badge>}
           {inf.fecha && (
-            <span className="flex items-center gap-1 text-xs text-slate-400">
+            <span className="flex items-center gap-1 text-xs text-slate-500">
               <Calendar className="w-3 h-3" />{inf.fecha}
             </span>
           )}
         </div>
-        <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#0a1628] dark:text-slate-100 leading-tight tracking-tight">
+        <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#0F172A] dark:text-slate-100 leading-tight tracking-tight">
           {inf.titulo}
         </h3>
-        {inf.bajada && <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-4">{inf.bajada}</p>}
+        {inf.bajada && <p className="text-sm text-slate-600 dark:text-slate-500 leading-relaxed line-clamp-4">{inf.bajada}</p>}
         <Link to={inf.url} className="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:text-brand-700 no-underline group pt-2">
           Leer informe
           <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
         </Link>
       </div>
 
-      <div className="lg:col-span-2 bg-[#0a1628] bg-pattern-dark p-6 sm:p-7 flex flex-col">
+      <div className="lg:col-span-2 bg-[#0F172A] bg-pattern-dark p-6 sm:p-7 flex flex-col">
         <p className="text-brand-400 text-[10px] font-semibold tracking-[0.2em] uppercase mb-4">
           Destacado
         </p>
@@ -195,7 +195,7 @@ function HeroVizPanel({ informe, viz }) {
   const chartData = viz.chart_data ?? viz.chartData
   const chartOptions = viz.chart_options ?? viz.chartOptions
 
-  const darkTicks = { color: 'rgba(255,255,255,0.45)', font: { family: 'Poppins', size: 10 } }
+  const darkTicks = { color: 'rgba(255,255,255,0.62)', font: { family: 'Archivo', size: 10 } }
   const darkGrid  = { color: 'rgba(255,255,255,0.07)' }
 
   const options = {
@@ -206,7 +206,7 @@ function HeroVizPanel({ informe, viz }) {
       legend: {
         display: (chartData?.datasets?.length ?? 0) > 1,
         position: 'bottom',
-        labels: { font: { family: 'Poppins', size: 10 }, color: 'rgba(255,255,255,0.55)', boxWidth: 10, padding: 10 },
+        labels: { font: { family: 'Archivo', size: 10 }, color: 'rgba(255,255,255,0.55)', boxWidth: 10, padding: 10 },
       },
       tooltip: { enabled: true },
     },
@@ -215,13 +215,13 @@ function HeroVizPanel({ informe, viz }) {
         ...(chartOptions?.scales?.x ?? {}),
         ticks: { ...(chartOptions?.scales?.x?.ticks ?? {}), ...darkTicks },
         grid: darkGrid,
-        title: { ...(chartOptions?.scales?.x?.title ?? {}), color: 'rgba(255,255,255,0.3)' },
+        title: { ...(chartOptions?.scales?.x?.title ?? {}), color: 'rgba(255,255,255,0.45)' },
       },
       y: {
         ...(chartOptions?.scales?.y ?? {}),
         ticks: { ...(chartOptions?.scales?.y?.ticks ?? {}), ...darkTicks },
         grid: darkGrid,
-        title: { ...(chartOptions?.scales?.y?.title ?? {}), color: 'rgba(255,255,255,0.3)' },
+        title: { ...(chartOptions?.scales?.y?.title ?? {}), color: 'rgba(255,255,255,0.45)' },
       },
     },
   }
@@ -249,7 +249,7 @@ function HeroVizPanel({ informe, viz }) {
       </div>
 
       <div className="mt-4 pt-4 border-t border-white/10">
-        <p className="text-xs text-slate-400 leading-relaxed line-clamp-4">
+        <p className="text-xs text-slate-500 leading-relaxed line-clamp-4">
           {informe.bajada}
         </p>
         <Link
@@ -300,7 +300,7 @@ export default function Home() {
       <TickerBar reportes={reportes} />
 
       {/* Hero */}
-      <section className="bg-[#0a1628] bg-pattern-dark py-10 sm:py-14">
+      <section className="bg-[#0F172A] bg-pattern-dark py-10 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col lg:flex-row items-start lg:items-center lg:justify-between gap-10 lg:gap-16">
 
@@ -317,21 +317,21 @@ export default function Home() {
                 La provincia,<br />
                 contada con <span className="text-brand-400">datos</span>.
               </h1>
-              <p className="text-slate-400 text-sm sm:text-base leading-relaxed mt-5 max-w-sm">
+              <p className="text-slate-500 text-sm sm:text-base leading-relaxed mt-5 max-w-sm">
                 Análisis e informes sobre política, economía y territorio bonaerense, basados en evidencia.
               </p>
               <div className="flex gap-8 sm:gap-12 mt-10 pt-8 border-t border-white/10">
                 <div>
                   <p className="text-3xl font-bold text-white tabular-nums leading-none">135</p>
-                  <p className="text-[11px] text-slate-400 mt-2 uppercase tracking-widest">municipios</p>
+                  <p className="text-[11px] text-slate-500 mt-2 uppercase tracking-widest">municipios</p>
                 </div>
                 <div>
                   <p className="text-3xl font-bold text-white tabular-nums leading-none">17M+</p>
-                  <p className="text-[11px] text-slate-400 mt-2 uppercase tracking-widest">habitantes</p>
+                  <p className="text-[11px] text-slate-500 mt-2 uppercase tracking-widest">habitantes</p>
                 </div>
                 <div>
                   <p className="text-3xl font-bold text-white tabular-nums leading-none">{new Date().getFullYear()}</p>
-                  <p className="text-[11px] text-slate-400 mt-2 uppercase tracking-widest">actualizado</p>
+                  <p className="text-[11px] text-slate-500 mt-2 uppercase tracking-widest">actualizado</p>
                 </div>
               </div>
             </m.div>

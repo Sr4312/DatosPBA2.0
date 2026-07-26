@@ -22,7 +22,7 @@ const C = {
   inkLight: 'var(--c-ink-light)',
   rule:     'var(--c-rule)',
   card:     'var(--c-surface)',
-  hero:     '#0a1628',
+  hero:     '#0F172A',
   accent:   '#3d65b2',
 }
 
@@ -88,10 +88,10 @@ function SectionLabel({ children, dark = false }) {
 function CifraCard(props) {
   return (
     <div style={{
-      background: '#fff', borderRadius: 14,
+      background: '#fff', borderRadius: 2,
       border: `1px solid ${C.rule}`,
       padding: '1.125rem 1.125rem 1rem',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+      
     }}>
       <Cifra size="md" {...props} />
     </div>
@@ -137,7 +137,7 @@ export default function InformeMedicamentosTISH() {
     plugins: {
       legend: {
         position: 'bottom',
-        labels: { font: { family: 'Poppins', size: 11 }, color: C.inkMid, boxWidth: 12, padding: 16 },
+        labels: { font: { family: 'Archivo', size: 11 }, color: C.inkMid, boxWidth: 12, padding: 16 },
       },
       tooltip: {
         callbacks: {
@@ -161,12 +161,12 @@ export default function InformeMedicamentosTISH() {
       x: {
         stacked: true,
         max: 4.3,
-        ticks: { callback: v => `${v}%`, font: { family: 'Poppins', size: 11 }, color: C.inkMid },
+        ticks: { callback: v => `${v}%`, font: { family: 'Archivo', size: 11 }, color: C.inkMid },
         grid: { color: 'rgba(13,17,23,0.06)' },
       },
       y: {
         stacked: true,
-        ticks: { font: { family: 'Poppins', size: 11 }, color: C.inkMid },
+        ticks: { font: { family: 'Archivo', size: 11 }, color: C.inkMid },
         grid: { display: false },
       },
     },
@@ -182,7 +182,7 @@ export default function InformeMedicamentosTISH() {
         <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
           <Link to="/informes"
             className="inline-flex items-center gap-1.5 text-sm no-underline mb-10"
-            style={{ color: 'rgba(255,255,255,0.45)' }}>
+            style={{ color: 'rgba(255,255,255,0.62)' }}>
             <ArrowLeft className="w-4 h-4" /> Volver a informes
           </Link>
 
@@ -204,7 +204,7 @@ export default function InformeMedicamentosTISH() {
             className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
             {HERO_STATS.map((s, i) => (
               <m.div key={i} {...fadeUp} transition={dur(0.45, 0.1 * i + 0.3)}
-                style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16 }}
+                style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
                 className="p-5">
                 <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
               </m.div>
@@ -237,7 +237,7 @@ export default function InformeMedicamentosTISH() {
                     background: active ? C.ink : 'transparent',
                     color: active ? '#fff' : C.inkMid,
                     border: `1.5px solid ${active ? C.ink : 'rgba(13,17,23,0.15)'}`,
-                    borderRadius: 999, padding: '5px 16px',
+                    borderRadius: 2, padding: '5px 16px',
                     fontSize: '0.78rem', fontWeight: 600,
                     cursor: 'pointer', transition: 'all 0.15s',
                   }}>
@@ -277,7 +277,7 @@ export default function InformeMedicamentosTISH() {
 
         <m.div {...fadeUp} transition={dur(0.5, 0.1)}
           className="overflow-x-auto rounded-xl"
-          style={{ border: `1px solid ${C.rule}`, boxShadow: '0 1px 4px rgba(0,0,0,0.05)' }}>
+          style={{ border: `1px solid ${C.rule}` }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', background: C.card, fontSize: '0.85rem' }}>
             <thead>
               <tr style={{ background: C.ink }}>
@@ -353,7 +353,7 @@ export default function InformeMedicamentosTISH() {
               { icon: '📈', title: 'Módulos fiscales y complejidad', desc: 'Cada variable se transforma en índices y categorías que determinan módulos fiscales a pagar. El diseño "agrega un alto grado de complejidad y puede resultar en cargas significativas para contribuyentes de gran escala".' },
             ].map((s, i) => (
               <m.div key={i} {...fadeUp} transition={dur(0.45, 0.1 * i + 0.15)}
-                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16 }}
+                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
                 className="p-6">
                 <div style={{ fontSize: 28, marginBottom: 10 }}>{s.icon}</div>
                 <h3 style={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem', marginBottom: 8 }}>{s.title}</h3>
@@ -363,7 +363,7 @@ export default function InformeMedicamentosTISH() {
           </div>
 
           <m.div {...fadeUp} transition={dur(0.5, 0.5)}
-            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12, marginTop: 24 }}
+            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 2, marginTop: 24 }}
             className="p-5">
             <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.75)' }}>
               <span style={{ color: D.red, fontWeight: 700 }}>Conclusión del informe: </span>
@@ -403,7 +403,7 @@ export default function InformeMedicamentosTISH() {
           </div>
 
           <m.div {...fadeUp} transition={dur(0.5, 0.3)}
-            style={{ background: '#edf1f8', border: `1px solid #d0daf0`, borderRadius: 12 }}
+            style={{ background: '#edf1f8', border: `1px solid #d0daf0`, borderRadius: 2 }}
             className="p-5">
             <p className="text-sm leading-relaxed" style={{ color: C.inkMid }}>
               <span style={{ color: C.accent, fontWeight: 700 }}>Heterogeneidad extrema: </span>

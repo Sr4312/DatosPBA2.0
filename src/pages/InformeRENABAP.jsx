@@ -25,7 +25,7 @@ ChartJS.register(
   BarElement, LineElement, PointElement, Filler, Tooltip, Legend
 )
 
-ChartJS.defaults.font.family = 'Poppins, sans-serif'
+ChartJS.defaults.font.family = 'Archivo, sans-serif'
 ChartJS.defaults.font.size = 12
 ChartJS.defaults.color = '#475569'
 
@@ -38,7 +38,7 @@ const C = {
   rule:     'var(--c-rule)',
   card:     'var(--c-surface)',
   accent:   '#3d65b2',
-  hero:     '#0a1628',
+  hero:     '#0F172A',
   // semantic — la valoración se deriva de la escala única (t=1 mejor situación, t=0 peor),
   // nunca de un verde/rojo elegido a mano
   formal:   colorEscalaValoracion(1), formalBg: '#e8f5ee',
@@ -247,7 +247,7 @@ function Hero() {
         <Link
           to="/informes"
           className="inline-flex items-center gap-1.5 text-sm no-underline mb-10"
-          style={{ color: 'rgba(255,255,255,0.45)' }}
+          style={{ color: 'rgba(255,255,255,0.62)' }}
         >
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
@@ -294,7 +294,7 @@ function Hero() {
               style={{
                 background: 'rgba(255,255,255,0.06)',
                 border: '1px solid rgba(255,255,255,0.10)',
-                borderRadius: 16,
+                borderRadius: 2,
               }}
               className="p-5"
             >
@@ -318,7 +318,7 @@ function Hero() {
             { label: 'Actualizado',val: 'Abril 2026' },
           ].map(item => (
             <div key={item.label}>
-              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
+              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
@@ -452,7 +452,7 @@ function ServicioDonut({ srv, delay = 0 }) {
       {...fadeUp(delay)}
       style={{
         background: '#fff', border: `1px solid ${C.rule}`,
-        borderRadius: 16, padding: '22px 20px',
+        borderRadius: 2, padding: '22px 20px',
       }}
     >
       <p style={{
@@ -655,7 +655,7 @@ function BarriosMap() {
         >
           {loading && (
             <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
-              <span className="text-xs text-slate-400">Cargando mapa de la PBA…</span>
+              <span className="text-xs text-slate-500">Cargando mapa de la PBA…</span>
             </div>
           )}
           <div ref={mapRef} className="w-full h-full" />
@@ -669,7 +669,7 @@ function BarriosMap() {
             <div className="p-5 flex flex-col gap-4 flex-1">
               <div>
                 <p className="text-lg font-bold leading-tight" style={{ color: C.ink }}>{selected.nombre}</p>
-                <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-1">
+                <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">
                   Barrios populares RENABAP
                 </p>
               </div>
@@ -679,17 +679,17 @@ function BarriosMap() {
                      style={{ fontSize: '3rem', color: fillFor(selected.count) }}>
                     {selected.count}
                   </p>
-                  <p className="text-[10px] text-slate-400 mt-2 uppercase tracking-wider">
+                  <p className="text-[10px] text-slate-500 mt-2 uppercase tracking-wider">
                     barrios populares en el partido
                   </p>
                 </div>
               ) : (
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-slate-500">
                   Este partido no tiene barrios populares registrados en el RENABAP (o su cobertura es marginal).
                 </p>
               )}
               <div className="mt-auto pt-3 border-t border-slate-100">
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-slate-500 leading-relaxed">
                   Datos: RENABAP · Ministerio de Desarrollo Social de la Nación.
                 </p>
               </div>
@@ -705,25 +705,25 @@ function BarriosMap() {
                 </svg>
               </div>
               <p className="text-sm font-medium text-slate-600">Seleccioná un partido</p>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-xs text-slate-500 leading-relaxed">
                 Hacé clic sobre el mapa para ver la cantidad de barrios populares.
               </p>
               <div className="w-full mt-2 space-y-2">
                 <div className="flex-1 h-2 rounded-full"
                   style={{ background: `linear-gradient(to right, ${colorEscalaValoracion(1)}, ${colorEscalaValoracion(0.5)}, ${colorEscalaValoracion(0)})` }} />
-                <div className="flex justify-between text-[10px] text-slate-400">
+                <div className="flex justify-between text-[10px] text-slate-500">
                   <span>1-5</span><span>5-15</span><span>15-40</span><span>40-80</span><span>80+</span>
                 </div>
                 <div className="flex items-center gap-2 mt-2">
                   <div className="w-4 h-3 rounded-sm shrink-0 bg-slate-200" />
-                  <span className="text-[10px] text-slate-400">Sin barrios RENABAP registrados</span>
+                  <span className="text-[10px] text-slate-500">Sin barrios RENABAP registrados</span>
                 </div>
               </div>
             </div>
           )}
         </div>
       </div>
-      <p className="text-[10px] text-slate-400 mt-3 leading-snug">
+      <p className="text-[10px] text-slate-500 mt-3 leading-snug">
         Fuente: Ministerio de Desarrollo Social de la Nación - RENABAP. Se muestran los partidos con barrios populares
         registrados (más de 80 partidos de la PBA, conurbano e interior).
       </p>
@@ -759,7 +759,7 @@ function DosBuenosAires() {
       {...fadeUp()}
       style={{
         background: '#fff', border: `1px solid ${C.rule}`,
-        borderRadius: 20, overflow: 'hidden',
+        borderRadius: 2, overflow: 'hidden',
       }}
     >
       <div style={{ height: 5, background: side.color }} />
@@ -809,7 +809,7 @@ function FisuVsDesfinanciamiento() {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
       <m.div
         {...fadeUp(0)}
-        style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '28px 26px' }}
+        style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '28px 26px' }}
       >
         <p style={{ color: C.inkLight, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>
           FISU (2019-2023)
@@ -835,7 +835,7 @@ function FisuVsDesfinanciamiento() {
 
       <m.div
         {...fadeUp(0.1)}
-        style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '28px 26px' }}
+        style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '28px 26px' }}
       >
         <p style={{ color: C.inkLight, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>
           OPISU · Provincia
@@ -863,7 +863,7 @@ function FisuVsDesfinanciamiento() {
         {...fadeUp(0.2)}
         style={{
           background: '#fef2f2', border: `1px solid #fecaca`,
-          borderRadius: 16, padding: '28px 26px',
+          borderRadius: 2, padding: '28px 26px',
         }}
       >
         <p style={{ color: C.informal, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10, fontWeight: 700 }}>
@@ -987,7 +987,7 @@ export default function InformeRENABAP() {
 
           <m.div
             {...fadeUp(0.4)}
-            style={{ background: '#edf1f8', border: `1px solid #d0daf0`, borderRadius: 12, marginTop: 32 }}
+            style={{ background: '#edf1f8', border: `1px solid #d0daf0`, borderRadius: 2, marginTop: 32 }}
             className="p-5"
           >
             <p className="text-sm leading-relaxed" style={{ color: C.inkMid }}>
@@ -1039,7 +1039,7 @@ export default function InformeRENABAP() {
           {...fadeUp(0)}
           className="bg-pattern-dark"
           style={{
-            background: C.hero, borderRadius: 20,
+            background: C.hero, borderRadius: 2,
             padding: '44px 48px', position: 'relative', overflow: 'hidden',
           }}
         >
@@ -1056,7 +1056,7 @@ export default function InformeRENABAP() {
 
           <div className="relative z-10">
             <p style={{
-              color: 'rgba(255,255,255,0.45)', fontSize: '0.72rem',
+              color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem',
               textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16,
             }}>
               La conclusión
@@ -1079,7 +1079,7 @@ export default function InformeRENABAP() {
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   background: 'rgba(255,255,255,0.1)', color: '#fff', textDecoration: 'none',
-                  borderRadius: 999, padding: '10px 20px',
+                  borderRadius: 2, padding: '10px 20px',
                   fontSize: '0.82rem', fontWeight: 600,
                   border: '1px solid rgba(255,255,255,0.15)',
                 }}
@@ -1092,7 +1092,7 @@ export default function InformeRENABAP() {
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.85)', textDecoration: 'none',
-                  borderRadius: 999, padding: '10px 20px',
+                  borderRadius: 2, padding: '10px 20px',
                   fontSize: '0.82rem', fontWeight: 600,
                   border: '1px solid rgba(255,255,255,0.12)',
                 }}

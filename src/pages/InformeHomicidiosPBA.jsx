@@ -16,7 +16,7 @@ import Cifra from '@/components/shared/Cifra'
 import { DATA, colorEscalaValoracion } from '@/lib/variacion'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
-ChartJS.defaults.font.family = 'Poppins, sans-serif'
+ChartJS.defaults.font.family = 'Archivo, sans-serif'
 ChartJS.defaults.font.size = 12
 ChartJS.defaults.color = '#475569'
 
@@ -27,7 +27,7 @@ const C = {
   inkLight: 'var(--c-ink-light)',
   rule:     'var(--c-rule)',
   card:     'var(--c-surface)',
-  hero:     '#0a1628',
+  hero:     '#0F172A',
   accent:   '#dc2626',
 }
 
@@ -103,15 +103,15 @@ const DL_FOOTER_H = 56
 const DL_MIN_W    = 1200
 
 function drawFooter(ctx, y, w) {
-  ctx.fillStyle = '#0a1628'
+  ctx.fillStyle = '#0F172A'
   ctx.fillRect(0, y, w, DL_FOOTER_H)
   ctx.fillStyle = '#ffffff'
-  ctx.font = `bold ${Math.round(w * 0.018)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.font = `bold ${Math.round(w * 0.018)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText('Datos', DL_PADDING, y + DL_FOOTER_H * 0.65)
   ctx.fillStyle = '#60a5fa'
   ctx.fillText('PBA', DL_PADDING + Math.round(w * 0.06), y + DL_FOOTER_H * 0.65)
   ctx.fillStyle = '#94a3b8'
-  ctx.font = `${Math.round(w * 0.013)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.font = `${Math.round(w * 0.013)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText('datospba.com', w - DL_PADDING - Math.round(w * 0.11), y + DL_FOOTER_H * 0.65)
 }
 
@@ -137,13 +137,13 @@ async function downloadVizContainer(node, title, fuente) {
   ctx.fillStyle = '#ffffff'
   ctx.fillRect(0, 0, W, H)
 
-  ctx.fillStyle = '#0a1628'
-  ctx.font = `bold ${Math.round(W * 0.020)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.fillStyle = '#0F172A'
+  ctx.font = `bold ${Math.round(W * 0.020)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText(title, DL_PADDING, Math.round(titleH * 0.52), W - DL_PADDING * 2)
 
   if (fuente) {
     ctx.fillStyle = '#94a3b8'
-    ctx.font = `${Math.round(W * 0.014)}px Poppins, Roboto, system-ui, sans-serif`
+    ctx.font = `${Math.round(W * 0.014)}px Archivo, Roboto, system-ui, sans-serif`
     ctx.fillText(`Fuente: ${fuente}`, DL_PADDING, Math.round(titleH * 0.82))
   }
 
@@ -175,7 +175,7 @@ function DownloadableViz({ title, fuente = 'Ministerio Público · PBA', childre
           disabled={busy}
           title="Descargar PNG con marca DatosPBA"
           style={{
-            background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 8,
+            background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2,
             padding: '6px 10px', cursor: busy ? 'wait' : 'pointer', color: C.inkMid,
             display: 'inline-flex', alignItems: 'center', gap: 6,
             fontSize: '0.72rem', fontWeight: 600, transition: 'color 0.15s, border-color 0.15s',
@@ -208,10 +208,10 @@ function SectionLabel({ children, dark = false, color }) {
 function CifraCard(props) {
   return (
     <div style={{
-      background: '#fff', borderRadius: 14,
+      background: '#fff', borderRadius: 2,
       border: `1px solid ${C.rule}`,
       padding: '1.125rem 1.125rem 1rem',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+      
     }}>
       <Cifra size="md" {...props} />
     </div>
@@ -227,7 +227,7 @@ function Hero() {
         <Link
           to="/informes"
           className="inline-flex items-center gap-1.5 text-sm no-underline mb-10"
-          style={{ color: 'rgba(255,255,255,0.45)' }}
+          style={{ color: 'rgba(255,255,255,0.62)' }}
         >
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
@@ -276,7 +276,7 @@ function Hero() {
               style={{
                 background: 'rgba(255,255,255,0.06)',
                 border: '1px solid rgba(255,255,255,0.10)',
-                borderRadius: 16,
+                borderRadius: 2,
               }}
               className="p-5"
             >
@@ -300,7 +300,7 @@ function Hero() {
             { label: 'Actualizado',      val: 'Mayo 2026' },
           ].map(item => (
             <div key={item.label}>
-              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
+              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
@@ -355,7 +355,7 @@ function BrechaChart() {
   }
 
   return (
-    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
+    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
       <div style={{ height: 300 }}>
         <Bar data={data} options={opts} />
       </div>
@@ -405,7 +405,7 @@ function RankingTasaChart() {
   }
 
   return (
-    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
+    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
       <p style={{ fontSize: '0.78rem', fontWeight: 700, color: C.ink, marginBottom: 12 }}>
         Por tasa de homicidios dolosos
       </p>
@@ -452,7 +452,7 @@ function RankingAbsChart() {
   }
 
   return (
-    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
+    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
       <p style={{ fontSize: '0.78rem', fontWeight: 700, color: C.ink, marginBottom: 12 }}>
         Por cantidad absoluta de homicidios
       </p>
@@ -501,7 +501,7 @@ function MatanzaComparacionChart() {
   }
 
   return (
-    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
+    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
       <div style={{ height: 280 }}>
         <Bar data={data} options={opts} />
       </div>
@@ -543,7 +543,7 @@ function NotaMetodologica() {
         background: '#fef3c7',
         border: '1px solid rgba(180,83,9,0.18)',
         borderLeft: '3px solid #b45309',
-        borderRadius: 12,
+        borderRadius: 2,
         padding: '18px 20px',
       }}
     >
@@ -667,7 +667,7 @@ function HomicidiosMap() {
   }, [])
 
   return (
-    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, overflow: 'hidden' }}>
+    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, overflow: 'hidden' }}>
       <div style={{ padding: '16px 20px 12px', borderBottom: `1px solid ${C.rule}` }}>
         <p style={{ fontSize: '0.78rem', fontWeight: 700, color: C.ink, marginBottom: 4 }}>
           Tasa de homicidios por municipio (datos disponibles)
@@ -736,7 +736,7 @@ export default function InformeHomicidiosPBA() {
               background: C.bg,
               border: `1px solid ${C.rule}`,
               borderLeft: `3px solid ${C.accent}`,
-              borderRadius: 12,
+              borderRadius: 2,
               padding: '20px 24px',
             }}>
               <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12 }}>
@@ -747,7 +747,7 @@ export default function InformeHomicidiosPBA() {
                   <div key={i} style={{
                     background: '#fff',
                     border: `1px solid ${C.rule}`,
-                    borderRadius: 8,
+                    borderRadius: 2,
                     padding: '10px 12px',
                     fontSize: '0.76rem',
                     color: C.ink,
@@ -859,7 +859,7 @@ export default function InformeHomicidiosPBA() {
             background: '#fff',
             border: `1px solid ${C.rule}`,
             borderLeft: `3px solid ${C.accent}`,
-            borderRadius: 12,
+            borderRadius: 2,
             padding: '20px 24px',
           }}>
             <p style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 12 }}>
@@ -900,13 +900,13 @@ export default function InformeHomicidiosPBA() {
                 style={{
                   background: '#fff',
                   border: `1px solid ${C.rule}`,
-                  borderRadius: 20,
+                  borderRadius: 2,
                   overflow: 'hidden',
                 }}
               >
                 <div style={{ height: 5, background: d.color }} />
                 <div style={{ padding: '28px 28px 26px' }}>
-                  <div style={{ background: d.bg, borderRadius: 14, padding: '20px 20px 18px', marginBottom: 18 }}>
+                  <div style={{ background: d.bg, borderRadius: 2, padding: '20px 20px 18px', marginBottom: 18 }}>
                     <p style={{ fontSize: '0.7rem', color: d.color, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4 }}>
                       {d.label}
                     </p>
@@ -924,7 +924,7 @@ export default function InformeHomicidiosPBA() {
           </div>
 
           <m.div {...fadeUp(0.2)} className="mt-6">
-            <div style={{ background: C.bg, border: `1px solid ${C.rule}`, borderRadius: 12, padding: '18px 20px' }}>
+            <div style={{ background: C.bg, border: `1px solid ${C.rule}`, borderRadius: 2, padding: '18px 20px' }}>
               <p style={{ fontSize: '0.8rem', color: C.inkMid, lineHeight: 1.7, maxWidth: '72ch' }}>
                 <strong style={{ color: C.ink }}>76 casos</strong> vinculados a narcotráfico o
                 bandas en toda la provincia. La expansión de economías ilegales -especialmente en
@@ -947,7 +947,7 @@ export default function InformeHomicidiosPBA() {
           {...fadeUp(0)}
           className="bg-pattern-dark"
           style={{
-            background: C.hero, borderRadius: 20,
+            background: C.hero, borderRadius: 2,
             padding: '44px 48px', position: 'relative', overflow: 'hidden',
           }}
         >
@@ -964,7 +964,7 @@ export default function InformeHomicidiosPBA() {
 
           <div className="relative z-10">
             <p style={{
-              color: 'rgba(255,255,255,0.45)', fontSize: '0.72rem',
+              color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem',
               textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16,
             }}>
               El argumento
@@ -990,7 +990,7 @@ export default function InformeHomicidiosPBA() {
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   background: 'rgba(255,255,255,0.1)', color: '#fff', textDecoration: 'none',
-                  borderRadius: 999, padding: '10px 20px',
+                  borderRadius: 2, padding: '10px 20px',
                   fontSize: '0.82rem', fontWeight: 600,
                   border: '1px solid rgba(255,255,255,0.15)',
                 }}
@@ -1003,7 +1003,7 @@ export default function InformeHomicidiosPBA() {
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.65)', textDecoration: 'none',
-                  borderRadius: 999, padding: '10px 20px',
+                  borderRadius: 2, padding: '10px 20px',
                   fontSize: '0.82rem', fontWeight: 600,
                   border: '1px solid rgba(255,255,255,0.10)',
                 }}

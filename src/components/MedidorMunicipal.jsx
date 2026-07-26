@@ -384,7 +384,7 @@ const THEMES = {
   general: {
     default:  { fillColor: '#1f4795', fillOpacity: 0.15, color: '#1a3d7c', weight: 0.8, opacity: 0.7 },
     hover:    { fillColor: '#1f4795', fillOpacity: 0.38, color: '#1a3d7c', weight: 1.2, opacity: 1   },
-    selected: { fillColor: '#0a1628', fillOpacity: 0.65, color: '#93c5fd', weight: 2,   opacity: 1   },
+    selected: { fillColor: '#0F172A', fillOpacity: 0.65, color: '#93c5fd', weight: 2,   opacity: 1   },
   },
   produccion: {
     default:  { fillColor: '#0e6e55', fillOpacity: 0.15, color: '#0a5240', weight: 0.8, opacity: 0.7 },
@@ -478,9 +478,9 @@ function IndicatorBar({ ind, data }) {
 function ConcejalesLegend() {
   return (
     <div className="flex items-center gap-2 mt-3">
-      <span className="text-[10px] text-slate-400">Menos gasto</span>
+      <span className="text-[10px] text-slate-500">Menos gasto</span>
       <div className="flex-1 h-2 rounded-full" style={{ background: 'linear-gradient(to right, rgba(123,45,0,0.1), rgba(123,45,0,0.85))' }} />
-      <span className="text-[10px] text-slate-400">Más gasto</span>
+      <span className="text-[10px] text-slate-500">Más gasto</span>
     </div>
   )
 }
@@ -704,7 +704,7 @@ export default function AtlasMunicipal() {
             </svg>
           </div>
           <p className="text-sm font-medium text-slate-600">Seleccioná un municipio</p>
-          <p className="text-xs text-slate-400 leading-relaxed">
+          <p className="text-xs text-slate-500 leading-relaxed">
             {tema === 'concejales'
               ? 'Solo los municipios coloreados tienen datos. Hacé clic para ver el detalle.'
               : 'Hacé clic sobre cualquier partido del mapa para ver sus indicadores.'}
@@ -716,8 +716,8 @@ export default function AtlasMunicipal() {
     if (selected._noData) {
       return (
         <div className="flex-1 flex flex-col items-center justify-center text-center gap-2 p-6">
-          <p className="text-base font-bold text-[#0a1628]">{selected.nombre}</p>
-          <p className="text-xs text-slate-400">Sin datos disponibles para este partido.</p>
+          <p className="text-base font-bold text-[#0F172A]">{selected.nombre}</p>
+          <p className="text-xs text-slate-500">Sin datos disponibles para este partido.</p>
         </div>
       )
     }
@@ -726,25 +726,25 @@ export default function AtlasMunicipal() {
       <div className="flex flex-col h-full overflow-hidden">
         {/* Header */}
         <div className="px-5 pt-5 pb-4 border-b border-slate-100 shrink-0">
-          <h3 className="text-lg font-bold text-[#0a1628] leading-tight">{selected.nombre}</h3>
+          <h3 className="text-lg font-bold text-[#0F172A] leading-tight">{selected.nombre}</h3>
           {tema !== 'concejales' && tema !== 'transparencia' && tema !== 'economia' && (
             <div className="flex flex-wrap gap-4 mt-3">
               {selected.poblacion && (
                 <div>
                   <p className="text-xl font-bold text-brand-600 leading-none">{selected.poblacion.toLocaleString('es-AR')}</p>
-                  <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Habitantes</p>
+                  <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1">Habitantes</p>
                 </div>
               )}
               {selected.hogares && (
                 <div>
                   <p className="text-xl font-bold text-brand-600 leading-none">{selected.hogares.toLocaleString('es-AR')}</p>
-                  <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Hogares</p>
+                  <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1">Hogares</p>
                 </div>
               )}
               {selected.superficie_km2 != null && (
                 <div>
                   <p className="text-xl font-bold text-brand-600 leading-none">{selected.superficie_km2.toLocaleString('es-AR')}</p>
-                  <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">km²</p>
+                  <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1">km²</p>
                 </div>
               )}
             </div>
@@ -753,11 +753,11 @@ export default function AtlasMunicipal() {
             <div className="flex flex-wrap gap-4 mt-3">
               <div>
                 <p className="text-xl font-bold text-orange-600 leading-none">{selected._concejales.concejales}</p>
-                <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Concejales</p>
+                <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1">Concejales</p>
               </div>
               <div>
                 <p className="text-xl font-bold text-orange-600 leading-none">{selected._concejales.pct_total}%</p>
-                <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Del presupuesto</p>
+                <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1">Del presupuesto</p>
               </div>
             </div>
           )}
@@ -767,7 +767,7 @@ export default function AtlasMunicipal() {
                 <p className="text-2xl font-bold leading-none" style={{ color: transparenciaFill(selected._transparencia.indice) }}>
                   {selected._transparencia.indice}
                 </p>
-                <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-1">Índice (0–100)</p>
+                <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1">Índice (0–100)</p>
               </div>
               <span
                 className="text-xs font-semibold px-2.5 py-1 rounded-full text-white"
@@ -788,11 +788,11 @@ export default function AtlasMunicipal() {
                 </span>
                 <div>
                   <p className="text-lg font-bold text-slate-900 leading-none">{CADENA_CATEGORIAS[selected._cadena].vab}</p>
-                  <p className="text-[10px] text-slate-400 uppercase tracking-wider mt-0.5">del VAB provincial</p>
+                  <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">del VAB provincial</p>
                 </div>
               </div>
               {selected.poblacion && (
-                <p className="text-xs text-slate-400 mt-2">{selected.poblacion.toLocaleString('es-AR')} habitantes</p>
+                <p className="text-xs text-slate-500 mt-2">{selected.poblacion.toLocaleString('es-AR')} habitantes</p>
               )}
             </div>
           )}
@@ -800,7 +800,7 @@ export default function AtlasMunicipal() {
 
         {/* Tema label */}
         <div className="px-5 pt-3 pb-1 shrink-0">
-          <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
+          <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">
             {TEMAS.find(t => t.id === tema)?.label}
           </p>
         </div>
@@ -819,7 +819,7 @@ export default function AtlasMunicipal() {
                       ? `${selected._tasa.valor.toFixed(2).replace('.', ',')}%`
                       : selected._tasa.label}
                   </p>
-                  <p className="text-[10px] text-slate-400 mt-2 uppercase tracking-wider">
+                  <p className="text-[10px] text-slate-500 mt-2 uppercase tracking-wider">
                     {selected._tasa.tipo === 'pct' ? 'por litro expendido' : 'fijo por litro (pesos)'}
                   </p>
                 </div>
@@ -840,7 +840,7 @@ export default function AtlasMunicipal() {
                 </div>
               </div>
             ) : (
-              <p className="text-xs text-slate-400">Sin datos de tasa vial para este partido en el relevamiento 2025.</p>
+              <p className="text-xs text-slate-500">Sin datos de tasa vial para este partido en el relevamiento 2025.</p>
             )}
           </div>
         ) : indicators === 'transparencia' ? (
@@ -875,7 +875,7 @@ export default function AtlasMunicipal() {
                 </div>
               )
             })() : (
-              <p className="text-xs text-slate-400">Sin datos de transparencia fiscal para este partido.</p>
+              <p className="text-xs text-slate-500">Sin datos de transparencia fiscal para este partido.</p>
             )}
           </div>
         ) : indicators === 'economia' ? (
@@ -904,13 +904,13 @@ export default function AtlasMunicipal() {
                     </div>
                   </div>
                   <p className="text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">{c.desc}</p>
-                  <p className="text-[11px] text-slate-400 leading-snug border-t border-slate-100 pt-3">
+                  <p className="text-[11px] text-slate-500 leading-snug border-t border-slate-100 pt-3">
                     Fuente: "Cadenas Productivas en los Municipios de la Provincia de Buenos Aires 2016/2025" — A. Lodola, Comisión de Asuntos Municipales, Senado PBA.
                   </p>
                 </div>
               )
             })() : (
-              <p className="text-xs text-slate-400">Sin datos de clasificación económica para este partido.</p>
+              <p className="text-xs text-slate-500">Sin datos de clasificación económica para este partido.</p>
             )}
           </div>
         ) : indicators === 'custom' ? (
@@ -929,24 +929,24 @@ export default function AtlasMunicipal() {
                 <div className="flex flex-col gap-4">
                   {rows.map(r => (
                     <div key={r.label}>
-                      <p className="text-xs text-slate-400 mb-0.5">{r.label}</p>
+                      <p className="text-xs text-slate-500 mb-0.5">{r.label}</p>
                       <p className="text-sm font-semibold text-slate-900">{r.value}</p>
                     </div>
                   ))}
                   <div className="pt-2 border-t border-slate-100">
-                    <p className="text-xs text-slate-400 mb-2">Gasto por habitante vs. provincia</p>
+                    <p className="text-xs text-slate-500 mb-2">Gasto por habitante vs. provincia</p>
                     <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                       <div className="h-full rounded-full transition-all duration-500" style={{ width: `${t * 100}%`, background: 'linear-gradient(to right, rgba(123,45,0,0.4), rgba(123,45,0,0.9))' }} />
                     </div>
                     <div className="flex justify-between mt-1">
-                      <span className="text-[10px] text-slate-400">${CONC_MIN.toLocaleString('es-AR')}</span>
-                      <span className="text-[10px] text-slate-400">${CONC_MAX.toLocaleString('es-AR')}</span>
+                      <span className="text-[10px] text-slate-500">${CONC_MIN.toLocaleString('es-AR')}</span>
+                      <span className="text-[10px] text-slate-500">${CONC_MAX.toLocaleString('es-AR')}</span>
                     </div>
                   </div>
                 </div>
               )
             })() : (
-              <p className="text-xs text-slate-400">Sin datos de concejales para este partido.</p>
+              <p className="text-xs text-slate-500">Sin datos de concejales para este partido.</p>
             )}
           </div>
         ) : (
@@ -964,8 +964,8 @@ export default function AtlasMunicipal() {
 
         {/* Header + tabs */}
         <div className="mb-6">
-          <div className="flex items-center border-b-2 border-[#0a1628] pb-3 mb-5">
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#0a1628] leading-none tracking-tight">
+          <div className="flex items-center border-b-2 border-[#0F172A] pb-3 mb-5">
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#0F172A] leading-none tracking-tight">
               Atlas Municipal
             </h2>
           </div>
@@ -973,7 +973,7 @@ export default function AtlasMunicipal() {
           <div className="flex flex-wrap gap-2">
             {TEMAS.map(t => {
               const colors = {
-                general:    tema === t.id ? 'bg-[#0a1628] text-white border-[#0a1628]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#1a3d7c] hover:text-[#1a3d7c]',
+                general:    tema === t.id ? 'bg-[#0F172A] text-white border-[#0F172A]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#1a3d7c] hover:text-[#1a3d7c]',
                 produccion: tema === t.id ? 'bg-[#063d2f] text-white border-[#063d2f]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#0a5240] hover:text-[#0a5240]',
                 economia:   tema === t.id ? 'bg-[#334155] text-white border-[#334155]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#475569] hover:text-[#475569]',
                 tasas:      tema === t.id ? 'bg-[#4c1d95] text-white border-[#4c1d95]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#6d28d9] hover:text-[#6d28d9]',
@@ -997,7 +997,7 @@ export default function AtlasMunicipal() {
           </div>
 
           {(tema === 'general' || tema === 'produccion') && (
-            <p className="text-[11px] text-slate-400 mt-2">
+            <p className="text-[11px] text-slate-500 mt-2">
               Fuente: CAF - Banco de Desarrollo de América Latina y el Caribe
             </p>
           )}
@@ -1006,18 +1006,18 @@ export default function AtlasMunicipal() {
               <div className="flex items-center gap-3 mt-3">
                 <div className="flex items-center gap-1.5">
                   <div className="flex-shrink-0 w-20 h-2 rounded-full" style={{ background: `linear-gradient(to right, ${colorEscalaValoracion(1)}, ${colorEscalaValoracion(0.5)}, ${colorEscalaValoracion(0)})` }} />
-                  <span className="text-[10px] text-slate-400">0,8% → 3%</span>
+                  <span className="text-[10px] text-slate-500">0,8% → 3%</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-3 rounded-sm shrink-0" style={{ background: '#0F172A', opacity: 0.7 }} />
-                  <span className="text-[10px] text-slate-400">Pesos fijos/l</span>
+                  <span className="text-[10px] text-slate-500">Pesos fijos/l</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-3 rounded-sm shrink-0 bg-slate-300 opacity-60" />
-                  <span className="text-[10px] text-slate-400">Sin datos</span>
+                  <span className="text-[10px] text-slate-500">Sin datos</span>
                 </div>
               </div>
-              <p className="text-[11px] text-slate-400 mt-1.5">
+              <p className="text-[11px] text-slate-500 mt-1.5">
                 Fuente: Ministerio de Economía de la Nación - Subsecretaría de Coordinación Fiscal Provincial, mar. 2025
               </p>
             </>
@@ -1026,9 +1026,9 @@ export default function AtlasMunicipal() {
             <>
               <div className="flex items-center gap-1.5 mt-3">
                 <div className="flex-shrink-0 w-20 h-2 rounded-full" style={{ background: `linear-gradient(to right, ${colorEscalaValoracion(0)}, ${colorEscalaValoracion(0.5)}, ${colorEscalaValoracion(1)})` }} />
-                <span className="text-[10px] text-slate-400">Índice 0 (Nulo) → 100 (Estricto)</span>
+                <span className="text-[10px] text-slate-500">Índice 0 (Nulo) → 100 (Estricto)</span>
               </div>
-              <p className="text-[11px] text-slate-400 mt-1.5">
+              <p className="text-[11px] text-slate-500 mt-1.5">
                 Fuente: ASAP - Asociación Argentina de Presupuesto y Administración Financiera Pública, Filial Provincia de Buenos Aires
               </p>
             </>
@@ -1043,7 +1043,7 @@ export default function AtlasMunicipal() {
                   </div>
                 ))}
               </div>
-              <p className="text-[11px] text-slate-400 mt-1.5">
+              <p className="text-[11px] text-slate-500 mt-1.5">
                 Fuente: A. Lodola, "Cadenas Productivas en los Municipios de la PBA 2016/2025" - Comisión de Asuntos Municipales, Senado PBA
               </p>
             </>
@@ -1051,7 +1051,7 @@ export default function AtlasMunicipal() {
           {tema === 'concejales' && (
             <>
               <ConcejalesLegend />
-              <p className="text-[11px] text-slate-400 mt-2">
+              <p className="text-[11px] text-slate-500 mt-2">
                 Fuente: Fundación Libertad
               </p>
             </>
@@ -1064,12 +1064,12 @@ export default function AtlasMunicipal() {
           <div className="flex-1 relative rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-50 min-h-[320px] sm:min-h-[500px]">
             {loading && !error && (
               <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
-                <span className="text-sm text-slate-400">Cargando mapa...</span>
+                <span className="text-sm text-slate-500">Cargando mapa...</span>
               </div>
             )}
             {error && (
               <div className="absolute inset-0 z-10 flex items-center justify-center">
-                <span className="text-sm text-slate-400">No se pudo cargar el mapa.</span>
+                <span className="text-sm text-slate-500">No se pudo cargar el mapa.</span>
               </div>
             )}
             <div ref={mapRef} className="w-full h-full min-h-[320px] sm:min-h-[500px]" />
@@ -1085,9 +1085,9 @@ export default function AtlasMunicipal() {
 
       <style>{`
         .muni-tooltip {
-          background: #0a1628;
+          background: #0F172A;
           border: none;
-          border-radius: 6px;
+          border-radius: 2px;
           color: #fff;
           font-size: 12px;
           font-family: inherit;

@@ -9,24 +9,26 @@ import { getColorVariacion, flechaVariacion, signoVariacion } from '@/lib/variac
  * depende solo del color.
  */
 
+/* Escala del sistema: data-xl (40/1, 700) para cifra principal,
+   data-md (24/1, 600) para cifra en card o tabla, caption (13) para meta. */
 const SIZES = {
   xl: {
-    valor: 'text-4xl font-bold',
+    valor: 'text-data-xl',
     unidad: 'text-base font-semibold',
-    label: 'text-[11px]',
-    meta: 'text-xs',
+    label: 'text-label',
+    meta: 'text-caption',
   },
   md: {
-    valor: 'text-3xl font-bold',
+    valor: 'text-data-md',
     unidad: 'text-sm font-semibold',
-    label: 'text-[10px]',
-    meta: 'text-xs',
+    label: 'text-label',
+    meta: 'text-caption',
   },
   sm: {
     valor: 'text-base font-bold',
     unidad: 'text-xs font-semibold',
-    label: 'text-[10px]',
-    meta: 'text-[11px]',
+    label: 'text-label',
+    meta: 'text-caption',
   },
 }
 

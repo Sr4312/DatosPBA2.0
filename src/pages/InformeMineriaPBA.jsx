@@ -22,7 +22,7 @@ ChartJS.register(
   CategoryScale, LinearScale, BarElement, LineElement, PointElement, Tooltip, Legend, Filler
 )
 
-ChartJS.defaults.font.family = 'Poppins, sans-serif'
+ChartJS.defaults.font.family = 'Archivo, sans-serif'
 ChartJS.defaults.font.size = 12
 ChartJS.defaults.color = '#475569'
 
@@ -33,7 +33,7 @@ const C = {
   inkLight: 'var(--c-ink-light)',
   rule:     'var(--c-rule)',
   card:     'var(--c-surface)',
-  hero:     '#0a1628',
+  hero:     '#0F172A',
   accent:   '#3d65b2',
 }
 
@@ -99,15 +99,15 @@ const DL_FOOTER_H = 56
 const DL_MIN_W    = 1200
 
 function drawFooter(ctx, y, w) {
-  ctx.fillStyle = '#0a1628'
+  ctx.fillStyle = '#0F172A'
   ctx.fillRect(0, y, w, DL_FOOTER_H)
   ctx.fillStyle = '#ffffff'
-  ctx.font = `bold ${Math.round(w * 0.018)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.font = `bold ${Math.round(w * 0.018)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText('Datos', DL_PADDING, y + DL_FOOTER_H * 0.65)
   ctx.fillStyle = '#60a5fa'
   ctx.fillText('PBA', DL_PADDING + Math.round(w * 0.06), y + DL_FOOTER_H * 0.65)
   ctx.fillStyle = '#94a3b8'
-  ctx.font = `${Math.round(w * 0.013)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.font = `${Math.round(w * 0.013)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText('datospba.com', w - DL_PADDING - Math.round(w * 0.11), y + DL_FOOTER_H * 0.65)
 }
 
@@ -133,13 +133,13 @@ async function downloadVizContainer(node, title, fuente) {
   ctx.fillStyle = '#ffffff'
   ctx.fillRect(0, 0, W, H)
 
-  ctx.fillStyle = '#0a1628'
-  ctx.font = `bold ${Math.round(W * 0.020)}px Poppins, Roboto, system-ui, sans-serif`
+  ctx.fillStyle = '#0F172A'
+  ctx.font = `bold ${Math.round(W * 0.020)}px Archivo, Roboto, system-ui, sans-serif`
   ctx.fillText(title, DL_PADDING, Math.round(titleH * 0.52), W - DL_PADDING * 2)
 
   if (fuente) {
     ctx.fillStyle = '#94a3b8'
-    ctx.font = `${Math.round(W * 0.014)}px Poppins, Roboto, system-ui, sans-serif`
+    ctx.font = `${Math.round(W * 0.014)}px Archivo, Roboto, system-ui, sans-serif`
     ctx.fillText(`Fuente: ${fuente}`, DL_PADDING, Math.round(titleH * 0.82))
   }
 
@@ -171,7 +171,7 @@ function DownloadableViz({ title, fuente = 'DPM / SIACAM / AFCP', children }) {
           disabled={busy}
           title="Descargar PNG con marca DatosPBA"
           style={{
-            background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 8,
+            background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2,
             padding: '6px 10px', cursor: busy ? 'wait' : 'pointer', color: C.inkMid,
             display: 'inline-flex', alignItems: 'center', gap: 6,
             fontSize: '0.72rem', fontWeight: 600, transition: 'color 0.15s, border-color 0.15s',
@@ -210,7 +210,7 @@ function Hero() {
         <Link
           to="/informes"
           className="inline-flex items-center gap-1.5 text-sm no-underline mb-10"
-          style={{ color: 'rgba(255,255,255,0.45)' }}
+          style={{ color: 'rgba(255,255,255,0.62)' }}
         >
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
@@ -258,7 +258,7 @@ function Hero() {
               style={{
                 background: 'rgba(255,255,255,0.06)',
                 border: '1px solid rgba(255,255,255,0.10)',
-                borderRadius: 16,
+                borderRadius: 2,
               }}
               className="p-5"
             >
@@ -282,7 +282,7 @@ function Hero() {
             { label: 'Actualizado', val: 'Mayo 2025' },
           ].map(item => (
             <div key={item.label}>
-              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
+              <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
@@ -338,7 +338,7 @@ function ProduccionChart() {
   }
 
   return (
-    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
+    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
       <div style={{ height: 280 }}>
         <Bar data={data} options={opts} />
       </div>
@@ -399,7 +399,7 @@ function PBGHistorico() {
   }
 
   return (
-    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: '22px 24px' }}>
+    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
       <div style={{ height: 340 }}>
         <Line data={data} options={opts} />
       </div>
@@ -439,7 +439,7 @@ function EmpleoMunicipal() {
   }
 
   return (
-    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: 16, overflowX: 'auto' }}>
+    <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: 16, overflowX: 'auto' }}>
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', minWidth: 560, height: 'auto', display: 'block' }}>
         {/* Grid lines */}
         {[0, 10, 20, 30, 40, 50].map(t => (
@@ -447,7 +447,7 @@ function EmpleoMunicipal() {
             <line x1={xScale(t)} y1={padT} x2={xScale(t)} y2={H - padB}
                   stroke={C.rule} strokeWidth={1} strokeDasharray={t === 0 ? 'none' : '2 4'} />
             <text x={xScale(t)} y={H - padB + 18} textAnchor="middle"
-                  fontSize="11" fill={C.inkLight} fontFamily="Poppins, sans-serif">
+                  fontSize="11" fill={C.inkLight} fontFamily="Archivo, sans-serif">
               {t}%
             </text>
           </g>
@@ -455,7 +455,7 @@ function EmpleoMunicipal() {
 
         {/* Axis title */}
         <text x={padL + innerW / 2} y={H - 4} textAnchor="middle"
-              fontSize="11" fill={C.inkMid} fontFamily="Poppins, sans-serif" fontWeight="600">
+              fontSize="11" fill={C.inkMid} fontFamily="Archivo, sans-serif" fontWeight="600">
           % del empleo minero provincial
         </text>
 
@@ -468,7 +468,7 @@ function EmpleoMunicipal() {
             <g key={m.nombre}>
               {/* Label */}
               <text x={padL - 12} y={y + 4} textAnchor="end"
-                    fontSize="12.5" fontFamily="Poppins, sans-serif"
+                    fontSize="12.5" fontFamily="Archivo, sans-serif"
                     fill={C.ink} fontWeight={m.nombre === 'Olavarría' ? '700' : '500'}>
                 {m.nombre}
               </text>
@@ -481,7 +481,7 @@ function EmpleoMunicipal() {
               {/* Value */}
               <text x={xScale(m.pct) + 10} y={y + 4} textAnchor="start"
                     fontSize="13" fill={color} fontWeight="700"
-                    fontFamily="Poppins, sans-serif">
+                    fontFamily="Archivo, sans-serif">
                 {m.pct}%
               </text>
             </g>
@@ -492,11 +492,11 @@ function EmpleoMunicipal() {
         <rect x={padL + innerW - 10} y={padT + 2} width={padR - 4} height={34}
               fill={DATA[4] + '15'} rx={6} />
         <text x={padL + innerW + (padR - 4) / 2 - 8} y={padT + 14} textAnchor="middle"
-              fontSize="9" fill={DATA[4]} fontWeight="700" fontFamily="Poppins, sans-serif">
+              fontSize="9" fill={DATA[4]} fontWeight="700" fontFamily="Archivo, sans-serif">
           49% fuera
         </text>
         <text x={padL + innerW + (padR - 4) / 2 - 8} y={padT + 26} textAnchor="middle"
-              fontSize="9" fill={DATA[4]} fontFamily="Poppins, sans-serif">
+              fontSize="9" fill={DATA[4]} fontFamily="Archivo, sans-serif">
           de Olavarría
         </text>
       </svg>
@@ -553,7 +553,7 @@ function Materiales() {
           {...fadeUp(0.08 * i)}
           style={{
             background: '#fff', border: `1px solid ${C.rule}`,
-            borderRadius: 16, padding: '24px 24px 22px', overflow: 'hidden',
+            borderRadius: 2, padding: '24px 24px 22px', overflow: 'hidden',
           }}
         >
           <div className="flex items-center gap-3 mb-3">
@@ -603,12 +603,12 @@ function DatosDestacados() {
           {...fadeUp(0.08 * i)}
           style={{
             background: '#fff', border: `1px solid ${C.rule}`,
-            borderRadius: 20, overflow: 'hidden',
+            borderRadius: 2, overflow: 'hidden',
           }}
         >
           <div style={{ height: 5, background: d.color }} />
           <div style={{ padding: '28px 28px 26px' }}>
-            <div style={{ background: d.bg, borderRadius: 14, padding: '20px 20px 18px', marginBottom: 18 }}>
+            <div style={{ background: d.bg, borderRadius: 2, padding: '20px 20px 18px', marginBottom: 18 }}>
               <p style={{ fontSize: '0.7rem', color: d.color, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4 }}>
                 {d.label}
               </p>
@@ -637,7 +637,7 @@ function NotaMetodologica() {
         background: D.warnBg,
         border: `1px solid ${D.warn}30`,
         borderLeft: `3px solid ${D.warn}`,
-        borderRadius: 12,
+        borderRadius: 2,
         padding: '18px 20px',
       }}
     >
@@ -772,7 +772,7 @@ export default function InformeMineriaPBA() {
           {...fadeUp(0)}
           className="bg-pattern-dark"
           style={{
-            background: C.hero, borderRadius: 20,
+            background: C.hero, borderRadius: 2,
             padding: '44px 48px', position: 'relative', overflow: 'hidden',
           }}
         >
@@ -789,7 +789,7 @@ export default function InformeMineriaPBA() {
 
           <div className="relative z-10">
             <p style={{
-              color: 'rgba(255,255,255,0.45)', fontSize: '0.72rem',
+              color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem',
               textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16,
             }}>
               El argumento
@@ -814,7 +814,7 @@ export default function InformeMineriaPBA() {
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   background: 'rgba(255,255,255,0.1)', color: '#fff', textDecoration: 'none',
-                  borderRadius: 999, padding: '10px 20px',
+                  borderRadius: 2, padding: '10px 20px',
                   fontSize: '0.82rem', fontWeight: 600,
                   border: '1px solid rgba(255,255,255,0.15)',
                 }}
@@ -827,7 +827,7 @@ export default function InformeMineriaPBA() {
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
                   background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.65)', textDecoration: 'none',
-                  borderRadius: 999, padding: '10px 20px',
+                  borderRadius: 2, padding: '10px 20px',
                   fontSize: '0.82rem', fontWeight: 600,
                   border: '1px solid rgba(255,255,255,0.10)',
                 }}
