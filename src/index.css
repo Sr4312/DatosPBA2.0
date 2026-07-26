@@ -11,6 +11,30 @@
   --c-rule:      rgba(13,17,23,0.08);
   --c-surface:   #ffffff;
   --c-surface-2: #f8fafc;
+
+  /* ── Semántica de variación ──
+     El color codifica valoración, nunca dirección. Se deriva SIEMPRE de
+     polaridad × signo(variación) vía getColorVariacion() en src/lib/variacion.js.
+     Ningún componente elige estos colores por su cuenta. */
+  --better:       #0D9488;
+  --worse:        #B4234C;
+  --neutral:      #64748B;
+  /* variantes para texto chico (<18px) sobre fondo claro: --better base da 3.7:1,
+     insuficiente para AA 4.5:1 */
+  --better-text:  #0F766E;
+  --worse-text:   #B4234C;
+  --neutral-text: #64748B;
+  /* variantes para bloques oscuros (--c-ink): verificadas ≥4.5:1 sobre #0a1628 */
+  --better-dark:  #2DD4BF;
+  --worse-dark:   #FB7185;
+  --neutral-dark: #94A3B8;
+
+  /* ── Paleta de dato (series de gráfico) ──
+     Alineada con las piezas de Twitter. No se mezcla con colores de interfaz. */
+  --data-1: #E11D74;   /* magenta — serie principal / PBA */
+  --data-2: #0D9488;   /* teal — comparación / Nación */
+  --data-3: #22D3EE;   /* cyan — tercera serie; sobre blanco requiere borde #0E7490 */
+  --data-4: #0F172A;   /* navy — total / agregado */
 }
 
 html.dark {
