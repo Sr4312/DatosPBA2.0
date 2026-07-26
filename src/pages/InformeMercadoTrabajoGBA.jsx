@@ -12,6 +12,8 @@ import {
   Legend,
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
+import Cifra from '@/components/shared/Cifra'
+import { DATA, getColorVariacion } from '@/lib/variacion'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 ChartJS.defaults.font.family = 'Poppins, sans-serif'
@@ -62,11 +64,11 @@ const VARIACION_POBLACION = [
 ]
 
 const POBLACION_TABLA = [
-  ['Población total de referencia',          '13.090', '13.229', '+139'],
-  ['Población económicamente activa (PEA)',  '6.344',  '6.356',  '+12'],
-  ['Población ocupada',                      '5.731',  '5.741',  '+10'],
-  ['Población desocupada',                   '613',    '615',    '+2'],
-  ['Población subocupada',                   '694',    '770',    '+76'],
+  { ind: 'Población total de referencia',         t2025: '13.090', t2026: '13.229', variacion: '+139', polaridad: 'neutro' },
+  { ind: 'Población económicamente activa (PEA)', t2025: '6.344',  t2026: '6.356',  variacion: '+12',  polaridad: 'neutro' },
+  { ind: 'Población ocupada',                     t2025: '5.731',  t2026: '5.741',  variacion: '+10',  polaridad: 'mayor-es-mejor' },
+  { ind: 'Población desocupada',                  t2025: '613',    t2026: '615',    variacion: '+2',   polaridad: 'menor-es-mejor' },
+  { ind: 'Población subocupada',                  t2025: '694',    t2026: '770',    variacion: '+76',  polaridad: 'menor-es-mejor' },
 ]
 
 const DESOCUPACION_CONTEXTO = [
@@ -75,11 +77,13 @@ const DESOCUPACION_CONTEXTO = [
   { label: 'CABA',                        value: 4.8 },
 ]
 
+/* La valoración de cada cifra se declara acá y el color lo deriva <Cifra>:
+   nunca se asigna un color a mano. */
 const HERO_STATS = [
-  { n: '9,7%',    label: 'tasa de desocupación, igual que en el 1T2025',      color: '#93c5fd' },
-  { n: '12,1%',   label: 'subocupación horaria, desde 10,9% un año atrás',    color: '#fde68a' },
-  { n: '+76 mil', label: 'personas subocupadas más que en el 1T2025',         color: '#a5f3fc' },
-  { n: '48,0%',   label: 'tasa de actividad, desde 48,5% un año atrás',       color: '#6ee7b7' },
+  { label: 'Tasa de desocupación', valor: '9,7%',   variacion: '0,0 pp',  polaridad: 'menor-es-mejor', periodo: 'vs. 1T2025' },
+  { label: 'Subocupación horaria', valor: '12,1%',  variacion: '+1,2 pp', polaridad: 'menor-es-mejor', periodo: 'desde 10,9% en 1T2025' },
+  { label: 'Población subocupada', valor: '770 mil', variacion: '+76 mil', polaridad: 'menor-es-mejor', periodo: 'vs. 1T2025' },
+  { label: 'Tasa de actividad',    valor: '48,0%',  variacion: '−0,5 pp', polaridad: 'mayor-es-mejor', periodo: 'desde 48,5% en 1T2025' },
 ]
 
 // ─── ANIMACIÓN ───────────────────────────────────────────────
@@ -208,18 +212,15 @@ function SH({ num, title }) {
   )
 }
 
-function MC({ label, value, unit, accent = false }) {
+function CifraCard(props) {
   return (
     <div style={{
       background: '#fff', borderRadius: 14,
       border: `1px solid ${C.rule}`,
-      borderLeft: `4px solid ${accent ? B[600] : B[400]}`,
       padding: '1.125rem 1.125rem 1rem',
       boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
     }}>
-      <div style={{ fontSize: '0.625rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>{label}</div>
-      <div style={{ fontSize: '1.875rem', fontWeight: 800, color: accent ? B[600] : C.ink, lineHeight: 1, marginBottom: '0.375rem' }}>{value}</div>
-      <div style={{ fontSize: '0.6875rem', color: '#94a3b8', lineHeight: 1.4 }}>{unit}</div>
+      <Cifra size="md" {...props} />
     </div>
   )
 }
@@ -295,15 +296,15 @@ function ChartTasas() {
   const data = {
     labels: TASAS_PRINCIPALES.map(d => d.label),
     datasets: [
-      { label: '1° trim. 2025', data: TASAS_PRINCIPALES.map(d => d.t2025), backgroundColor: B[200], borderRadius: 4, barPercentage: 0.55 },
-      { label: '1° trim. 2026', data: TASAS_PRINCIPALES.map(d => d.t2026), backgroundColor: B[500], borderRadius: 4, barPercentage: 0.55 },
+      { label: '1° trim. 2025', data: TASAS_PRINCIPALES.map(d => d.t2025), backgroundColor: DATA[2], borderRadius: 4, barPercentage: 0.55 },
+      { label: '1° trim. 2026', data: TASAS_PRINCIPALES.map(d => d.t2026), backgroundColor: DATA[1], borderRadius: 4, barPercentage: 0.55 },
     ],
   }
   return (
     <ChartCard
       title="Tasas de actividad, empleo y desocupación — Partidos del GBA"
       fuente="INDEC, EPH, cuadro 3.1 — 1° trim. 2025 y 1° trim. 2026"
-      legend={[{ label: '1° trim. 2025', color: B[200] }, { label: '1° trim. 2026', color: B[500] }]}
+      legend={[{ label: '1° trim. 2025', color: DATA[2] }, { label: '1° trim. 2026', color: DATA[1] }]}
       height={240}
     >
       <Bar
@@ -330,15 +331,15 @@ function ChartSubocupacion() {
   const data = {
     labels: SUBOCUPACION.map(d => d.label),
     datasets: [
-      { label: '1° trim. 2025', data: SUBOCUPACION.map(d => d.t2025), backgroundColor: B[200], borderRadius: 4, barPercentage: 0.55 },
-      { label: '1° trim. 2026', data: SUBOCUPACION.map(d => d.t2026), backgroundColor: B[500], borderRadius: 4, barPercentage: 0.55 },
+      { label: '1° trim. 2025', data: SUBOCUPACION.map(d => d.t2025), backgroundColor: DATA[2], borderRadius: 4, barPercentage: 0.55 },
+      { label: '1° trim. 2026', data: SUBOCUPACION.map(d => d.t2026), backgroundColor: DATA[1], borderRadius: 4, barPercentage: 0.55 },
     ],
   }
   return (
     <ChartCard
       title="Subocupación horaria como % de la PEA — Partidos del GBA"
       fuente="INDEC, EPH, cuadro 3.1 — 1° trim. 2025 y 1° trim. 2026"
-      legend={[{ label: '1° trim. 2025', color: B[200] }, { label: '1° trim. 2026', color: B[500] }]}
+      legend={[{ label: '1° trim. 2025', color: DATA[2] }, { label: '1° trim. 2026', color: DATA[1] }]}
       height={240}
     >
       <Bar
@@ -366,7 +367,7 @@ function ChartVariacionAbsoluta() {
     labels: VARIACION_POBLACION.map(d => d.label),
     datasets: [{
       data: VARIACION_POBLACION.map(d => d.value),
-      backgroundColor: [B[600], B[400], B[200]],
+      backgroundColor: DATA[1],
       borderRadius: 4, barPercentage: 0.6,
     }],
   }
@@ -401,7 +402,7 @@ function ChartContexto() {
     labels: DESOCUPACION_CONTEXTO.map(d => d.label),
     datasets: [{
       data: DESOCUPACION_CONTEXTO.map(d => d.value),
-      backgroundColor: [B[600], B[400], B[200]],
+      backgroundColor: DATA[1],
       borderRadius: 4, barPercentage: 0.6,
     }],
   }
@@ -472,8 +473,7 @@ function Hero() {
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16 }}
               className="p-5"
             >
-              <div className="font-display text-4xl font-bold mb-1" style={{ color: s.color }}>{s.n}</div>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', lineHeight: 1.45 }}>{s.label}</p>
+              <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
             </m.div>
           ))}
         </m.div>
@@ -552,10 +552,10 @@ export default function InformeMercadoTrabajoGBA() {
             6.356.000 integraban la población económicamente activa (PEA).
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-            <MC label="Tasa de desocupación" value="9,7%" unit="idéntica al 1T2025" accent />
-            <MC label="Tasa de actividad" value="48,0%" unit="−0,5 p.p. interanual" />
-            <MC label="Tasa de empleo" value="43,4%" unit="−0,4 p.p. interanual" />
-            <MC label="Ocupados demandantes" value="15,8%" unit="−2,0 p.p. interanual" />
+            <CifraCard label="Tasa de desocupación" valor="9,7%" variacion="0,0 pp" polaridad="menor-es-mejor" periodo="vs. 1T2025" />
+            <CifraCard label="Tasa de actividad" valor="48,0%" variacion="−0,5 pp" polaridad="mayor-es-mejor" periodo="interanual" />
+            <CifraCard label="Tasa de empleo" valor="43,4%" variacion="−0,4 pp" polaridad="mayor-es-mejor" periodo="interanual" />
+            <CifraCard label="Ocupados demandantes" valor="15,8%" variacion="−2,0 pp" polaridad="menor-es-mejor" periodo="interanual" />
           </div>
           <DownloadableViz title="Tasas de actividad, empleo y desocupación — Partidos del GBA" fuente="INDEC, EPH — 1T2025 y 1T2026">
             <ChartTasas />
@@ -582,9 +582,9 @@ export default function InformeMercadoTrabajoGBA() {
               trimestre de 2025 y el mismo trimestre de 2026.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-              <MC label="Subocupación no demandante" value="4,9%" unit="desde 3,3% — +1,6 p.p." accent />
-              <MC label="Subocupación total" value="12,1%" unit="desde 10,9% — +1,2 p.p." />
-              <MC label="Subocupación demandante" value="7,2%" unit="desde 7,7% — −0,5 p.p." />
+              <CifraCard label="Subocupación no demandante" valor="4,9%" variacion="+1,6 pp" polaridad="menor-es-mejor" periodo="desde 3,3% en 1T2025" />
+              <CifraCard label="Subocupación total" valor="12,1%" variacion="+1,2 pp" polaridad="menor-es-mejor" periodo="desde 10,9% en 1T2025" />
+              <CifraCard label="Subocupación demandante" valor="7,2%" variacion="−0,5 pp" polaridad="menor-es-mejor" periodo="desde 7,7% en 1T2025" />
             </div>
             <DownloadableViz title="Subocupación horaria — Partidos del GBA" fuente="INDEC, EPH — 1T2025 y 1T2026">
               <ChartSubocupacion />
@@ -622,12 +622,17 @@ export default function InformeMercadoTrabajoGBA() {
                 </tr>
               </thead>
               <tbody>
-                {POBLACION_TABLA.map(([ind, a, b, v], i, arr) => (
+                {POBLACION_TABLA.map((r, i, arr) => (
                   <tr key={i} style={{ borderBottom: i < arr.length - 1 ? `0.5px solid #f1f5f9` : 'none' }}>
-                    <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.ink, fontWeight: 600 }}>{ind}</td>
-                    <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.inkMid }}>{a}</td>
-                    <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.inkMid }}>{b}</td>
-                    <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: B[600], fontWeight: 600 }}>{v}</td>
+                    <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.ink, fontWeight: 600 }}>{r.ind}</td>
+                    <td className="tabular-nums" style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.inkMid }}>{r.t2025}</td>
+                    <td className="tabular-nums" style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.inkMid }}>{r.t2026}</td>
+                    <td
+                      className="tabular-nums"
+                      style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', fontWeight: 600, color: getColorVariacion({ variacion: r.variacion, polaridad: r.polaridad, texto: true }) }}
+                    >
+                      {r.variacion}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -648,9 +653,9 @@ export default function InformeMercadoTrabajoGBA() {
               del conurbano duplica con creces a la de la Ciudad.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-              <MC label="Partidos del GBA" value="9,7%" unit="tasa de desocupación 1T2026" accent />
-              <MC label="Total 31 aglomerados" value="7,8%" unit="promedio nacional urbano EPH" />
-              <MC label="CABA" value="4,8%" unit="brecha de 4,9 p.p. con el GBA" />
+              <CifraCard label="Partidos del GBA" valor="9,7%" periodo="tasa de desocupación 1T2026" />
+              <CifraCard label="Total 31 aglomerados" valor="7,8%" periodo="promedio nacional urbano EPH" />
+              <CifraCard label="CABA" valor="4,8%" periodo="brecha de 4,9 pp con el GBA" />
             </div>
             <DownloadableViz title="Tasa de desocupación por área geográfica — 1T2026" fuente="INDEC, EPH — 1T2026">
               <ChartContexto />
