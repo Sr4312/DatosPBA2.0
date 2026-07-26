@@ -16,6 +16,8 @@ import {
   Filler,
 } from 'chart.js'
 import { Bar, Line, Doughnut } from 'react-chartjs-2'
+import Cifra from '@/components/shared/Cifra'
+import { DATA } from '@/lib/variacion'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, ArcElement, Tooltip, Legend, Filler)
 ChartJS.defaults.font.family = 'Poppins, sans-serif'
@@ -88,11 +90,13 @@ const TABLA_PROVINCIA_CULTIVO = [
   ['Girasol', '68,1%', '63,0%', '60,2%', '65,3%', '59,2%', 's/d', 's/d'],
 ]
 
+/* Composición por nivel de gobierno: categorías sin valoración, siguen la
+   paleta DATA en orden de magnitud (como IMPUESTOS en InformeKPMGIIBB). */
 const FEDERALISMO = [
-  { label: 'Nacionales no coparticipables', value: 56.7, color: B[700] },
-  { label: 'Nacionales coparticipables',    value: 32.9, color: B[400] },
-  { label: 'Provinciales',                  value: 9.3,  color: B[200] },
-  { label: 'Municipales',                   value: 1.1,  color: '#f59e0b' },
+  { label: 'Nacionales no coparticipables', value: 56.7, color: DATA[1] },
+  { label: 'Nacionales coparticipables',    value: 32.9, color: DATA[2] },
+  { label: 'Provinciales',                  value: 9.3,  color: DATA[3] },
+  { label: 'Municipales',                   value: 1.1,  color: DATA[4] },
 ]
 
 const HECTAREA_PBA = [
@@ -113,11 +117,14 @@ const FLETE_VBP = [
   { label: 'Santa Fe',     value: 11.1 },
 ]
 
+/* La valoración de cada cifra se declara acá y el color lo deriva <Cifra>:
+   nunca se asigna un color a mano. Las cuatro son niveles sin variación y el
+   texto original es frase-continuación del número, por eso va en `periodo`. */
 const HERO_STATS = [
-  { n: '59%',      label: 'de la renta agrícola bonaerense se la lleva el Estado',      color: '#93c5fd' },
-  { n: '61,9%',    label: 'es el promedio nacional del Índice FADA (jun. 2026)',        color: '#a5f3fc' },
-  { n: '$474.077', label: 'paga en impuestos una hectárea promedio en PBA',             color: '#fde68a' },
-  { n: '51,4%',    label: 'la carga del maíz, la menor entre los cultivos bonaerenses', color: '#6ee7b7' },
+  { valor: '59%',      periodo: 'de la renta agrícola bonaerense se la lleva el Estado' },
+  { valor: '61,9%',    periodo: 'es el promedio nacional del Índice FADA (jun. 2026)' },
+  { valor: '$474.077', periodo: 'paga en impuestos una hectárea promedio en PBA' },
+  { valor: '51,4%',    periodo: 'la carga del maíz, la menor entre los cultivos bonaerenses' },
 ]
 
 // ─── ANIMACIÓN ───────────────────────────────────────────────
@@ -246,18 +253,15 @@ function SH({ num, title }) {
   )
 }
 
-function MC({ label, value, unit, accent = false }) {
+function CifraCard(props) {
   return (
     <div style={{
       background: '#fff', borderRadius: 14,
       border: `1px solid ${C.rule}`,
-      borderLeft: `4px solid ${accent ? B[600] : B[400]}`,
       padding: '1.125rem 1.125rem 1rem',
       boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
     }}>
-      <div style={{ fontSize: '0.625rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>{label}</div>
-      <div style={{ fontSize: '1.875rem', fontWeight: 800, color: accent ? B[600] : C.ink, lineHeight: 1, marginBottom: '0.375rem' }}>{value}</div>
-      <div style={{ fontSize: '0.6875rem', color: '#94a3b8', lineHeight: 1.4 }}>{unit}</div>
+      <Cifra size="md" {...props} />
     </div>
   )
 }
@@ -316,12 +320,12 @@ function ChartSerieNacional() {
     labels: SERIE_NACIONAL.map(d => d.label),
     datasets: [{
       data: SERIE_NACIONAL.map(d => d.value),
-      borderColor: B[500],
-      backgroundColor: 'rgba(61,101,178,0.12)',
+      borderColor: DATA[1],
+      backgroundColor: 'rgba(225,29,116,0.12)',
       fill: true,
       tension: 0.3,
       pointRadius: 4,
-      pointBackgroundColor: B[500],
+      pointBackgroundColor: DATA[1],
     }],
   }
   return (
@@ -351,7 +355,7 @@ function ChartRankingProvincias() {
     datasets: [{
       data: RANKING_PROVINCIAS.map(d => d.value),
       backgroundColor: RANKING_PROVINCIAS.map(d =>
-        d.label === 'Buenos Aires' ? B[600] : d.label === 'Nacional' ? '#f59e0b' : B[300]),
+        d.label === 'Buenos Aires' ? DATA[1] : d.label === 'Nacional' ? DATA[4] : DATA[2]),
       borderRadius: 4, barPercentage: 0.65,
     }],
   }
@@ -359,7 +363,7 @@ function ChartRankingProvincias() {
     <ChartCard
       title="Participación del Estado en la renta agrícola por provincia (junio 2026)"
       fuente="FADA, Índice FADA junio 2026"
-      legend={[{ label: 'Buenos Aires', color: B[600] }, { label: 'Promedio nacional', color: '#f59e0b' }, { label: 'Otras provincias', color: B[300] }]}
+      legend={[{ label: 'Buenos Aires', color: DATA[1] }, { label: 'Promedio nacional', color: DATA[4] }, { label: 'Otras provincias', color: DATA[2] }]}
       height={250}
     >
       <Bar
@@ -387,7 +391,7 @@ function ChartCultivosPBA() {
     labels: CULTIVOS_PBA.map(d => d.label),
     datasets: [{
       data: CULTIVOS_PBA.map(d => d.value),
-      backgroundColor: [B[700], B[500], B[400], B[200]],
+      backgroundColor: DATA[1],
       borderRadius: 4, barPercentage: 0.55,
     }],
   }
@@ -445,7 +449,7 @@ function ChartFlete() {
     labels: FLETE_VBP.map(d => d.label),
     datasets: [{
       data: FLETE_VBP.map(d => d.value),
-      backgroundColor: FLETE_VBP.map(d => d.label === 'Buenos Aires' ? B[600] : B[300]),
+      backgroundColor: FLETE_VBP.map(d => d.label === 'Buenos Aires' ? DATA[1] : DATA[2]),
       borderRadius: 4, barPercentage: 0.65,
     }],
   }
@@ -453,7 +457,7 @@ function ChartFlete() {
     <ChartCard
       title="Peso del flete sobre el valor bruto de producción del maíz, por provincia (junio 2026)"
       fuente="FADA, Índice FADA junio 2026"
-      legend={[{ label: 'Buenos Aires', color: B[600] }, { label: 'Otras provincias', color: B[300] }]}
+      legend={[{ label: 'Buenos Aires', color: DATA[1] }, { label: 'Otras provincias', color: DATA[2] }]}
       height={230}
     >
       <Bar
@@ -516,8 +520,7 @@ function Hero() {
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16 }}
               className="p-5"
             >
-              <div className="font-display text-4xl font-bold mb-1" style={{ color: s.color }}>{s.n}</div>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', lineHeight: 1.45 }}>{s.label}</p>
+              <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
             </m.div>
           ))}
         </m.div>
@@ -559,9 +562,9 @@ export default function InformeIndiceFADA() {
             El Índice FADA es elaborado trimestralmente por la Fundación Agropecuaria para el Desarrollo de Argentina y mide la participación del Estado (impuestos nacionales, provinciales y municipales) sobre la renta agrícola: lo que queda de restar al valor de la producción los costos necesarios para producir. Esa renta se distribuye en tres componentes: los impuestos, la renta de la tierra y el resultado del productor.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="Índice FADA nacional (jun. 2026)" value="61,9%" unit="de la renta agrícola va a impuestos" accent />
-            <MC label="Variación vs. marzo 2026" value="−0,7 pp" unit="desde el 62,5% de la medición anterior" />
-            <MC label="Resultado para el productor" value="8,5%" unit="de la renta; el 29,7% restante es costo de la tierra" />
+            <CifraCard label="Índice FADA nacional (jun. 2026)" valor="61,9%" periodo="de la renta agrícola va a impuestos" />
+            <CifraCard label="Variación vs. marzo 2026" valor="−0,7" unidad="pp" periodo="desde el 62,5% de la medición anterior" />
+            <CifraCard label="Resultado para el productor" valor="8,5%" periodo="de la renta; el 29,7% restante es costo de la tierra" />
           </div>
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             En junio de 2026 el índice nacional se ubicó en 61,9%: por debajo del promedio de la serie histórica y lejos de los picos de 2008-2009 y 2015, aunque por encima de los mínimos de 2018 y de fines de 2025.
@@ -596,7 +599,7 @@ export default function InformeIndiceFADA() {
                 {TABLA_PROVINCIA_CULTIVO.map((row, i, arr) => (
                   <tr key={i} style={{ borderBottom: i < arr.length - 1 ? `0.5px solid #f1f5f9` : 'none' }}>
                     {row.map((cell, j) => (
-                      <td key={j} style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: j === 0 ? C.ink : j === 3 ? B[600] : C.inkMid, fontWeight: j === 0 || j === 3 ? 600 : 400 }}>{cell}</td>
+                      <td key={j} style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: j === 0 ? C.ink : j === 3 ? DATA[1] : C.inkMid, fontWeight: j === 0 || j === 3 ? 600 : 400 }}>{cell}</td>
                     ))}
                   </tr>
                 ))}
@@ -612,10 +615,10 @@ export default function InformeIndiceFADA() {
             Dentro de Buenos Aires, el maíz presenta la menor carga relativa entre los cuatro cultivos ponderados, mientras que trigo y soja muestran valores casi idénticos y el girasol se ubica en un nivel intermedio. A nivel nacional, el informe señala al trigo como "el caso más crítico" (73,6%), golpeado por la suba del 49% anual en el precio de la urea que FADA atribuye a las tensiones geopolíticas en Medio Oriente.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-            <MC label="Maíz" value="51,4%" unit="la menor carga en PBA" accent />
-            <MC label="Girasol" value="60,2%" unit="nivel intermedio" />
-            <MC label="Soja" value="62,1%" unit="similar al trigo" />
-            <MC label="Trigo" value="62,2%" unit="la mayor carga en PBA" />
+            <CifraCard label="Maíz" valor="51,4%" periodo="la menor carga en PBA" />
+            <CifraCard label="Girasol" valor="60,2%" periodo="nivel intermedio" />
+            <CifraCard label="Soja" valor="62,1%" periodo="similar al trigo" />
+            <CifraCard label="Trigo" valor="62,2%" periodo="la mayor carga en PBA" />
           </div>
           <DownloadableViz title="Índice FADA por cultivo en Buenos Aires - junio 2026" fuente="FADA, Índice FADA junio 2026">
             <ChartCultivosPBA />
@@ -638,9 +641,9 @@ export default function InformeIndiceFADA() {
             En Buenos Aires, una hectárea promedio pagó en junio de 2026 $412.277 de impuestos nacionales, $55.792 de impuestos provinciales -sobre todo inmobiliario rural, con ingresos brutos al 1% y sellos- y $6.008 de tasas municipales, mayoritariamente viales: el 70% de lo recaudado se destina a caminos rurales.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="Impuestos nacionales (PBA)" value="$412.277" unit="por hectárea promedio, jun. 2026" accent />
-            <MC label="Impuestos provinciales (PBA)" value="$55.792" unit="inmobiliario rural, IIBB y sellos" />
-            <MC label="Tasas municipales (PBA)" value="$6.008" unit="promedio; 70% va a caminos rurales" />
+            <CifraCard label="Impuestos nacionales (PBA)" valor="$412.277" periodo="por hectárea promedio, jun. 2026" />
+            <CifraCard label="Impuestos provinciales (PBA)" valor="$55.792" periodo="inmobiliario rural, IIBB y sellos" />
+            <CifraCard label="Tasas municipales (PBA)" valor="$6.008" periodo="promedio; 70% va a caminos rurales" />
           </div>
           <div style={{ background: '#fff', borderRadius: 14, border: `1px solid ${C.rule}`, overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', margin: '1.25rem 0', overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 420 }}>
@@ -673,9 +676,9 @@ export default function InformeIndiceFADA() {
             En Buenos Aires, el flete representa el 38,1% de los costos totales de una hectárea de maíz, el valor más alto entre las seis provincias relevadas. Pero medido sobre el valor bruto de producción, la provincia queda en una posición favorable: solo el 16,4% del ingreso que genera esa hectárea se destina al transporte, 1,7 de cada 10 camiones producidos.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="Flete sobre costos del maíz (PBA)" value="38,1%" unit="el más alto de las 6 provincias" />
-            <MC label="Flete sobre valor de producción" value="16,4%" unit="segundo más bajo, tras Santa Fe" accent />
-            <MC label="Distancia promedio a puerto" value="250 km" unit="vs. 340 km de Córdoba y La Pampa" />
+            <CifraCard label="Flete sobre costos del maíz (PBA)" valor="38,1%" periodo="el más alto de las 6 provincias" />
+            <CifraCard label="Flete sobre valor de producción" valor="16,4%" periodo="segundo más bajo, tras Santa Fe" />
+            <CifraCard label="Distancia promedio a puerto" valor="250" unidad="km" periodo="vs. 340 km de Córdoba y La Pampa" />
           </div>
           <DownloadableViz title="Peso del flete sobre el valor de producción del maíz - junio 2026" fuente="FADA, Índice FADA junio 2026">
             <ChartFlete />

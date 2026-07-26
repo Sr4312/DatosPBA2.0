@@ -17,6 +17,8 @@ import {
 } from 'chart.js'
 import { Doughnut, Bar, Line } from 'react-chartjs-2'
 import 'leaflet/dist/leaflet.css'
+import Cifra from '@/components/shared/Cifra'
+import { DATA, DATA_BORDES, getColorVariacion, colorEscalaValoracion } from '@/lib/variacion'
 
 ChartJS.register(
   ArcElement, DoughnutController, CategoryScale, LinearScale,
@@ -37,29 +39,22 @@ const C = {
   card:     'var(--c-surface)',
   accent:   '#3d65b2',
   hero:     '#0a1628',
-  // semantic
-  formal:   '#1a6b3a', formalBg: '#e8f5ee',
-  informal: '#b91c1c', informalBg: '#fee2e2',
+  // semantic — la valoración se deriva de la escala única (t=1 mejor situación, t=0 peor),
+  // nunca de un verde/rojo elegido a mano
+  formal:   colorEscalaValoracion(1), formalBg: '#e8f5ee',
+  informal: colorEscalaValoracion(0), informalBg: '#fee2e2',
   mid:      '#b45309', midBg: '#fef3c7',
-  fisu:     '#0f2d5e', fisuBg: '#e8eef7',
-}
-
-// data palette
-const D = {
-  cloaca:      '#1e40af',
-  agua:        '#0891b2',
-  electricidad:'#b45309',
-  gas:         '#7c2d12',
-  magenta:     '#e91e8c',
-  green:       '#059669',
+  fisu:     DATA[4], fisuBg: '#e8eef7',
 }
 
 // ───── Aggregate numbers from the RENABAP PBA report ─────
+/* Cifras de nivel sin variación: el contexto va en `periodo` (frase-continuación
+   del número original) y el color lo resuelve <Cifra>, no la posición. */
 const HERO_STATS = [
-  { n: '2.327',  label: 'barrios populares en PBA',           color: D.magenta },
-  { n: '27.913', label: 'hectáreas ocupadas',                 color: D.cloaca  },
-  { n: '+2,5M',  label: 'personas viviendo en informalidad',  color: D.electricidad },
-  { n: '36%',    label: 'del total nacional de barrios populares', color: D.green },
+  { valor: '2.327',  periodo: 'barrios populares en PBA' },
+  { valor: '27.913', periodo: 'hectáreas ocupadas' },
+  { valor: '+2,5M',  periodo: 'personas viviendo en informalidad' },
+  { valor: '36%',    periodo: 'del total nacional de barrios populares' },
 ]
 
 // evolución anual de barrios populares registrados (RENABAP, acumulado PBA)
@@ -190,11 +185,13 @@ const BARRIOS_POR_MUNI = [
 ]
 
 // acceso a servicios formales dentro de los barrios RENABAP (%)
+// colores categóricos (identidad de cada servicio) → paleta DATA;
+// colorTexto usa DATA_BORDES para asegurar contraste del texto sobre blanco
 const SERVICIOS = [
-  { key: 'gas',          label: 'Gas de red',            pct:  2, color: D.gas          },
-  { key: 'cloaca',       label: 'Cloaca de red',         pct:  4, color: D.cloaca       },
-  { key: 'agua',         label: 'Agua corriente',        pct: 17, color: D.agua         },
-  { key: 'electricidad', label: 'Electricidad formal',   pct: 33, color: D.electricidad },
+  { key: 'gas',          label: 'Gas de red',            pct:  2, color: DATA[1], colorTexto: DATA_BORDES[1] },
+  { key: 'cloaca',       label: 'Cloaca de red',         pct:  4, color: DATA[2], colorTexto: DATA_BORDES[2] },
+  { key: 'agua',         label: 'Agua corriente',        pct: 17, color: DATA[3], colorTexto: DATA_BORDES[3] },
+  { key: 'electricidad', label: 'Electricidad formal',   pct: 33, color: DATA[4], colorTexto: DATA_BORDES[4] },
 ]
 
 // Distribución por década de creación
@@ -301,8 +298,7 @@ function Hero() {
               }}
               className="p-5"
             >
-              <div className="font-display text-4xl font-bold mb-1" style={{ color: s.color }}>{s.n}</div>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', lineHeight: 1.45 }}>{s.label}</p>
+              <Cifra dark size="xl" valor={s.valor} periodo={s.periodo} />
             </m.div>
           ))}
         </m.div>
@@ -339,20 +335,20 @@ function EvolucionChart() {
     datasets: [{
       label: 'Barrios populares registrados (acumulado)',
       data: EVOL_BARRIOS.data,
-      borderColor: D.magenta,
+      borderColor: DATA[1],
       backgroundColor: ctx => {
         const { ctx: c, chartArea } = ctx.chart
-        if (!chartArea) return D.magenta + '33'
+        if (!chartArea) return DATA[1] + '33'
         const g = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom)
-        g.addColorStop(0, D.magenta + '66')
-        g.addColorStop(1, D.magenta + '05')
+        g.addColorStop(0, DATA[1] + '66')
+        g.addColorStop(1, DATA[1] + '05')
         return g
       },
       fill: true,
       tension: 0.35,
       pointRadius: 5,
       pointBackgroundColor: '#fff',
-      pointBorderColor: D.magenta,
+      pointBorderColor: DATA[1],
       pointBorderWidth: 2.5,
       pointHoverRadius: 7,
       borderWidth: 3,
@@ -396,12 +392,7 @@ function TopMunicipiosChart() {
     datasets: [{
       label: 'Barrios populares',
       data: sorted.map(m => m.n),
-      backgroundColor: sorted.map((_, i) =>
-        i === 0 ? D.magenta
-        : i < 3 ? D.electricidad
-        : i < 7 ? D.mid || '#b45309'
-        : D.cloaca
-      ),
+      backgroundColor: DATA[1],
       borderRadius: 4,
       borderSkipped: false,
     }],
@@ -478,7 +469,7 @@ function ServicioDonut({ srv, delay = 0 }) {
           alignItems: 'center', justifyContent: 'center',
           pointerEvents: 'none',
         }}>
-          <span className="font-display" style={{ fontSize: '2.4rem', fontWeight: 700, color: srv.color, lineHeight: 1 }}>
+          <span className="font-display" style={{ fontSize: '2.4rem', fontWeight: 700, color: srv.colorTexto, lineHeight: 1 }}>
             {srv.pct}%
           </span>
           <span style={{ fontSize: '0.68rem', color: C.inkLight, marginTop: 2 }}>con acceso</span>
@@ -486,7 +477,7 @@ function ServicioDonut({ srv, delay = 0 }) {
       </div>
       <p style={{ fontSize: '0.78rem', color: C.inkMid, marginTop: 12, lineHeight: 1.5 }}>
         <strong style={{ color: C.ink }}>{100 - srv.pct}%</strong> de los hogares relevados{' '}
-        <span style={{ color: srv.color, fontWeight: 600 }}>no tiene {srv.label.toLowerCase()}</span>
+        <span style={{ color: srv.colorTexto, fontWeight: 600 }}>no tiene {srv.label.toLowerCase()}</span>
       </p>
     </m.div>
   )
@@ -499,13 +490,8 @@ function DecadasChart() {
     datasets: [{
       label: '% de barrios creados en el período',
       data: DECADAS.map(d => d.pct),
-      backgroundColor: DECADAS.map((_, i) => {
-        const t = i / (DECADAS.length - 1)
-        const r = Math.round(11  + t * (233 - 11))
-        const g = Math.round(64  + t * (30  - 64))
-        const b = Math.round(175 + t * (140 - 175))
-        return `rgb(${r},${g},${b})`
-      }),
+      // composición temporal (neutro): dataset único → DATA[1], sin rampa decorativa
+      backgroundColor: DATA[1],
       borderRadius: 6, borderSkipped: false,
     }],
   }
@@ -566,13 +552,16 @@ function BarriosMap() {
     return muniLookup[n] ?? null
   }
 
+  /* Rampa de valoración: más barrios populares = mayor déficit habitacional
+     concentrado (el copy lo encuadra como "urbanización pendiente", no como
+     mero registro) → nivel peor. t=1 mejor situación, t=0 peor. */
   function fillFor(n) {
     if (n === null) return '#e2e8f0'
-    if (n >= 80) return '#7f1d1d'
-    if (n >= 40) return '#b91c1c'
-    if (n >= 15) return '#dc2626'
-    if (n >=  5) return '#f87171'
-    return '#fecaca'
+    if (n >= 80) return colorEscalaValoracion(0)
+    if (n >= 40) return colorEscalaValoracion(0.25)
+    if (n >= 15) return colorEscalaValoracion(0.5)
+    if (n >=  5) return colorEscalaValoracion(0.75)
+    return colorEscalaValoracion(1)
   }
 
   function styleFor(name, state) {
@@ -582,7 +571,7 @@ function BarriosMap() {
       return { fillColor: '#e2e8f0', fillOpacity: 0.35, color: '#94a3b8', weight: 0.4, opacity: 0.5 }
     }
     const fo = state === 'selected' ? 0.90 : state === 'hover' ? 0.80 : 0.65
-    return { fillColor: fillFor(n), fillOpacity: fo, color: '#450a0a', weight: w, opacity: 0.85 }
+    return { fillColor: fillFor(n), fillOpacity: fo, color: DATA[4], weight: w, opacity: 0.85 }
   }
 
   useEffect(() => {
@@ -707,6 +696,8 @@ function BarriosMap() {
             </div>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 p-6">
+              {/* pin de ubicación decorativo (estado vacío del mapa): no comunica
+                  alerta de dato, se deja fuera de la semántica de valoración */}
               <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center">
                 <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#dc2626" strokeWidth="1.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -719,7 +710,7 @@ function BarriosMap() {
               </p>
               <div className="w-full mt-2 space-y-2">
                 <div className="flex-1 h-2 rounded-full"
-                  style={{ background: 'linear-gradient(to right, #fecaca, #f87171, #dc2626, #b91c1c, #7f1d1d)' }} />
+                  style={{ background: `linear-gradient(to right, ${colorEscalaValoracion(1)}, ${colorEscalaValoracion(0.5)}, ${colorEscalaValoracion(0)})` }} />
                 <div className="flex justify-between text-[10px] text-slate-400">
                   <span>1-5</span><span>5-15</span><span>15-40</span><span>40-80</span><span>80+</span>
                 </div>
@@ -849,7 +840,7 @@ function FisuVsDesfinanciamiento() {
         <p style={{ color: C.inkLight, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>
           OPISU · Provincia
         </p>
-        <div className="font-display" style={{ fontSize: '3rem', fontWeight: 700, color: D.agua, lineHeight: 1 }}>
+        <div className="font-display" style={{ fontSize: '3rem', fontWeight: 700, color: DATA_BORDES[3], lineHeight: 1 }}>
           {OPISU.barrios}
         </div>
         <p style={{ fontSize: '0.84rem', color: C.inkMid, marginTop: 10, lineHeight: 1.5 }}>
@@ -858,11 +849,11 @@ function FisuVsDesfinanciamiento() {
         </p>
         <div style={{ borderTop: `1px solid ${C.rule}`, marginTop: 16, paddingTop: 14, display: 'flex', justifyContent: 'space-between' }}>
           <div>
-            <div className="font-display" style={{ fontSize: '1.4rem', fontWeight: 700, color: D.agua }}>{OPISU.municipios}</div>
+            <div className="font-display" style={{ fontSize: '1.4rem', fontWeight: 700, color: DATA_BORDES[3] }}>{OPISU.municipios}</div>
             <div style={{ fontSize: '0.7rem', color: C.inkLight }}>municipios alcanzados</div>
           </div>
           <div>
-            <div className="font-display" style={{ fontSize: '1.4rem', fontWeight: 700, color: D.agua }}>360k</div>
+            <div className="font-display" style={{ fontSize: '1.4rem', fontWeight: 700, color: DATA_BORDES[3] }}>360k</div>
             <div style={{ fontSize: '0.7rem', color: C.inkLight }}>vecinos intervenidos</div>
           </div>
         </div>
@@ -878,7 +869,9 @@ function FisuVsDesfinanciamiento() {
         <p style={{ color: C.informal, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10, fontWeight: 700 }}>
           2024 · Desfinanciamiento
         </p>
-        <div className="font-display" style={{ fontSize: '3rem', fontWeight: 700, color: C.informal, lineHeight: 1 }}>
+        {/* variación: caída de ejecución de inversión (mayor-es-mejor) → el color
+            se deriva de polaridad × signo, nunca a mano */}
+        <div className="font-display" style={{ fontSize: '3rem', fontWeight: 700, color: getColorVariacion({ variacion: '−95%', polaridad: 'mayor-es-mejor', texto: true }), lineHeight: 1 }}>
           −95%
         </div>
         <p style={{ fontSize: '0.84rem', color: C.inkMid, marginTop: 10, lineHeight: 1.5 }}>

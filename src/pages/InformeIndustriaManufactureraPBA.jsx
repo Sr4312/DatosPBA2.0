@@ -15,6 +15,8 @@ import {
   Filler,
 } from 'chart.js'
 import { Bar, Line } from 'react-chartjs-2'
+import Cifra from '@/components/shared/Cifra'
+import { DATA, getColorVariacion, getTonoVariacion, VALORACION_HEX } from '@/lib/variacion'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Tooltip, Legend, Filler)
 ChartJS.defaults.font.family = 'Poppins, sans-serif'
@@ -44,8 +46,6 @@ const B = {
   100: '#d0daf0',
   50:  '#edf1f8',
 }
-
-const NEG = '#b91c1c'
 
 // ─── DATOS ───────────────────────────────────────────────────
 
@@ -116,11 +116,13 @@ const BLOQUES = [
 // Incidencia sobre el +13,2% agregado, ordenada desc.
 const INCIDENCIAS = [...BLOQUES].sort((a, b) => b.inc - a.inc)
 
+/* La valoración de cada cifra se declara acá y el color lo deriva <Cifra>:
+   nunca se asigna un color a mano. */
 const HERO_STATS = [
-  { n: '13,2%',   label: 'suba interanual del ISIM-PBA en marzo de 2026',        color: '#93c5fd' },
-  { n: '+5,9%',   label: 'variación mensual desestacionalizada frente a febrero', color: '#a5f3fc' },
-  { n: '9 de 11', label: 'bloques industriales con alza interanual en marzo',     color: '#6ee7b7' },
-  { n: '+3,5%',   label: 'acumulado del primer trimestre 2026 vs. 2025',          color: '#fde68a' },
+  { valor: '+13,2%', variacion: '+13,2%', polaridad: 'mayor-es-mejor', periodo: 'suba interanual del ISIM-PBA en marzo de 2026' },
+  { valor: '+5,9%',  variacion: '+5,9%',  polaridad: 'mayor-es-mejor', periodo: 'variación mensual desestacionalizada frente a febrero' },
+  { valor: '9 de 11', periodo: 'bloques industriales con alza interanual en marzo' },
+  { valor: '+3,5%',  variacion: '+3,5%',  polaridad: 'mayor-es-mejor', periodo: 'acumulado del primer trimestre 2026 vs. 2025' },
 ]
 
 // ─── ANIMACIÓN ───────────────────────────────────────────────
@@ -249,19 +251,15 @@ function SH({ num, title }) {
   )
 }
 
-function MC({ label, value, unit, accent = false, negative = false }) {
-  const numberColor = negative ? NEG : accent ? B[600] : C.ink
+function CifraCard(props) {
   return (
     <div style={{
       background: '#fff', borderRadius: 14,
       border: `1px solid ${C.rule}`,
-      borderLeft: `4px solid ${negative ? NEG : accent ? B[600] : B[400]}`,
       padding: '1.125rem 1.125rem 1rem',
       boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
     }}>
-      <div style={{ fontSize: '0.625rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>{label}</div>
-      <div style={{ fontSize: '1.875rem', fontWeight: 800, color: numberColor, lineHeight: 1, marginBottom: '0.375rem' }}>{value}</div>
-      <div style={{ fontSize: '0.6875rem', color: '#94a3b8', lineHeight: 1.4 }}>{unit}</div>
+      <Cifra size="md" {...props} />
     </div>
   )
 }
@@ -292,6 +290,7 @@ const fmtPct1 = v => v.toLocaleString('es-AR', { minimumFractionDigits: 1, maxim
 const fmtPP2  = v => v.toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
 // Barras horizontales con signo: etiqueta afuera de la punta de la barra.
+// Canvas: la valoración sale de polaridad × signo vía helper (hex, no CSS vars).
 function horizontalLabels(id, fmt) {
   return {
     id,
@@ -301,7 +300,7 @@ function horizontalLabels(id, fmt) {
       meta.data.forEach((bar, i) => {
         const v = chart.data.datasets[0].data[i]
         ctx.save()
-        ctx.fillStyle = v < 0 ? NEG : '#334155'
+        ctx.fillStyle = getTonoVariacion({ variacion: v, polaridad: 'mayor-es-mejor' }) === 'worse' ? VALORACION_HEX.worse.text : '#334155'
         ctx.font = 'bold 11px Poppins, sans-serif'
         ctx.textBaseline = 'middle'
         ctx.textAlign = v < 0 ? 'right' : 'left'
@@ -321,7 +320,7 @@ const verticalPctLabels = {
     meta.data.forEach((bar, i) => {
       const v = chart.data.datasets[0].data[i]
       ctx.save()
-      ctx.fillStyle = v < 0 ? NEG : '#334155'
+      ctx.fillStyle = getTonoVariacion({ variacion: v, polaridad: 'mayor-es-mejor' }) === 'worse' ? VALORACION_HEX.worse.text : '#334155'
       ctx.font = 'bold 9px Poppins, sans-serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = v < 0 ? 'top' : 'bottom'
@@ -343,23 +342,23 @@ function ChartSerie() {
       {
         label: 'ISIM-PBA',
         data: SERIE.map(d => d.gen),
-        borderColor: B[500],
-        backgroundColor: 'rgba(31,71,149,0.10)',
+        borderColor: DATA[1],
+        backgroundColor: 'rgba(225,29,116,0.10)',
         fill: true,
         tension: 0.3,
         pointRadius: 3,
-        pointBackgroundColor: B[500],
+        pointBackgroundColor: DATA[1],
       },
       {
         label: 'Serie desestacionalizada',
         data: SERIE.map(d => d.des),
-        borderColor: '#f59e0b',
+        borderColor: DATA[2],
         backgroundColor: 'transparent',
         borderDash: [5, 4],
         fill: false,
         tension: 0.3,
         pointRadius: 3,
-        pointBackgroundColor: '#f59e0b',
+        pointBackgroundColor: DATA[2],
       },
     ],
   }
@@ -367,7 +366,7 @@ function ChartSerie() {
     <ChartCard
       title="ISIM-PBA — nivel general y serie desestacionalizada (marzo 2025 – marzo 2026, base 2012=100)"
       fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA"
-      legend={[{ label: 'Nivel general', color: B[500] }, { label: 'Desestacionalizado', color: '#f59e0b' }]}
+      legend={[{ label: 'Nivel general', color: DATA[1] }, { label: 'Desestacionalizado', color: DATA[2] }]}
       height={270}
     >
       <Line data={data} options={{
@@ -390,7 +389,11 @@ function ChartVarInteranual() {
     labels: VAR_INTERANUAL.map(d => d.label),
     datasets: [{
       data: VAR_INTERANUAL.map(d => d.value),
-      backgroundColor: VAR_INTERANUAL.map(d => d.value < 0 ? NEG : B[500]),
+      /* Valoración por polaridad × signo (canvas: hex equivalentes de los
+         tokens de valoración, no un verde/rojo elegido a mano). */
+      backgroundColor: VAR_INTERANUAL.map(d =>
+        VALORACION_HEX[getTonoVariacion({ variacion: d.value, polaridad: 'mayor-es-mejor' })].base
+      ),
       borderRadius: 4, barPercentage: 0.72,
     }],
   }
@@ -398,7 +401,7 @@ function ChartVarInteranual() {
     <ChartCard
       title="ISIM-PBA — variación interanual mensual (marzo 2025 – marzo 2026)"
       fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA"
-      legend={[{ label: 'Alza interanual', color: B[500] }, { label: 'Caída interanual', color: NEG }]}
+      legend={[{ label: 'Alza interanual', color: VALORACION_HEX.better.base }, { label: 'Caída interanual', color: VALORACION_HEX.worse.base }]}
       height={260}
     >
       <Bar
@@ -426,7 +429,10 @@ function ChartBloques() {
     labels: BLOQUES.map(d => d.label),
     datasets: [{
       data: BLOQUES.map(d => d.varia),
-      backgroundColor: BLOQUES.map(d => d.varia < 0 ? NEG : B[500]),
+      /* Valoración por polaridad × signo, derivada por el helper. */
+      backgroundColor: BLOQUES.map(d =>
+        VALORACION_HEX[getTonoVariacion({ variacion: d.varia, polaridad: 'mayor-es-mejor' })].base
+      ),
       borderRadius: 4, barPercentage: 0.7,
     }],
   }
@@ -434,7 +440,7 @@ function ChartBloques() {
     <ChartCard
       title="Variación interanual por bloque industrial (marzo 2026)"
       fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA"
-      legend={[{ label: 'Alza interanual', color: B[500] }, { label: 'Caída interanual', color: NEG }]}
+      legend={[{ label: 'Alza interanual', color: VALORACION_HEX.better.base }, { label: 'Caída interanual', color: VALORACION_HEX.worse.base }]}
       height={340}
     >
       <Bar
@@ -462,7 +468,11 @@ function ChartIncidencias() {
     labels: INCIDENCIAS.map(d => d.label),
     datasets: [{
       data: INCIDENCIAS.map(d => d.inc),
-      backgroundColor: INCIDENCIAS.map(d => d.inc < 0 ? NEG : (d.inc >= 1.5 ? B[600] : B[400])),
+      /* Aporte positivo = mejora el agregado, negativo = lo empeora: la
+         valoración la deriva el helper (se elimina el tono de énfasis a mano). */
+      backgroundColor: INCIDENCIAS.map(d =>
+        VALORACION_HEX[getTonoVariacion({ variacion: d.inc, polaridad: 'mayor-es-mejor' })].base
+      ),
       borderRadius: 4, barPercentage: 0.7,
     }],
   }
@@ -470,7 +480,7 @@ function ChartIncidencias() {
     <ChartCard
       title="Incidencia de cada bloque en la variación interanual del ISIM-PBA (marzo 2026, en p.p.)"
       fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA"
-      legend={[{ label: 'Mayor aporte', color: B[600] }, { label: 'Aporte positivo', color: B[400] }, { label: 'Aporte negativo', color: NEG }]}
+      legend={[{ label: 'Aporte positivo', color: VALORACION_HEX.better.base }, { label: 'Aporte negativo', color: VALORACION_HEX.worse.base }]}
       height={340}
     >
       <Bar
@@ -513,9 +523,11 @@ function TablaSerie() {
             return (
               <tr key={row[0]} style={{ borderBottom: i < arr.length - 1 ? `0.5px solid #f1f5f9` : 'none', background: highlight ? B[50] : 'transparent' }}>
                 {row.map((cell, j) => {
-                  const isNeg = cell.startsWith('−')
+                  /* Columnas 3-5 son variaciones del ISIM (mayor-es-mejor):
+                     el color lo deriva el helper; las columnas de nivel quedan neutras. */
+                  const esVariacion = j >= 3
                   return (
-                    <td key={j} style={{ padding: '0.6rem 1rem', fontSize: '0.8125rem', color: j === 0 ? C.ink : isNeg ? NEG : C.inkMid, fontWeight: j === 0 || highlight ? 600 : 400 }}>{cell}</td>
+                    <td key={j} style={{ padding: '0.6rem 1rem', fontSize: '0.8125rem', color: j === 0 ? C.ink : esVariacion ? getColorVariacion({ variacion: cell, polaridad: 'mayor-es-mejor', texto: true }) : C.inkMid, fontWeight: j === 0 || highlight ? 600 : 400 }}>{cell}</td>
                   )
                 })}
               </tr>
@@ -544,9 +556,9 @@ function TablaBloques() {
             <tr key={b.label} style={{ borderBottom: i < BLOQUES.length - 1 ? `0.5px solid #f1f5f9` : 'none' }}>
               <td style={{ padding: '0.6rem 1rem', fontSize: '0.8125rem', color: C.ink, fontWeight: 600 }}>{b.label}</td>
               <td style={{ padding: '0.6rem 1rem', fontSize: '0.8125rem', color: C.inkMid }}>{b.indice.toLocaleString('es-AR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}</td>
-              <td style={{ padding: '0.6rem 1rem', fontSize: '0.8125rem', color: b.varia < 0 ? NEG : C.inkMid, fontWeight: 600 }}>{fmtPct1(b.varia)}</td>
-              <td style={{ padding: '0.6rem 1rem', fontSize: '0.8125rem', color: b.acum < 0 ? NEG : C.inkMid }}>{fmtPct1(b.acum)}</td>
-              <td style={{ padding: '0.6rem 1rem', fontSize: '0.8125rem', color: b.inc < 0 ? NEG : C.inkMid }}>{fmtPP2(b.inc)}</td>
+              <td style={{ padding: '0.6rem 1rem', fontSize: '0.8125rem', color: getColorVariacion({ variacion: b.varia, polaridad: 'mayor-es-mejor', texto: true }), fontWeight: 600 }}>{fmtPct1(b.varia)}</td>
+              <td style={{ padding: '0.6rem 1rem', fontSize: '0.8125rem', color: getColorVariacion({ variacion: b.acum, polaridad: 'mayor-es-mejor', texto: true }) }}>{fmtPct1(b.acum)}</td>
+              <td style={{ padding: '0.6rem 1rem', fontSize: '0.8125rem', color: getColorVariacion({ variacion: b.inc, polaridad: 'mayor-es-mejor', texto: true }) }}>{fmtPP2(b.inc)}</td>
             </tr>
           ))}
           <tr style={{ background: B[50] }}>
@@ -601,8 +613,7 @@ function Hero() {
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16 }}
               className="p-5"
             >
-              <div className="font-display text-4xl font-bold mb-1" style={{ color: s.color }}>{s.n}</div>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', lineHeight: 1.45 }}>{s.label}</p>
+              <Cifra dark size="xl" valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
             </m.div>
           ))}
         </m.div>
@@ -644,9 +655,9 @@ export default function InformeIndustriaManufactureraPBA() {
             El Indicador Sintético de la Industria Manufacturera de la provincia de Buenos Aires (ISIM-PBA) es elaborado por la Dirección Provincial de Estadística del Ministerio de Economía bonaerense a partir de un relevamiento propio sobre establecimientos industriales de la Provincia. Tiene base 2012=100 y sigue la evolución de corto plazo de la actividad fabril, una referencia clave dado que la Provincia concentra una porción sustancial de la producción manufacturera del país.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="Índice ISIM-PBA (mar. 2026)" value="94,7" unit="base 2012=100 · dato preliminar" accent />
-            <MC label="Bloques sectoriales relevados" value="11" unit="ramas de la industria manufacturera" />
-            <MC label="Bloques en alza interanual" value="9 de 11" unit="en marzo de 2026" />
+            <CifraCard label="Índice ISIM-PBA (mar. 2026)" valor="94,7" periodo="base 2012=100 · dato preliminar" />
+            <CifraCard label="Bloques sectoriales relevados" valor="11" periodo="ramas de la industria manufacturera" />
+            <CifraCard label="Bloques en alza interanual" valor="9 de 11" periodo="en marzo de 2026" />
           </div>
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El indicador se desagrega en once bloques: alimentos y bebidas, tabaco, textiles y cueros, papel y cartón, refinación de petróleo, productos químicos, caucho y plástico, minerales no metálicos, metales comunes, máquinas y equipos, y vehículos automotores. El dato de marzo de 2026 es preliminar y está sujeto a revisión.
@@ -660,9 +671,9 @@ export default function InformeIndustriaManufactureraPBA() {
             En marzo de 2026 el ISIM-PBA alcanzó 94,7 puntos, frente a 83,7 en marzo de 2025: una suba interanual del 13,2%. En la comparación desestacionalizada, el índice se ubicó en 94,1 puntos, con un alza del 5,9% respecto de febrero, que había marcado 80,5 puntos, el nivel más bajo del período analizado.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="ISIM-PBA (mar. 2026)" value="94,7" unit="vs. 83,7 en marzo de 2025" accent />
-            <MC label="Serie desestacionalizada" value="94,1" unit="+5,9% respecto de febrero" />
-            <MC label="Piso reciente (feb. 2026)" value="80,5" unit="el nivel más bajo del período" negative />
+            <CifraCard label="ISIM-PBA (mar. 2026)" valor="94,7" periodo="vs. 83,7 en marzo de 2025" />
+            <CifraCard label="Serie desestacionalizada" valor="94,1" variacion="+5,9%" polaridad="mayor-es-mejor" periodo="respecto de febrero" />
+            <CifraCard label="Piso reciente (feb. 2026)" valor="80,5" periodo="el nivel más bajo del período" />
           </div>
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El repunte contrasta con la desaceleración de fines de 2025, cuando el índice había caído 10,2% interanual en noviembre. La serie de los últimos doce meses muestra la recuperación de marzo tras el piso del verano.
@@ -679,9 +690,9 @@ export default function InformeIndustriaManufactureraPBA() {
             El primer bimestre de 2026 había mostrado variaciones interanuales negativas —enero −1,6% y febrero −1,3%—, en línea con la caída de noviembre de 2025 (−10,2%), la mayor del período. Con el salto de marzo (+13,2%), el acumulado del primer trimestre se ubicó 3,5% por encima de igual período de 2025.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="Acumulado 1er trimestre 2026" value="+3,5%" unit="respecto de igual período de 2025" accent />
-            <MC label="Enero / febrero 2026" value="−1,6% / −1,3%" unit="caídas interanuales" negative />
-            <MC label="Noviembre 2025" value="−10,2%" unit="la mayor caída del período" negative />
+            <CifraCard label="Acumulado 1er trimestre 2026" valor="+3,5%" variacion="+3,5%" polaridad="mayor-es-mejor" periodo="respecto de igual período de 2025" />
+            <CifraCard label="Enero / febrero 2026" valor="−1,6% / −1,3%" variacion="−1,6% / −1,3%" polaridad="mayor-es-mejor" periodo="caídas interanuales" />
+            <CifraCard label="Noviembre 2025" valor="−10,2%" variacion="−10,2%" polaridad="mayor-es-mejor" periodo="la mayor caída del período" />
           </div>
           <DownloadableViz title="ISIM-PBA: variación interanual mensual (mar. 2025 – mar. 2026)" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA">
             <ChartVarInteranual />
@@ -699,9 +710,9 @@ export default function InformeIndustriaManufactureraPBA() {
             En marzo, nueve de los once bloques mostraron alzas interanuales. Productos químicos encabezó con +40,5%, seguido por Minerales no metálicos (+25,5%), Tabaco (+19,7%), Textiles y cueros (+17,7%) y Máquinas y equipos (+16,5%). Los únicos bloques con caída fueron Vehículos automotores (−6,8%) y Metales comunes (−14,0%).
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="Productos químicos" value="+40,5%" unit="la mayor suba interanual" accent />
-            <MC label="Minerales no metálicos" value="+25,5%" unit="segunda mayor suba" />
-            <MC label="Metales comunes" value="−14,0%" unit="la mayor caída del mes" negative />
+            <CifraCard label="Productos químicos" valor="+40,5%" variacion="+40,5%" polaridad="mayor-es-mejor" periodo="la mayor suba interanual" />
+            <CifraCard label="Minerales no metálicos" valor="+25,5%" variacion="+25,5%" polaridad="mayor-es-mejor" periodo="segunda mayor suba" />
+            <CifraCard label="Metales comunes" valor="−14,0%" variacion="−14,0%" polaridad="mayor-es-mejor" periodo="la mayor caída del mes" />
           </div>
           <DownloadableViz title="Variación interanual por bloque industrial (marzo 2026)" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA">
             <ChartBloques />
@@ -716,9 +727,9 @@ export default function InformeIndustriaManufactureraPBA() {
             Detrás del +13,2% agregado hay un crecimiento fuertemente concentrado. Productos químicos aportó 6,78 puntos porcentuales y Máquinas y equipos 1,96: entre ambos explican más de dos tercios de la incidencia positiva total. Les siguieron Alimentos y bebidas (1,89 p.p.), Refinación de petróleo (1,27) y Textiles y cueros (1,20).
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="Productos químicos" value="6,78 pp" unit="de incidencia en el +13,2%" accent />
-            <MC label="Máquinas y equipos" value="1,96 pp" unit="segundo mayor aporte" />
-            <MC label="Químicos + Máquinas" value=">2/3" unit="de la incidencia positiva total" />
+            <CifraCard label="Productos químicos" valor="6,78 pp" periodo="de incidencia en el +13,2%" />
+            <CifraCard label="Máquinas y equipos" valor="1,96 pp" periodo="segundo mayor aporte" />
+            <CifraCard label="Químicos + Máquinas" valor=">2/3" periodo="de la incidencia positiva total" />
           </div>
           <DownloadableViz title="Incidencia de cada bloque en la variación interanual del ISIM-PBA (marzo 2026)" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA">
             <ChartIncidencias />
@@ -732,9 +743,9 @@ export default function InformeIndustriaManufactureraPBA() {
             El repunte tiene matices. Vehículos automotores acumuló su quinta baja interanual consecutiva (−6,8%) y Metales comunes cayó 14,0%, con incidencias negativas de 0,62 y 0,89 puntos porcentuales respectivamente. Además, pese al crecimiento generalizado, siete de los once bloques permanecen por debajo de los niveles de actividad del año base 2012, lo que matiza la lectura del salto interanual de marzo.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="Vehículos automotores" value="−6,8%" unit="quinta baja interanual seguida" negative />
-            <MC label="Metales comunes" value="−14,0%" unit="incidencia de −0,89 p.p." negative />
-            <MC label="Bloques bajo el nivel 2012" value="7 de 11" unit="aún por debajo del año base" accent />
+            <CifraCard label="Vehículos automotores" valor="−6,8%" variacion="−6,8%" polaridad="mayor-es-mejor" periodo="quinta baja interanual seguida" />
+            <CifraCard label="Metales comunes" valor="−14,0%" variacion="−14,0%" polaridad="mayor-es-mejor" periodo="incidencia de −0,89 p.p." />
+            <CifraCard label="Bloques bajo el nivel 2012" valor="7 de 11" periodo="aún por debajo del año base" />
           </div>
         </m.div>
 

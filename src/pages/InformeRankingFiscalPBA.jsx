@@ -15,6 +15,8 @@ import {
   Filler,
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
+import Cifra from '@/components/shared/Cifra'
+import { DATA, getColorVariacion, getTonoVariacion, VALORACION_HEX } from '@/lib/variacion'
 
 ChartJS.register(
   CategoryScale, LinearScale, BarElement, LineElement, PointElement, Tooltip, Legend, Filler
@@ -36,13 +38,8 @@ const C = {
 }
 
 const D = {
-  red:    '#dc2626',
-  redBg:  '#fef2f2',
-  green:  '#16a34a',
-  greenBg:'#f0fdf4',
   warn:   '#b45309',
   warnBg: '#fef3c7',
-  amber:  '#d97706',
 }
 
 // ─── DATOS ───────────────────────────────────────────────────
@@ -86,11 +83,13 @@ const OBRA_PUBLICA = [
   { provincia: 'Chaco',       pct: -37 },
 ]
 
+/* Niveles sin variación explícita: sin valoración de color. Si alguna cifra
+   suma variación, el color lo deriva <Cifra> de polaridad × signo, nunca a mano. */
 const HERO_STATS = [
-  { n: '−0,1%',  label: 'déficit primario provincial 2025, % del PBI (vs. +0,4% en 2024)', color: '#fda4af' },
-  { n: '−0,4%',  label: 'resultado financiero provincial 2025, % del PBI (vs. +0,1% en 2024)', color: '#fda4af' },
-  { n: '+7%',    label: 'crecimiento real del gasto en personal, en todas las provincias',  color: '#93c5fd' },
-  { n: '4 de 24', label: 'provincias que mejoraron sus cuentas fiscales en 2025',            color: '#6ee7b7' },
+  { valor: '−0,1%',   periodo: 'déficit primario provincial 2025, % del PBI (vs. +0,4% en 2024)' },
+  { valor: '−0,4%',   periodo: 'resultado financiero provincial 2025, % del PBI (vs. +0,1% en 2024)' },
+  { valor: '+7%',     periodo: 'crecimiento real del gasto en personal, en todas las provincias' },
+  { valor: '4 de 24', periodo: 'provincias que mejoraron sus cuentas fiscales en 2025' },
 ]
 
 // ─── ANIMACIÓN ───────────────────────────────────────────────
@@ -211,28 +210,15 @@ function SectionLabel({ children, dark = false, color }) {
   )
 }
 
-function MC({ label, value, unit, accent = false }) {
+function CifraCard(props) {
   return (
     <div style={{
-      background: C.card,
+      background: '#fff', borderRadius: 14,
       border: `1px solid ${C.rule}`,
-      borderLeft: `3px solid ${accent ? C.accent : C.inkLight}`,
-      borderRadius: 12,
-      padding: '18px 20px',
+      padding: '1.125rem 1.125rem 1rem',
+      boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
     }}>
-      <p style={{
-        fontSize: '0.72rem', fontWeight: 700, color: C.inkMid,
-        textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 8,
-      }}>
-        {label}
-      </p>
-      <div
-        className="font-display"
-        style={{ fontSize: '2.2rem', fontWeight: 700, color: accent ? C.accent : C.ink, lineHeight: 1 }}
-      >
-        {value}
-      </div>
-      {unit && <p style={{ fontSize: '0.76rem', color: C.inkMid, marginTop: 4 }}>{unit}</p>}
+      <Cifra size="md" {...props} />
     </div>
   )
 }
@@ -297,8 +283,7 @@ function Hero() {
               }}
               className="p-5"
             >
-              <div className="font-display text-4xl font-bold mb-1" style={{ color: s.color }}>{s.n}</div>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', lineHeight: 1.45 }}>{s.label}</p>
+              <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
             </m.div>
           ))}
         </m.div>
@@ -344,6 +329,11 @@ function ResultadoPrimarioQuadrante() {
   const gridX = [-9, -6, -3, 0, 3, 6, 9]
   const gridY = [0.8, 0.4, 0, -0.4, -0.8]
 
+  /* Valoración de los cuadrantes según el eje Nación: déficit = empeora,
+     superávit = mejora. El color sale del helper, no se elige a mano. */
+  const colDeficit   = getColorVariacion({ variacion: -1, polaridad: 'mayor-es-mejor', texto: true })
+  const colSuperavit = getColorVariacion({ variacion: 1, polaridad: 'mayor-es-mejor', texto: true })
+
   return (
     <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 16, padding: 16, overflowX: 'auto' }}>
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', minWidth: 600, height: 'auto', display: 'block' }}>
@@ -383,30 +373,30 @@ function ResultadoPrimarioQuadrante() {
         </text>
 
         {/* Quadrant labels */}
-        <text x={padL + 8} y={padT + 16} fontSize="10.5" fontWeight="700" fill={D.red} fontFamily="Poppins, sans-serif">Déficit Nación</text>
-        <text x={padL + 8} y={padT + 30} fontSize="10.5" fontWeight="700" fill={D.red} fontFamily="Poppins, sans-serif">Superávit Provincias</text>
+        <text x={padL + 8} y={padT + 16} fontSize="10.5" fontWeight="700" fill={colDeficit} fontFamily="Poppins, sans-serif">Déficit Nación</text>
+        <text x={padL + 8} y={padT + 30} fontSize="10.5" fontWeight="700" fill={colDeficit} fontFamily="Poppins, sans-serif">Superávit Provincias</text>
 
-        <text x={W - padR - 8} y={padT + 16} textAnchor="end" fontSize="10.5" fontWeight="700" fill={D.green} fontFamily="Poppins, sans-serif">Superávit Nación</text>
-        <text x={W - padR - 8} y={padT + 30} textAnchor="end" fontSize="10.5" fontWeight="700" fill={D.green} fontFamily="Poppins, sans-serif">Superávit Provincias</text>
+        <text x={W - padR - 8} y={padT + 16} textAnchor="end" fontSize="10.5" fontWeight="700" fill={colSuperavit} fontFamily="Poppins, sans-serif">Superávit Nación</text>
+        <text x={W - padR - 8} y={padT + 30} textAnchor="end" fontSize="10.5" fontWeight="700" fill={colSuperavit} fontFamily="Poppins, sans-serif">Superávit Provincias</text>
 
-        <text x={padL + 8} y={H - padB - 24} fontSize="10.5" fontWeight="700" fill={D.red} fontFamily="Poppins, sans-serif">Déficit Nación</text>
-        <text x={padL + 8} y={H - padB - 10} fontSize="10.5" fontWeight="700" fill={D.red} fontFamily="Poppins, sans-serif">Déficit Provincias</text>
+        <text x={padL + 8} y={H - padB - 24} fontSize="10.5" fontWeight="700" fill={colDeficit} fontFamily="Poppins, sans-serif">Déficit Nación</text>
+        <text x={padL + 8} y={H - padB - 10} fontSize="10.5" fontWeight="700" fill={colDeficit} fontFamily="Poppins, sans-serif">Déficit Provincias</text>
 
-        <text x={W - padR - 8} y={H - padB - 24} textAnchor="end" fontSize="10.5" fontWeight="700" fill={D.green} fontFamily="Poppins, sans-serif">Superávit Nación</text>
-        <text x={W - padR - 8} y={H - padB - 10} textAnchor="end" fontSize="10.5" fontWeight="700" fill={D.green} fontFamily="Poppins, sans-serif">Déficit Provincias</text>
+        <text x={W - padR - 8} y={H - padB - 24} textAnchor="end" fontSize="10.5" fontWeight="700" fill={colSuperavit} fontFamily="Poppins, sans-serif">Superávit Nación</text>
+        <text x={W - padR - 8} y={H - padB - 10} textAnchor="end" fontSize="10.5" fontWeight="700" fill={colSuperavit} fontFamily="Poppins, sans-serif">Déficit Provincias</text>
 
         {/* Puntos */}
         {PUNTOS_CUADRANTE.map(p => {
           const cx = xScale(p.nacion)
           const cy = yScale(p.provincias)
           const r = p.destacado ? 6 : 4.2
-          const color = p.destacado ? C.accent : C.inkLight
+          const color = p.destacado ? DATA[1] : C.inkLight
           return (
             <g key={p.year}>
               <circle cx={cx} cy={cy} r={r} fill={color} fillOpacity={p.destacado ? 0.95 : 0.55} stroke="#fff" strokeWidth={1.4} />
               <text x={cx + r + 5} y={cy + 3.5} fontSize={p.destacado ? '11.5' : '10'}
                     fontWeight={p.destacado ? '700' : '500'}
-                    fill={p.destacado ? C.accent : C.inkMid} fontFamily="Poppins, sans-serif">
+                    fill={p.destacado ? DATA[1] : C.inkMid} fontFamily="Poppins, sans-serif">
                 {p.year}
               </text>
             </g>
@@ -431,7 +421,7 @@ function GastoIngresosChart() {
       label: 'Variación real interanual',
       data: GASTO_INGRESOS.map(d => d.val),
       backgroundColor: GASTO_INGRESOS.map(d =>
-        d.tipo === 'nacion' ? D.green : d.tipo === 'ingreso' ? '#94a3b8' : D.amber
+        d.tipo === 'nacion' ? DATA[4] : d.tipo === 'ingreso' ? DATA[2] : DATA[1]
       ),
       borderRadius: 5,
       borderSkipped: false,
@@ -481,7 +471,11 @@ function ObraPublicaChart() {
     datasets: [{
       label: 'Variación real interanual del gasto en capital',
       data: OBRA_PUBLICA.map(p => p.pct),
-      backgroundColor: OBRA_PUBLICA.map(p => p.pct >= 0 ? D.green : D.red),
+      /* Valoración por polaridad × signo (canvas: se usan los hex equivalentes
+         de los tokens de valoración, no un verde/rojo elegido a mano). */
+      backgroundColor: OBRA_PUBLICA.map(p =>
+        VALORACION_HEX[getTonoVariacion({ variacion: p.pct, polaridad: 'mayor-es-mejor' })].base
+      ),
       borderRadius: 5,
       borderSkipped: false,
     }],
@@ -647,10 +641,10 @@ export default function InformeRankingFiscalPBA() {
           </p>
         </m.div>
         <m.div {...fadeUp(0.1)} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <MC label="Ranking fiscal general" value="15° / 24" unit="posición de PBA, la jurisdicción más poblada del país" accent />
-          <MC label="Resultado primario" value="-0,3%" unit="del PBG provincial, 2025" />
-          <MC label="Resultado financiero" value="-0,8%" unit="del PBG provincial, 2025" />
-          <MC label="Deuda / ingresos totales" value="52%" unit="la exposición financiera más alta del país" accent />
+          <CifraCard label="Ranking fiscal general" valor="15° / 24" periodo="posición de PBA, la jurisdicción más poblada del país" />
+          <CifraCard label="Resultado primario" valor="-0,3%" periodo="del PBG provincial, 2025" />
+          <CifraCard label="Resultado financiero" valor="-0,8%" periodo="del PBG provincial, 2025" />
+          <CifraCard label="Deuda / ingresos totales" valor="52%" periodo="la exposición financiera más alta del país" />
         </m.div>
       </div>
 

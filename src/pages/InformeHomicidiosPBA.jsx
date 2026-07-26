@@ -12,6 +12,8 @@ import {
   Legend,
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
+import Cifra from '@/components/shared/Cifra'
+import { DATA, colorEscalaValoracion } from '@/lib/variacion'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 ChartJS.defaults.font.family = 'Poppins, sans-serif'
@@ -31,12 +33,21 @@ const C = {
 
 // ─── DATOS ───────────────────────────────────────────────────
 
+/* Cifras de nivel sin variación: el texto que continúa al número va en
+   `periodo` y el color lo resuelve <Cifra>, nunca la posición. */
 const HERO_STATS = [
-  { n: '808',  label: 'víctimas de homicidios consumados · PBA 2025',        color: '#fca5a5' },
-  { n: '4,6',  label: 'tasa provincial de homicidios cada 100.000 hab.',     color: '#93c5fd' },
-  { n: '56%',  label: 'de los homicidios cometidos con armas de fuego',      color: '#fcd34d' },
-  { n: '20%',  label: 'de las IPPs de homicidio concentradas en La Matanza', color: '#6ee7b7' },
+  { valor: '808', periodo: 'víctimas de homicidios consumados · PBA 2025' },
+  { valor: '4,6', periodo: 'tasa provincial de homicidios cada 100.000 hab.' },
+  { valor: '56%', periodo: 'de los homicidios cometidos con armas de fuego' },
+  { valor: '20%', periodo: 'de las IPPs de homicidio concentradas en La Matanza' },
 ]
+
+/* Dominio compartido para colorear por nivel de tasa de homicidios
+   (menor-es-mejor): t=1 en la tasa más baja del informe (interior, 2,42)
+   y t=0 en la más alta (La Matanza, 8,02). Lo usan gráficos y mapa. */
+const TASA_MIN = 2.42
+const TASA_MAX = 8.02
+const colorTasa = tasa => colorEscalaValoracion((TASA_MAX - tasa) / (TASA_MAX - TASA_MIN))
 
 const RANKING_TASA = [
   { nombre: 'La Matanza',               tasa: 8.02 },
@@ -194,28 +205,15 @@ function SectionLabel({ children, dark = false, color }) {
   )
 }
 
-function MC({ label, value, unit, accent = false }) {
+function CifraCard(props) {
   return (
     <div style={{
-      background: C.card,
+      background: '#fff', borderRadius: 14,
       border: `1px solid ${C.rule}`,
-      borderLeft: `3px solid ${accent ? C.accent : C.inkLight}`,
-      borderRadius: 12,
-      padding: '18px 20px',
+      padding: '1.125rem 1.125rem 1rem',
+      boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
     }}>
-      <p style={{
-        fontSize: '0.72rem', fontWeight: 700, color: C.inkMid,
-        textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 8,
-      }}>
-        {label}
-      </p>
-      <div
-        className="font-display"
-        style={{ fontSize: '2.2rem', fontWeight: 700, color: accent ? C.accent : C.ink, lineHeight: 1 }}
-      >
-        {value}
-      </div>
-      {unit && <p style={{ fontSize: '0.76rem', color: C.inkMid, marginTop: 4 }}>{unit}</p>}
+      <Cifra size="md" {...props} />
     </div>
   )
 }
@@ -282,8 +280,7 @@ function Hero() {
               }}
               className="p-5"
             >
-              <div className="font-display text-4xl font-bold mb-1" style={{ color: s.color }}>{s.n}</div>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', lineHeight: 1.45 }}>{s.label}</p>
+              <Cifra dark size="xl" valor={s.valor} periodo={s.periodo} />
             </m.div>
           ))}
         </m.div>
@@ -325,7 +322,7 @@ function BrechaChart() {
     datasets: [{
       label: 'Tasa de homicidios /100k',
       data: [5.48, 4.6, 2.42],
-      backgroundColor: [C.accent, '#64748b', '#94a3b8'],
+      backgroundColor: [5.48, 4.6, 2.42].map(colorTasa),
       borderRadius: 6,
       borderSkipped: false,
       maxBarThickness: 64,
@@ -377,7 +374,7 @@ function RankingTasaChart() {
     datasets: [{
       label: 'Tasa /100k',
       data: RANKING_TASA.map(d => d.tasa),
-      backgroundColor: RANKING_TASA.map((_, i) => i === 0 ? C.accent : '#94a3b8'),
+      backgroundColor: RANKING_TASA.map(d => colorTasa(d.tasa)),
       borderRadius: 5,
       borderSkipped: false,
       maxBarThickness: 28,
@@ -425,7 +422,7 @@ function RankingAbsChart() {
     datasets: [{
       label: 'Homicidios consumados',
       data: RANKING_ABS.map(d => d.hom),
-      backgroundColor: RANKING_ABS.map((_, i) => i === 0 ? C.accent : '#94a3b8'),
+      backgroundColor: DATA[1],
       borderRadius: 5,
       borderSkipped: false,
       maxBarThickness: 28,
@@ -474,7 +471,7 @@ function MatanzaComparacionChart() {
     datasets: [{
       label: 'Tasa de homicidios /100k',
       data: COMPARACION.map(d => d.val),
-      backgroundColor: COMPARACION.map(d => d.highlight ? C.accent : '#94a3b8'),
+      backgroundColor: COMPARACION.map(d => colorTasa(d.val)),
       borderRadius: 6,
       borderSkipped: false,
       maxBarThickness: 56,
@@ -523,16 +520,16 @@ const VICTIMAS_CARDS = [
     label: 'homicidios en contexto de robo',
     desc: 'Del total provincial, 22 ocurrieron en La Matanza. Entre las víctimas, trabajadores y vecinos sorprendidos por asaltantes en la vía pública.',
     sub: 'Incluye el caso de Rita Mabel Suárez, docente, 47 años',
-    color: C.accent,
-    bg: '#fef2f2',
+    color: DATA[1], // categórico: primera categoría de la paleta de dato
+    bg: 'rgba(225,29,116,0.06)',
   },
   {
     stat: '175',
     label: 'menores imputados en causas de homicidio',
     desc: '20 de esos casos corresponden al Departamento Judicial La Matanza. La participación de menores en violencia letal es otro foco de alerta.',
     sub: 'Caso Dilan Joel Insfrán, 17 años, González Catán',
-    color: '#1e3a8a',
-    bg: '#eff6ff',
+    color: DATA[4], // categórico: navy de la paleta de dato
+    bg: 'rgba(15,23,42,0.05)',
   },
 ]
 
@@ -598,18 +595,14 @@ function HomicidiosMap() {
 
   function fillFor(t) {
     if (t === null) return '#e2e8f0'
-    if (t >= 7.5) return '#7f1d1d'
-    if (t >= 6)   return '#b91c1c'
-    if (t >= 5)   return '#dc2626'
-    if (t >= 3.5) return '#f87171'
-    return '#fecaca'
+    return colorTasa(t)
   }
 
   function styleFor(name, state) {
     const t = getTasa(name)
     if (t === null) return { fillColor: '#e2e8f0', fillOpacity: 0.35, color: '#94a3b8', weight: 0.4, opacity: 0.5 }
     const fo = state === 'selected' ? 0.92 : state === 'hover' ? 0.82 : 0.70
-    return { fillColor: fillFor(t), fillOpacity: fo, color: '#450a0a', weight: state !== 'default' ? 1.5 : 0.6, opacity: 0.85 }
+    return { fillColor: fillFor(t), fillOpacity: fo, color: '#0F172A', weight: state !== 'default' ? 1.5 : 0.6, opacity: 0.85 }
   }
 
   useEffect(() => {
@@ -681,11 +674,11 @@ function HomicidiosMap() {
         </p>
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           {[
-            { label: '≥ 7,5', color: '#7f1d1d' },
-            { label: '6 - 7,5', color: '#b91c1c' },
-            { label: '5 - 6', color: '#dc2626' },
-            { label: '3,5 - 5', color: '#f87171' },
-            { label: '< 3,5', color: '#fecaca' },
+            { label: '≥ 7,5', color: colorTasa(7.75) },
+            { label: '6 - 7,5', color: colorTasa(6.75) },
+            { label: '5 - 6', color: colorTasa(5.5) },
+            { label: '3,5 - 5', color: colorTasa(4.25) },
+            { label: '< 3,5', color: colorTasa(3) },
             { label: 'Sin dato', color: '#e2e8f0' },
           ].map(item => (
             <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.68rem', color: C.inkMid }}>
@@ -734,9 +727,9 @@ export default function InformeHomicidiosPBA() {
             </p>
           </m.div>
           <m.div {...fadeUp(0.1)} className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-            <MC label="Víctimas de homicidios consumados" value="808" unit="Provincia de Buenos Aires · 2025" accent />
-            <MC label="Homicidios con arma de fuego" value="56%" unit="Del total de causas registradas" />
-            <MC label="Ocurridos en vía pública" value="+60%" unit="Contexto de lugar mas frecuente" />
+            <CifraCard label="Víctimas de homicidios consumados" valor="808" periodo="Provincia de Buenos Aires · 2025" />
+            <CifraCard label="Homicidios con arma de fuego" valor="56%" periodo="Del total de causas registradas" />
+            <CifraCard label="Ocurridos en vía pública" valor="+60%" periodo="Contexto de lugar mas frecuente" />
           </m.div>
           <m.div {...fadeUp(0.15)}>
             <div style={{
@@ -847,9 +840,9 @@ export default function InformeHomicidiosPBA() {
         </m.div>
 
         <m.div {...fadeUp(0.1)} className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <MC label="Homicidios consumados" value="147" unit="Departamento Judicial La Matanza · 2025" accent />
-          <MC label="Tasa de homicidios /100k" value="8,02" unit="La mas alta del AMBA y de toda la Provincia" />
-          <MC label="Sobre San Martín (103 hom.)" value="+44" unit="Homicidios mas que el segundo departamento" />
+          <CifraCard label="Homicidios consumados" valor="147" periodo="Departamento Judicial La Matanza · 2025" />
+          <CifraCard label="Tasa de homicidios /100k" valor="8,02" periodo="La mas alta del AMBA y de toda la Provincia" />
+          <CifraCard label="Sobre San Martín (103 hom.)" valor="+44" periodo="Homicidios mas que el segundo departamento" />
         </m.div>
 
         <m.div {...fadeUp(0.15)}>

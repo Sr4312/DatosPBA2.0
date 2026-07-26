@@ -13,6 +13,8 @@ import {
   Legend,
 } from 'chart.js'
 import { Bar, Doughnut } from 'react-chartjs-2'
+import Cifra from '@/components/shared/Cifra'
+import { DATA, VALORACION_HEX, getTonoVariacion, getColorVariacion } from '@/lib/variacion'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend)
 ChartJS.defaults.font.family = 'Poppins, sans-serif'
@@ -55,18 +57,18 @@ const SERIE_VARIACION = [
 ]
 
 const COMPOSICION = [
-  { label: 'Productores de Servicios',  value: 47.0, color: G[700] },
-  { label: 'Productores de Bienes',     value: 34.5, color: G[500] },
-  { label: 'IVA y otros impuestos',     value: 18.5, color: G[300] },
+  { label: 'Productores de Servicios',  value: 47.0, color: DATA[1] },
+  { label: 'Productores de Bienes',     value: 34.5, color: DATA[2] },
+  { label: 'IVA y otros impuestos',     value: 18.5, color: DATA[3] },
 ]
 
 const SECTORES = [
-  { label: 'Industria',                    var: '+2,8%',  part: '20,8%', inc: 0.59 },
-  { label: 'Comercio',                     var: '+3,5%',  part: '12,7%', inc: 0.45 },
-  { label: 'Agropecuario',                 var: '+5,6%',  part: '8,1%',  inc: 0.44 },
-  { label: 'Ss. inmobiliarios y empresariales', var: '+4,0%',  part: '10,9%', inc: 0.44 },
-  { label: 'Intermediación financiera',    var: '+24,9%', part: '1,9%',  inc: 0.39 },
-  { label: 'Transporte y comunicaciones',  var: '+2,4%',  part: '8,6%',  inc: 0.21 },
+  { label: 'Industria',                    var: '+2,8%',  part: '20,8%', inc: 0.59, polaridad: 'mayor-es-mejor' },
+  { label: 'Comercio',                     var: '+3,5%',  part: '12,7%', inc: 0.45, polaridad: 'mayor-es-mejor' },
+  { label: 'Agropecuario',                 var: '+5,6%',  part: '8,1%',  inc: 0.44, polaridad: 'mayor-es-mejor' },
+  { label: 'Ss. inmobiliarios y empresariales', var: '+4,0%',  part: '10,9%', inc: 0.44, polaridad: 'mayor-es-mejor' },
+  { label: 'Intermediación financiera',    var: '+24,9%', part: '1,9%',  inc: 0.39, polaridad: 'mayor-es-mejor' },
+  { label: 'Transporte y comunicaciones',  var: '+2,4%',  part: '8,6%',  inc: 0.21, polaridad: 'mayor-es-mejor' },
 ]
 
 const NACION = [
@@ -75,11 +77,13 @@ const NACION = [
   { label: 'VAB de servicios', value: 32.4 },
 ]
 
+/* La valoración de cada cifra se declara acá y el color lo deriva <Cifra>:
+   nunca se asigna un color a mano. */
 const HERO_STATS = [
-  { n: '+4,2%',      label: 'crecimiento real en 2025, segundo mejor de la serie 2004-2025', color: '#6ee7b7' },
-  { n: '$263.668 M', label: 'PBG-PBA a precios constantes de 2004',                          color: '#a5f3fc' },
-  { n: '35,7%',      label: 'participación en el PBI de Nación',                             color: '#fde68a' },
-  { n: '14 de 16',   label: 'sectores registraron alzas interanuales',                       color: '#93c5fd' },
+  { valor: '+4,2%', variacion: '+4,2%', polaridad: 'mayor-es-mejor', periodo: 'crecimiento real en 2025, segundo mejor de la serie 2004-2025' },
+  { valor: '$263.668 M', periodo: 'PBG-PBA a precios constantes de 2004' },
+  { valor: '35,7%',      periodo: 'participación en el PBI de Nación' },
+  { valor: '14 de 16',   periodo: 'sectores registraron alzas interanuales' },
 ]
 
 // ─── ANIMACIÓN ───────────────────────────────────────────────
@@ -208,18 +212,15 @@ function SH({ num, title }) {
   )
 }
 
-function MC({ label, value, unit, accent = false }) {
+function CifraCard(props) {
   return (
     <div style={{
       background: '#fff', borderRadius: 14,
       border: `1px solid ${C.rule}`,
-      borderLeft: `4px solid ${accent ? G[600] : G[400]}`,
       padding: '1.125rem 1.125rem 1rem',
       boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
     }}>
-      <div style={{ fontSize: '0.625rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>{label}</div>
-      <div style={{ fontSize: '1.875rem', fontWeight: 800, color: accent ? G[600] : C.ink, lineHeight: 1, marginBottom: '0.375rem' }}>{value}</div>
-      <div style={{ fontSize: '0.6875rem', color: '#94a3b8', lineHeight: 1.4 }}>{unit}</div>
+      <Cifra size="md" {...props} />
     </div>
   )
 }
@@ -300,7 +301,11 @@ function ChartSerie() {
     labels: SERIE_VARIACION.map(d => d.year),
     datasets: [{
       data: SERIE_VARIACION.map(d => d.value),
-      backgroundColor: SERIE_VARIACION.map(d => d.value >= 0 ? G[500] : '#94a3b8'),
+      /* Valoración por polaridad × signo (canvas: se usan los hex equivalentes
+         de los tokens de valoración, no un verde/rojo elegido a mano). */
+      backgroundColor: SERIE_VARIACION.map(d =>
+        VALORACION_HEX[getTonoVariacion({ variacion: d.value, polaridad: 'mayor-es-mejor' })].base
+      ),
       borderRadius: 4, barPercentage: 0.55,
     }],
   }
@@ -308,7 +313,7 @@ function ChartSerie() {
     <ChartCard
       title="Variación interanual del PBG-PBA a precios constantes de 2004"
       fuente="Dirección Provincial de Estadística. (*) Provisorio. (**) Preliminar."
-      legend={[{ label: 'Años de crecimiento', color: G[500] }, { label: 'Años de caída', color: '#94a3b8' }]}
+      legend={[{ label: 'Años de crecimiento', color: VALORACION_HEX.better.base }, { label: 'Años de caída', color: VALORACION_HEX.worse.base }]}
       height={240}
     >
       <Bar
@@ -359,7 +364,7 @@ function ChartSectores() {
     labels: SECTORES.map(d => d.label),
     datasets: [{
       data: SECTORES.map(d => d.inc),
-      backgroundColor: [G[700], G[600], G[500], G[400], G[300], G[200]],
+      backgroundColor: DATA[1],
       borderRadius: 4, barPercentage: 0.65,
     }],
   }
@@ -394,7 +399,7 @@ function ChartNacion() {
     labels: NACION.map(d => d.label),
     datasets: [{
       data: NACION.map(d => d.value),
-      backgroundColor: [G[600], G[500], G[300]],
+      backgroundColor: DATA[1],
       borderRadius: 4, barPercentage: 0.6,
     }],
   }
@@ -465,8 +470,7 @@ function Hero() {
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 16 }}
               className="p-5"
             >
-              <div className="font-display text-4xl font-bold mb-1" style={{ color: s.color }}>{s.n}</div>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', lineHeight: 1.45 }}>{s.label}</p>
+              <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
             </m.div>
           ))}
         </m.div>
@@ -543,10 +547,10 @@ export default function InformePBGPBA() {
             el producto provincial alcanzó $288.853.456 millones, con un alza interanual de 44,0%.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-            <MC label="Crecimiento real 2025" value="+4,2%" unit="a precios constantes de 2004" accent />
-            <MC label="Suba a precios corrientes" value="+44,0%" unit="vs. +45,2% de Nación" />
-            <MC label="Inflación implícita (IPI-PBA)" value="+38,3%" unit="variación de precios 2025" />
-            <MC label="Crecimiento real de Nación" value="+4,4%" unit="PBI, a precios constantes" />
+            <CifraCard label="Crecimiento real 2025" valor="+4,2%" variacion="+4,2%" polaridad="mayor-es-mejor" periodo="a precios constantes de 2004" />
+            <CifraCard label="Suba a precios corrientes" valor="+44,0%" variacion="+44,0%" polaridad="neutro" periodo="vs. +45,2% de Nación" />
+            <CifraCard label="Inflación implícita (IPI-PBA)" valor="+38,3%" variacion="+38,3%" polaridad="neutro" periodo="variación de precios 2025" />
+            <CifraCard label="Crecimiento real de Nación" valor="+4,4%" variacion="+4,4%" polaridad="mayor-es-mejor" periodo="PBI, a precios constantes" />
           </div>
           <DownloadableViz title="Variación interanual del PBG-PBA a precios constantes" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA">
             <ChartSerie />
@@ -571,9 +575,9 @@ export default function InformePBGPBA() {
               del producto provincial.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-              <MC label="Productores de Servicios" value="+3,4%" unit="1,60 p.p. de incidencia · 47,0% del PBG" accent />
-              <MC label="Productores de Bienes" value="+3,2%" unit="1,13 p.p. de incidencia · 34,5% del PBG" />
-              <MC label="IVA y otros impuestos" value="+8,1%" unit="1,45 p.p. de incidencia · 18,5% del PBG" />
+              <CifraCard label="Productores de Servicios" valor="+3,4%" variacion="+3,4%" polaridad="mayor-es-mejor" periodo="1,60 p.p. de incidencia · 47,0% del PBG" />
+              <CifraCard label="Productores de Bienes" valor="+3,2%" variacion="+3,2%" polaridad="mayor-es-mejor" periodo="1,13 p.p. de incidencia · 34,5% del PBG" />
+              <CifraCard label="IVA y otros impuestos" valor="+8,1%" variacion="+8,1%" polaridad="neutro" periodo="1,45 p.p. de incidencia · 18,5% del PBG" />
             </div>
             <DownloadableViz title="Composición del PBG-PBA 2025 por grandes componentes" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA">
               <ChartComposicion />
@@ -594,9 +598,9 @@ export default function InformePBGPBA() {
             peso relativo en la estructura productiva.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <MC label="Industria" value="0,59 p.p." unit="+2,8% i.a. · 20,8% del PBG" accent />
-            <MC label="Comercio" value="0,45 p.p." unit="+3,5% i.a. · 12,7% del PBG" />
-            <MC label="Intermediación financiera" value="+24,9%" unit="mayor suba interanual desde 2004" />
+            <CifraCard label="Industria" valor="0,59" unidad="p.p." variacion="+2,8% i.a." polaridad="mayor-es-mejor" periodo="20,8% del PBG" />
+            <CifraCard label="Comercio" valor="0,45" unidad="p.p." variacion="+3,5% i.a." polaridad="mayor-es-mejor" periodo="12,7% del PBG" />
+            <CifraCard label="Intermediación financiera" valor="+24,9%" variacion="+24,9%" polaridad="mayor-es-mejor" periodo="mayor suba interanual desde 2004" />
           </div>
           <DownloadableViz title="Incidencia de cada sector en el crecimiento del PBG-PBA 2025" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA">
             <ChartSectores />
@@ -614,9 +618,19 @@ export default function InformePBGPBA() {
                 {SECTORES.map((s, i, arr) => (
                   <tr key={i} style={{ borderBottom: i < arr.length - 1 ? `0.5px solid #f1f5f9` : 'none' }}>
                     <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.ink, fontWeight: 600 }}>{s.label}</td>
-                    <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.inkMid }}>{s.var}</td>
+                    <td
+                      className="tabular-nums"
+                      style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', fontWeight: 600, color: getColorVariacion({ variacion: s.var, polaridad: s.polaridad, texto: true }) }}
+                    >
+                      {s.var}
+                    </td>
                     <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.inkMid }}>{s.part}</td>
-                    <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: G[600], fontWeight: 600 }}>{s.inc.toLocaleString('es-AR', { minimumFractionDigits: 2 })}</td>
+                    <td
+                      className="tabular-nums"
+                      style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', fontWeight: 600, color: getColorVariacion({ variacion: s.inc, polaridad: s.polaridad, texto: true }) }}
+                    >
+                      {s.inc.toLocaleString('es-AR', { minimumFractionDigits: 2 })}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -637,9 +651,9 @@ export default function InformePBGPBA() {
               de la Provincia en la producción industrial y agropecuaria del país.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-              <MC label="PBG-PBA / PBI Nación" value="35,7%" unit="en línea con el promedio 2004-2024" accent />
-              <MC label="VAB de bienes" value="40,3%" unit="del total nacional de bienes" />
-              <MC label="VAB de servicios" value="32,4%" unit="del total nacional de servicios" />
+              <CifraCard label="PBG-PBA / PBI Nación" valor="35,7%" periodo="en línea con el promedio 2004-2024" />
+              <CifraCard label="VAB de bienes" valor="40,3%" periodo="del total nacional de bienes" />
+              <CifraCard label="VAB de servicios" valor="32,4%" periodo="del total nacional de servicios" />
             </div>
             <DownloadableViz title="Participación bonaerense en el total nacional, 2025" fuente="Dirección Provincial de Estadística · INDEC">
               <ChartNacion />

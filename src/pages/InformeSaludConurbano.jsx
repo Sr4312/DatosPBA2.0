@@ -14,6 +14,8 @@ import {
   Legend,
 } from 'chart.js'
 import { Doughnut, Bar } from 'react-chartjs-2'
+import Cifra from '@/components/shared/Cifra'
+import { DATA, DATA_BORDES, VALORACION_HEX, colorEscalaValoracion } from '@/lib/variacion'
 
 ChartJS.register(
   ArcElement, DoughnutController, CategoryScale, LinearScale, BarElement, Tooltip, Legend
@@ -50,6 +52,12 @@ const D = {
   rose:      '#9f1239',
   neutral:   '#475569',
 }
+
+// Tinte suave derivado de la escala de valoración compartida (fondos de
+// cards y tracks). Nunca se elige un verde/rojo a mano: siempre sale de
+// colorEscalaValoracion (1 = carga más baja / mejor, 0 = carga más alta / peor).
+const tinteEscala = (t, alpha = 0.12) =>
+  colorEscalaValoracion(t).replace('rgb(', 'rgba(').replace(')', `,${alpha})`)
 
 // ───── DATA ────────────────────────────────────────────────────
 // Source: PEC - Programa de Estudios del Conurbano (CSV crudo)
@@ -110,12 +118,13 @@ const WORST = SORTED.slice(-5).reverse()
 const SORTED_PRE = [...MUNIS].sort((a, b) => a.carga - b.carga)
 const BRECHA = SORTED_PRE[SORTED_PRE.length - 1].carga / SORTED_PRE[0].carga
 
-// HERO stats - se calculan dinámicamente desde los datos
+// HERO stats - se calculan dinámicamente desde los datos.
+// Son niveles sin variación: el contexto va en `periodo` y el color lo pone <Cifra>.
 const HERO_STATS = [
-  { n: '4,1 M',                                          label: 'personas sin cobertura formal en el conurbano',           color: '#fda4af' },
-  { n: TOT.est.toLocaleString('es-AR'),                  label: 'establecimientos públicos en los 24 partidos',           color: '#93c5fd' },
-  { n: Math.round(AVG_CARGA).toLocaleString('es-AR'),    label: 'personas por establecimiento - promedio conurbano',      color: '#fcd34d' },
-  { n: BRECHA.toFixed(1).replace('.', ',') + '×',        label: 'brecha entre el mejor y el peor partido',                color: '#6ee7b7' },
+  { valor: '4,1 M',                                       periodo: 'personas sin cobertura formal en el conurbano' },
+  { valor: TOT.est.toLocaleString('es-AR'),               periodo: 'establecimientos públicos en los 24 partidos' },
+  { valor: Math.round(AVG_CARGA).toLocaleString('es-AR'), periodo: 'personas por establecimiento - promedio conurbano' },
+  { valor: BRECHA.toFixed(1).replace('.', ',') + '×',     periodo: 'brecha entre el mejor y el peor partido' },
 ]
 
 // ───── animation ───────────────────────────────────────────────
@@ -315,8 +324,7 @@ function Hero() {
               }}
               className="p-5"
             >
-              <div className="font-display text-4xl font-bold mb-1" style={{ color: s.color }}>{s.n}</div>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', lineHeight: 1.45 }}>{s.label}</p>
+              <Cifra dark size="xl" valor={s.valor} periodo={s.periodo} />
             </m.div>
           ))}
         </m.div>
@@ -356,7 +364,8 @@ function CoberturaDonut() {
     labels: ['Obra social / Prepaga / PAMI', 'Sin cobertura formal', 'Programas estatales'],
     datasets: [{
       data: [TOT.obraSocial, TOT.sinCob, TOT.planEstatal],
-      backgroundColor: [D.info, D.bad, D.warn],
+      // Composición categórica: paleta DATA (sin cobertura = serie principal DATA[1])
+      backgroundColor: [DATA[2], DATA[1], DATA[3]],
       borderColor: '#fff',
       borderWidth: 3,
     }],
@@ -379,7 +388,7 @@ function CoberturaDonut() {
       <m.div {...fadeUp(0.05)} className="relative mx-auto" style={{ width: 250, height: 250 }}>
         <Doughnut data={data} options={opts} />
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          <span className="font-display text-4xl font-bold" style={{ color: D.bad }}>{PCT_DEP_PUBLICO.toFixed(1).replace('.', ',')}%</span>
+          <span className="font-display text-4xl font-bold" style={{ color: DATA[1] }}>{PCT_DEP_PUBLICO.toFixed(1).replace('.', ',')}%</span>
           <span style={{ fontSize: '0.72rem', color: C.inkMid, marginTop: 4, textAlign: 'center' }}>
             sin cobertura<br/>formal de salud
           </span>
@@ -388,14 +397,14 @@ function CoberturaDonut() {
 
       <m.div {...fadeUp(0.15)} className="space-y-4">
         {[
-          { color: D.info, label: 'Obra social, prepaga o PAMI', val: TOT.obraSocial, pct: obraSocialPct, desc: 'Acceso vía sector privado o PAMI. No depende de la red pública para la atención corriente.' },
-          { color: D.bad,  label: 'Sin cobertura formal',        val: TOT.sinCob,     pct: sinCobPct,    desc: 'No declara obra social, prepaga ni programa. Toda su atención sale de hospitales y centros públicos municipales / provinciales.' },
-          { color: D.warn, label: 'Programas o planes estatales',val: TOT.planEstatal,pct: planEstatalPct,desc: 'PROFE, Incluir Salud, Cobertura Universal de Salud y similares. Operan sobre la red pública.' },
+          { color: DATA[2], colorTexto: DATA[2],        label: 'Obra social, prepaga o PAMI', val: TOT.obraSocial, pct: obraSocialPct, desc: 'Acceso vía sector privado o PAMI. No depende de la red pública para la atención corriente.' },
+          { color: DATA[1], colorTexto: DATA[1],        label: 'Sin cobertura formal',        val: TOT.sinCob,     pct: sinCobPct,    desc: 'No declara obra social, prepaga ni programa. Toda su atención sale de hospitales y centros públicos municipales / provinciales.' },
+          { color: DATA[3], colorTexto: DATA_BORDES[3], label: 'Programas o planes estatales',val: TOT.planEstatal,pct: planEstatalPct,desc: 'PROFE, Incluir Salud, Cobertura Universal de Salud y similares. Operan sobre la red pública.' },
         ].map((row, i) => (
           <div key={i} style={{ borderLeft: `3px solid ${row.color}`, paddingLeft: 14, paddingTop: 4, paddingBottom: 4 }}>
             <div className="flex items-baseline justify-between gap-3">
               <span style={{ color: C.ink, fontWeight: 600, fontSize: '0.92rem' }}>{row.label}</span>
-              <span className="font-display" style={{ color: row.color, fontSize: '1.5rem', fontWeight: 700 }}>{row.pct.toFixed(1)}%</span>
+              <span className="font-display" style={{ color: row.colorTexto, fontSize: '1.5rem', fontWeight: 700 }}>{row.pct.toFixed(1)}%</span>
             </div>
             <p style={{ color: C.inkMid, fontSize: '0.78rem', marginTop: 4, lineHeight: 1.5 }}>{row.desc}</p>
             <p style={{ color: C.inkLight, fontSize: '0.7rem', marginTop: 2 }}>{fmt(row.val)} personas</p>
@@ -419,14 +428,15 @@ function BarometroCarga() {
   const xScale = v => padL + (v / maxCarga) * innerW
   const rowH = innerH / SORTED.length
 
-  // Colors based on deviation
+  // Colors based on deviation - escala de valoración compartida
+  // (t = 1 carga más baja / mejor, t = 0 carga más alta / peor)
   const colorFor = c => {
     const dev = (c - AVG_CARGA) / AVG_CARGA
-    if (dev <= -0.4) return D.good
-    if (dev <= -0.15) return D.goodSoft
-    if (dev <= 0.15) return D.neutral
-    if (dev <= 0.40) return D.warn
-    return D.bad
+    if (dev <= -0.4) return colorEscalaValoracion(1)
+    if (dev <= -0.15) return colorEscalaValoracion(0.75)
+    if (dev <= 0.15) return colorEscalaValoracion(0.5)
+    if (dev <= 0.40) return colorEscalaValoracion(0.25)
+    return colorEscalaValoracion(0)
   }
 
   const ticks = [0, 2000, 4000, 6000, 8000, 10000]
@@ -448,20 +458,20 @@ function BarometroCarga() {
 
         {/* zone bands */}
         <rect x={padL} y={padT} width={xScale(AVG_CARGA) - padL} height={innerH}
-              fill={D.goodBg} opacity={0.35} />
+              fill={colorEscalaValoracion(1)} opacity={0.08} />
         <rect x={xScale(AVG_CARGA)} y={padT} width={padL + innerW - xScale(AVG_CARGA)} height={innerH}
-              fill={D.badBg} opacity={0.30} />
+              fill={colorEscalaValoracion(0)} opacity={0.07} />
 
         {/* avg reference */}
         <line x1={xScale(AVG_CARGA)} y1={padT - 6} x2={xScale(AVG_CARGA)} y2={H - padB + 4}
               stroke={D.warn} strokeWidth={2} strokeDasharray="5 4" />
 
         {/* HEADER ROW: zone labels + promedio badge - alineados arriba del rect */}
-        <text x={padL + 10} y={padT - 16} fontSize="9.5" fill={D.good}
+        <text x={padL + 10} y={padT - 16} fontSize="9.5" fill={VALORACION_HEX.better.text}
               fontFamily="Poppins, sans-serif" fontWeight="700" letterSpacing="0.8">
           GESTIONA MEJOR
         </text>
-        <text x={padL + 10} y={padT - 4} fontSize="8.5" fill={D.good}
+        <text x={padL + 10} y={padT - 4} fontSize="8.5" fill={VALORACION_HEX.better.text}
               fontFamily="Poppins, sans-serif" opacity={0.75}>
           menos carga por establecimiento
         </text>
@@ -473,11 +483,11 @@ function BarometroCarga() {
           PROMEDIO {fmt(AVG_CARGA)}
         </text>
 
-        <text x={padL + innerW - 10} y={padT - 16} fontSize="9.5" fill={D.bad}
+        <text x={padL + innerW - 10} y={padT - 16} fontSize="9.5" fill={VALORACION_HEX.worse.text}
               fontFamily="Poppins, sans-serif" fontWeight="700" letterSpacing="0.8" textAnchor="end">
           GESTIONA PEOR
         </text>
-        <text x={padL + innerW - 10} y={padT - 4} fontSize="8.5" fill={D.bad}
+        <text x={padL + innerW - 10} y={padT - 4} fontSize="8.5" fill={VALORACION_HEX.worse.text}
               fontFamily="Poppins, sans-serif" opacity={0.75} textAnchor="end">
           más carga por establecimiento
         </text>
@@ -521,11 +531,11 @@ function BarometroCarga() {
       </svg>
 
       <div className="flex flex-wrap gap-4 mt-2 px-2 text-[11px]" style={{ color: C.inkMid }}>
-        <div className="flex items-center gap-1.5"><span style={{ width: 10, height: 10, borderRadius: '50%', background: D.good, display: 'inline-block' }} /> Carga muy baja (&lt; 60% del promedio)</div>
-        <div className="flex items-center gap-1.5"><span style={{ width: 10, height: 10, borderRadius: '50%', background: D.goodSoft, display: 'inline-block' }} /> Carga baja</div>
-        <div className="flex items-center gap-1.5"><span style={{ width: 10, height: 10, borderRadius: '50%', background: D.neutral, display: 'inline-block' }} /> Cerca del promedio</div>
-        <div className="flex items-center gap-1.5"><span style={{ width: 10, height: 10, borderRadius: '50%', background: D.warn, display: 'inline-block' }} /> Carga alta</div>
-        <div className="flex items-center gap-1.5"><span style={{ width: 10, height: 10, borderRadius: '50%', background: D.bad, display: 'inline-block' }} /> Carga muy alta (&gt; 40% sobre promedio)</div>
+        <div className="flex items-center gap-1.5"><span style={{ width: 10, height: 10, borderRadius: '50%', background: colorEscalaValoracion(1), display: 'inline-block' }} /> Carga muy baja (&lt; 60% del promedio)</div>
+        <div className="flex items-center gap-1.5"><span style={{ width: 10, height: 10, borderRadius: '50%', background: colorEscalaValoracion(0.75), display: 'inline-block' }} /> Carga baja</div>
+        <div className="flex items-center gap-1.5"><span style={{ width: 10, height: 10, borderRadius: '50%', background: colorEscalaValoracion(0.5), display: 'inline-block' }} /> Cerca del promedio</div>
+        <div className="flex items-center gap-1.5"><span style={{ width: 10, height: 10, borderRadius: '50%', background: colorEscalaValoracion(0.25), display: 'inline-block' }} /> Carga alta</div>
+        <div className="flex items-center gap-1.5"><span style={{ width: 10, height: 10, borderRadius: '50%', background: colorEscalaValoracion(0), display: 'inline-block' }} /> Carga muy alta (&gt; 40% sobre promedio)</div>
       </div>
     </div>
   )
@@ -571,12 +581,12 @@ function CuadranteGestion() {
         {/* zona BIEN gestionado (arriba de la diagonal) */}
         <polygon
           points={`${padL},${padT} ${diagX2},${diagY2} ${padL},${diagY2}`}
-          fill={D.goodBg} opacity={0.45}
+          fill={colorEscalaValoracion(1)} opacity={0.08}
         />
         {/* zona MAL gestionado (debajo de la diagonal) */}
         <polygon
           points={`${diagX1},${diagY1} ${padL + innerW},${padT + innerH} ${diagX2},${diagY2} ${padL + innerW},${diagY2}`}
-          fill={D.badBg} opacity={0.40}
+          fill={colorEscalaValoracion(0)} opacity={0.07}
         />
 
         {/* grid */}
@@ -611,19 +621,19 @@ function CuadranteGestion() {
 
         {/* zone labels - separados de la diagonal para evitar choques */}
         <text x={padL + innerW * 0.18} y={padT + 22} fontSize="9.5" fontWeight="700"
-              fill={D.good} letterSpacing="0.6" fontFamily="Poppins, sans-serif" textAnchor="middle">
+              fill={VALORACION_HEX.better.text} letterSpacing="0.6" fontFamily="Poppins, sans-serif" textAnchor="middle">
           ✓ MEJOR GESTIÓN
         </text>
         <text x={padL + innerW * 0.18} y={padT + 36} fontSize="8.5"
-              fill={D.good} fontFamily="Poppins, sans-serif" textAnchor="middle" opacity="0.7">
+              fill={VALORACION_HEX.better.text} fontFamily="Poppins, sans-serif" textAnchor="middle" opacity="0.7">
           más oferta para la demanda
         </text>
         <text x={padL + innerW - 14} y={padT + innerH - 24} fontSize="9.5" fontWeight="700"
-              fill={D.bad} letterSpacing="0.6" fontFamily="Poppins, sans-serif" textAnchor="end">
+              fill={VALORACION_HEX.worse.text} letterSpacing="0.6" fontFamily="Poppins, sans-serif" textAnchor="end">
           ✗ PEOR GESTIÓN
         </text>
         <text x={padL + innerW - 14} y={padT + innerH - 10} fontSize="8.5"
-              fill={D.bad} fontFamily="Poppins, sans-serif" textAnchor="end" opacity="0.7">
+              fill={VALORACION_HEX.worse.text} fontFamily="Poppins, sans-serif" textAnchor="end" opacity="0.7">
           demanda no atendida
         </text>
 
@@ -657,7 +667,7 @@ function CuadranteGestion() {
           const cy = yScale(mu.est)
           const r = radius(mu.pop)
           const isWorse = mu.carga > AVG_CARGA
-          const fill = isWorse ? D.bad : D.good
+          const fill = isWorse ? colorEscalaValoracion(0) : colorEscalaValoracion(1)
           const isHov = hovered === mu.name
           return (
             <g key={mu.name}
@@ -708,7 +718,7 @@ function CuadranteGestion() {
                 {fmt(mu.depPublico)} dependientes · {mu.est} establec.
               </text>
               <text x={tx + 10} y={ty + 50} fontSize="10" fontWeight="600"
-                    fill={mu.carga > AVG_CARGA ? D.badSoft : D.goodSoft}
+                    fill={mu.carga > AVG_CARGA ? VALORACION_HEX.worse.dark : VALORACION_HEX.better.dark}
                     fontFamily="Poppins, sans-serif">
                 {fmt(mu.carga)} personas / establecimiento
               </text>
@@ -733,8 +743,8 @@ function BalanzaExtrema() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       {[
-        { side: best, color: D.good, bg: D.goodBg, label: 'MEJOR GESTIÓN', position: 'mejor' },
-        { side: worst, color: D.bad, bg: D.badBg, label: 'PEOR GESTIÓN',   position: 'peor' },
+        { side: best, color: colorEscalaValoracion(1), bg: tinteEscala(1), ring: tinteEscala(1, 0.2), label: 'MEJOR GESTIÓN', position: 'mejor' },
+        { side: worst, color: colorEscalaValoracion(0), bg: tinteEscala(0), ring: tinteEscala(0, 0.2), label: 'PEOR GESTIÓN',   position: 'peor' },
       ].map((b, i) => (
         <m.div
           key={b.side.name}
@@ -783,7 +793,7 @@ function BalanzaExtrema() {
               }}>
                 <div style={{
                   width: 14, height: 14, borderRadius: 4, background: b.color,
-                  boxShadow: `0 0 0 2px ${b.color}33`,
+                  boxShadow: `0 0 0 2px ${b.ring}`,
                   flexShrink: 0,
                 }} title="1 establecimiento" />
                 {Array.from({ length: Math.min(Math.round(b.side.carga / 200), 60) }).map((_, j) => (
@@ -902,16 +912,16 @@ function RankingPodios() {
         title="Mejor gestión sanitaria"
         label="Top 5 - gestionan bien"
         list={BEST}
-        color={D.good}
-        bg={D.goodBg}
+        color={colorEscalaValoracion(1)}
+        bg={tinteEscala(1)}
         dir="asc"
       />
       <Card
         title="Peor gestión sanitaria"
         label="Top 5 - gestionan mal"
         list={WORST}
-        color={D.bad}
-        bg={D.badBg}
+        color={colorEscalaValoracion(0)}
+        bg={tinteEscala(0)}
         dir="desc"
       />
     </div>
@@ -926,7 +936,7 @@ function DependientesBar() {
     datasets: [{
       label: 'Personas sin cobertura formal de salud',
       data: sorted.map(m => m.depPublico),
-      backgroundColor: sorted.map(m => m.carga > AVG_CARGA ? D.bad : D.good),
+      backgroundColor: sorted.map(m => m.carga > AVG_CARGA ? colorEscalaValoracion(0) : colorEscalaValoracion(1)),
       borderRadius: 4,
       borderSkipped: false,
     }],
@@ -1026,7 +1036,7 @@ function TablaCompleta() {
                   <td style={{ padding: '11px 12px', fontWeight: 600, color: C.ink, fontSize: '0.85rem' }}>
                     <span style={{
                       display: 'inline-block', width: 6, height: 6, borderRadius: '50%',
-                      background: isWorse ? D.bad : D.good, marginRight: 8,
+                      background: isWorse ? colorEscalaValoracion(0) : colorEscalaValoracion(1), marginRight: 8,
                     }} />
                     {mu.name}
                   </td>
@@ -1034,7 +1044,7 @@ function TablaCompleta() {
                   <td style={{ padding: '11px 12px', textAlign: 'right', fontVariantNumeric: 'tabular-nums', color: C.inkMid, fontSize: '0.85rem' }}>{mu.est}</td>
                   <td style={{ padding: '11px 12px', textAlign: 'right', fontVariantNumeric: 'tabular-nums', color: C.inkMid, fontSize: '0.85rem' }}>{fmt(mu.depPublico)}</td>
                   <td style={{ padding: '11px 12px', textAlign: 'right', fontVariantNumeric: 'tabular-nums', color: C.inkMid, fontSize: '0.85rem' }}>{mu.pctDepPublico.toFixed(1)}%</td>
-                  <td style={{ padding: '11px 12px', textAlign: 'right', fontVariantNumeric: 'tabular-nums', color: isWorse ? D.bad : D.good, fontWeight: 700, fontSize: '0.9rem' }}>
+                  <td style={{ padding: '11px 12px', textAlign: 'right', fontVariantNumeric: 'tabular-nums', color: isWorse ? VALORACION_HEX.worse.text : VALORACION_HEX.better.text, fontWeight: 700, fontSize: '0.9rem' }}>
                     {fmt(mu.carga)}
                   </td>
                   <td style={{ padding: '11px 12px', textAlign: 'right', fontVariantNumeric: 'tabular-nums', color: C.inkMid, fontSize: '0.85rem' }}>{mu.estPer10k.toFixed(2)}</td>
@@ -1147,8 +1157,8 @@ export default function InformeSaludConurbano() {
           <p style={{ color: C.inkMid }} className="text-sm max-w-2xl">
             Cada partido es una burbuja: el eje horizontal mide habitantes sin cobertura formal y el vertical
             cantidad de establecimientos públicos. La diagonal naranja representa la proporción promedio
-            del conurbano. Las burbujas que están <strong style={{ color: D.good }}>arriba de la línea</strong> tienen
-            más oferta de la esperada para su demanda. Las que están <strong style={{ color: D.bad }}>debajo</strong> tienen menos.
+            del conurbano. Las burbujas que están <strong style={{ color: VALORACION_HEX.better.text }}>arriba de la línea</strong> tienen
+            más oferta de la esperada para su demanda. Las que están <strong style={{ color: VALORACION_HEX.worse.text }}>debajo</strong> tienen menos.
           </p>
         </m.div>
         <m.div {...fadeUp(0.1)}>
@@ -1169,7 +1179,7 @@ export default function InformeSaludConurbano() {
             <p style={{ color: C.inkMid }} className="text-sm max-w-2xl">
               Dos partidos vecinos, en la misma provincia, con la misma constitución y los mismos derechos
               sanitarios. Pero un establecimiento público en La Matanza atiende a{' '}
-              <strong style={{ color: D.bad }}>{BRECHA.toFixed(1).replace('.', ',')} veces más personas</strong> que uno en Vicente López.
+              <strong style={{ color: VALORACION_HEX.worse.text }}>{BRECHA.toFixed(1).replace('.', ',')} veces más personas</strong> que uno en Vicente López.
             </p>
           </m.div>
           <DownloadableViz title="Vicente López vs. La Matanza - los dos extremos de la gestión sanitaria">
@@ -1231,19 +1241,19 @@ export default function InformeSaludConurbano() {
               n: '01',
               title: 'La oferta pública no escala con la demanda',
               body: 'La Matanza concentra el 21% de la demanda pública del conurbano y solo el 8% de los establecimientos. La cantidad de centros de salud parece responder a la geografía histórica, no a la presión demográfica actual.',
-              color: D.bad,
+              color: DATA[1],
             },
             {
               n: '02',
               title: 'Distribución regresiva del sistema público',
               body: 'Los partidos con más cobertura privada (Vicente López, San Isidro, Avellaneda) son los que tienen mejor ratio público. Donde menos se necesita la red pública, mejor está dimensionada. Donde más se necesita, peor.',
-              color: D.warn,
+              color: DATA[2],
             },
             {
               n: '03',
               title: 'El sur del conurbano es la zona crítica',
               body: 'La Matanza, Merlo, Moreno, Almirante Brown y Florencio Varela - todos en el primer y segundo cordón sur/oeste - concentran los peores ratios. Son también los partidos con mayor crecimiento poblacional de las últimas décadas.',
-              color: D.info,
+              color: DATA[4],
             },
           ].map((h, i) => (
             <m.div
