@@ -19,7 +19,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           'router':        ['react-router-dom'],
-          'framer-motion': ['framer-motion'],
           'chart':         ['chart.js', 'react-chartjs-2'],
           'leaflet':       ['leaflet'],
         },

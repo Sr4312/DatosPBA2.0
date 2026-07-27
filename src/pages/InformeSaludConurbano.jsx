@@ -1,6 +1,5 @@
 import { useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ArrowLeft, ExternalLink, Download } from 'lucide-react'
 import html2canvas from 'html2canvas'
 import {
@@ -128,13 +127,6 @@ const HERO_STATS = [
 ]
 
 // ───── animation ───────────────────────────────────────────────
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
-})
-
 // ───── DOWNLOAD HELPER ─────────────────────────────────────────
 // Estilo idéntico a VizCard de DataPBA: título + fuente arriba, footer azul abajo.
 const DL_PADDING = 60
@@ -254,7 +246,7 @@ function SectionLabel({ children, dark = false, color }) {
   return (
     <p
       style={{ color: color || (dark ? 'rgba(255,255,255,0.5)' : C.accent) }}
-      className="text-xs font-semibold tracking-[0.18em] uppercase mb-3"
+      className={dark ? 'text-xs font-semibold tracking-[0.18em] uppercase mb-3' : 'text-sm font-semibold mb-3'}
     >
       {children}
     </p>
@@ -266,7 +258,7 @@ const fmt = n => Math.round(n).toLocaleString('es-AR')
 // ───────────────── HERO ──────────────────────────────────────
 function Hero() {
   return (
-    <div className="bg-pattern-dark" style={{ background: C.hero }}>
+    <div style={{ background: C.hero }}>
       <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
         <Link
           to="/informes"
@@ -276,12 +268,11 @@ function Hero() {
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
 
-        <m.div {...fadeUp(0)}>
+        <div>
           <SectionLabel dark>PEC · Programa de Estudios del Conurbano · Salud pública</SectionLabel>
-        </m.div>
+        </div>
 
-        <m.h1
-          {...fadeUp(0.05)}
+        <h1
           className="font-display"
           style={{
             fontSize: 'clamp(2rem, 4.6vw, 3.2rem)',
@@ -290,12 +281,11 @@ function Hero() {
           }}
         >
           La salud que se gestiona<br />
-          <span style={{ color: D.goodSoft }}>y la que se desborda:</span><br />
-          <span style={{ color: D.badSoft }}>1.088 establecimientos para 4,1 M de personas</span>
-        </m.h1>
+          <span>y la que se desborda:</span><br />
+          <span>1.088 establecimientos para 4,1 M de personas</span>
+        </h1>
 
-        <m.p
-          {...fadeUp(0.1)}
+        <p
           style={{
             color: 'rgba(255,255,255,0.60)', maxWidth: 720,
             lineHeight: 1.7, fontSize: '1.05rem',
@@ -307,16 +297,14 @@ function Hero() {
           prepaga ni PAMI: dependen exclusivamente del sistema público de salud. Para atenderlas existen{' '}
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>1.088 establecimientos públicos</strong>. Pero la
           distribución no responde a la demanda: hay partidos con un establecimiento cada 1.200 personas y otros con uno cada 9.400.
-        </m.p>
+        </p>
 
-        <m.div
-          {...fadeUp(0.15)}
+        <div
           className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12"
         >
           {HERO_STATS.map((s, i) => (
-            <m.div
+            <div
               key={i}
-              {...fadeUp(0.1 * i + 0.2)}
               style={{
                 background: 'rgba(255,255,255,0.06)',
                 border: '1px solid rgba(255,255,255,0.10)',
@@ -325,12 +313,11 @@ function Hero() {
               className="p-5"
             >
               <Cifra dark size="xl" valor={s.valor} periodo={s.periodo} />
-            </m.div>
+            </div>
           ))}
-        </m.div>
+        </div>
 
-        <m.div
-          {...fadeUp(0.3)}
+        <div
           style={{
             display: 'flex', gap: 32, marginTop: 28,
             paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)',
@@ -348,7 +335,7 @@ function Hero() {
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
-        </m.div>
+        </div>
       </div>
     </div>
   )
@@ -385,7 +372,7 @@ function CoberturaDonut() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-      <m.div {...fadeUp(0.05)} className="relative mx-auto" style={{ width: 250, height: 250 }}>
+      <div className="relative mx-auto" style={{ width: 250, height: 250 }}>
         <Doughnut data={data} options={opts} />
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
           <span className="font-display text-4xl font-bold" style={{ color: DATA[1] }}>{PCT_DEP_PUBLICO.toFixed(1).replace('.', ',')}%</span>
@@ -393,9 +380,9 @@ function CoberturaDonut() {
             sin cobertura<br/>formal de salud
           </span>
         </div>
-      </m.div>
+      </div>
 
-      <m.div {...fadeUp(0.15)} className="space-y-4">
+      <div className="space-y-4">
         {[
           { color: DATA[2], colorTexto: DATA[2],        label: 'Obra social, prepaga o PAMI', val: TOT.obraSocial, pct: obraSocialPct, desc: 'Acceso vía sector privado o PAMI. No depende de la red pública para la atención corriente.' },
           { color: DATA[1], colorTexto: DATA[1],        label: 'Sin cobertura formal',        val: TOT.sinCob,     pct: sinCobPct,    desc: 'No declara obra social, prepaga ni programa. Toda su atención sale de hospitales y centros públicos municipales / provinciales.' },
@@ -410,7 +397,7 @@ function CoberturaDonut() {
             <p style={{ color: C.inkLight, fontSize: '0.7rem', marginTop: 2 }}>{fmt(row.val)} personas</p>
           </div>
         ))}
-      </m.div>
+      </div>
     </div>
   )
 }
@@ -746,9 +733,8 @@ function BalanzaExtrema() {
         { side: best, color: colorEscalaValoracion(1), bg: tinteEscala(1), ring: tinteEscala(1, 0.2), label: 'MEJOR GESTIÓN', position: 'mejor' },
         { side: worst, color: colorEscalaValoracion(0), bg: tinteEscala(0), ring: tinteEscala(0, 0.2), label: 'PEOR GESTIÓN',   position: 'peor' },
       ].map((b, i) => (
-        <m.div
+        <div
           key={b.side.name}
-          {...fadeUp(0.08 * i)}
           style={{
             background: '#fff', border: `1px solid ${C.rule}`,
             borderRadius: 2, overflow: 'hidden',
@@ -821,7 +807,7 @@ function BalanzaExtrema() {
               <Row label="Establ. cada 10 mil hab." val={b.side.estPer10k.toFixed(2)} />
             </div>
           </div>
-        </m.div>
+        </div>
       ))}
     </div>
   )
@@ -839,8 +825,7 @@ function Row({ label, val }) {
 // ───────────────── RANKING TOP 5 / BOTTOM 5 ─────────────────
 function RankingPodios() {
   const Card = ({ title, list, color, bg, dir, label }) => (
-    <m.div
-      {...fadeUp()}
+    <div
       style={{
         background: '#fff', border: `1px solid ${C.rule}`,
         borderRadius: 2, overflow: 'hidden',
@@ -864,12 +849,8 @@ function RankingPodios() {
             const min = dir === 'asc' ? list[0].carga : list[list.length - 1].carga
             const pct = ((mu.carga - min) / (max - min || 1)) * 80 + 20
             return (
-              <m.div
+              <div
                 key={mu.name}
-                initial={{ opacity: 0, x: -8 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.06 * i }}
                 style={{ borderBottom: i < list.length - 1 ? `1px solid ${C.rule}` : 'none', paddingBottom: 12 }}
               >
                 <div className="flex items-baseline justify-between gap-2 mb-1.5">
@@ -886,11 +867,8 @@ function RankingPodios() {
                   </span>
                 </div>
                 <div style={{ background: bg, height: 6, borderRadius: 6, overflow: 'hidden' }}>
-                  <m.div
-                    initial={{ width: 0 }}
+                  <div
                     whileInView={{ width: `${pct}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.7, delay: 0.06 * i + 0.1 }}
                     style={{ height: '100%', background: color, borderRadius: 6 }}
                   />
                 </div>
@@ -898,12 +876,12 @@ function RankingPodios() {
                   <span>{fmt(mu.depPublico)} dependientes</span>
                   <span>{mu.est} establ.</span>
                 </div>
-              </m.div>
+              </div>
             )
           })}
         </div>
       </div>
-    </m.div>
+    </div>
   )
 
   return (
@@ -1084,7 +1062,7 @@ export default function InformeSaludConurbano() {
       {/* SECCIÓN 1 - COBERTURA */}
       <div style={{ background: C.card, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-10">
+          <div className="mb-10">
             <SectionLabel>Sección 1 · Quién depende del sistema público</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Casi 4 de cada 10 bonaerenses depende del sistema público
@@ -1094,7 +1072,7 @@ export default function InformeSaludConurbano() {
               de los hospitales y centros de salud públicos. Un 2,6% adicional accede vía programas
               estatales (Incluir Salud, CUS, PROFE) que también operan sobre la red pública.
             </p>
-          </m.div>
+          </div>
           <DownloadableViz title="Cobertura de salud - Conurbano bonaerense">
             <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
               <CoberturaDonut />
@@ -1105,7 +1083,7 @@ export default function InformeSaludConurbano() {
 
       {/* SECCIÓN 2 - DEPENDIENTES POR PARTIDO */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp(0)} className="mb-8">
+        <div className="mb-8">
           <SectionLabel>Sección 2 · Demanda territorial</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             La demanda no se reparte por igual
@@ -1115,20 +1093,20 @@ export default function InformeSaludConurbano() {
             exclusivamente de la red pública. La Matanza concentra por sí sola el 21% de la demanda
             del conurbano: más de 846.000 personas.
           </p>
-        </m.div>
-        <m.div {...fadeUp(0.1)}>
+        </div>
+        <div>
           <DownloadableViz title="Habitantes dependientes del sistema público - por partido del conurbano">
             <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
               <DependientesBar />
             </div>
           </DownloadableViz>
-        </m.div>
+        </div>
       </div>
 
       {/* SECCIÓN 3 - BARÓMETRO DE CARGA */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-6xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-8 max-w-5xl mx-auto">
+          <div className="mb-8 max-w-5xl mx-auto">
             <SectionLabel>Sección 3 · El indicador clave</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Barómetro de carga sanitaria
@@ -1138,18 +1116,18 @@ export default function InformeSaludConurbano() {
               Es la métrica que combina demanda y oferta. Cuanto más alto el número,
               más estirado está el sistema. La línea naranja marca el promedio del conurbano ({fmt(AVG_CARGA)}).
             </p>
-          </m.div>
-          <m.div {...fadeUp(0.1)}>
+          </div>
+          <div>
             <DownloadableViz title="Barómetro de carga sanitaria - personas dependientes del sistema público por establecimiento">
               <BarometroCarga />
             </DownloadableViz>
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* SECCIÓN 4 - CUADRANTE DE GESTIÓN */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp(0)} className="mb-8">
+        <div className="mb-8">
           <SectionLabel>Sección 4 · Mapa de gestión</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             Cuántos establecimientos para cuánta demanda
@@ -1160,18 +1138,18 @@ export default function InformeSaludConurbano() {
             del conurbano. Las burbujas que están <strong style={{ color: VALORACION_HEX.better.text }}>arriba de la línea</strong> tienen
             más oferta de la esperada para su demanda. Las que están <strong style={{ color: VALORACION_HEX.worse.text }}>debajo</strong> tienen menos.
           </p>
-        </m.div>
-        <m.div {...fadeUp(0.1)}>
+        </div>
+        <div>
           <DownloadableViz title="Cuadrante de gestión sanitaria - establecimientos vs. demanda por partido">
             <CuadranteGestion />
           </DownloadableViz>
-        </m.div>
+        </div>
       </div>
 
       {/* SECCIÓN 5 - BALANZA EXTREMA */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <SectionLabel>Sección 5 · Los dos extremos</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Vicente López vs. La Matanza
@@ -1181,7 +1159,7 @@ export default function InformeSaludConurbano() {
               sanitarios. Pero un establecimiento público en La Matanza atiende a{' '}
               <strong style={{ color: VALORACION_HEX.worse.text }}>{BRECHA.toFixed(1).replace('.', ',')} veces más personas</strong> que uno en Vicente López.
             </p>
-          </m.div>
+          </div>
           <DownloadableViz title="Vicente López vs. La Matanza - los dos extremos de la gestión sanitaria">
             <BalanzaExtrema />
           </DownloadableViz>
@@ -1190,7 +1168,7 @@ export default function InformeSaludConurbano() {
 
       {/* SECCIÓN 6 - RANKINGS */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp(0)} className="mb-8">
+        <div className="mb-8">
           <SectionLabel>Sección 6 · Top 5 mejor y peor gestionados</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             Quiénes lideran y quiénes se quedaron atrás
@@ -1199,7 +1177,7 @@ export default function InformeSaludConurbano() {
             Ranking ordenado por carga sanitaria (personas dependientes del sistema público por establecimiento).
             Cifras absolutas: cuanto más bajo, mejor. Cuanto más alto, peor.
           </p>
-        </m.div>
+        </div>
         <DownloadableViz title="Top 5 mejor y peor gestionados - carga sanitaria por establecimiento">
           <RankingPodios />
         </DownloadableViz>
@@ -1208,7 +1186,7 @@ export default function InformeSaludConurbano() {
       {/* SECCIÓN 7 - TABLA */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <SectionLabel>Sección 7 · Tabla detallada</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Los 24 partidos del conurbano
@@ -1217,23 +1195,23 @@ export default function InformeSaludConurbano() {
               Hacé clic en cualquier columna para reordenar. La columna <strong>Carga × Est.</strong> es el indicador
               clave de gestión: personas dependientes del sistema público por cada establecimiento de salud.
             </p>
-          </m.div>
-          <m.div {...fadeUp(0.1)}>
+          </div>
+          <div>
             <DownloadableViz title="Salud pública en el conurbano - los 24 partidos del GBA">
               <TablaCompleta />
             </DownloadableViz>
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* SECCIÓN 8 - HIPÓTESIS Y LECTURA */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp(0)} className="mb-8">
+        <div className="mb-8">
           <SectionLabel>Sección 8 · Hipótesis y lectura</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             Tres patrones que explican la brecha
           </h2>
-        </m.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
@@ -1256,9 +1234,8 @@ export default function InformeSaludConurbano() {
               color: DATA[4],
             },
           ].map((h, i) => (
-            <m.div
+            <div
               key={h.n}
-              {...fadeUp(0.08 * i)}
               style={{
                 background: '#fff', border: `1px solid ${C.rule}`,
                 borderRadius: 2, padding: '24px 24px 22px',
@@ -1272,37 +1249,23 @@ export default function InformeSaludConurbano() {
                 {h.title}
               </h3>
               <p style={{ fontSize: '0.85rem', color: C.inkMid, lineHeight: 1.55 }}>{h.body}</p>
-            </m.div>
+            </div>
           ))}
         </div>
       </div>
 
       {/* CONCLUSIÓN */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div
-          {...fadeUp(0)}
-          className="bg-pattern-dark"
+        <div
+         
           style={{
             background: C.hero, borderRadius: 2,
             padding: '44px 48px', position: 'relative', overflow: 'hidden',
           }}
         >
-          <div style={{
-            position: 'absolute', right: -80, top: -80,
-            width: 280, height: 280, borderRadius: '50%',
-            border: '40px solid rgba(255,255,255,0.04)',
-          }} />
-          <div style={{
-            position: 'absolute', right: 60, bottom: -100,
-            width: 180, height: 180, borderRadius: '50%',
-            border: '30px solid rgba(255,255,255,0.03)',
-          }} />
 
           <div className="relative z-10">
-            <p style={{
-              color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem',
-              textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16,
-            }}>
+            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
               La conclusión
             </p>
             <p style={{
@@ -1310,11 +1273,11 @@ export default function InformeSaludConurbano() {
               lineHeight: 1.6, fontWeight: 500, maxWidth: 800,
             }}>
               El conurbano bonaerense no tiene un problema de cobertura: tiene un problema de{' '}
-              <span style={{ color: D.goodSoft, fontWeight: 700 }}>distribución</span>.
+              <span style={{ fontWeight: 700 }}>distribución</span>.
               Los <strong style={{ color: '#fff' }}>1.088 establecimientos públicos</strong> existen, pero su asignación territorial
               está descoordinada con la demanda real. La Matanza necesita atender 846.000 personas con 90 centros;
               Vicente López, 38.000 con 32. La salud pública del conurbano está{' '}
-              <span style={{ color: D.badSoft, fontWeight: 700 }}>sobrecargada donde más se la necesita</span>{' '}
+              <span style={{ fontWeight: 700 }}>sobrecargada donde más se la necesita</span>{' '}
               y holgada donde la demanda es menor. Cerrar la brecha no requiere inventar un sistema:
               requiere redistribuir, ampliar y planificar el que ya existe.
             </p>
@@ -1324,24 +1287,22 @@ export default function InformeSaludConurbano() {
                 target="_blank" rel="noopener noreferrer"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'rgba(255,255,255,0.1)', color: '#fff', textDecoration: 'none',
-                  borderRadius: 2, padding: '10px 20px',
+                  color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
                   fontSize: '0.82rem', fontWeight: 600,
-                  border: '1px solid rgba(255,255,255,0.15)',
                 }}
               >
                 PEC - Programa de Estudios del Conurbano <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold" style={{ color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+            <p className="text-sm font-semibold" style={{ color: C.ink }}>
               Fuentes
             </p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>

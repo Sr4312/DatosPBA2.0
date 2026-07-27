@@ -1,6 +1,5 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { LazyMotion, domAnimation } from 'framer-motion'
 import Layout from './components/Layout'
 import ScrollToTop from './components/ScrollToTop'
 import { ThemeProvider } from './context/ThemeContext'
@@ -32,7 +31,6 @@ const QuienesSomos    = lazy(() => import('./pages/QuienesSomos'))
 export default function App() {
   return (
     <ThemeProvider>
-    <LazyMotion features={domAnimation}>
       <BrowserRouter>
         <ScrollToTop />
         <Routes>
@@ -63,7 +61,6 @@ export default function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-    </LazyMotion>
     </ThemeProvider>
   )
 }

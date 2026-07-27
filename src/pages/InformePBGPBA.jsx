@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ArrowLeft, Download, ExternalLink } from 'lucide-react'
 import html2canvas from 'html2canvas'
 import {
@@ -85,15 +84,6 @@ const HERO_STATS = [
   { valor: '35,7%',      periodo: 'participación en el PBI de Nación' },
   { valor: '14 de 16',   periodo: 'sectores registraron alzas interanuales' },
 ]
-
-// ─── ANIMACIÓN ───────────────────────────────────────────────
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
-})
 
 // ─── DOWNLOAD ────────────────────────────────────────────────
 
@@ -196,17 +186,16 @@ function SectionLabel({ children, dark = false, color }) {
   return (
     <p
       style={{ color: color || (dark ? 'rgba(255,255,255,0.5)' : C.accent) }}
-      className="text-xs font-semibold tracking-[0.18em] uppercase mb-3"
+      className={dark ? 'text-xs font-semibold tracking-[0.18em] uppercase mb-3' : 'text-sm font-semibold mb-3'}
     >
       {children}
     </p>
   )
 }
 
-function SH({ num, title }) {
+function SH({ title }) {
   return (
     <div style={{ borderBottom: `2px solid ${C.ink}`, paddingBottom: '0.75rem', marginBottom: '1.75rem', marginTop: '3rem' }}>
-      <p style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: G[500], marginBottom: '0.2rem' }}>{num}</p>
       <h2 style={{ fontSize: 'clamp(1.4rem, 2.8vw, 1.875rem)', fontWeight: 700, color: C.ink, lineHeight: 1.05, letterSpacing: '-0.015em' }}>{title}</h2>
     </div>
   )
@@ -433,50 +422,46 @@ function ChartNacion() {
 
 function Hero() {
   return (
-    <div className="bg-pattern-dark" style={{ background: C.hero }}>
+    <div style={{ background: C.hero }}>
       <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
         <Link to="/informes" className="inline-flex items-center gap-1.5 text-sm no-underline mb-10" style={{ color: 'rgba(255,255,255,0.62)' }}>
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
 
-        <m.div {...fadeUp(0)}>
-          <SectionLabel dark color="#6ee7b7">Dirección Provincial de Estadística · Ministerio de Economía PBA</SectionLabel>
-        </m.div>
+        <div>
+          <SectionLabel dark color="rgba(255,255,255,0.62)">Dirección Provincial de Estadística · Ministerio de Economía PBA</SectionLabel>
+        </div>
 
-        <m.h1
-          {...fadeUp(0.05)}
+        <h1
           className="font-display"
           style={{ fontSize: 'clamp(2rem, 4.6vw, 3.2rem)', fontWeight: 700, color: '#fff', lineHeight: 1.12, marginBottom: 20, maxWidth: 820 }}
         >
           Producto Bruto Geográfico<br />
-          <span style={{ color: '#6ee7b7' }}>de la Provincia de Buenos Aires</span>
-        </m.h1>
+          <span>de la Provincia de Buenos Aires</span>
+        </h1>
 
-        <m.p
-          {...fadeUp(0.1)}
+        <p
           style={{ color: 'rgba(255,255,255,0.60)', maxWidth: 720, lineHeight: 1.7, fontSize: '1.05rem' }}
         >
           La economía bonaerense creció{' '}
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>4,2% a precios constantes en 2025</strong>, el segundo
           mejor registro de la serie 2004-2025, tras dos años consecutivos de caída. El repunte fue de base amplia,
           impulsado por la Industria, el Comercio y el sector Agropecuario.
-        </m.p>
+        </p>
 
-        <m.div {...fadeUp(0.15)} className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
           {HERO_STATS.map((s, i) => (
-            <m.div
+            <div
               key={i}
-              {...fadeUp(0.1 * i + 0.2)}
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
               className="p-5"
             >
               <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
-            </m.div>
+            </div>
           ))}
-        </m.div>
+        </div>
 
-        <m.div
-          {...fadeUp(0.3)}
+        <div
           style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}
         >
           {[
@@ -490,7 +475,7 @@ function Hero() {
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
-        </m.div>
+        </div>
       </div>
     </div>
   )
@@ -500,17 +485,14 @@ function Hero() {
 
 function NotaMetodologica() {
   return (
-    <m.div
-      {...fadeUp(0)}
+    <div
       style={{
-        background: '#fffbeb',
-        border: '1px solid #d9770630',
-        borderLeft: '3px solid #d97706',
-        borderRadius: 2,
+        background: 'var(--surface-2)',
+        borderTop: '2px solid var(--ink)',
         padding: '18px 20px',
       }}
     >
-      <p style={{ fontSize: '0.72rem', fontWeight: 700, color: '#d97706', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 8 }}>
+      <p style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--ink)', marginBottom: 8 }}>
         Nota metodológica
       </p>
       <p style={{ fontSize: '0.82rem', color: C.inkMid, lineHeight: 1.6, marginBottom: 8 }}>
@@ -525,7 +507,7 @@ function NotaMetodologica() {
         municipios), a diferencia de las estadísticas laborales de la EPH, que en Buenos Aires se relevan únicamente
         sobre los Partidos del Gran Buenos Aires. Ambos indicadores no son directamente comparables.
       </p>
-    </m.div>
+    </div>
   )
 }
 
@@ -538,8 +520,8 @@ export default function InformePBGPBA() {
 
       {/* 01 — NIVEL Y EVOLUCIÓN */}
       <div className="max-w-5xl mx-auto px-6 pt-2 pb-12">
-        <m.div {...fadeUp()}>
-          <SH num="01 · Nivel y evolución" title="La recuperación de 2025" />
+        <div>
+          <SH title="La recuperación de 2025" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             En 2025 el PBG-PBA alcanzó $263.668 millones de pesos constantes de 2004, una suba real de 4,2%
             que lo posicionó como el segundo mejor valor de toda la serie desde 2004, solo por debajo del récord
@@ -560,14 +542,14 @@ export default function InformePBGPBA() {
             pandemia (−9,8%) le siguió una recuperación sostenida hasta 2022, dos años de contracción en 2023
             (−0,9%) y 2024 (−3,6%), y el repunte registrado en 2025.
           </p>
-        </m.div>
+        </div>
       </div>
 
       {/* 02 — COMPOSICIÓN (fondo blanco alternado) */}
       <div style={{ background: '#fff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 pb-12">
-          <m.div {...fadeUp(0.05)}>
-            <SH num="02 · Composición" title="Bienes, servicios e impuestos" />
+          <div>
+            <SH title="Bienes, servicios e impuestos" />
             <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
               De los 4,2 puntos porcentuales de crecimiento real del PBG-PBA en 2025, los sectores productores
               de servicios aportaron 1,60 p.p. y los productores de bienes 1,13 p.p., mientras que los impuestos
@@ -582,14 +564,14 @@ export default function InformePBGPBA() {
             <DownloadableViz title="Composición del PBG-PBA 2025 por grandes componentes" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA">
               <ChartComposicion />
             </DownloadableViz>
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* 03 — SECTORES */}
       <div className="max-w-5xl mx-auto px-6 pb-12">
-        <m.div {...fadeUp(0.05)}>
-          <SH num="03 · Sectores" title="Los motores del crecimiento" />
+        <div>
+          <SH title="Los motores del crecimiento" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             De los 16 sectores que componen el PBG-PBA, 14 registraron alzas interanuales en 2025 y solo 2
             (Salud y Administración pública) mostraron descensos. Industria fue el sector que más aportó al
@@ -636,14 +618,14 @@ export default function InformePBGPBA() {
               </tbody>
             </table>
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* 04 — NACIÓN (fondo blanco alternado) */}
       <div style={{ background: '#fff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 pb-12">
-          <m.div {...fadeUp(0.05)}>
-            <SH num="04 · Nación" title="El peso bonaerense en el PBI" />
+          <div>
+            <SH title="El peso bonaerense en el PBI" />
             <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
               La participación del PBG-PBA en el Producto Bruto Interno de Nación fue de 35,7% en 2025, en línea
               con el promedio del período 2004-2024. Los sectores productores de bienes bonaerenses pesan más en
@@ -658,7 +640,7 @@ export default function InformePBGPBA() {
             <DownloadableViz title="Participación bonaerense en el total nacional, 2025" fuente="Dirección Provincial de Estadística · INDEC">
               <ChartNacion />
             </DownloadableViz>
-          </m.div>
+          </div>
         </div>
       </div>
 
@@ -669,30 +651,16 @@ export default function InformePBGPBA() {
 
       {/* CONCLUSIÓN */}
       <div className="max-w-5xl mx-auto px-6 pb-16">
-        <m.div
-          {...fadeUp(0)}
-          className="bg-pattern-dark"
+        <div
+         
           style={{
             background: C.hero, borderRadius: 2,
             padding: '44px 48px', position: 'relative', overflow: 'hidden',
           }}
         >
-          <div style={{
-            position: 'absolute', right: -80, top: -80,
-            width: 280, height: 280, borderRadius: '50%',
-            border: '40px solid rgba(255,255,255,0.04)',
-          }} />
-          <div style={{
-            position: 'absolute', right: 60, bottom: -100,
-            width: 180, height: 180, borderRadius: '50%',
-            border: '30px solid rgba(255,255,255,0.03)',
-          }} />
 
           <div className="relative z-10">
-            <p style={{
-              color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem',
-              textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16,
-            }}>
+            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
               El argumento
             </p>
             <p style={{
@@ -700,7 +668,7 @@ export default function InformePBGPBA() {
               lineHeight: 1.6, fontWeight: 500, maxWidth: 800,
             }}>
               Tras dos años de contracción, la economía bonaerense se recuperó en 2025 con un crecimiento de{' '}
-              <span style={{ color: '#6ee7b7', fontWeight: 700 }}>4,2%</span>, el segundo mejor de la serie
+              <span style={{ fontWeight: 700 }}>4,2%</span>, el segundo mejor de la serie
               2004-2025 y de base amplia: 14 de los 16 sectores en alza, con Industria, Comercio y Agro como
               motores.{' '}
               <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
@@ -713,23 +681,21 @@ export default function InformePBGPBA() {
                 target="_blank" rel="noopener noreferrer"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'rgba(255,255,255,0.1)', color: '#fff', textDecoration: 'none',
-                  borderRadius: 2, padding: '10px 20px',
+                  color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
                   fontSize: '0.82rem', fontWeight: 600,
-                  border: '1px solid rgba(255,255,255,0.15)',
                 }}
               >
                 Dirección Provincial de Estadística <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8">
-          <p className="text-xs font-semibold" style={{ color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+          <p className="text-sm font-semibold" style={{ color: C.ink }}>
             Fuentes
           </p>
           <p className="text-sm mt-1" style={{ color: C.inkMid }}>

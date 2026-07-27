@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ArrowLeft, Download, ExternalLink } from 'lucide-react'
 import html2canvas from 'html2canvas'
 import {
@@ -127,15 +126,6 @@ const HERO_STATS = [
   { valor: '51,4%',    periodo: 'la carga del maíz, la menor entre los cultivos bonaerenses' },
 ]
 
-// ─── ANIMACIÓN ───────────────────────────────────────────────
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
-})
-
 // ─── DOWNLOAD ────────────────────────────────────────────────
 
 const DL_PADDING  = 60
@@ -237,17 +227,16 @@ function SectionLabel({ children, dark = false, color }) {
   return (
     <p
       style={{ color: color || (dark ? 'rgba(255,255,255,0.5)' : C.accent) }}
-      className="text-xs font-semibold tracking-[0.18em] uppercase mb-3"
+      className={dark ? 'text-xs font-semibold tracking-[0.18em] uppercase mb-3' : 'text-sm font-semibold mb-3'}
     >
       {children}
     </p>
   )
 }
 
-function SH({ num, title }) {
+function SH({ title }) {
   return (
     <div style={{ borderBottom: `2px solid ${C.ink}`, paddingBottom: '0.75rem', marginBottom: '1.75rem', marginTop: '3rem' }}>
-      <p style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: B[400], marginBottom: '0.2rem' }}>{num}</p>
       <h2 style={{ fontSize: 'clamp(1.4rem, 2.8vw, 1.875rem)', fontWeight: 700, color: C.ink, lineHeight: 1.05, letterSpacing: '-0.015em' }}>{title}</h2>
     </div>
   )
@@ -484,49 +473,45 @@ function ChartFlete() {
 
 function Hero() {
   return (
-    <div className="bg-pattern-dark" style={{ background: C.hero }}>
+    <div style={{ background: C.hero }}>
       <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
         <Link to="/informes" className="inline-flex items-center gap-1.5 text-sm no-underline mb-10" style={{ color: 'rgba(255,255,255,0.62)' }}>
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
 
-        <m.div {...fadeUp(0)}>
-          <SectionLabel dark color="#93c5fd">FADA · Índice de participación del Estado en la renta agrícola · Junio 2026</SectionLabel>
-        </m.div>
+        <div>
+          <SectionLabel dark color="rgba(255,255,255,0.62)">FADA · Índice de participación del Estado en la renta agrícola · Junio 2026</SectionLabel>
+        </div>
 
-        <m.h1
-          {...fadeUp(0.05)}
+        <h1
           className="font-display"
           style={{ fontSize: 'clamp(2rem, 4.6vw, 3.2rem)', fontWeight: 700, color: '#fff', lineHeight: 1.12, marginBottom: 20, maxWidth: 820 }}
         >
           El Estado se queda con el 59%<br />
-          <span style={{ color: '#93c5fd' }}>de la renta agrícola bonaerense</span>
-        </m.h1>
+          <span>de la renta agrícola bonaerense</span>
+        </h1>
 
-        <m.p
-          {...fadeUp(0.1)}
+        <p
           style={{ color: 'rgba(255,255,255,0.60)', maxWidth: 720, lineHeight: 1.7, fontSize: '1.05rem' }}
         >
           Según el Índice FADA de junio de 2026, Buenos Aires exhibe una carga tributaria agrícola{' '}
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>por debajo del promedio nacional (61,9%)</strong>{' '}
           y de provincias como Córdoba y Entre Ríos, aunque con fuertes diferencias según el cultivo: del 51,4% del maíz al 62,2% del trigo.
-        </m.p>
+        </p>
 
-        <m.div {...fadeUp(0.15)} className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
           {HERO_STATS.map((s, i) => (
-            <m.div
+            <div
               key={i}
-              {...fadeUp(0.1 * i + 0.2)}
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
               className="p-5"
             >
               <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
-            </m.div>
+            </div>
           ))}
-        </m.div>
+        </div>
 
-        <m.div
-          {...fadeUp(0.3)}
+        <div
           style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}
         >
           {[
@@ -540,7 +525,7 @@ function Hero() {
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
-        </m.div>
+        </div>
       </div>
     </div>
   )
@@ -556,8 +541,8 @@ export default function InformeIndiceFADA() {
       <div className="max-w-5xl mx-auto px-6 py-12">
 
         {/* 01 */}
-        <m.div {...fadeUp()}>
-          <SH num="01 · Contexto" title="Qué es y qué mide el Índice FADA" />
+        <div>
+          <SH title="Qué es y qué mide el Índice FADA" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El Índice FADA es elaborado trimestralmente por la Fundación Agropecuaria para el Desarrollo de Argentina y mide la participación del Estado (impuestos nacionales, provinciales y municipales) sobre la renta agrícola: lo que queda de restar al valor de la producción los costos necesarios para producir. Esa renta se distribuye en tres componentes: los impuestos, la renta de la tierra y el resultado del productor.
           </p>
@@ -572,11 +557,11 @@ export default function InformeIndiceFADA() {
           <DownloadableViz title="Índice FADA nacional - serie 2007-2026" fuente="FADA, Índice FADA junio 2026">
             <ChartSerieNacional />
           </DownloadableViz>
-        </m.div>
+        </div>
 
         {/* 02 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="02 · Comparación provincial" title="Buenos Aires, debajo del promedio nacional" />
+        <div>
+          <SH title="Buenos Aires, debajo del promedio nacional" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Con un 59% de participación estatal en la renta agrícola, Buenos Aires se ubica por debajo del promedio nacional (61,9%), de Entre Ríos (65,5%) y de Córdoba (60,2%), aunque por encima de Santa Fe (55,6%). FADA aclara que un índice mayor no implica necesariamente pagar más impuestos en pesos: refleja la conjunción entre el peso de los tributos y una renta que puede ser menor por diferencias de rindes y costos entre regiones.
           </p>
@@ -606,11 +591,11 @@ export default function InformeIndiceFADA() {
               </tbody>
             </table>
           </div>
-        </m.div>
+        </div>
 
         {/* 03 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="03 · Cultivos" title="Del 51,4% del maíz al 62,2% del trigo" />
+        <div>
+          <SH title="Del 51,4% del maíz al 62,2% del trigo" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Dentro de Buenos Aires, el maíz presenta la menor carga relativa entre los cuatro cultivos ponderados, mientras que trigo y soja muestran valores casi idénticos y el girasol se ubica en un nivel intermedio. A nivel nacional, el informe señala al trigo como "el caso más crítico" (73,6%), golpeado por la suba del 49% anual en el precio de la urea que FADA atribuye a las tensiones geopolíticas en Medio Oriente.
           </p>
@@ -626,11 +611,11 @@ export default function InformeIndiceFADA() {
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Pese al encarecimiento de los fertilizantes, el índice del trigo mejoró respecto de marzo de 2026 por la combinación de mayores precios internacionales (+15,5% trimestral) y la reducción de los derechos de exportación del 7,5% al 5,5%.
           </p>
-        </m.div>
+        </div>
 
         {/* 04 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="04 · Federalismo fiscal" title="Nueve de cada diez pesos van a la Nación" />
+        <div>
+          <SH title="Nueve de cada diez pesos van a la Nación" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Del total de impuestos que paga una hectárea agrícola en el país, el 56,7% son tributos nacionales no coparticipables -principalmente derechos de exportación-, el nivel más bajo para un mes de junio desde 2007, con excepción de junio de 2018. FADA advierte que este esquema afecta al federalismo fiscal: los recursos generados en las regiones productivas no retornan de forma directa a las provincias donde se originan.
           </p>
@@ -667,11 +652,11 @@ export default function InformeIndiceFADA() {
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El monto provincial es un promedio: en la zona núcleo, el inmobiliario rural casi triplica ese valor. Para inicios de 2026, FADA registra aumentos del inmobiliario rural de entre 70% y 110%. Buenos Aires y Santa Fe son, además, las únicas jurisdicciones relevadas donde los municipios cobran tasas sobre las áreas rurales, porque cada partido bonaerense tiene jurisdicción sobre su territorio rural completo.
           </p>
-        </m.div>
+        </div>
 
         {/* 05 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="05 · Logística" title="El flete: pesa mucho en los costos, poco en el valor" />
+        <div>
+          <SH title="El flete: pesa mucho en los costos, poco en el valor" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             En Buenos Aires, el flete representa el 38,1% de los costos totales de una hectárea de maíz, el valor más alto entre las seis provincias relevadas. Pero medido sobre el valor bruto de producción, la provincia queda en una posición favorable: solo el 16,4% del ingreso que genera esa hectárea se destina al transporte, 1,7 de cada 10 camiones producidos.
           </p>
@@ -686,46 +671,32 @@ export default function InformeIndiceFADA() {
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             La aparente contradicción se explica porque Buenos Aires combina rendimientos más altos con una distancia a puerto relativamente corta: eso eleva el valor de producción por hectárea y diluye el peso proporcional del flete, aun cuando su participación en la estructura interna de costos sea alta. A nivel nacional, los costos de transporte subieron 26% en pesos respecto de marzo.
           </p>
-        </m.div>
+        </div>
 
         {/* NOTA METODOLÓGICA */}
-        <m.div {...fadeUp(0.05)}>
+        <div>
           <div style={{ borderTop: `1px solid ${C.rule}`, marginTop: '3rem', paddingTop: '1.5rem' }}>
             <SectionLabel>Nota metodológica</SectionLabel>
             <p style={{ fontSize: '0.8125rem', color: C.inkMid, lineHeight: 1.75, maxWidth: '72ch' }}>
               El Índice FADA no debe confundirse con "presión tributaria" en sentido estricto: esta última mide los impuestos sobre el valor bruto de producción sin descontar costos, mientras que el Índice FADA los mide sobre la renta (ingresos menos costos), lo que amplifica su magnitud porcentual. Los índices provinciales ponderan soja, maíz, trigo y girasol según su participación en la superficie sembrada de cada provincia; para San Luis se consideran solo soja y maíz, y para Entre Ríos, soja, maíz y trigo. Los tributos municipales se miden desde junio de 2019. El tipo de cambio de referencia de junio de 2026 fue de $1.430. La periodización por gobiernos de la serie histórica proviene del gráfico original de FADA y se reproduce como dato, no como valoración.
             </p>
           </div>
-        </m.div>
+        </div>
 
       </div>
 
       {/* CONCLUSIÓN */}
       <div className="max-w-5xl mx-auto px-6 pb-16">
-        <m.div
-          {...fadeUp(0)}
-          className="bg-pattern-dark"
+        <div
+         
           style={{
             background: C.hero, borderRadius: 2,
             padding: '44px 48px', position: 'relative', overflow: 'hidden',
           }}
         >
-          <div style={{
-            position: 'absolute', right: -80, top: -80,
-            width: 280, height: 280, borderRadius: '50%',
-            border: '40px solid rgba(255,255,255,0.04)',
-          }} />
-          <div style={{
-            position: 'absolute', right: 60, bottom: -100,
-            width: 180, height: 180, borderRadius: '50%',
-            border: '30px solid rgba(255,255,255,0.03)',
-          }} />
 
           <div className="relative z-10">
-            <p style={{
-              color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem',
-              textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16,
-            }}>
+            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
               El argumento
             </p>
             <p style={{
@@ -733,7 +704,7 @@ export default function InformeIndiceFADA() {
               lineHeight: 1.6, fontWeight: 500, maxWidth: 800,
             }}>
               De cada hectárea agrícola bonaerense, el Estado se queda con el{' '}
-              <span style={{ color: '#93c5fd', fontWeight: 700 }}>59% de la renta</span>, y casi el 90% de esos impuestos son nacionales.
+              <span style={{ fontWeight: 700 }}>59% de la renta</span>, y casi el 90% de esos impuestos son nacionales.
               Los recursos que genera el campo bonaerense no vuelven de forma directa a la provincia ni a sus municipios,
               que apenas capturan el 9,3% y el 1,1% del total.{' '}
               <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
@@ -746,24 +717,22 @@ export default function InformeIndiceFADA() {
                 target="_blank" rel="noopener noreferrer"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'rgba(255,255,255,0.1)', color: '#fff', textDecoration: 'none',
-                  borderRadius: 2, padding: '10px 20px',
+                  color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
                   fontSize: '0.82rem', fontWeight: 600,
-                  border: '1px solid rgba(255,255,255,0.15)',
                 }}
               >
                 Fundación FADA <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold" style={{ color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+            <p className="text-sm font-semibold" style={{ color: C.ink }}>
               Fuentes
             </p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>

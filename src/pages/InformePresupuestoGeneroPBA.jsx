@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ArrowLeft, Download } from 'lucide-react'
 import html2canvas from 'html2canvas'
 import {
@@ -91,15 +90,6 @@ const HERO_STATS = [
   { valor: '80,2%', periodo: 'del PPG es gasto social reetiquetado (TYC)' },
   { valor: '1,2%',  periodo: 'del PPG ejecuta el Min. de Mujeres y Diversidad' },
 ]
-
-// ─── ANIMACIÓN ───────────────────────────────────────────────
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
-})
 
 // ─── DOWNLOAD ────────────────────────────────────────────────
 
@@ -202,17 +192,16 @@ function SectionLabel({ children, dark = false, color }) {
   return (
     <p
       style={{ color: color || (dark ? 'rgba(255,255,255,0.5)' : C.accent) }}
-      className="text-xs font-semibold tracking-[0.18em] uppercase mb-3"
+      className={dark ? 'text-xs font-semibold tracking-[0.18em] uppercase mb-3' : 'text-sm font-semibold mb-3'}
     >
       {children}
     </p>
   )
 }
 
-function SH({ num, title }) {
+function SH({ title }) {
   return (
     <div style={{ borderBottom: `2px solid ${C.ink}`, paddingBottom: '0.75rem', marginBottom: '1.75rem', marginTop: '3rem' }}>
-      <p style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: V[400], marginBottom: '0.2rem' }}>{num}</p>
       <h2 style={{ fontSize: 'clamp(1.4rem, 2.8vw, 1.875rem)', fontWeight: 700, color: C.ink, lineHeight: 1.05, letterSpacing: '-0.015em' }}>{title}</h2>
     </div>
   )
@@ -359,50 +348,46 @@ function ChartGeneroNeto() {
 
 function Hero() {
   return (
-    <div className="bg-pattern-dark" style={{ background: C.hero }}>
+    <div style={{ background: C.hero }}>
       <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
         <Link to="/informes" className="inline-flex items-center gap-1.5 text-sm no-underline mb-10" style={{ color: 'rgba(255,255,255,0.62)' }}>
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
 
-        <m.div {...fadeUp(0)}>
-          <SectionLabel dark color={V[200]}>Presupuesto Provincial 2026 · Planilla 35 (PPG)</SectionLabel>
-        </m.div>
+        <div>
+          <SectionLabel dark color="rgba(255,255,255,0.62)">Presupuesto Provincial 2026 · Planilla 35 (PPG)</SectionLabel>
+        </div>
 
-        <m.h1
-          {...fadeUp(0.05)}
+        <h1
           className="font-display"
           style={{ fontSize: 'clamp(2rem, 4.6vw, 3.2rem)', fontWeight: 700, color: '#fff', lineHeight: 1.12, marginBottom: 20, maxWidth: 820 }}
         >
           El maquillaje contable<br />
-          <span style={{ color: V[200] }}>del Presupuesto de Género</span>
-        </m.h1>
+          <span>del Presupuesto de Género</span>
+        </h1>
 
-        <m.p
-          {...fadeUp(0.1)}
+        <p
           style={{ color: 'rgba(255,255,255,0.60)', maxWidth: 720, lineHeight: 1.7, fontSize: '1.05rem' }}
         >
           La Provincia presenta un Presupuesto con Perspectiva de Género (PPG) de{' '}
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>$1,79 billones</strong>, el 4,2% del
           presupuesto total. Al abrir las planillas, solo $353.439 millones —el 0,82%— corresponden
           efectivamente a políticas focalizadas en cerrar brechas de género.
-        </m.p>
+        </p>
 
-        <m.div {...fadeUp(0.15)} className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
           {HERO_STATS.map((s, i) => (
-            <m.div
+            <div
               key={i}
-              {...fadeUp(0.1 * i + 0.2)}
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
               className="p-5"
             >
               <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
-            </m.div>
+            </div>
           ))}
-        </m.div>
+        </div>
 
-        <m.div
-          {...fadeUp(0.3)}
+        <div
           style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}
         >
           {[
@@ -416,7 +401,7 @@ function Hero() {
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
-        </m.div>
+        </div>
       </div>
     </div>
   )
@@ -432,8 +417,8 @@ export default function InformePresupuestoGeneroPBA() {
       <div className="max-w-5xl mx-auto px-6 py-12">
 
         {/* 01 */}
-        <m.div {...fadeUp()}>
-          <SH num="01 · Metodología" title="Qué mide (y qué no mide) el PPG" />
+        <div>
+          <SH title="Qué mide (y qué no mide) el PPG" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El Presupuesto con Perspectiva de Género es una herramienta de clasificación presupuestaria
             que etiqueta partidas según su impacto en cinco brechas de desigualdad de género. La
@@ -471,11 +456,11 @@ export default function InformePresupuestoGeneroPBA() {
             perspectiva de género) y PPG-Parcial (el crédito se computa con un ponderador), lo que
             evita la doble contabilización dentro del presupuesto oficial.
           </p>
-        </m.div>
+        </div>
 
         {/* 02 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="02 · Cifras oficiales" title="Dónde dice ir la plata del 'presupuesto de género'" />
+        <div>
+          <SH title="Dónde dice ir la plata del 'presupuesto de género'" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             La categoría Tiempo y Cuidados concentra el 80,2% del PPG 2026. Funciona como un recipiente
             amplio que absorbe gasto social universal —Servicio Alimentario Escolar, MESA Bonaerense,
@@ -491,11 +476,11 @@ export default function InformePresupuestoGeneroPBA() {
           <DownloadableViz title="Distribución del PPG 2026 por brecha de impacto" fuente="Presupuesto 2026 PBA, Planilla 35">
             <ChartBrechas />
           </DownloadableViz>
-        </m.div>
+        </div>
 
         {/* 03 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="03 · Concentración institucional" title="El ministerio que lleva el nombre, recibe 1 de cada 2.000 pesos" />
+        <div>
+          <SH title="El ministerio que lleva el nombre, recibe 1 de cada 2.000 pesos" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El PPG es ejecutado por 26 organismos, pero está extremadamente concentrado: tres
             jurisdicciones acumulan el 88% del total. El Ministerio de Desarrollo de la Comunidad
@@ -528,11 +513,11 @@ export default function InformePresupuestoGeneroPBA() {
               </tbody>
             </table>
           </div>
-        </m.div>
+        </div>
 
         {/* 04 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="04 · El gasto neto" title="Lo que queda si se saca el maquillaje" />
+        <div>
+          <SH title="Lo que queda si se saca el maquillaje" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Si se elimina del cómputo la categoría Tiempo y Cuidados —que captura gasto social
             universal— el gasto estrictamente focalizado en brechas de género cae a $353.439 millones:
@@ -550,10 +535,10 @@ export default function InformePresupuestoGeneroPBA() {
           <DownloadableViz title="Composición del gasto en género neto" fuente="Presupuesto 2026 PBA, Planilla 35">
             <ChartGeneroNeto />
           </DownloadableViz>
-        </m.div>
+        </div>
 
         {/* Nota metodológica */}
-        <m.div {...fadeUp(0.05)}>
+        <div>
           <div style={{ borderLeft: `3px solid ${V[300]}`, padding: '0.875rem 1.25rem', background: V[50], borderRadius: '0 0.5rem 0.5rem 0', margin: '2.5rem 0 1.5rem', maxWidth: '72ch' }}>
             <p style={{ fontSize: '0.72rem', fontWeight: 700, color: V[600], textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 8 }}>
               Nota sobre los datos
@@ -568,25 +553,22 @@ export default function InformePresupuestoGeneroPBA() {
               la Planilla 35 del Presupuesto 2026 de la Provincia de Buenos Aires.
             </p>
           </div>
-        </m.div>
+        </div>
 
         {/* Conclusión */}
-        <m.div
-          {...fadeUp(0.05)}
-          className="bg-pattern-dark"
+        <div
+         
           style={{ background: C.hero, borderRadius: 2, padding: '44px 48px', position: 'relative', overflow: 'hidden', margin: '2rem 0' }}
         >
-          <div style={{ position: 'absolute', right: -80, top: -80, width: 280, height: 280, borderRadius: '50%', border: '40px solid rgba(255,255,255,0.04)' }} />
-          <div style={{ position: 'absolute', right: 60, bottom: -100, width: 180, height: 180, borderRadius: '50%', border: '30px solid rgba(255,255,255,0.03)' }} />
           <div className="relative z-10">
-            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16 }}>
+            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
               El argumento
             </p>
             <p style={{ color: '#fff', fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
               El Gobierno distribuye la etiqueta "género" por todas las áreas para inflar la cifra en el
               discurso, pero deja a la cartera específicamente creada para la igualdad con un
               presupuesto marginal. Solo el{' '}
-              <span style={{ color: V[200], fontWeight: 700 }}>0,82% del presupuesto provincial</span>{' '}
+              <span style={{ fontWeight: 700 }}>0,82% del presupuesto provincial</span>{' '}
               cierra brechas específicas de género.{' '}
               <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
                 Esconder el gasto real dentro de otras jurisdicciones no es transparencia: es marketing
@@ -594,10 +576,10 @@ export default function InformePresupuestoGeneroPBA() {
               </span>
             </p>
           </div>
-        </m.div>
+        </div>
 
         {/* Fuentes */}
-        <m.div {...fadeUp(0.05)}>
+        <div>
           <div style={{ borderTop: `1px solid ${C.rule}`, marginTop: '1rem', paddingTop: '1.5rem' }}>
             <p style={{ fontSize: '0.6875rem', color: C.inkLight, lineHeight: 1.75 }}>
               <strong style={{ color: '#64748b' }}>Fuentes:</strong>{' '}
@@ -605,7 +587,7 @@ export default function InformePresupuestoGeneroPBA() {
               Género) · Elaboración propia DatosPBA.
             </p>
           </div>
-        </m.div>
+        </div>
 
       </div>
     </div>

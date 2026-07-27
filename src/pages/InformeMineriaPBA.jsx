@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ArrowLeft, ExternalLink, Download } from 'lucide-react'
 import html2canvas from 'html2canvas'
 import {
@@ -82,15 +81,6 @@ const HERO_STATS = [
   { valor: '53',    periodo: 'municipios con actividad minera (de 135)' },
   { valor: '+130',  periodo: 'años de industria minera en la provincia' },
 ]
-
-// ─── ANIMACIÓN ───────────────────────────────────────────────
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
-})
 
 // ─── DOWNLOAD ────────────────────────────────────────────────
 
@@ -194,7 +184,7 @@ function SectionLabel({ children, dark = false, color }) {
   return (
     <p
       style={{ color: color || (dark ? 'rgba(255,255,255,0.5)' : C.accent) }}
-      className="text-xs font-semibold tracking-[0.18em] uppercase mb-3"
+      className={dark ? 'text-xs font-semibold tracking-[0.18em] uppercase mb-3' : 'text-sm font-semibold mb-3'}
     >
       {children}
     </p>
@@ -205,7 +195,7 @@ function SectionLabel({ children, dark = false, color }) {
 
 function Hero() {
   return (
-    <div className="bg-pattern-dark" style={{ background: C.hero }}>
+    <div style={{ background: C.hero }}>
       <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
         <Link
           to="/informes"
@@ -215,12 +205,11 @@ function Hero() {
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
 
-        <m.div {...fadeUp(0)}>
-          <SectionLabel dark color={D.goldSoft}>DPM · SIACAM · Minería bonaerense</SectionLabel>
-        </m.div>
+        <div>
+          <SectionLabel dark color="rgba(255,255,255,0.62)">DPM · SIACAM · Minería bonaerense</SectionLabel>
+        </div>
 
-        <m.h1
-          {...fadeUp(0.05)}
+        <h1
           className="font-display"
           style={{
             fontSize: 'clamp(2rem, 4.6vw, 3.2rem)',
@@ -229,11 +218,10 @@ function Hero() {
           }}
         >
           La minería que nadie mira<br />
-          <span style={{ color: D.goldSoft }}>en Buenos Aires</span>
-        </m.h1>
+          <span>en Buenos Aires</span>
+        </h1>
 
-        <m.p
-          {...fadeUp(0.1)}
+        <p
           style={{
             color: 'rgba(255,255,255,0.60)', maxWidth: 720,
             lineHeight: 1.7, fontSize: '1.05rem',
@@ -245,16 +233,14 @@ function Hero() {
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>50 millones de toneladas</strong>{' '}
           de minerales se extraen cada año en Buenos Aires. Sin esos materiales no hay rutas,
           no hay hormigón, no hay cemento para hospitales ni escuelas.
-        </m.p>
+        </p>
 
-        <m.div
-          {...fadeUp(0.15)}
+        <div
           className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12"
         >
           {HERO_STATS.map((s, i) => (
-            <m.div
+            <div
               key={i}
-              {...fadeUp(0.1 * i + 0.2)}
               style={{
                 background: 'rgba(255,255,255,0.06)',
                 border: '1px solid rgba(255,255,255,0.10)',
@@ -263,12 +249,11 @@ function Hero() {
               className="p-5"
             >
               <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
-            </m.div>
+            </div>
           ))}
-        </m.div>
+        </div>
 
-        <m.div
-          {...fadeUp(0.3)}
+        <div
           style={{
             display: 'flex', gap: 32, marginTop: 28,
             paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)',
@@ -286,7 +271,7 @@ function Hero() {
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
-        </m.div>
+        </div>
       </div>
     </div>
   )
@@ -548,9 +533,8 @@ function Materiales() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
       {MINERALES.map((min, i) => (
-        <m.div
+        <div
           key={min.nombre}
-          {...fadeUp(0.08 * i)}
           style={{
             background: '#fff', border: `1px solid ${C.rule}`,
             borderRadius: 2, padding: '24px 24px 22px', overflow: 'hidden',
@@ -569,7 +553,7 @@ function Materiales() {
             {min.nombre}
           </h3>
           <p style={{ fontSize: '0.85rem', color: C.inkMid, lineHeight: 1.55 }}>{min.desc}</p>
-        </m.div>
+        </div>
       ))}
     </div>
   )
@@ -598,9 +582,8 @@ function DatosDestacados() {
           bg: '#eff6ff',
         },
       ].map((d, i) => (
-        <m.div
+        <div
           key={d.stat}
-          {...fadeUp(0.08 * i)}
           style={{
             background: '#fff', border: `1px solid ${C.rule}`,
             borderRadius: 2, overflow: 'hidden',
@@ -621,7 +604,7 @@ function DatosDestacados() {
             </p>
             <p style={{ fontSize: '0.7rem', color: C.inkLight }}>{d.fuente}</p>
           </div>
-        </m.div>
+        </div>
       ))}
     </div>
   )
@@ -631,17 +614,14 @@ function DatosDestacados() {
 
 function NotaMetodologica() {
   return (
-    <m.div
-      {...fadeUp(0)}
+    <div
       style={{
-        background: D.warnBg,
-        border: `1px solid ${D.warn}30`,
-        borderLeft: `3px solid ${D.warn}`,
-        borderRadius: 2,
+        background: 'var(--surface-2)',
+        borderTop: '2px solid var(--ink)',
         padding: '18px 20px',
       }}
     >
-      <p style={{ fontSize: '0.72rem', fontWeight: 700, color: D.warn, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 8 }}>
+      <p style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--ink)', marginBottom: 8 }}>
         Nota sobre los datos
       </p>
       <p style={{ fontSize: '0.82rem', color: C.inkMid, lineHeight: 1.6 }}>
@@ -650,7 +630,7 @@ function NotaMetodologica() {
         Los datos de producción de Santa Fe, San Juan y Mendoza son estimaciones; los de Buenos Aires y Córdoba son los más robustos.
         Antes de usar estas cifras en comunicación pública, confirmar el dato de 50 Mtn con la DPM.
       </p>
-    </m.div>
+    </div>
   )
 }
 
@@ -665,7 +645,7 @@ export default function InformeMineriaPBA() {
       {/* SECCIÓN 1 - PRODUCCIÓN POR PROVINCIA */}
       <div style={{ background: C.card, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-10">
+          <div className="mb-10">
             <SectionLabel>Sección 1 · Producción nacional comparada</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Buenos Aires, la primera productora de áridos del país
@@ -675,18 +655,18 @@ export default function InformeMineriaPBA() {
               no metalíferos a nivel nacional, superando levemente a Córdoba. A diferencia de la minería
               cordillerana, esta producción abastece directamente la obra pública y la construcción cotidiana.
             </p>
-          </m.div>
-          <m.div {...fadeUp(0.1)}>
+          </div>
+          <div>
             <DownloadableViz title="Producción de áridos y minerales no metalíferos por provincia">
               <ProduccionChart />
             </DownloadableViz>
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* SECCIÓN 2 - PBG HISTÓRICO */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp(0)} className="mb-8">
+        <div className="mb-8">
           <SectionLabel>Sección 2 · Evolución económica del sector</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             Veinte años de crecimiento con un pico histórico en 2023
@@ -697,18 +677,18 @@ export default function InformeMineriaPBA() {
             <strong style={{ color: C.ink }}>$823 millones</strong> (pesos constantes 2004).
             La caída de 2020 por COVID fue revertida en dos años.
           </p>
-        </m.div>
-        <m.div {...fadeUp(0.1)}>
+        </div>
+        <div>
           <DownloadableViz title="PBG Buenos Aires - Explotación de minas y canteras 2004-2024" fuente="DIPEC - Dirección Provincial de Estadística">
             <PBGHistorico />
           </DownloadableViz>
-        </m.div>
+        </div>
       </div>
 
       {/* SECCIÓN 3 - DATOS DESTACADOS */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <SectionLabel>Sección 3 · Los números que definen el sector</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               La mitad del cemento y el 80% del granito del país
@@ -717,7 +697,7 @@ export default function InformeMineriaPBA() {
               La minería bonaerense no produce lujo ni exportaciones: produce los materiales que sostienen
               la infraestructura nacional. Dos cifras lo resumen mejor que cualquier discurso.
             </p>
-          </m.div>
+          </div>
           <DownloadableViz title="Participación de Buenos Aires en la producción nacional de cemento y granito">
             <DatosDestacados />
           </DownloadableViz>
@@ -726,7 +706,7 @@ export default function InformeMineriaPBA() {
 
       {/* SECCIÓN 4 - EMPLEO TERRITORIAL */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp(0)} className="mb-8">
+        <div className="mb-8">
           <SectionLabel>Sección 4 · Distribución territorial del empleo</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             Olavarría concentra el 32%, pero el 49% está en el resto de la provincia
@@ -736,18 +716,18 @@ export default function InformeMineriaPBA() {
             está distribuida en 53 municipios. Tandil, Gral. Pueyrredón y Villarino también tienen
             presencia significativa.
           </p>
-        </m.div>
-        <m.div {...fadeUp(0.1)}>
+        </div>
+        <div>
           <DownloadableViz title="Distribución del empleo minero por municipio - Provincia de Buenos Aires">
             <EmpleoMunicipal />
           </DownloadableViz>
-        </m.div>
+        </div>
       </div>
 
       {/* SECCIÓN 5 - LOS MATERIALES */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <SectionLabel>Sección 5 · Qué se extrae</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Los materiales que construyen el país
@@ -756,7 +736,7 @@ export default function InformeMineriaPBA() {
               Buenos Aires no tiene oro ni litio. Tiene algo más cotidiano y más necesario:
               los insumos básicos de la construcción y la industria nacional.
             </p>
-          </m.div>
+          </div>
           <Materiales />
         </div>
       </div>
@@ -768,30 +748,16 @@ export default function InformeMineriaPBA() {
 
       {/* CONCLUSIÓN */}
       <div className="max-w-5xl mx-auto px-6 pb-16">
-        <m.div
-          {...fadeUp(0)}
-          className="bg-pattern-dark"
+        <div
+         
           style={{
             background: C.hero, borderRadius: 2,
             padding: '44px 48px', position: 'relative', overflow: 'hidden',
           }}
         >
-          <div style={{
-            position: 'absolute', right: -80, top: -80,
-            width: 280, height: 280, borderRadius: '50%',
-            border: '40px solid rgba(255,255,255,0.04)',
-          }} />
-          <div style={{
-            position: 'absolute', right: 60, bottom: -100,
-            width: 180, height: 180, borderRadius: '50%',
-            border: '30px solid rgba(255,255,255,0.03)',
-          }} />
 
           <div className="relative z-10">
-            <p style={{
-              color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem',
-              textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16,
-            }}>
+            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
               El argumento
             </p>
             <p style={{
@@ -800,7 +766,7 @@ export default function InformeMineriaPBA() {
             }}>
               Todos hablan de la minería en la cordillera y nadie habla de la minería en Buenos Aires.
               Mientras el gobierno provincial ignora un sector que produce{' '}
-              <span style={{ color: D.goldSoft, fontWeight: 700 }}>50 millones de toneladas al año</span>{' '}
+              <span style={{ fontWeight: 700 }}>50 millones de toneladas al año</span>{' '}
               y da trabajo a miles de familias en el interior bonaerense,
               la política sectorial está ausente.{' '}
               <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
@@ -813,10 +779,8 @@ export default function InformeMineriaPBA() {
                 target="_blank" rel="noopener noreferrer"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'rgba(255,255,255,0.1)', color: '#fff', textDecoration: 'none',
-                  borderRadius: 2, padding: '10px 20px',
+                  color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
                   fontSize: '0.82rem', fontWeight: 600,
-                  border: '1px solid rgba(255,255,255,0.15)',
                 }}
               >
                 Dirección Provincial de Minería <ExternalLink className="w-3.5 h-3.5" />
@@ -836,14 +800,14 @@ export default function InformeMineriaPBA() {
               </a>
             </div>
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold" style={{ color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+            <p className="text-sm font-semibold" style={{ color: C.ink }}>
               Fuentes
             </p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>

@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ArrowLeft, Download } from 'lucide-react'
 import html2canvas from 'html2canvas'
 import {
@@ -91,15 +90,6 @@ const HERO_STATS = [
   { valor: '+7%',     periodo: 'crecimiento real del gasto en personal, en todas las provincias' },
   { valor: '4 de 24', periodo: 'provincias que mejoraron sus cuentas fiscales en 2025' },
 ]
-
-// ─── ANIMACIÓN ───────────────────────────────────────────────
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
-})
 
 // ─── DOWNLOAD ────────────────────────────────────────────────
 
@@ -203,7 +193,7 @@ function SectionLabel({ children, dark = false, color }) {
   return (
     <p
       style={{ color: color || (dark ? 'rgba(255,255,255,0.5)' : C.accent) }}
-      className="text-xs font-semibold tracking-[0.18em] uppercase mb-3"
+      className={dark ? 'text-xs font-semibold tracking-[0.18em] uppercase mb-3' : 'text-sm font-semibold mb-3'}
     >
       {children}
     </p>
@@ -227,7 +217,7 @@ function CifraCard(props) {
 
 function Hero() {
   return (
-    <div className="bg-pattern-dark" style={{ background: C.hero }}>
+    <div style={{ background: C.hero }}>
       <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
         <Link
           to="/informes"
@@ -237,12 +227,11 @@ function Hero() {
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
 
-        <m.div {...fadeUp(0)}>
-          <SectionLabel dark color="#93c5fd">Empiria · Informe económico N°531</SectionLabel>
-        </m.div>
+        <div>
+          <SectionLabel dark color="rgba(255,255,255,0.62)">Empiria · Informe económico N°531</SectionLabel>
+        </div>
 
-        <m.h1
-          {...fadeUp(0.05)}
+        <h1
           className="font-display"
           style={{
             fontSize: 'clamp(2rem, 4.6vw, 3.2rem)',
@@ -251,11 +240,10 @@ function Hero() {
           }}
         >
           El regreso del<br />
-          <span style={{ color: '#93c5fd' }}>déficit subnacional</span>
-        </m.h1>
+          <span>déficit subnacional</span>
+        </h1>
 
-        <m.p
-          {...fadeUp(0.1)}
+        <p
           style={{
             color: 'rgba(255,255,255,0.60)', maxWidth: 720,
             lineHeight: 1.7, fontSize: '1.05rem',
@@ -266,16 +254,14 @@ function Hero() {
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>superávit primario de 0,4% del PBI en 2024</strong>{' '}
           a un déficit de 0,1% en 2025, empujadas por un gasto en personal y jubilaciones que
           creció muy por encima de los ingresos.
-        </m.p>
+        </p>
 
-        <m.div
-          {...fadeUp(0.15)}
+        <div
           className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12"
         >
           {HERO_STATS.map((s, i) => (
-            <m.div
+            <div
               key={i}
-              {...fadeUp(0.1 * i + 0.2)}
               style={{
                 background: 'rgba(255,255,255,0.06)',
                 border: '1px solid rgba(255,255,255,0.10)',
@@ -284,12 +270,11 @@ function Hero() {
               className="p-5"
             >
               <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
-            </m.div>
+            </div>
           ))}
-        </m.div>
+        </div>
 
-        <m.div
-          {...fadeUp(0.3)}
+        <div
           style={{
             display: 'flex', gap: 32, marginTop: 28,
             paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)',
@@ -307,7 +292,7 @@ function Hero() {
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
-        </m.div>
+        </div>
       </div>
     </div>
   )
@@ -523,17 +508,14 @@ function ObraPublicaChart() {
 
 function NotaMetodologica() {
   return (
-    <m.div
-      {...fadeUp(0)}
+    <div
       style={{
-        background: D.warnBg,
-        border: `1px solid ${D.warn}30`,
-        borderLeft: `3px solid ${D.warn}`,
-        borderRadius: 2,
+        background: 'var(--surface-2)',
+        borderTop: '2px solid var(--ink)',
         padding: '18px 20px',
       }}
     >
-      <p style={{ fontSize: '0.72rem', fontWeight: 700, color: D.warn, textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 8 }}>
+      <p style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--ink)', marginBottom: 8 }}>
         Nota sobre los datos
       </p>
       <p style={{ fontSize: '0.82rem', color: C.inkMid, lineHeight: 1.6 }}>
@@ -548,7 +530,7 @@ function NotaMetodologica() {
         informe; el resto de la serie histórica (2011-2023) y la posición de Nación en cada año son
         una reconstrucción visual aproximada a partir del gráfico publicado.
       </p>
-    </m.div>
+    </div>
   )
 }
 
@@ -563,7 +545,7 @@ export default function InformeRankingFiscalPBA() {
       {/* SECCIÓN 1 - CUADRANTE NACIÓN VS PROVINCIAS */}
       <div style={{ background: C.card, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-10">
+          <div className="mb-10">
             <SectionLabel>Sección 1 · Una relación fiscal que se invierte</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Nación y provincias cambian de lugar después de 25 años
@@ -574,18 +556,18 @@ export default function InformeRankingFiscalPBA() {
               mayor equilibrio. En 2025 sucede exactamente lo contrario: la Nación exhibe
               superávit y las provincias vuelven a registrar déficits agregados.
             </p>
-          </m.div>
-          <m.div {...fadeUp(0.1)}>
+          </div>
+          <div>
             <DownloadableViz title="Resultado primario - Nación vs. Provincias, 2011-2025 (% del PBI)">
               <ResultadoPrimarioQuadrante />
             </DownloadableViz>
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* SECCIÓN 2 - GASTO VS INGRESOS */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp(0)} className="mb-8">
+        <div className="mb-8">
           <SectionLabel>Sección 2 · El motor del deterioro</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             El gasto provincial crece el doble que los ingresos
@@ -596,18 +578,18 @@ export default function InformeRankingFiscalPBA() {
             <strong style={{ color: C.ink }}>todas las provincias</strong>, y el gasto previsional
             11%. En sentido contrario, la administración nacional redujo su gasto real 2%.
           </p>
-        </m.div>
-        <m.div {...fadeUp(0.1)}>
+        </div>
+        <div>
           <DownloadableViz title="Variación real interanual del gasto y los ingresos provinciales, 2025">
             <GastoIngresosChart />
           </DownloadableViz>
-        </m.div>
+        </div>
       </div>
 
       {/* SECCIÓN 3 - OBRA PÚBLICA */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <SectionLabel>Sección 3 · Una tijera desigual</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               El gasto en obra pública creció 3%, pero no para todas las provincias igual
@@ -617,18 +599,18 @@ export default function InformeRankingFiscalPBA() {
               redujeron. Río Negro (+93%) y Santa Cruz (+78%) lideran las subas; San Luis (-49%)
               y Chaco (-37%) registran las mayores caídas.
             </p>
-          </m.div>
-          <m.div {...fadeUp(0.1)}>
+          </div>
+          <div>
             <DownloadableViz title="Variación real del gasto en obra pública por provincia, 2025 vs. 2024">
               <ObraPublicaChart />
             </DownloadableViz>
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* SECCIÓN 4 - BUENOS AIRES */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp(0)} className="mb-8">
+        <div className="mb-8">
           <SectionLabel>Sección 4 · El caso bonaerense</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             Buenos Aires: alta autonomía, déficit y la mayor deuda del país
@@ -639,13 +621,13 @@ export default function InformeRankingFiscalPBA() {
             bonaerense: a pesar de contar con una elevada autonomía de recursos, mantiene
             importantes desequilibrios fiscales y un desempeño negativo en calidad del gasto.
           </p>
-        </m.div>
-        <m.div {...fadeUp(0.1)} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <CifraCard label="Ranking fiscal general" valor="15° / 24" periodo="posición de PBA, la jurisdicción más poblada del país" />
           <CifraCard label="Resultado primario" valor="-0,3%" periodo="del PBG provincial, 2025" />
           <CifraCard label="Resultado financiero" valor="-0,8%" periodo="del PBG provincial, 2025" />
           <CifraCard label="Deuda / ingresos totales" valor="52%" periodo="la exposición financiera más alta del país" />
-        </m.div>
+        </div>
       </div>
 
       {/* NOTA METODOLÓGICA */}
@@ -655,30 +637,16 @@ export default function InformeRankingFiscalPBA() {
 
       {/* CONCLUSIÓN */}
       <div className="max-w-5xl mx-auto px-6 pb-16">
-        <m.div
-          {...fadeUp(0)}
-          className="bg-pattern-dark"
+        <div
+         
           style={{
             background: C.hero, borderRadius: 2,
             padding: '44px 48px', position: 'relative', overflow: 'hidden',
           }}
         >
-          <div style={{
-            position: 'absolute', right: -80, top: -80,
-            width: 280, height: 280, borderRadius: '50%',
-            border: '40px solid rgba(255,255,255,0.04)',
-          }} />
-          <div style={{
-            position: 'absolute', right: 60, bottom: -100,
-            width: 180, height: 180, borderRadius: '50%',
-            border: '30px solid rgba(255,255,255,0.03)',
-          }} />
 
           <div className="relative z-10">
-            <p style={{
-              color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem',
-              textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16,
-            }}>
+            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
               El argumento
             </p>
             <p style={{
@@ -688,21 +656,21 @@ export default function InformeRankingFiscalPBA() {
               Por primera vez en 25 años, la Nación corrige sus cuentas y las provincias las
               empeoran. El gasto en personal y jubilaciones, no la obra pública, es lo que rompió
               el equilibrio. Buenos Aires resume la tensión:{' '}
-              <span style={{ color: '#93c5fd', fontWeight: 700 }}>alta presión tributaria, déficit fiscal y la mayor deuda del país</span>{' '}
+              <span style={{ fontWeight: 700 }}>alta presión tributaria, déficit fiscal y la mayor deuda del país</span>{' '}
               en la jurisdicción económica más importante de la Argentina.{' '}
               <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
                 Sin equilibrio fiscal, no hay margen para reducir la exposición financiera.
               </span>
             </p>
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold" style={{ color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+            <p className="text-sm font-semibold" style={{ color: C.ink }}>
               Fuentes
             </p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>

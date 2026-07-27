@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ArrowLeft, Download } from 'lucide-react'
 import html2canvas from 'html2canvas'
 import {
@@ -165,15 +164,6 @@ const RECOMENDACIONES = [
   },
 ]
 
-// ─── ANIMACIÓN ───────────────────────────────────────────────
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
-})
-
 // ─── DOWNLOAD ────────────────────────────────────────────────
 
 const DL_PADDING  = 60
@@ -275,17 +265,16 @@ function SectionLabel({ children, dark = false, color }) {
   return (
     <p
       style={{ color: color || (dark ? 'rgba(255,255,255,0.5)' : C.accent) }}
-      className="text-xs font-semibold tracking-[0.18em] uppercase mb-3"
+      className={dark ? 'text-xs font-semibold tracking-[0.18em] uppercase mb-3' : 'text-sm font-semibold mb-3'}
     >
       {children}
     </p>
   )
 }
 
-function SH({ num, title }) {
+function SH({ title }) {
   return (
     <div style={{ borderBottom: `2px solid ${C.ink}`, paddingBottom: '0.75rem', marginBottom: '1.75rem', marginTop: '3rem' }}>
-      <p style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: B[400], marginBottom: '0.2rem' }}>{num}</p>
       <h2 style={{ fontSize: 'clamp(1.4rem, 2.8vw, 1.875rem)', fontWeight: 700, color: C.ink, lineHeight: 1.05, letterSpacing: '-0.015em' }}>{title}</h2>
     </div>
   )
@@ -495,49 +484,45 @@ function ChartExportaciones() {
 
 function Hero() {
   return (
-    <div className="bg-pattern-dark" style={{ background: C.hero }}>
+    <div style={{ background: C.hero }}>
       <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
         <Link to="/informes" className="inline-flex items-center gap-1.5 text-sm no-underline mb-10" style={{ color: 'rgba(255,255,255,0.62)' }}>
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
 
-        <m.div {...fadeUp(0)}>
-          <SectionLabel dark color="#93c5fd">FADA · INDEC · Tierra Viva · Bolsa de Cereales · Argendata</SectionLabel>
-        </m.div>
+        <div>
+          <SectionLabel dark color="rgba(255,255,255,0.62)">FADA · INDEC · Tierra Viva · Bolsa de Cereales · Argendata</SectionLabel>
+        </div>
 
-        <m.h1
-          {...fadeUp(0.05)}
+        <h1
           className="font-display"
           style={{ fontSize: 'clamp(2rem, 4.6vw, 3.2rem)', fontWeight: 700, color: '#fff', lineHeight: 1.12, marginBottom: 20, maxWidth: 820 }}
         >
           La agroindustria en la<br />
-          <span style={{ color: '#93c5fd' }}>Provincia de Buenos Aires</span>
-        </m.h1>
+          <span>Provincia de Buenos Aires</span>
+        </h1>
 
-        <m.p
-          {...fadeUp(0.1)}
+        <p
           style={{ color: 'rgba(255,255,255,0.60)', maxWidth: 720, lineHeight: 1.7, fontSize: '1.05rem' }}
         >
           Buenos Aires concentra el{' '}
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>26% de la producción agroindustrial</strong>{' '}
           nacional y el 35% de las exportaciones del país. Un análisis del peso productivo bonaerense, los desafíos estructurales del modelo y las políticas que pueden transformarlo.
-        </m.p>
+        </p>
 
-        <m.div {...fadeUp(0.15)} className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
           {HERO_STATS.map((s, i) => (
-            <m.div
+            <div
               key={i}
-              {...fadeUp(0.1 * i + 0.2)}
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
               className="p-5"
             >
               <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
-            </m.div>
+            </div>
           ))}
-        </m.div>
+        </div>
 
-        <m.div
-          {...fadeUp(0.3)}
+        <div
           style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}
         >
           {[
@@ -551,7 +536,7 @@ function Hero() {
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
-        </m.div>
+        </div>
       </div>
     </div>
   )
@@ -567,8 +552,8 @@ export default function InformeAgroindustriaPBA() {
       <div className="max-w-5xl mx-auto px-6 py-12">
 
         {/* 01 */}
-        <m.div {...fadeUp()}>
-          <SH num="01 · Contexto" title="La provincia como epicentro agroindustrial" />
+        <div>
+          <SH title="La provincia como epicentro agroindustrial" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Buenos Aires es la jurisdicción con mayor peso económico del país y el corazón de su sistema agroindustrial. Con más de 30,7 millones de hectáreas totales y aproximadamente 23,7 millones de superficie rural, concentra el 26% de la producción agroindustrial nacional y el 35% de las exportaciones totales del país.
           </p>
@@ -584,11 +569,11 @@ export default function InformeAgroindustriaPBA() {
           <DownloadableViz title="Participación de Buenos Aires en producción nacional por cultivo" fuente="CNA 2018 · Ministerio de Desarrollo Agrario PBA">
             <ChartParticipacion />
           </DownloadableViz>
-        </m.div>
+        </div>
 
         {/* 02 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="02 · Territorio" title="El mapa productivo bonaerense" />
+        <div>
+          <SH title="El mapa productivo bonaerense" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El territorio provincial organiza su producción en zonas claramente diferenciadas. Al norte se extiende la "zona núcleo" del agronegocio, dominada por la soja. El sudeste concentra trigo y cebada con porciones hortícolas. El centro y oeste serrano se orientan hacia la ganadería bovina, mientras el "cinturón verde" (de La Plata a Campana) rodea al Conurbano con producción hortícola intensiva.
           </p>
@@ -618,11 +603,11 @@ export default function InformeAgroindustriaPBA() {
               </tbody>
             </table>
           </div>
-        </m.div>
+        </div>
 
         {/* 03 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="03 · Empleo" title="Empleo y cadenas de valor" />
+        <div>
+          <SH title="Empleo y cadenas de valor" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Las cadenas agroindustriales generaron 4,2 millones de puestos de trabajo en Argentina en 2023, equivalentes al 22,4% del empleo privado nacional (FADA, 2025). Buenos Aires concentra cerca del 28% de los establecimientos agropecuarios del país y es la primera jurisdicción generadora de empleo con el 31,2% del total nacional.
           </p>
@@ -637,11 +622,11 @@ export default function InformeAgroindustriaPBA() {
           <DownloadableViz title="Empleos por cada 1.000 hectáreas según tipo de producción" fuente="Gobierno PBA / OIT · Agencia Tierra Viva, 2022">
             <ChartEmpleoPorHa />
           </DownloadableViz>
-        </m.div>
+        </div>
 
         {/* 04 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="04 · Estructura" title="La distribución de la tierra" />
+        <div>
+          <SH title="La distribución de la tierra" />
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El Censo Agropecuario 2018 reveló una concentración extrema de la propiedad de la tierra. El 16% de las explotaciones agropecuarias -aquellas con más de 1.000 hectáreas- controlan el 66,5% de la superficie total provincial. En el extremo opuesto, el 30% de las EAP con menos de 100 ha apenas posee el 1,8% del suelo.
           </p>
@@ -651,11 +636,11 @@ export default function InformeAgroindustriaPBA() {
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Este proceso de concentración vino acompañado de una reducción drástica del número de explotaciones: de 75.531 en 1988 a 36.700 en 2018, casi la mitad en tres décadas. La densidad de población rural cayó de 1 persona cada 141 hectáreas en 1988 a 1 cada 258 en 2018.
           </p>
-        </m.div>
+        </div>
 
         {/* 05 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="05 · Modelo productivo" title="El debate sobre el modelo productivo" />
+        <div>
+          <SH title="El debate sobre el modelo productivo" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             La soja transgénica -aprobada en Argentina en 1996- transformó radicalmente el paisaje productivo bonaerense. En 2018, la oleaginosa representaba el 86,5% de las hectáreas sembradas con oleaginosas, con 3,9 millones de hectáreas. Sólo el cultivo de soja demandaba el 46% del total de plaguicidas utilizados, con el glifosato como producto más empleado.
           </p>
@@ -673,11 +658,11 @@ export default function InformeAgroindustriaPBA() {
           <DownloadableViz title="Evolución de explotaciones agropecuarias en PBA" fuente="CNA 1988, 2002, 2018">
             <ChartEAP />
           </DownloadableViz>
-        </m.div>
+        </div>
 
         {/* 06 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="06 · Comercio exterior" title="Exportaciones y rol en la economía nacional" />
+        <div>
+          <SH title="Exportaciones y rol en la economía nacional" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Las cadenas agroindustriales generaron exportaciones por USD 52.900 millones en 2025, el 61% del total exportado por Argentina -6 de cada 10 dólares que ingresaron al país. Entre enero y octubre de 2025, los complejos de granos líderes sumaron USD 28.875 millones, un 5% más en valor y 10% en volumen respecto de 2024.
           </p>
@@ -689,11 +674,11 @@ export default function InformeAgroindustriaPBA() {
           <DownloadableViz title="Principales complejos exportadores de Argentina (2025)" fuente="FADA (2026) · BCR · Secretaría de Agricultura">
             <ChartExportaciones />
           </DownloadableViz>
-        </m.div>
+        </div>
 
         {/* 07 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="07 · Diagnóstico" title="Desafíos estructurales del sector" />
+        <div>
+          <SH title="Desafíos estructurales del sector" />
           <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, overflow: 'hidden', margin: '1.25rem 0' }}>
             {DESAFIOS.map((d, i) => (
               <div
@@ -714,36 +699,35 @@ export default function InformeAgroindustriaPBA() {
               </div>
             ))}
           </div>
-        </m.div>
+        </div>
 
         {/* 08 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="08 · Política pública" title="Recomendaciones de política" />
+        <div>
+          <SH title="Recomendaciones de política" />
           <div className="grid sm:grid-cols-2 gap-3 mt-5">
             {RECOMENDACIONES.map((r, i) => (
-              <m.div
+              <div
                 key={i}
-                {...fadeUp(i * 0.06)}
                 style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, borderLeft: `4px solid ${B[500]}`, padding: '1.125rem 1.25rem', transition: 'box-shadow 0.15s, border-left-color 0.15s' }}
                 
               >
                 <div style={{ fontSize: '0.575rem', fontWeight: 700, letterSpacing: '0.17em', textTransform: 'uppercase', color: B[400], marginBottom: '0.375rem' }}>{r.num}</div>
                 <div style={{ fontSize: '0.9rem', fontWeight: 600, color: C.ink, marginBottom: '0.4rem' }}>{r.title}</div>
                 <div style={{ fontSize: '0.8125rem', color: C.inkMid, lineHeight: 1.65 }}>{r.body}</div>
-              </m.div>
+              </div>
             ))}
           </div>
-        </m.div>
+        </div>
 
         {/* Fuentes */}
-        <m.div {...fadeUp(0.05)}>
+        <div>
           <div style={{ borderTop: `1px solid ${C.rule}`, marginTop: '3rem', paddingTop: '1.5rem' }}>
             <p style={{ fontSize: '0.6875rem', color: C.inkLight, lineHeight: 1.75 }}>
               <strong style={{ color: '#64748b' }}>Fuentes:</strong>{' '}
               FADA (2025) - Empleo en las Cadenas Agroindustriales 2023; BCCBA - Informe Económico N° 453 (julio 2025); Agencia Tierra Viva (2022) - "Buenos Aires: pilar del agronegocio"; Ministerio de Economía Nación / CEP XXI; CNA 2018; BCR - Informativo Semanal (2024, 2026); Argentina.gob.ar / Secretaría de Agricultura; Chequeado (2024); Argendata / Fund.ar.
             </p>
           </div>
-        </m.div>
+        </div>
 
       </div>
     </div>

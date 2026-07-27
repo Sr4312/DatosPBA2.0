@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
 import {
   Chart as ChartJS,
@@ -73,13 +72,11 @@ const HERO_STATS = [
 // ── Helpers ──────────────────────────────────────────────────────
 const fmt = n => n.toFixed(2).replace('.', ',')
 
-const fadeUp = { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true } }
-const dur = (d = 0.5, delay = 0) => ({ duration: d, delay })
 
 function SectionLabel({ children, dark = false }) {
   return (
     <p style={{ color: dark ? 'rgba(255,255,255,0.5)' : C.accent }}
-      className="text-xs font-semibold tracking-[0.18em] uppercase mb-3">
+      className={dark ? 'text-xs font-semibold tracking-[0.18em] uppercase mb-3' : 'text-sm font-semibold mb-3'}>
       {children}
     </p>
   )
@@ -178,7 +175,7 @@ export default function InformeMedicamentosTISH() {
     <div style={{ background: C.bg, minHeight: '100vh', color: C.ink }}>
 
       {/* ── HERO ───────────────────────────────────────────────── */}
-      <div className="bg-pattern-dark" style={{ background: C.hero }}>
+      <div style={{ background: C.hero }}>
         <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
           <Link to="/informes"
             className="inline-flex items-center gap-1.5 text-sm no-underline mb-10"
@@ -186,11 +183,11 @@ export default function InformeMedicamentosTISH() {
             <ArrowLeft className="w-4 h-4" /> Volver a informes
           </Link>
 
-          <m.div {...fadeUp} transition={dur(0.6)}>
+          <div>
             <SectionLabel dark>CEFIP-UNLP · CILFA · Mayo 2025</SectionLabel>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6 text-white">
               El precio de vivir<br />
-              <span style={{ color: D.red }}>en el municipio equivocado</span>
+              <span>en el municipio equivocado</span>
             </h1>
             <p style={{ color: 'rgba(255,255,255,0.55)', maxWidth: 620 }}
               className="text-base sm:text-lg leading-relaxed">
@@ -198,25 +195,25 @@ export default function InformeMedicamentosTISH() {
               distinta según el municipio. Pilar lidera con una presión del 3,73% sobre el precio
               final - casi el triple que Bahía Blanca. Mismo producto, reglas muy distintas.
             </p>
-          </m.div>
+          </div>
 
-          <m.div {...fadeUp} transition={dur(0.5, 0.2)}
+          <div
             className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
             {HERO_STATS.map((s, i) => (
-              <m.div key={i} {...fadeUp} transition={dur(0.45, 0.1 * i + 0.3)}
+              <div key={i}
                 style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
                 className="p-5">
                 <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
-              </m.div>
+              </div>
             ))}
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* ── GRÁFICO INTERACTIVO ───────────────────────────────── */}
       <div style={{ background: C.card, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp} transition={dur(0.5)} className="mb-6">
+          <div className="mb-6">
             <SectionLabel>Comparación interactiva</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Presión TISH acumulada por etapa de la cadena
@@ -225,7 +222,7 @@ export default function InformeMedicamentosTISH() {
               Alícuota sobre facturación como % del precio final de venta. Asume 1% para laboratorios.
               Filtrá por provincia para comparar entre jurisdicciones.
             </p>
-          </m.div>
+          </div>
 
           <div className="flex flex-wrap gap-2 mb-8">
             {PROVINCES.map(p => {
@@ -247,10 +244,10 @@ export default function InformeMedicamentosTISH() {
             })}
           </div>
 
-          <m.div {...fadeUp} transition={dur(0.6, 0.1)}
+          <div
             style={{ height: Math.max(280, filtered.length * 54) }}>
             <Bar data={chartData} options={chartOptions} />
-          </m.div>
+          </div>
 
           <div className="flex flex-wrap gap-5 mt-6">
             {Object.entries(PROV_COLORS).map(([prov, color]) => (
@@ -265,7 +262,7 @@ export default function InformeMedicamentosTISH() {
 
       {/* ── TABLA COMPLETA ──────────────────────────────────────── */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp} transition={dur(0.5)} className="mb-8">
+        <div className="mb-8">
           <SectionLabel>Datos completos · Tabla 6</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             Presión tributaria municipal por municipio y etapa
@@ -273,9 +270,9 @@ export default function InformeMedicamentosTISH() {
           <p style={{ color: C.inkMid }} className="text-sm">
             En porcentaje del precio final de venta. Informe CEFIP-UNLP, mayo 2025.
           </p>
-        </m.div>
+        </div>
 
-        <m.div {...fadeUp} transition={dur(0.5, 0.1)}
+        <div
           className="overflow-x-auto rounded-xl"
           style={{ border: `1px solid ${C.rule}` }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', background: C.card, fontSize: '0.85rem' }}>
@@ -328,13 +325,13 @@ export default function InformeMedicamentosTISH() {
           <div style={{ padding: '10px 16px', fontSize: '0.73rem', color: C.inkLight, background: '#f8f9fc', borderTop: `1px solid ${C.rule}` }}>
             * Alícuota final acumulada asumiendo 1% para laboratorios. Fuente: CEFIP-UNLP en base a legislación vigente, mayo 2025.
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* ── CASO PILAR ─────────────────────────────────────────── */}
-      <div className="bg-pattern-dark" style={{ background: C.hero, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <div style={{ background: C.hero, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp} transition={dur(0.5)} className="mb-8">
+          <div className="mb-8">
             <SectionLabel dark>El caso paradigmático</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-3 text-white">
               Pilar: tres tributos, una sola cadena de medicamentos
@@ -343,7 +340,7 @@ export default function InformeMedicamentosTISH() {
               El municipio aplica una estructura que combina TISH sobre facturación, montos fijos
               elevados y una tasa adicional (DIPE) calculada sobre tres variables simultáneas.
             </p>
-          </m.div>
+          </div>
 
           <div className="grid sm:grid-cols-2 gap-5">
             {[
@@ -352,34 +349,34 @@ export default function InformeMedicamentosTISH() {
               { icon: '⚙️', title: 'DIPE - triple variable', desc: 'La "Tasa para el Desarrollo de la Infraestructura y Promoción del Empleo local" determina la carga combinando superficie del establecimiento, cantidad de empleados e ingresos brutos generados en el partido.' },
               { icon: '📈', title: 'Módulos fiscales y complejidad', desc: 'Cada variable se transforma en índices y categorías que determinan módulos fiscales a pagar. El diseño "agrega un alto grado de complejidad y puede resultar en cargas significativas para contribuyentes de gran escala".' },
             ].map((s, i) => (
-              <m.div key={i} {...fadeUp} transition={dur(0.45, 0.1 * i + 0.15)}
+              <div key={i}
                 style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
                 className="p-6">
                 <div style={{ fontSize: 28, marginBottom: 10 }}>{s.icon}</div>
                 <h3 style={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem', marginBottom: 8 }}>{s.title}</h3>
                 <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.84rem', lineHeight: 1.65 }}>{s.desc}</p>
-              </m.div>
+              </div>
             ))}
           </div>
 
-          <m.div {...fadeUp} transition={dur(0.5, 0.5)}
+          <div
             style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 2, marginTop: 24 }}
             className="p-5">
             <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.75)' }}>
-              <span style={{ color: D.red, fontWeight: 700 }}>Conclusión del informe: </span>
+              <span style={{ fontWeight: 700 }}>Conclusión del informe: </span>
               La TISH y tributos complementarios como la DIPE operan muchas veces como verdaderos
               impuestos sobre la actividad económica y no como tasas asociadas estrictamente a
               servicios municipales. El diseño fragmentado genera distorsiones en decisiones de
               inversión, localización y comercialización.
             </p>
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* ── PBA VS NACIÓN ──────────────────────────────────────── */}
       <div style={{ background: C.card, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp} transition={dur(0.5)} className="mb-8">
+          <div className="mb-8">
             <SectionLabel>Contexto provincial y nacional</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               PBA: 4% de IIBB provincial + hasta 3,73% de TISH municipal
@@ -388,7 +385,7 @@ export default function InformeMedicamentosTISH() {
               La carga municipal se acumula sobre la presión provincial. En Pilar, ambas suman
               una carga subnacional estimada superior al 7% del precio final.
             </p>
-          </m.div>
+          </div>
 
           <div className="grid sm:grid-cols-3 gap-5 mb-8">
             {[
@@ -396,13 +393,13 @@ export default function InformeMedicamentosTISH() {
               { label: 'TISH máxima (Pilar)',      valor: '3,73%', periodo: 'La más alta del país entre los municipios analizados en el informe' },
               { label: 'Carga combinada estimada', valor: '~7,7%', periodo: 'IIBB + TISH solo en Pilar - sin contar tributos nacionales' },
             ].map((s, i) => (
-              <m.div key={i} {...fadeUp} transition={dur(0.45, 0.08 * i)}>
+              <div key={i}>
                 <CifraCard label={s.label} valor={s.valor} periodo={s.periodo} />
-              </m.div>
+              </div>
             ))}
           </div>
 
-          <m.div {...fadeUp} transition={dur(0.5, 0.3)}
+          <div
             style={{ background: '#edf1f8', border: `1px solid #d0daf0`, borderRadius: 2 }}
             className="p-5">
             <p className="text-sm leading-relaxed" style={{ color: C.inkMid }}>
@@ -412,7 +409,7 @@ export default function InformeMedicamentosTISH() {
               a Bahía Blanca (1,40%) y supera ampliamente a Córdoba Capital (2,52%), Río Cuarto (2,22%)
               y Santa Fe Capital (1,91%).
             </p>
-          </m.div>
+          </div>
         </div>
       </div>
 
@@ -420,7 +417,7 @@ export default function InformeMedicamentosTISH() {
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold" style={{ color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Fuente</p>
+            <p className="text-sm font-semibold" style={{ color: C.ink }}>Fuente</p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>
               CEFIP-UNLP (Garriga, Puig, Rosales) - Análisis de la presión tributaria sobre medicamentos en Argentina · CILFA · Mayo 2025
             </p>

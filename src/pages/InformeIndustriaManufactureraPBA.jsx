@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ArrowLeft, Download, ExternalLink } from 'lucide-react'
 import html2canvas from 'html2canvas'
 import {
@@ -125,15 +124,6 @@ const HERO_STATS = [
   { valor: '+3,5%',  variacion: '+3,5%',  polaridad: 'mayor-es-mejor', periodo: 'acumulado del primer trimestre 2026 vs. 2025' },
 ]
 
-// ─── ANIMACIÓN ───────────────────────────────────────────────
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
-})
-
 // ─── DOWNLOAD ────────────────────────────────────────────────
 
 const DL_PADDING  = 60
@@ -235,17 +225,16 @@ function SectionLabel({ children, dark = false, color }) {
   return (
     <p
       style={{ color: color || (dark ? 'rgba(255,255,255,0.5)' : C.accent) }}
-      className="text-xs font-semibold tracking-[0.18em] uppercase mb-3"
+      className={dark ? 'text-xs font-semibold tracking-[0.18em] uppercase mb-3' : 'text-sm font-semibold mb-3'}
     >
       {children}
     </p>
   )
 }
 
-function SH({ num, title }) {
+function SH({ title }) {
   return (
     <div style={{ borderBottom: `2px solid ${C.ink}`, paddingBottom: '0.75rem', marginBottom: '1.75rem', marginTop: '3rem' }}>
-      <p style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: B[400], marginBottom: '0.2rem' }}>{num}</p>
       <h2 style={{ fontSize: 'clamp(1.4rem, 2.8vw, 1.875rem)', fontWeight: 700, color: C.ink, lineHeight: 1.05, letterSpacing: '-0.015em' }}>{title}</h2>
     </div>
   )
@@ -578,48 +567,44 @@ function TablaBloques() {
 
 function Hero() {
   return (
-    <div className="bg-pattern-dark" style={{ background: C.hero }}>
+    <div style={{ background: C.hero }}>
       <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
         <Link to="/informes" className="inline-flex items-center gap-1.5 text-sm no-underline mb-10" style={{ color: 'rgba(255,255,255,0.62)' }}>
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
 
-        <m.div {...fadeUp(0)}>
-          <SectionLabel dark color="#93c5fd">ISIM-PBA · Dirección Provincial de Estadística · Ministerio de Economía PBA · Marzo 2026</SectionLabel>
-        </m.div>
+        <div>
+          <SectionLabel dark color="rgba(255,255,255,0.62)">ISIM-PBA · Dirección Provincial de Estadística · Ministerio de Economía PBA · Marzo 2026</SectionLabel>
+        </div>
 
-        <m.h1
-          {...fadeUp(0.05)}
+        <h1
           className="font-display"
           style={{ fontSize: 'clamp(2rem, 4.6vw, 3.2rem)', fontWeight: 700, color: '#fff', lineHeight: 1.12, marginBottom: 20, maxWidth: 820 }}
         >
           La industria manufacturera bonaerense<br />
-          <span style={{ color: '#93c5fd' }}>rebotó 13,2% en marzo</span>
-        </m.h1>
+          <span>rebotó 13,2% en marzo</span>
+        </h1>
 
-        <m.p
-          {...fadeUp(0.1)}
+        <p
           style={{ color: 'rgba(255,255,255,0.60)', maxWidth: 720, lineHeight: 1.7, fontSize: '1.05rem' }}
         >
           Tras un primer bimestre de 2026 en baja, el ISIM-PBA marcó en marzo su mayor suba interanual reciente para ese mes, impulsada por{' '}
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>Productos químicos y Máquinas y equipos</strong>. Nueve de once bloques crecieron, aunque siete siguen por debajo de los niveles de actividad de 2012.
-        </m.p>
+        </p>
 
-        <m.div {...fadeUp(0.15)} className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
           {HERO_STATS.map((s, i) => (
-            <m.div
+            <div
               key={i}
-              {...fadeUp(0.1 * i + 0.2)}
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
               className="p-5"
             >
               <Cifra dark size="xl" valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
-            </m.div>
+            </div>
           ))}
-        </m.div>
+        </div>
 
-        <m.div
-          {...fadeUp(0.3)}
+        <div
           style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}
         >
           {[
@@ -633,7 +618,7 @@ function Hero() {
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
-        </m.div>
+        </div>
       </div>
     </div>
   )
@@ -649,8 +634,8 @@ export default function InformeIndustriaManufactureraPBA() {
       <div className="max-w-5xl mx-auto px-6 py-12">
 
         {/* 01 */}
-        <m.div {...fadeUp()}>
-          <SH num="01 · Contexto" title="Qué es y qué mide el ISIM-PBA" />
+        <div>
+          <SH title="Qué es y qué mide el ISIM-PBA" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El Indicador Sintético de la Industria Manufacturera de la provincia de Buenos Aires (ISIM-PBA) es elaborado por la Dirección Provincial de Estadística del Ministerio de Economía bonaerense a partir de un relevamiento propio sobre establecimientos industriales de la Provincia. Tiene base 2012=100 y sigue la evolución de corto plazo de la actividad fabril, una referencia clave dado que la Provincia concentra una porción sustancial de la producción manufacturera del país.
           </p>
@@ -662,11 +647,11 @@ export default function InformeIndustriaManufactureraPBA() {
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El indicador se desagrega en once bloques: alimentos y bebidas, tabaco, textiles y cueros, papel y cartón, refinación de petróleo, productos químicos, caucho y plástico, minerales no metálicos, metales comunes, máquinas y equipos, y vehículos automotores. El dato de marzo de 2026 es preliminar y está sujeto a revisión.
           </p>
-        </m.div>
+        </div>
 
         {/* 02 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="02 · Resultado general" title="El rebote de marzo revierte el arranque de año" />
+        <div>
+          <SH title="El rebote de marzo revierte el arranque de año" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             En marzo de 2026 el ISIM-PBA alcanzó 94,7 puntos, frente a 83,7 en marzo de 2025: una suba interanual del 13,2%. En la comparación desestacionalizada, el índice se ubicó en 94,1 puntos, con un alza del 5,9% respecto de febrero, que había marcado 80,5 puntos, el nivel más bajo del período analizado.
           </p>
@@ -681,11 +666,11 @@ export default function InformeIndustriaManufactureraPBA() {
           <DownloadableViz title="ISIM-PBA: nivel general y serie desestacionalizada (mar. 2025 – mar. 2026)" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA">
             <ChartSerie />
           </DownloadableViz>
-        </m.div>
+        </div>
 
         {/* 03 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="03 · Evolución interanual" title="De tres meses en rojo al salto del 13,2%" />
+        <div>
+          <SH title="De tres meses en rojo al salto del 13,2%" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El primer bimestre de 2026 había mostrado variaciones interanuales negativas —enero −1,6% y febrero −1,3%—, en línea con la caída de noviembre de 2025 (−10,2%), la mayor del período. Con el salto de marzo (+13,2%), el acumulado del primer trimestre se ubicó 3,5% por encima de igual período de 2025.
           </p>
@@ -701,11 +686,11 @@ export default function InformeIndustriaManufactureraPBA() {
             El cuadro completo detalla el nivel general, la serie desestacionalizada y las variaciones mensuales, interanuales y acumuladas de los últimos trece meses.
           </p>
           <TablaSerie />
-        </m.div>
+        </div>
 
         {/* 04 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="04 · Bloques industriales" title="Nueve de once ramas en terreno positivo" />
+        <div>
+          <SH title="Nueve de once ramas en terreno positivo" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             En marzo, nueve de los once bloques mostraron alzas interanuales. Productos químicos encabezó con +40,5%, seguido por Minerales no metálicos (+25,5%), Tabaco (+19,7%), Textiles y cueros (+17,7%) y Máquinas y equipos (+16,5%). Los únicos bloques con caída fueron Vehículos automotores (−6,8%) y Metales comunes (−14,0%).
           </p>
@@ -718,11 +703,11 @@ export default function InformeIndustriaManufactureraPBA() {
             <ChartBloques />
           </DownloadableViz>
           <TablaBloques />
-        </m.div>
+        </div>
 
         {/* 05 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="05 · Incidencias" title="El alza la explican dos bloques" />
+        <div>
+          <SH title="El alza la explican dos bloques" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Detrás del +13,2% agregado hay un crecimiento fuertemente concentrado. Productos químicos aportó 6,78 puntos porcentuales y Máquinas y equipos 1,96: entre ambos explican más de dos tercios de la incidencia positiva total. Les siguieron Alimentos y bebidas (1,89 p.p.), Refinación de petróleo (1,27) y Textiles y cueros (1,20).
           </p>
@@ -734,11 +719,11 @@ export default function InformeIndustriaManufactureraPBA() {
           <DownloadableViz title="Incidencia de cada bloque en la variación interanual del ISIM-PBA (marzo 2026)" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA">
             <ChartIncidencias />
           </DownloadableViz>
-        </m.div>
+        </div>
 
         {/* 06 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="06 · La contracara" title="Autos, metales y una base todavía baja" />
+        <div>
+          <SH title="Autos, metales y una base todavía baja" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El repunte tiene matices. Vehículos automotores acumuló su quinta baja interanual consecutiva (−6,8%) y Metales comunes cayó 14,0%, con incidencias negativas de 0,62 y 0,89 puntos porcentuales respectivamente. Además, pese al crecimiento generalizado, siete de los once bloques permanecen por debajo de los niveles de actividad del año base 2012, lo que matiza la lectura del salto interanual de marzo.
           </p>
@@ -747,46 +732,32 @@ export default function InformeIndustriaManufactureraPBA() {
             <CifraCard label="Metales comunes" valor="−14,0%" variacion="−14,0%" polaridad="mayor-es-mejor" periodo="incidencia de −0,89 p.p." />
             <CifraCard label="Bloques bajo el nivel 2012" valor="7 de 11" periodo="aún por debajo del año base" />
           </div>
-        </m.div>
+        </div>
 
         {/* NOTA METODOLÓGICA */}
-        <m.div {...fadeUp(0.05)}>
+        <div>
           <div style={{ borderTop: `1px solid ${C.rule}`, marginTop: '3rem', paddingTop: '1.5rem' }}>
             <SectionLabel>Nota metodológica</SectionLabel>
             <p style={{ fontSize: '0.8125rem', color: C.inkMid, lineHeight: 1.75, maxWidth: '72ch' }}>
               El ISIM-PBA se construye con base 2012=100 a partir de un relevamiento propio de la Dirección Provincial de Estadística sobre establecimientos industriales bonaerenses. El dato de marzo de 2026 es preliminar y los meses de 2025 y 2026 son provisorios, por lo que pueden revisarse en publicaciones posteriores. La serie desestacionalizada corrige los efectos de calendario y estacionalidad, y puede diferir del nivel general en la lectura mensual. La "incidencia" mide el aporte, en puntos porcentuales, de cada bloque a la variación interanual del índice agregado. Los datos corresponden a información difundida en junio de 2026.
             </p>
           </div>
-        </m.div>
+        </div>
 
       </div>
 
       {/* CONCLUSIÓN */}
       <div className="max-w-5xl mx-auto px-6 pb-16">
-        <m.div
-          {...fadeUp(0)}
-          className="bg-pattern-dark"
+        <div
+         
           style={{
             background: C.hero, borderRadius: 2,
             padding: '44px 48px', position: 'relative', overflow: 'hidden',
           }}
         >
-          <div style={{
-            position: 'absolute', right: -80, top: -80,
-            width: 280, height: 280, borderRadius: '50%',
-            border: '40px solid rgba(255,255,255,0.04)',
-          }} />
-          <div style={{
-            position: 'absolute', right: 60, bottom: -100,
-            width: 180, height: 180, borderRadius: '50%',
-            border: '30px solid rgba(255,255,255,0.03)',
-          }} />
 
           <div className="relative z-10">
-            <p style={{
-              color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem',
-              textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16,
-            }}>
+            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
               El argumento
             </p>
             <p style={{
@@ -794,9 +765,9 @@ export default function InformeIndustriaManufactureraPBA() {
               lineHeight: 1.6, fontWeight: 500, maxWidth: 800,
             }}>
               La industria bonaerense creció{' '}
-              <span style={{ color: '#93c5fd', fontWeight: 700 }}>13,2% interanual en marzo</span>, el mayor salto reciente para ese mes,
+              <span style={{ fontWeight: 700 }}>13,2% interanual en marzo</span>, el mayor salto reciente para ese mes,
               pero sobre una base de comparación baja: enero y febrero cerraron en caída y{' '}
-              <span style={{ color: '#93c5fd', fontWeight: 700 }}>7 de 11 bloques</span> siguen por debajo de 2012.
+              <span style={{ fontWeight: 700 }}>7 de 11 bloques</span> siguen por debajo de 2012.
               Además, el alza estuvo muy concentrada en Productos químicos y Máquinas y equipos.{' '}
               <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
                 Los datos no alcanzan para saber si marzo inicia una tendencia o responde a factores puntuales de comparación.
@@ -808,24 +779,22 @@ export default function InformeIndustriaManufactureraPBA() {
                 target="_blank" rel="noopener noreferrer"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'rgba(255,255,255,0.1)', color: '#fff', textDecoration: 'none',
-                  borderRadius: 2, padding: '10px 20px',
+                  color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
                   fontSize: '0.82rem', fontWeight: 600,
-                  border: '1px solid rgba(255,255,255,0.15)',
                 }}
               >
                 Ministerio de Economía PBA <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold" style={{ color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+            <p className="text-sm font-semibold" style={{ color: C.ink }}>
               Fuentes
             </p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>

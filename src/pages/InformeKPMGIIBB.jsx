@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
 import {
   Chart as ChartJS,
@@ -104,14 +103,12 @@ const doughnutOpts = {
   },
 }
 
-const fadeUp = { initial: { opacity: 0, y: 28 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true } }
-const dur = (d = 0.5, delay = 0) => ({ duration: d, delay })
 
 function SectionLabel({ children, dark = false }) {
   return (
     <p
       style={{ color: dark ? 'rgba(255,255,255,0.5)' : C.accent }}
-      className="text-xs font-semibold tracking-[0.18em] uppercase mb-3"
+      className={dark ? 'text-xs font-semibold tracking-[0.18em] uppercase mb-3' : 'text-sm font-semibold mb-3'}
     >
       {children}
     </p>
@@ -123,7 +120,7 @@ export default function InformeKPMGIIBB() {
     <div style={{ background: C.bg, minHeight: '100vh', color: C.ink }}>
 
       {/* HERO OSCURO */}
-      <div className="bg-pattern-dark" style={{ background: C.hero }}>
+      <div style={{ background: C.hero }}>
         <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
           <Link
             to="/informes"
@@ -133,11 +130,11 @@ export default function InformeKPMGIIBB() {
             <ArrowLeft className="w-4 h-4" /> Volver a informes
           </Link>
 
-          <m.div {...fadeUp} transition={dur(0.6)}>
+          <div>
             <SectionLabel dark>Encuesta KPMG · Empresas medianas y grandes · 2025</SectionLabel>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight mb-6 text-white">
               El peso fiscal que<br />
-              <span style={{ color: D.magenta }}>encarece cada precio</span>
+              <span>encarece cada precio</span>
             </h1>
             <p style={{ color: 'rgba(255,255,255,0.55)', maxWidth: 620 }} className="text-base sm:text-lg leading-relaxed">
               El Impuesto sobre los Ingresos Brutos lidera por lejos los gravámenes
@@ -145,31 +142,29 @@ export default function InformeKPMGIIBB() {
               medianas y grandes confirma una arquitectura fiscal que castiga la producción
               y se traslada, en cascada, al consumidor final.
             </p>
-          </m.div>
+          </div>
 
           {/* headline stats */}
-          <m.div
-            {...fadeUp} transition={dur(0.5, 0.2)}
+          <div
             className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12"
           >
             {HERO_STATS.map((s, i) => (
-              <m.div
+              <div
                 key={i}
-                {...fadeUp} transition={dur(0.45, 0.1 * i + 0.3)}
                 style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
                 className="p-5"
               >
                 <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
-              </m.div>
+              </div>
             ))}
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* IMPUESTO QUE MÁS ENCARECE */}
       <div style={{ background: C.card, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp} transition={dur(0.5)} className="mb-2">
+          <div className="mb-2">
             <SectionLabel>Pregunta #1 de la encuesta</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               ¿Qué impuesto encarece más los precios?
@@ -178,42 +173,38 @@ export default function InformeKPMGIIBB() {
               El IIBB lidera con una brecha elocuente respecto a todos los demás gravámenes -
               este año superando el 60%, contra el 54% del año anterior.
             </p>
-          </m.div>
+          </div>
 
           <div className="flex flex-col lg:flex-row gap-10 items-center">
             {/* donut */}
-            <m.div {...fadeUp} transition={dur(0.6, 0.15)} className="relative shrink-0" style={{ width: 260, height: 260 }}>
+            <div className="relative shrink-0" style={{ width: 260, height: 260 }}>
               <Doughnut data={doughnutData} options={doughnutOpts} />
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <span className="font-display text-5xl font-bold" style={{ color: DATA[1] }}>61%</span>
                 <span style={{ color: C.inkLight, fontSize: '0.72rem', marginTop: 2 }}>Ing. Brutos</span>
               </div>
-            </m.div>
+            </div>
 
             {/* legend bars */}
             <div className="flex-1 space-y-4 w-full">
               {IMPUESTOS.map((imp, i) => (
-                <m.div key={imp.label} {...fadeUp} transition={dur(0.4, 0.1 * i + 0.2)}>
+                <div key={imp.label}>
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="text-sm font-medium" style={{ color: C.ink }}>{imp.label}</span>
                     <span className="font-bold text-sm" style={{ color: imp.color }}>{imp.pct}%</span>
                   </div>
                   <div style={{ background: 'rgba(13,17,23,0.08)', borderRadius: 2, height: 8, overflow: 'hidden' }}>
-                    <m.div
-                      initial={{ width: 0 }}
+                    <div
                       whileInView={{ width: `${imp.pct}%` }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.8, delay: 0.1 * i + 0.3, ease: 'easeOut' }}
                       style={{ height: '100%', borderRadius: 2, background: imp.color }}
                     />
                   </div>
-                </m.div>
+                </div>
               ))}
             </div>
           </div>
 
-          <m.div
-            {...fadeUp} transition={dur(0.5, 0.4)}
+          <div
             style={{ background: '#edf1f8', border: `1px solid #d0daf0`, borderRadius: 2, marginTop: 40 }}
             className="p-5"
           >
@@ -222,13 +213,13 @@ export default function InformeKPMGIIBB() {
               Es bastante improbable el éxito de una reforma fiscal pro empleo y producción sin una
               readecuación del IIBB y sin moderar la superposición de regímenes de recaudación provinciales.
             </p>
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* RANKING PROVINCIAS */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp} transition={dur(0.5)} className="mb-10">
+        <div className="mb-10">
           <SectionLabel>Pregunta #4 de la encuesta</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             ¿Dónde debería vender más caro?
@@ -237,13 +228,12 @@ export default function InformeKPMGIIBB() {
             Si una empresa pudiera fijar precios por provincia según la carga fiscal,
             estas cinco jurisdicciones encabezarían el ranking de las más gravosas.
           </p>
-        </m.div>
+        </div>
 
         <div className="space-y-5">
           {PROVINCIAS.map((p, i) => (
-            <m.div
+            <div
               key={p.rank}
-              {...fadeUp} transition={dur(0.45, i * 0.08 + 0.1)}
               className="flex items-center gap-5"
             >
               <div
@@ -259,28 +249,24 @@ export default function InformeKPMGIIBB() {
                   </span>
                 </div>
                 <div style={{ background: 'rgba(13,17,23,0.07)', borderRadius: 2, height: p.rank === 1 ? 14 : 10, overflow: 'hidden' }}>
-                  <m.div
-                    initial={{ width: 0 }}
+                  <div
                     whileInView={{ width: `${p.pct}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1, delay: i * 0.1 + 0.2, ease: [0.22, 1, 0.36, 1] }}
                     style={{
                       height: '100%',
                       borderRadius: 2,
                       background: p.rank === 1
-                        ? `linear-gradient(90deg, ${D.magenta}, #ff6abf)`
+                        ? D.magenta
                         : p.color,
                       
                     }}
                   />
                 </div>
               </div>
-            </m.div>
+            </div>
           ))}
         </div>
 
-        <m.div
-          {...fadeUp} transition={dur(0.5, 0.6)}
+        <div
           style={{ background: C.card, border: `1px solid ${C.rule}`, borderRadius: 2, marginTop: 40 }}
           className="p-5"
         >
@@ -289,13 +275,13 @@ export default function InformeKPMGIIBB() {
             Córdoba, Tucumán y la Ciudad de Buenos Aires conforman el grupo habitual de jurisdicciones
             percibidas como más gravosas, con alternancia frecuente de Santa Fe.
           </p>
-        </m.div>
+        </div>
       </div>
 
       {/* SALDOS A FAVOR - sección oscura */}
-      <div className="bg-pattern-dark" style={{ background: C.hero, borderTop: `1px solid rgba(255,255,255,0.06)`, borderBottom: `1px solid rgba(255,255,255,0.06)` }}>
+      <div style={{ background: C.hero, borderTop: `1px solid rgba(255,255,255,0.06)`, borderBottom: `1px solid rgba(255,255,255,0.06)` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp} transition={dur(0.5)} className="mb-10">
+          <div className="mb-10">
             <SectionLabel dark>Pregunta #6 de la encuesta</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2 text-white">
               El dinero inmovilizado: saldos a favor de IIBB
@@ -304,9 +290,9 @@ export default function InformeKPMGIIBB() {
               Solo el 16% de los consultados no posee saldos a favor del gravamen. El 84% restante
               acumula créditos inmovilizados de magnitudes diversas - un 2% más que el año pasado.
             </p>
-          </m.div>
+          </div>
 
-          <m.div {...fadeUp} transition={dur(0.6, 0.1)} className="flex flex-col sm:flex-row items-center gap-10 mb-12">
+          <div className="flex flex-col sm:flex-row items-center gap-10 mb-12">
             <div className="text-center shrink-0">
               <div className="font-display font-bold" style={{ fontSize: 'clamp(5rem, 15vw, 9rem)', color: '#fff', lineHeight: 1 }}>
                 84%
@@ -318,37 +304,30 @@ export default function InformeKPMGIIBB() {
 
             <div className="flex-1 w-full space-y-4">
               {SALDOS.map((s, i) => (
-                <m.div key={s.label} {...fadeUp} transition={dur(0.4, 0.08 * i + 0.25)}>
+                <div key={s.label}>
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>{s.label}</span>
                     <span className="font-bold text-sm" style={{ color: s.color }}>{s.pct}%</span>
                   </div>
                   <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 2, height: 8, overflow: 'hidden' }}>
-                    <m.div
-                      initial={{ width: 0 }}
+                    <div
                       whileInView={{ width: `${s.pct * 2.5}%` }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.8, delay: 0.08 * i + 0.3, ease: 'easeOut' }}
                       style={{ height: '100%', borderRadius: 2, background: s.color }}
                     />
                   </div>
-                </m.div>
+                </div>
               ))}
             </div>
-          </m.div>
+          </div>
 
-          <m.div {...fadeUp} transition={dur(0.6, 0.3)}>
+          <div>
             <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.72rem', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
               Distribución total
             </p>
             <div style={{ display: 'flex', borderRadius: 2, overflow: 'hidden', height: 28 }}>
               {SALDOS.map((s, i) => (
-                <m.div
+                <div
                   key={i}
-                  initial={{ flex: 0 }}
-                  whileInView={{ flex: s.pct }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1.1, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
                   style={{ background: s.color, minWidth: 0 }}
                   title={`${s.label}: ${s.pct}%`}
                 />
@@ -362,28 +341,27 @@ export default function InformeKPMGIIBB() {
                 </div>
               ))}
             </div>
-          </m.div>
+          </div>
 
-          <m.div
-            {...fadeUp} transition={dur(0.5, 0.5)}
+          <div
             style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 2, marginTop: 32 }}
             className="p-5"
           >
             <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.75)' }}>
-              <span style={{ color: D.cyan, fontWeight: 700 }}>Inmovilización financiera. </span>
+              <span style={{ fontWeight: 700 }}>Inmovilización financiera. </span>
               La multiplicidad de regímenes de recaudación provinciales -muchos duplicados entre
               transacciones y acreditaciones bancarias- ha generalizado una situación que para muchas
               empresas constituye una de las principales problemáticas del régimen tributario argentino.
               Esta inmovilización es altamente perjudicial y hasta confiscatoria.
             </p>
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* 9% vs 91% */}
       <div style={{ background: C.card, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp} transition={dur(0.5)} className="mb-10">
+          <div className="mb-10">
             <SectionLabel>Pregunta #16 de la encuesta · Consulta abierta en LinkedIn</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               ¿Quién paga realmente el Ingresos Brutos?
@@ -392,18 +370,14 @@ export default function InformeKPMGIIBB() {
               KPMG consultó a la opinión pública abierta en redes sociales.
               La respuesta fue contundente.
             </p>
-          </m.div>
+          </div>
 
-          <m.div {...fadeUp} transition={dur(0.6, 0.15)} className="relative overflow-hidden" style={{ borderRadius: 2, minHeight: 280 }}>
+          <div className="relative overflow-hidden" style={{ borderRadius: 2, minHeight: 280 }}>
             <div style={{ display: 'flex', height: '100%', minHeight: 280 }}>
               {/* 9% */}
-              <m.div
-                initial={{ flex: 0 }}
-                whileInView={{ flex: 9 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+              <div
                 style={{
-                  background: `linear-gradient(135deg, #0F172A, #162040)`,
+                  background: '#0F172A',
                   border: `1px solid rgba(255,255,255,0.12)`,
                   borderRight: 'none',
                   borderRadius: '20px 0 0 20px',
@@ -419,16 +393,12 @@ export default function InformeKPMGIIBB() {
                 <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '0.7rem', textAlign: 'center', marginTop: 10, lineHeight: 1.4 }}>
                   Solo afecta<br />a las empresas
                 </p>
-              </m.div>
+              </div>
 
               {/* 91% */}
-              <m.div
-                initial={{ flex: 0 }}
-                whileInView={{ flex: 91 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.2, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+              <div
                 style={{
-                  background: `linear-gradient(135deg, ${D.magenta}cc, #a0006a)`,
+                  background: D.magenta,
                   borderRadius: '0 20px 20px 0',
                   display: 'flex',
                   flexDirection: 'column',
@@ -451,12 +421,11 @@ export default function InformeKPMGIIBB() {
                     Se traslada al consumidor
                   </p>
                 </div>
-              </m.div>
+              </div>
             </div>
-          </m.div>
+          </div>
 
-          <m.div
-            {...fadeUp} transition={dur(0.5, 0.4)}
+          <div
             style={{ background: '#edf1f8', border: `1px solid #d0daf0`, borderRadius: 2, marginTop: 32 }}
             className="p-5"
           >
@@ -467,7 +436,7 @@ export default function InformeKPMGIIBB() {
               precio final. No lo paga "la empresa" - lo pagás vos en cada consumo.
               Encarece todo, castiga el trabajo y complica la producción.
             </p>
-          </m.div>
+          </div>
         </div>
       </div>
 
@@ -475,7 +444,7 @@ export default function InformeKPMGIIBB() {
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold" style={{ color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+            <p className="text-sm font-semibold" style={{ color: C.ink }}>
               Fuente
             </p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>

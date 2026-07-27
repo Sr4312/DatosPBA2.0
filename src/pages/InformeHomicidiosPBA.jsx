@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ArrowLeft, ExternalLink, Download } from 'lucide-react'
 import html2canvas from 'html2canvas'
 import {
@@ -86,15 +85,6 @@ const FACTORES = [
   'Economías ilegales arraigadas',
   'Gran extensión territorial',
 ]
-
-// ─── ANIMACIÓN ───────────────────────────────────────────────
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
-})
 
 // ─── DOWNLOAD ────────────────────────────────────────────────
 
@@ -198,7 +188,7 @@ function SectionLabel({ children, dark = false, color }) {
   return (
     <p
       style={{ color: color || (dark ? 'rgba(255,255,255,0.5)' : C.accent) }}
-      className="text-xs font-semibold tracking-[0.18em] uppercase mb-3"
+      className={dark ? 'text-xs font-semibold tracking-[0.18em] uppercase mb-3' : 'text-sm font-semibold mb-3'}
     >
       {children}
     </p>
@@ -222,7 +212,7 @@ function CifraCard(props) {
 
 function Hero() {
   return (
-    <div className="bg-pattern-dark" style={{ background: C.hero }}>
+    <div style={{ background: C.hero }}>
       <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
         <Link
           to="/informes"
@@ -232,14 +222,13 @@ function Hero() {
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
 
-        <m.div {...fadeUp(0)}>
-          <SectionLabel dark color="rgba(252,165,165,0.8)">
+        <div>
+          <SectionLabel dark color="rgba(255,255,255,0.62)">
             Ministerio Público · IPP · Provincia de Buenos Aires
           </SectionLabel>
-        </m.div>
+        </div>
 
-        <m.h1
-          {...fadeUp(0.05)}
+        <h1
           className="font-display"
           style={{
             fontSize: 'clamp(2rem, 4.6vw, 3.2rem)',
@@ -248,11 +237,10 @@ function Hero() {
           }}
         >
           Homicidios dolosos<br />
-          <span style={{ color: '#fca5a5' }}>en la Provincia de Buenos Aires</span>
-        </m.h1>
+          <span>en la Provincia de Buenos Aires</span>
+        </h1>
 
-        <m.p
-          {...fadeUp(0.1)}
+        <p
           style={{
             color: 'rgba(255,255,255,0.60)', maxWidth: 720,
             lineHeight: 1.7, fontSize: '1.05rem',
@@ -263,16 +251,14 @@ function Hero() {
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>La Matanza</strong>{' '}
           emerge como el caso mas crítico de toda la provincia: tasa mas alta, mayor volumen
           absoluto y casi un quinto de todas las causas de homicidio.
-        </m.p>
+        </p>
 
-        <m.div
-          {...fadeUp(0.15)}
+        <div
           className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12"
         >
           {HERO_STATS.map((s, i) => (
-            <m.div
+            <div
               key={i}
-              {...fadeUp(0.1 * i + 0.2)}
               style={{
                 background: 'rgba(255,255,255,0.06)',
                 border: '1px solid rgba(255,255,255,0.10)',
@@ -281,12 +267,11 @@ function Hero() {
               className="p-5"
             >
               <Cifra dark size="xl" valor={s.valor} periodo={s.periodo} />
-            </m.div>
+            </div>
           ))}
-        </m.div>
+        </div>
 
-        <m.div
-          {...fadeUp(0.3)}
+        <div
           style={{
             display: 'flex', gap: 32, marginTop: 28,
             paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)',
@@ -304,7 +289,7 @@ function Hero() {
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
-        </m.div>
+        </div>
       </div>
     </div>
   )
@@ -537,17 +522,14 @@ const VICTIMAS_CARDS = [
 
 function NotaMetodologica() {
   return (
-    <m.div
-      {...fadeUp(0)}
+    <div
       style={{
-        background: '#fef3c7',
-        border: '1px solid rgba(180,83,9,0.18)',
-        borderLeft: '3px solid #b45309',
-        borderRadius: 2,
+        background: 'var(--surface-2)',
+        borderTop: '2px solid var(--ink)',
         padding: '18px 20px',
       }}
     >
-      <p style={{ fontSize: '0.72rem', fontWeight: 700, color: '#b45309', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 8 }}>
+      <p style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--ink)', marginBottom: 8 }}>
         Nota sobre los datos
       </p>
       <p style={{ fontSize: '0.82rem', color: C.inkMid, lineHeight: 1.6 }}>
@@ -559,7 +541,7 @@ function NotaMetodologica() {
         reporte mas reciente disponible. La tasa de homicidios de La Matanza (8,02 /100k)
         es consistente en ambas fuentes.
       </p>
-    </m.div>
+    </div>
   )
 }
 
@@ -714,7 +696,7 @@ export default function InformeHomicidiosPBA() {
       {/* SECCIÓN 1 - PANORAMA PROVINCIAL */}
       <div style={{ background: C.card, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <SectionLabel>Sección 1 · Panorama provincial</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               808 víctimas: la dimensión de la violencia letal bonaerense
@@ -725,13 +707,13 @@ export default function InformeHomicidiosPBA() {
               y mas del 60% ocurre en la vía pública. El conurbano concentra la enorme mayoría
               de los casos.
             </p>
-          </m.div>
-          <m.div {...fadeUp(0.1)} className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <CifraCard label="Víctimas de homicidios consumados" valor="808" periodo="Provincia de Buenos Aires · 2025" />
             <CifraCard label="Homicidios con arma de fuego" valor="56%" periodo="Del total de causas registradas" />
             <CifraCard label="Ocurridos en vía pública" valor="+60%" periodo="Contexto de lugar mas frecuente" />
-          </m.div>
-          <m.div {...fadeUp(0.15)}>
+          </div>
+          <div>
             <div style={{
               background: C.bg,
               border: `1px solid ${C.rule}`,
@@ -760,13 +742,13 @@ export default function InformeHomicidiosPBA() {
                 ))}
               </div>
             </div>
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* SECCIÓN 2 - BRECHA TERRITORIAL */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp(0)} className="mb-8">
+        <div className="mb-8">
           <SectionLabel>Sección 2 · Brecha territorial</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             El conurbano casi duplica al interior en homicidios
@@ -778,21 +760,21 @@ export default function InformeHomicidiosPBA() {
             La brecha refleja décadas de densificación urbana desigual y deficit estructural
             en seguridad.
           </p>
-        </m.div>
-        <m.div {...fadeUp(0.1)}>
+        </div>
+        <div>
           <DownloadableViz
             title="Tasa de homicidios dolosos por region - PBA 2025"
             fuente="Ministerio Público de la Provincia de Buenos Aires"
           >
             <BrechaChart />
           </DownloadableViz>
-        </m.div>
+        </div>
       </div>
 
       {/* SECCIÓN 3 - DEPARTAMENTOS CRÍTICOS */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <SectionLabel>Sección 3 · Departamentos críticos</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Los cuatro departamentos con mayor violencia letal
@@ -805,8 +787,8 @@ export default function InformeHomicidiosPBA() {
               <strong style={{ color: C.ink }}>44 homicidios</strong> al siguiente en
               cantidad absoluta.
             </p>
-          </m.div>
-          <m.div {...fadeUp(0.1)}>
+          </div>
+          <div>
             <DownloadableViz
               title="Ranking departamentos judiciales por tasa y volumen de homicidios dolosos - PBA 2025"
               fuente="Ministerio Público de la Provincia de Buenos Aires"
@@ -816,16 +798,16 @@ export default function InformeHomicidiosPBA() {
                 <RankingAbsChart />
               </div>
             </DownloadableViz>
-          </m.div>
-          <m.div {...fadeUp(0.15)} className="mt-6">
+          </div>
+          <div className="mt-6">
             <HomicidiosMap />
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* SECCIÓN 4 - FOCO LA MATANZA */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp(0)} className="mb-8">
+        <div className="mb-8">
           <SectionLabel>Sección 4 · Foco La Matanza</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             Un municipio que concentra la conflictividad de una región entera
@@ -837,24 +819,24 @@ export default function InformeHomicidiosPBA() {
             territorio genere casi el 20% de todas las causas de homicidio provinciales
             no tiene precedente en el mapa judicial bonaerense.
           </p>
-        </m.div>
+        </div>
 
-        <m.div {...fadeUp(0.1)} className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <CifraCard label="Homicidios consumados" valor="147" periodo="Departamento Judicial La Matanza · 2025" />
           <CifraCard label="Tasa de homicidios /100k" valor="8,02" periodo="La mas alta del AMBA y de toda la Provincia" />
           <CifraCard label="Sobre San Martín (103 hom.)" valor="+44" periodo="Homicidios mas que el segundo departamento" />
-        </m.div>
+        </div>
 
-        <m.div {...fadeUp(0.15)}>
+        <div>
           <DownloadableViz
             title="La Matanza vs promedios de referencia - Tasa de homicidios dolosos 2025"
             fuente="Ministerio Público PBA / SNIC 2024"
           >
             <MatanzaComparacionChart />
           </DownloadableViz>
-        </m.div>
+        </div>
 
-        <m.div {...fadeUp(0.2)} className="mt-8">
+        <div className="mt-8">
           <div style={{
             background: '#fff',
             border: `1px solid ${C.rule}`,
@@ -874,13 +856,13 @@ export default function InformeHomicidiosPBA() {
               ))}
             </div>
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* SECCIÓN 5 - QUIÉNES SON LAS VÍCTIMAS */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <SectionLabel>Sección 5 · Quiénes son las víctimas</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Robos, bandas y menores: el perfil de la violencia
@@ -890,13 +872,12 @@ export default function InformeHomicidiosPBA() {
               ocurrieron durante un robo; 76 se vincularon a narcotráfico o violencia de bandas.
               Los datos de menores imputados suman otro nivel de alerta.
             </p>
-          </m.div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {VICTIMAS_CARDS.map((d, i) => (
-              <m.div
+              <div
                 key={d.stat}
-                {...fadeUp(0.08 * i)}
                 style={{
                   background: '#fff',
                   border: `1px solid ${C.rule}`,
@@ -919,11 +900,11 @@ export default function InformeHomicidiosPBA() {
                   </p>
                   <p style={{ fontSize: '0.7rem', color: C.inkLight }}>{d.sub}</p>
                 </div>
-              </m.div>
+              </div>
             ))}
           </div>
 
-          <m.div {...fadeUp(0.2)} className="mt-6">
+          <div className="mt-6">
             <div style={{ background: C.bg, border: `1px solid ${C.rule}`, borderRadius: 2, padding: '18px 20px' }}>
               <p style={{ fontSize: '0.8rem', color: C.inkMid, lineHeight: 1.7, maxWidth: '72ch' }}>
                 <strong style={{ color: C.ink }}>76 casos</strong> vinculados a narcotráfico o
@@ -932,7 +913,7 @@ export default function InformeHomicidiosPBA() {
                 uno de los mayores desafíos de seguridad pública de la Argentina.
               </p>
             </div>
-          </m.div>
+          </div>
         </div>
       </div>
 
@@ -943,30 +924,16 @@ export default function InformeHomicidiosPBA() {
 
       {/* CONCLUSIÓN */}
       <div className="max-w-5xl mx-auto px-6 pb-16">
-        <m.div
-          {...fadeUp(0)}
-          className="bg-pattern-dark"
+        <div
+         
           style={{
             background: C.hero, borderRadius: 2,
             padding: '44px 48px', position: 'relative', overflow: 'hidden',
           }}
         >
-          <div style={{
-            position: 'absolute', right: -80, top: -80,
-            width: 280, height: 280, borderRadius: '50%',
-            border: '40px solid rgba(255,255,255,0.04)',
-          }} />
-          <div style={{
-            position: 'absolute', right: 60, bottom: -100,
-            width: 180, height: 180, borderRadius: '50%',
-            border: '30px solid rgba(255,255,255,0.03)',
-          }} />
 
           <div className="relative z-10">
-            <p style={{
-              color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem',
-              textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16,
-            }}>
+            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
               El argumento
             </p>
             <p style={{
@@ -975,7 +942,7 @@ export default function InformeHomicidiosPBA() {
             }}>
               La violencia letal no se distribuye de manera uniforme en la Provincia de
               Buenos Aires. Hay un municipio -La Matanza- que concentra{' '}
-              <span style={{ color: '#fca5a5', fontWeight: 700 }}>casi el 20% de todos
+              <span style={{ fontWeight: 700 }}>casi el 20% de todos
               los homicidios provinciales</span>, con la tasa mas alta del AMBA y mas del
               triple de la que registra el interior bonaerense.{' '}
               <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
@@ -989,10 +956,8 @@ export default function InformeHomicidiosPBA() {
                 target="_blank" rel="noopener noreferrer"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'rgba(255,255,255,0.1)', color: '#fff', textDecoration: 'none',
-                  borderRadius: 2, padding: '10px 20px',
+                  color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
                   fontSize: '0.82rem', fontWeight: 600,
-                  border: '1px solid rgba(255,255,255,0.15)',
                 }}
               >
                 Ministerio Público PBA <ExternalLink className="w-3.5 h-3.5" />
@@ -1012,14 +977,14 @@ export default function InformeHomicidiosPBA() {
               </a>
             </div>
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold" style={{ color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+            <p className="text-sm font-semibold" style={{ color: C.ink }}>
               Fuentes
             </p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>

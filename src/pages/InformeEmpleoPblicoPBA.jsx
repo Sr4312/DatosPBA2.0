@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ArrowLeft, ExternalLink, Download } from 'lucide-react'
 import html2canvas from 'html2canvas'
 import {
@@ -133,15 +132,6 @@ const CARGOS_EQUIV = [
   { label: 'Con ratio Bahia (11,7)',         cargos: 205920, color: DATA[3] },
 ]
 
-// ─── ANIMACIÓN ───────────────────────────────────────────────
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
-})
-
 // ─── DOWNLOAD ────────────────────────────────────────────────
 
 const DL_PADDING  = 60
@@ -243,17 +233,16 @@ function SectionLabel({ children, dark = false, color }) {
   return (
     <p
       style={{ color: color || (dark ? 'rgba(255,255,255,0.5)' : C.accent) }}
-      className="text-xs font-semibold tracking-[0.18em] uppercase mb-3"
+      className={dark ? 'text-xs font-semibold tracking-[0.18em] uppercase mb-3' : 'text-sm font-semibold mb-3'}
     >
       {children}
     </p>
   )
 }
 
-function SH({ num, title }) {
+function SH({ title }) {
   return (
     <div style={{ borderBottom: `2px solid ${C.ink}`, paddingBottom: '0.75rem', marginBottom: '1.75rem', marginTop: '3rem' }}>
-      <p style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: B[400], marginBottom: '0.2rem' }}>{num}</p>
       <h2 style={{ fontSize: 'clamp(1.4rem, 2.8vw, 1.875rem)', fontWeight: 700, color: C.ink, lineHeight: 1.05, letterSpacing: '-0.015em' }}>{title}</h2>
     </div>
   )
@@ -276,7 +265,7 @@ function Tag({ children, variant = 'blue' }) {
   const s = {
     /* 'red' y 'green' son chips categóricos, no valoraciones: se re-tintan
        con la paleta DATA para no usar rojo/verde semántico. */
-    amber: { background: '#fef3c7', color: '#92400e' },
+    amber: { background: DATA[4] + '14', color: DATA[4] },
     red:   { background: DATA[1] + '1A', color: DATA[1] },
     blue:  { background: B[50],     color: B[600]    },
     green: { background: DATA[2] + '1A', color: DATA[2] },
@@ -510,7 +499,7 @@ function ChartCargosEquivalentes() {
 
 function Hero() {
   return (
-    <div className="bg-pattern-dark" style={{ background: C.hero }}>
+    <div style={{ background: C.hero }}>
       <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
         <Link
           to="/informes"
@@ -520,14 +509,13 @@ function Hero() {
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
 
-        <m.div {...fadeUp(0)}>
-          <SectionLabel dark color="#93c5fd">
+        <div>
+          <SectionLabel dark color="rgba(255,255,255,0.62)">
             Presupuesto PBA 2026 · Minas Gerais · Florida · Nueva York · Texas
           </SectionLabel>
-        </m.div>
+        </div>
 
-        <m.h1
-          {...fadeUp(0.05)}
+        <h1
           className="font-display"
           style={{
             fontSize: 'clamp(2rem, 4.6vw, 3.2rem)',
@@ -536,11 +524,10 @@ function Hero() {
           }}
         >
           El empleo público bonaerense<br />
-          <span style={{ color: '#93c5fd' }}>en perspectiva internacional</span>
-        </m.h1>
+          <span>en perspectiva internacional</span>
+        </h1>
 
-        <m.p
-          {...fadeUp(0.1)}
+        <p
           style={{ color: 'rgba(255,255,255,0.60)', maxWidth: 720, lineHeight: 1.7, fontSize: '1.05rem' }}
         >
           Comparar empleados públicos sin criterio metodológico es fácil de atacar políticamente.
@@ -549,23 +536,21 @@ function Hero() {
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>El resultado es consistente</strong>{' '}
           en todos los comparadores y en todas las orientaciones políticas: Buenos Aires tiene
           entre un 30% y un 160% más de empleados públicos por habitante que sus pares.
-        </m.p>
+        </p>
 
-        <m.div {...fadeUp(0.15)} className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
           {HERO_STATS.map((s, i) => (
-            <m.div
+            <div
               key={i}
-              {...fadeUp(0.1 * i + 0.2)}
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
               className="p-5"
             >
               <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
-            </m.div>
+            </div>
           ))}
-        </m.div>
+        </div>
 
-        <m.div
-          {...fadeUp(0.3)}
+        <div
           style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}
         >
           {[
@@ -579,7 +564,7 @@ function Hero() {
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
-        </m.div>
+        </div>
       </div>
     </div>
   )
@@ -595,8 +580,8 @@ export default function InformeEmpleoPblicoPBA() {
       <div className="max-w-5xl mx-auto px-6 py-16 space-y-2">
 
         {/* 01 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="01 · Buenos Aires" title="530.922 cargos: los números de partida" />
+        <div>
+          <SH title="530.922 cargos: los números de partida" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El Presupuesto 2026 de la Provincia de Buenos Aires fija 530.922 cargos en la
             administración central, organismos descentralizados e instituciones de previsión social.
@@ -618,11 +603,11 @@ export default function InformeEmpleoPblicoPBA() {
             proporcionalmente mucho más estado por habitante que una de 17 millones para proveer
             los mismos servicios básicos.
           </p>
-        </m.div>
+        </div>
 
         {/* 02 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="02 · Metodología" title="Tres condiciones para comparar bien" />
+        <div>
+          <SH title="Tres condiciones para comparar bien" />
           <p className="text-base leading-relaxed mb-6" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El ejercicio parte de una premisa clara: se seleccionan únicamente jurisdicciones que
             cumplan tres condiciones simultáneamente. Donde la verificación primaria no fue posible,
@@ -630,9 +615,8 @@ export default function InformeEmpleoPblicoPBA() {
           </p>
           <div className="grid sm:grid-cols-3 gap-3">
             {CRITERIOS.map((c, i) => (
-              <m.div
+              <div
                 key={i}
-                {...fadeUp(i * 0.07)}
                 style={{
                   background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`,
                   borderTop: `4px solid ${c.top}`,
@@ -642,14 +626,14 @@ export default function InformeEmpleoPblicoPBA() {
                 <div style={{ fontSize: '0.575rem', fontWeight: 700, letterSpacing: '0.17em', textTransform: 'uppercase', color: B[400], marginBottom: '0.5rem' }}>{c.label}</div>
                 <div style={{ fontSize: '0.9rem', fontWeight: 600, color: C.ink, marginBottom: '0.5rem' }}>{c.title}</div>
                 <div style={{ fontSize: '0.8125rem', color: C.inkMid, lineHeight: 1.65 }}>{c.body}</div>
-              </m.div>
+              </div>
             ))}
           </div>
-        </m.div>
+        </div>
 
         {/* 03 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="03 · Brasil" title="Los estados brasileños: el espejo más cercano" />
+        <div>
+          <SH title="Los estados brasileños: el espejo más cercano" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Brasil es el comparador latinoamericano más relevante porque su federalismo distribuye
             funciones de manera casi idéntica al argentino: los estados tienen a su cargo la educación
@@ -682,11 +666,11 @@ export default function InformeEmpleoPblicoPBA() {
           <DownloadableViz title="Empleados estaduales cada 1.000 habitantes - PBA y estados brasileños" fuente="Presupuesto PBA 2026 · Gobierno de Minas Gerais · SAEB Bahia · Gobierno RS (jun. 2024)">
             <ChartBrasil />
           </DownloadableViz>
-        </m.div>
+        </div>
 
         {/* 04 */}
-        <m.div {...fadeUp(0.05)}>
-          <SH num="04 · Estados Unidos" title="Florida, Nueva York y Texas: tres modelos, el mismo resultado" />
+        <div>
+          <SH title="Florida, Nueva York y Texas: tres modelos, el mismo resultado" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Los estados norteamericanos requieren una aclaración metodológica: en EE.UU., la
             educación K-12 se financia desde distritos escolares locales, no desde el gobierno
@@ -709,14 +693,14 @@ export default function InformeEmpleoPblicoPBA() {
           <DownloadableViz title="Impacto del ajuste K-12 en los ratios de empleo público de EE.UU." fuente="Dept. de Administración de Florida (2021-22) · Empire Center NY (oct. 2024) · State Auditor's Office Texas, rep. 24-703 (feb. 2024)">
             <ChartEEUU />
           </DownloadableViz>
-        </m.div>
+        </div>
 
       </div>
 
       {/* 05 - CUADRO COMPLETO (fondo blanco) */}
       <div style={{ background: '#ffffff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <SectionLabel>Sección 05 · El cuadro completo</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               PBA encabeza el ranking en todas las comparaciones
@@ -725,18 +709,18 @@ export default function InformeEmpleoPblicoPBA() {
               Buenos Aires tiene el ratio más alto de toda la serie, independientemente de la región,
               el sistema político o el nivel de desarrollo de cada jurisdicción.
             </p>
-          </m.div>
+          </div>
 
-          <m.div {...fadeUp(0.1)}>
+          <div>
             <DownloadableViz
               title="Empleados estatales cada 1.000 habitantes - PBA vs. jurisdicciones de escala similar"
               fuente="Presupuesto PBA 2026 · Fuentes primarias oficiales de cada jurisdicción · Elaboración propia DatosPBA"
             >
               <ChartComparacion />
             </DownloadableViz>
-          </m.div>
+          </div>
 
-          <m.div {...fadeUp(0.15)} style={{ marginTop: '2rem' }}>
+          <div style={{ marginTop: '2rem' }}>
             <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, overflow: 'hidden', overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 520 }}>
                 <thead>
@@ -769,14 +753,14 @@ export default function InformeEmpleoPblicoPBA() {
                 * EE.UU.: ajustado incorporando docentes K-12, que en ese país dependen de distritos locales y no del gobierno estadual.
               </p>
             </div>
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* 06 - DIAGNÓSTICO */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp(0.05)}>
-          <SH num="06 · Diagnóstico" title="Qué dice y qué no dice este número" />
+        <div>
+          <SH title="Qué dice y qué no dice este número" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             La comparación no es un argumento a favor del ajuste indiscriminado. Es un diagnóstico
             de escala: Buenos Aires tiene más empleados públicos por habitante que jurisdicciones
@@ -806,12 +790,12 @@ export default function InformeEmpleoPblicoPBA() {
               </div>
             ))}
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* NOTA METODOLÓGICA */}
       <div className="max-w-5xl mx-auto px-6 pb-6">
-        <m.div {...fadeUp(0)} style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, padding: '1.25rem 1.5rem' }}>
+        <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, padding: '1.25rem 1.5rem' }}>
           <p style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: B[400], marginBottom: '0.5rem' }}>Nota metodológica</p>
           <p style={{ fontSize: '0.8rem', color: C.inkMid, lineHeight: 1.7 }}>
             Los datos de EE.UU. se ajustan incorporando el empleo docente K-12, que en Argentina y Brasil
@@ -822,26 +806,23 @@ export default function InformeEmpleoPblicoPBA() {
             de la Fundación Ecosur / Bolsa de Comercio de Córdoba para 2024 y no forman parte del cuadro
             comparativo principal, que solo considera el nivel de gobierno provincial/estadual.
           </p>
-        </m.div>
+        </div>
       </div>
 
       {/* CONCLUSIÓN */}
       <div className="max-w-5xl mx-auto px-6 pb-16">
-        <m.div
-          {...fadeUp(0)}
-          className="bg-pattern-dark"
+        <div
+         
           style={{ background: C.hero, borderRadius: 2, padding: '44px 48px', position: 'relative', overflow: 'hidden' }}
         >
-          <div style={{ position: 'absolute', right: -80, top: -80, width: 280, height: 280, borderRadius: '50%', border: '40px solid rgba(255,255,255,0.04)' }} />
-          <div style={{ position: 'absolute', right: 60, bottom: -100, width: 180, height: 180, borderRadius: '50%', border: '30px solid rgba(255,255,255,0.03)' }} />
           <div className="relative z-10">
-            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16 }}>
+            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
               El argumento
             </p>
             <p style={{ color: '#fff', fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
               Texas y Nueva York tienen ideologías opuestas y el mismo ratio de empleo público por habitante.
               Buenos Aires supera a ambos.{' '}
-              <span style={{ color: '#93c5fd', fontWeight: 700 }}>La brecha no es ideológica: es estructural.</span>{' '}
+              <span style={{ fontWeight: 700 }}>La brecha no es ideológica: es estructural.</span>{' '}
               <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
                 Minas Gerais administra más habitantes con funciones equivalentes y 185.000 empleados menos.
                 Ese número es el punto de partida del debate, no el final.
@@ -851,27 +832,27 @@ export default function InformeEmpleoPblicoPBA() {
               <a
                 href="https://www.ec.gba.gov.ar"
                 target="_blank" rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.1)', color: '#fff', textDecoration: 'none', borderRadius: 2, padding: '10px 20px', fontSize: '0.82rem', fontWeight: 600, border: '1px solid rgba(255,255,255,0.15)' }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4, fontSize: '0.82rem', fontWeight: 600 }}
               >
                 Ministerio de Economía PBA <ExternalLink className="w-3.5 h-3.5" />
               </a>
               <a
                 href="https://www.transparencia.mg.gov.br"
                 target="_blank" rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.65)', textDecoration: 'none', borderRadius: 2, padding: '10px 20px', fontSize: '0.82rem', fontWeight: 600, border: '1px solid rgba(255,255,255,0.10)' }}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.65)', textDecoration: 'underline', textUnderlineOffset: 4, fontSize: '0.82rem', fontWeight: 600 }}
               >
                 Portal Minas Gerais <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold" style={{ color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+            <p className="text-sm font-semibold" style={{ color: C.ink }}>
               Fuentes
             </p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>

@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
 import { colorEscalaValoracion } from '@/lib/variacion'
 
@@ -43,13 +42,6 @@ const ZONE_BG = {
 }
 const ZONE_LABEL = { lean: 'Estado liviano', mid: 'Estado intermedio', heavy: 'Estado pesado' }
 
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
-})
-
 function Chip({ zona }) {
   return (
     <span style={{
@@ -71,7 +63,7 @@ function SpectrumChart() {
   const sorted = [...MUNICIPIOS].sort((a, b) => a.pct - b.pct)
 
   return (
-    <m.div {...fadeUp(0.1)} style={{ position: 'relative', paddingBottom: 48 }}>
+    <div style={{ position: 'relative', paddingBottom: 48 }}>
       <div style={{ position: 'relative', height: 120 }}>
         <div style={{
           position: 'absolute', left: 0, width: `${(10 / MAX) * 100}%`,
@@ -101,12 +93,8 @@ function SpectrumChart() {
           const left = `${(muni.pct / MAX) * 100}%`
           const isTop = i % 2 === 0
           return (
-            <m.div
+            <div
               key={muni.name}
-              initial={{ scale: 0, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.05 * i + 0.3, type: 'spring', stiffness: 300 }}
               style={{ position: 'absolute', left, top: '50%', transform: 'translate(-50%, -50%)', zIndex: 10 }}
             >
               <div style={{
@@ -140,7 +128,7 @@ function SpectrumChart() {
                 bottom: isTop ? 14 : 'auto',
                 top: isTop ? 'auto' : 14,
               }} />
-            </m.div>
+            </div>
           )
         })}
       </div>
@@ -165,7 +153,7 @@ function SpectrumChart() {
           </div>
         ))}
       </div>
-    </m.div>
+    </div>
   )
 }
 
@@ -173,8 +161,7 @@ function MuniCard({ m: muni, delay = 0 }) {
   const col = ZONE_COLOR[muni.zona]
   const bg  = ZONE_BG[muni.zona]
   return (
-    <m.div
-      {...fadeUp(delay)}
+    <div
       style={{
         background: '#fff',
         border: `1px solid ${C.rule}`,
@@ -200,11 +187,8 @@ function MuniCard({ m: muni, delay = 0 }) {
           <Chip zona={muni.zona} />
         </div>
         <div style={{ marginTop: 16, background: bg, borderRadius: 2, height: 6, overflow: 'hidden' }}>
-          <m.div
-            initial={{ width: 0 }}
+          <div
             whileInView={{ width: `${(muni.pct / MAX) * 100}%` }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: delay + 0.3, ease: [0.22, 1, 0.36, 1] }}
             style={{ height: '100%', background: col, borderRadius: 2 }}
           />
         </div>
@@ -212,7 +196,7 @@ function MuniCard({ m: muni, delay = 0 }) {
           de cada 100 empleados trabaja en el estado municipal
         </div>
       </div>
-    </m.div>
+    </div>
   )
 }
 
@@ -222,7 +206,7 @@ function Dumbbell() {
   const ratio = (heavy.pct / lean.pct).toFixed(1)
 
   return (
-    <m.div {...fadeUp(0.1)} style={{
+    <div style={{
       background: '#fff',
       border: `1px solid ${C.rule}`,
       borderRadius: 2,
@@ -267,7 +251,7 @@ function Dumbbell() {
         En Alberti, <strong>casi 4 de cada 10 empleados</strong> trabaja en la administración pública municipal.
         En Vicente López, menos de 1 de cada 20. La misma Provincia de Buenos Aires. Dos mundos fiscales completamente distintos.
       </p>
-    </m.div>
+    </div>
   )
 }
 
@@ -281,7 +265,7 @@ export default function InformeCAFEstadoMunicipal() {
 
       {/* HERO OSCURO */}
       <div
-        className="bg-pattern-dark"
+       
         style={{ background: '#0F172A' }}
       >
         <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
@@ -293,17 +277,16 @@ export default function InformeCAFEstadoMunicipal() {
             <ArrowLeft className="w-4 h-4" /> Volver a informes
           </Link>
 
-          <m.div {...fadeUp(0)}>
+          <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
               <div style={{ width: 32, height: 2, background: C.accent }} />
               <span style={{ fontSize: '0.72rem', fontWeight: 700, color: C.accent, textTransform: 'uppercase', letterSpacing: '0.15em' }}>
                 Atlas CAF · Gobiernos Locales · Buenos Aires
               </span>
             </div>
-          </m.div>
+          </div>
 
-          <m.h1
-            {...fadeUp(0.05)}
+          <h1
             className="font-display"
             style={{
               fontSize: 'clamp(2.4rem, 6vw, 4rem)',
@@ -315,17 +298,17 @@ export default function InformeCAFEstadoMunicipal() {
             }}
           >
             Dos Buenos Aires:<br />
-            <span style={{ color: '#34d399' }}>el estado que trabaja</span>{' '}
-            y <span style={{ color: '#7dd3fc' }}>el estado que pesa</span>
-          </m.h1>
+            <span>el estado que trabaja</span>{' '}
+            y <span>el estado que pesa</span>
+          </h1>
 
-          <m.p {...fadeUp(0.1)} style={{ color: 'rgba(255,255,255,0.60)', maxWidth: 620, lineHeight: 1.7, fontSize: '1.02rem' }}>
+          <p style={{ color: 'rgba(255,255,255,0.60)', maxWidth: 620, lineHeight: 1.7, fontSize: '1.02rem' }}>
             El Atlas de CAF revela una brecha de hasta <strong style={{ color: 'rgba(255,255,255,0.9)' }}>9 veces</strong> en el porcentaje
             de empleo en administración pública entre municipios bonaerenses. Más estado no significa
             mejor estado: significa más carga tributaria y menos sector privado.
-          </m.p>
+          </p>
 
-          <m.div {...fadeUp(0.15)} style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}>
             {[
               { label: 'Fuente', val: 'Atlas CAF Gobiernos Locales' },
               { label: 'Cobertura', val: 'Municipios de Buenos Aires' },
@@ -336,14 +319,14 @@ export default function InformeCAFEstadoMunicipal() {
                 <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
               </div>
             ))}
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* SPECTRUM */}
       <div style={{ background: '#fff', borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-14">
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               El espectro del empleo estatal municipal
             </h2>
@@ -351,14 +334,14 @@ export default function InformeCAFEstadoMunicipal() {
               Cada punto es un municipio, posicionado según el porcentaje de su fuerza laboral
               que trabaja en la administración pública.
             </p>
-          </m.div>
+          </div>
           <SpectrumChart />
         </div>
       </div>
 
       {/* DUMBBELL */}
       <div className="max-w-5xl mx-auto px-6 py-14">
-        <m.div {...fadeUp(0)} className="mb-8">
+        <div className="mb-8">
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             La brecha que no debería existir
           </h2>
@@ -366,7 +349,7 @@ export default function InformeCAFEstadoMunicipal() {
             Dentro de la misma provincia, con las mismas reglas, coexisten modelos fiscales
             radicalmente distintos.
           </p>
-        </m.div>
+        </div>
         <Dumbbell />
       </div>
 
@@ -375,7 +358,7 @@ export default function InformeCAFEstadoMunicipal() {
         <div className="max-w-5xl mx-auto px-6 py-14">
 
           {/* LEAN */}
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
               <div style={{ width: 12, height: 12, borderRadius: '50%', background: ZONE_COLOR.lean }} />
               <span style={{ fontSize: '0.72rem', fontWeight: 700, color: ZONE_COLOR.lean, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
@@ -386,14 +369,14 @@ export default function InformeCAFEstadoMunicipal() {
               Municipios donde el peso del empleo público es mínimo, permitiendo mayor dinamismo
               del sector privado y menor presión fiscal.
             </p>
-          </m.div>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-14">
             {lean.map((muni, i) => <MuniCard key={muni.name} m={muni} delay={i * 0.08} />)}
           </div>
 
           {/* HEAVY */}
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
               <div style={{ width: 12, height: 12, borderRadius: '50%', background: ZONE_COLOR.heavy }} />
               <span style={{ fontSize: '0.72rem', fontWeight: 700, color: ZONE_COLOR.heavy, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
@@ -404,21 +387,21 @@ export default function InformeCAFEstadoMunicipal() {
               Municipios donde más de 1 de cada 3 empleados trabaja en la administración pública.
               Mayor carga tributaria, menor sector privado.
             </p>
-          </m.div>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {heavy.map((muni, i) => <MuniCard key={muni.name} m={muni} delay={i * 0.08} />)}
           </div>
 
           {/* INTERMEDIATE */}
-          <m.div {...fadeUp(0)} className="mt-14 mb-8">
+          <div className="mt-14 mb-8">
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
               <div style={{ width: 12, height: 12, borderRadius: '50%', background: ZONE_COLOR.mid }} />
               <span style={{ fontSize: '0.72rem', fontWeight: 700, color: ZONE_COLOR.mid, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
                 Zona intermedia
               </span>
             </div>
-          </m.div>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {mid.map((muni, i) => <MuniCard key={muni.name} m={muni} delay={i * 0.08} />)}
@@ -428,9 +411,8 @@ export default function InformeCAFEstadoMunicipal() {
 
       {/* CONCLUSIÓN */}
       <div className="max-w-5xl mx-auto px-6 py-14">
-        <m.div
-          {...fadeUp(0)}
-          className="bg-pattern-dark"
+        <div
+         
           style={{
             background: '#0F172A',
             borderRadius: 2,
@@ -439,25 +421,15 @@ export default function InformeCAFEstadoMunicipal() {
             overflow: 'hidden',
           }}
         >
-          <div style={{
-            position: 'absolute', right: -60, top: -60,
-            width: 240, height: 240, borderRadius: '50%',
-            border: '40px solid rgba(255,255,255,0.04)',
-          }} />
-          <div style={{
-            position: 'absolute', right: 40, bottom: -80,
-            width: 160, height: 160, borderRadius: '50%',
-            border: '30px solid rgba(255,255,255,0.03)',
-          }} />
 
           <div className="relative z-10">
-            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16 }}>
+            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
               La conclusión
             </p>
             <p style={{ color: '#fff', fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 680 }}>
               Más empleo en la administración pública no es un indicador de mejor servicio:
               es una señal de{' '}
-              <span style={{ color: '#7dd3fc', fontWeight: 700 }}>mayor carga tributaria</span>{' '}
+              <span style={{ fontWeight: 700 }}>mayor carga tributaria</span>{' '}
               y menos espacio para el sector privado. El Atlas de CAF muestra que la elección
               del modelo de Estado es una decisión política - y sus consecuencias fiscales
               las pagan los vecinos.
@@ -469,18 +441,15 @@ export default function InformeCAFEstadoMunicipal() {
                 rel="noopener noreferrer"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'rgba(255,255,255,0.1)',
-                  color: '#fff', textDecoration: 'none',
-                  borderRadius: 2, padding: '8px 18px',
+                  color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
                   fontSize: '0.78rem', fontWeight: 600,
-                  border: '1px solid rgba(255,255,255,0.15)',
                 }}
               >
                 Ver Atlas CAF - Buenos Aires <ExternalLink className="w-3 h-3" />
               </a>
             </div>
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* FOOTER */}

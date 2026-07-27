@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { m } from 'framer-motion'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
 import {
   Chart as ChartJS,
@@ -221,18 +220,11 @@ const OPISU = {
 }
 
 // ───── animation helpers ─────
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
-})
-
 function SectionLabel({ children, dark = false, color }) {
   return (
     <p
       style={{ color: color || (dark ? 'rgba(255,255,255,0.5)' : C.accent) }}
-      className="text-xs font-semibold tracking-[0.18em] uppercase mb-3"
+      className={dark ? 'text-xs font-semibold tracking-[0.18em] uppercase mb-3' : 'text-sm font-semibold mb-3'}
     >
       {children}
     </p>
@@ -242,7 +234,7 @@ function SectionLabel({ children, dark = false, color }) {
 // ───────────────── HERO ─────────────────
 function Hero() {
   return (
-    <div className="bg-pattern-dark" style={{ background: C.hero }}>
+    <div style={{ background: C.hero }}>
       <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
         <Link
           to="/informes"
@@ -252,12 +244,11 @@ function Hero() {
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
 
-        <m.div {...fadeUp(0)}>
+        <div>
           <SectionLabel dark>RENABAP · Registro Nacional de Barrios Populares · PBA</SectionLabel>
-        </m.div>
+        </div>
 
-        <m.h1
-          {...fadeUp(0.05)}
+        <h1
           className="font-display"
           style={{
             fontSize: 'clamp(2.4rem, 6vw, 4.2rem)',
@@ -266,12 +257,11 @@ function Hero() {
           }}
         >
           Los otros Buenos Aires:<br />
-          <span style={{ color: '#ff6abf' }}>2.327 barrios populares</span><br />
-          <span style={{ color: '#7dd3fc' }}>sin cloacas, sin agua, sin Estado</span>
-        </m.h1>
+          <span>2.327 barrios populares</span><br />
+          <span>sin cloacas, sin agua, sin Estado</span>
+        </h1>
 
-        <m.p
-          {...fadeUp(0.1)}
+        <p
           style={{
             color: 'rgba(255,255,255,0.60)', maxWidth: 680,
             lineHeight: 1.7, fontSize: '1.05rem',
@@ -281,16 +271,14 @@ function Hero() {
           en barrios populares en la Provincia de Buenos Aires. Representan el <strong style={{ color: 'rgba(255,255,255,0.9)' }}>36%</strong> del
           total nacional. Solo el 4% tiene cloaca de red. El 98% de los hogares no tiene título de propiedad.
           Este es el mapa de la urbanización pendiente más grande del país.
-        </m.p>
+        </p>
 
-        <m.div
-          {...fadeUp(0.15)}
+        <div
           className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12"
         >
           {HERO_STATS.map((s, i) => (
-            <m.div
+            <div
               key={i}
-              {...fadeUp(0.1 * i + 0.2)}
               style={{
                 background: 'rgba(255,255,255,0.06)',
                 border: '1px solid rgba(255,255,255,0.10)',
@@ -299,12 +287,11 @@ function Hero() {
               className="p-5"
             >
               <Cifra dark size="xl" valor={s.valor} periodo={s.periodo} />
-            </m.div>
+            </div>
           ))}
-        </m.div>
+        </div>
 
-        <m.div
-          {...fadeUp(0.3)}
+        <div
           style={{
             display: 'flex', gap: 32, marginTop: 28,
             paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)',
@@ -322,7 +309,7 @@ function Hero() {
               <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{item.val}</div>
             </div>
           ))}
-        </m.div>
+        </div>
       </div>
     </div>
   )
@@ -448,8 +435,7 @@ function ServicioDonut({ srv, delay = 0 }) {
     },
   }
   return (
-    <m.div
-      {...fadeUp(delay)}
+    <div
       style={{
         background: '#fff', border: `1px solid ${C.rule}`,
         borderRadius: 2, padding: '22px 20px',
@@ -479,7 +465,7 @@ function ServicioDonut({ srv, delay = 0 }) {
         <strong style={{ color: C.ink }}>{100 - srv.pct}%</strong> de los hogares relevados{' '}
         <span style={{ color: srv.colorTexto, fontWeight: 600 }}>no tiene {srv.label.toLowerCase()}</span>
       </p>
-    </m.div>
+    </div>
   )
 }
 
@@ -755,8 +741,7 @@ function DosBuenosAires() {
   }
 
   const Card = ({ side }) => (
-    <m.div
-      {...fadeUp()}
+    <div
       style={{
         background: '#fff', border: `1px solid ${C.rule}`,
         borderRadius: 2, overflow: 'hidden',
@@ -775,12 +760,8 @@ function DosBuenosAires() {
         </div>
         <div className="space-y-3">
           {side.stats.map((s, i) => (
-            <m.div
+            <div
               key={i}
-              initial={{ opacity: 0, x: -8 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.08 * i }}
               className="flex items-center justify-between gap-3 py-2"
               style={{ borderBottom: i < side.stats.length - 1 ? `1px solid ${C.rule}` : 'none' }}
             >
@@ -788,11 +769,11 @@ function DosBuenosAires() {
               <span className="font-display" style={{ fontSize: '1.5rem', fontWeight: 700, color: side.color, lineHeight: 1 }}>
                 {s.n}
               </span>
-            </m.div>
+            </div>
           ))}
         </div>
       </div>
-    </m.div>
+    </div>
   )
 
   return (
@@ -807,8 +788,7 @@ function DosBuenosAires() {
 function FisuVsDesfinanciamiento() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-      <m.div
-        {...fadeUp(0)}
+      <div
         style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '28px 26px' }}
       >
         <p style={{ color: C.inkLight, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>
@@ -831,10 +811,9 @@ function FisuVsDesfinanciamiento() {
             <div style={{ fontSize: '0.7rem', color: C.inkLight }}>obras en PBA</div>
           </div>
         </div>
-      </m.div>
+      </div>
 
-      <m.div
-        {...fadeUp(0.1)}
+      <div
         style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '28px 26px' }}
       >
         <p style={{ color: C.inkLight, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>
@@ -857,10 +836,9 @@ function FisuVsDesfinanciamiento() {
             <div style={{ fontSize: '0.7rem', color: C.inkLight }}>vecinos intervenidos</div>
           </div>
         </div>
-      </m.div>
+      </div>
 
-      <m.div
-        {...fadeUp(0.2)}
+      <div
         style={{
           background: '#fef2f2', border: `1px solid #fecaca`,
           borderRadius: 2, padding: '28px 26px',
@@ -884,7 +862,7 @@ function FisuVsDesfinanciamiento() {
             quedó sin presupuesto operativo.
           </p>
         </div>
-      </m.div>
+      </div>
     </div>
   )
 }
@@ -899,7 +877,7 @@ export default function InformeRENABAP() {
       {/* EVOLUCIÓN 2017-2023 */}
       <div style={{ background: C.card, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <SectionLabel>Sección 1 · Evolución del relevamiento</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Siete años registrando el crecimiento de la informalidad
@@ -908,16 +886,16 @@ export default function InformeRENABAP() {
               Entre 2017 y 2023, el RENABAP pasó de registrar 1.650 a 2.327 barrios populares en la PBA:
               un crecimiento del 41% en el relevamiento - no necesariamente en la realidad, que ya estaba ahí.
             </p>
-          </m.div>
-          <m.div {...fadeUp(0.1)}>
+          </div>
+          <div>
             <EvolucionChart />
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* TOP MUNICIPIOS */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp(0)} className="mb-8">
+        <div className="mb-8">
           <SectionLabel>Sección 2 · Concentración geográfica</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             Los 15 partidos con más barrios populares
@@ -926,16 +904,16 @@ export default function InformeRENABAP() {
             Uno de cada tres barrios populares bonaerenses está en solo cinco partidos del conurbano:
             La Matanza, Moreno, Quilmes, Almirante Brown y Merlo.
           </p>
-        </m.div>
-        <m.div {...fadeUp(0.1)}>
+        </div>
+        <div>
           <TopMunicipiosChart />
-        </m.div>
+        </div>
       </div>
 
       {/* MAPA */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <SectionLabel>Sección 3 · Mapa interactivo</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               El mapa de la urbanización pendiente
@@ -944,16 +922,16 @@ export default function InformeRENABAP() {
               Hacé clic en cualquier partido del conurbano o del interior para ver la cantidad de barrios populares.
               La intensidad del color indica la concentración territorial.
             </p>
-          </m.div>
-          <m.div {...fadeUp(0.1)}>
+          </div>
+          <div>
             <BarriosMap />
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* DOS BUENOS AIRES */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp(0)} className="mb-8">
+        <div className="mb-8">
           <SectionLabel color={C.informal}>Sección 4 · Dos Buenos Aires</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             La Buenos Aires formal vs. la Buenos Aires informal
@@ -963,14 +941,14 @@ export default function InformeRENABAP() {
             de acceso a servicios básicos completamente distintos. No es un problema de geografía: es un problema
             de integración urbana.
           </p>
-        </m.div>
+        </div>
         <DosBuenosAires />
       </div>
 
       {/* SERVICIOS DONUTS */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <SectionLabel>Sección 5 · Acceso a servicios formales</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Cuatro servicios, cuatro déficits
@@ -979,14 +957,13 @@ export default function InformeRENABAP() {
               El porcentaje de hogares con acceso formal dentro de los barrios RENABAP.
               El resto resuelve por cuenta propia: conexiones irregulares, pozos ciegos, camiones cisterna, garrafas.
             </p>
-          </m.div>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {SERVICIOS.map((s, i) => <ServicioDonut key={s.key} srv={s} delay={i * 0.08} />)}
           </div>
 
-          <m.div
-            {...fadeUp(0.4)}
+          <div
             style={{ background: '#edf1f8', border: `1px solid #d0daf0`, borderRadius: 2, marginTop: 32 }}
             className="p-5"
           >
@@ -995,13 +972,13 @@ export default function InformeRENABAP() {
               el gas de red es el servicio menos disponible (2%), seguido por cloacas (4%), agua corriente (17%)
               y electricidad formal (33%). Todos muy por debajo del promedio provincial bonaerense.
             </p>
-          </m.div>
+          </div>
         </div>
       </div>
 
       {/* DÉCADAS */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div {...fadeUp(0)} className="mb-8">
+        <div className="mb-8">
           <SectionLabel>Sección 6 · Historia del crecimiento informal</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             Cuándo se formaron los barrios populares
@@ -1010,16 +987,16 @@ export default function InformeRENABAP() {
             El 61% de los barrios populares de la PBA se fundaron después del año 2000. Casi 4 de cada 10 barrios
             nacieron ya en el siglo XXI - prueba de que la urbanización informal no terminó con la crisis de 2001.
           </p>
-        </m.div>
-        <m.div {...fadeUp(0.1)}>
+        </div>
+        <div>
           <DecadasChart />
-        </m.div>
+        </div>
       </div>
 
       {/* FISU / OPISU / 2024 */}
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
-          <m.div {...fadeUp(0)} className="mb-8">
+          <div className="mb-8">
             <SectionLabel>Sección 7 · Política pública e inversión</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               FISU, OPISU y el freno de 2024
@@ -1028,37 +1005,23 @@ export default function InformeRENABAP() {
               La herramienta principal para cerrar la brecha - el Fondo de Integración Socio-Urbana -
               invirtió USD 1.244 millones entre 2019 y 2023. En 2024 se desfinanció prácticamente por completo.
             </p>
-          </m.div>
+          </div>
           <FisuVsDesfinanciamiento />
         </div>
       </div>
 
       {/* CONCLUSIÓN */}
       <div className="max-w-5xl mx-auto px-6 py-16">
-        <m.div
-          {...fadeUp(0)}
-          className="bg-pattern-dark"
+        <div
+         
           style={{
             background: C.hero, borderRadius: 2,
             padding: '44px 48px', position: 'relative', overflow: 'hidden',
           }}
         >
-          <div style={{
-            position: 'absolute', right: -80, top: -80,
-            width: 280, height: 280, borderRadius: '50%',
-            border: '40px solid rgba(255,255,255,0.04)',
-          }} />
-          <div style={{
-            position: 'absolute', right: 60, bottom: -100,
-            width: 180, height: 180, borderRadius: '50%',
-            border: '30px solid rgba(255,255,255,0.03)',
-          }} />
 
           <div className="relative z-10">
-            <p style={{
-              color: 'rgba(255,255,255,0.62)', fontSize: '0.72rem',
-              textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: 16,
-            }}>
+            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
               La conclusión
             </p>
             <p style={{
@@ -1068,9 +1031,9 @@ export default function InformeRENABAP() {
               La Provincia de Buenos Aires concentra más de un tercio de la informalidad urbana del país.
               2.327 barrios populares, 2,5 millones de personas, siete décadas de crecimiento sin integración.
               El mapa no muestra una frontera geográfica: muestra una{' '}
-              <span style={{ color: '#ff6abf', fontWeight: 700 }}>frontera de ciudadanía</span>.
+              <span style={{ fontWeight: 700 }}>frontera de ciudadanía</span>.
               Mientras el FISU no vuelva a estar operativo y el OPISU no escale su cobertura,{' '}
-              <span style={{ color: '#7dd3fc', fontWeight: 700 }}>la otra Buenos Aires seguirá existiendo sin Estado</span>.
+              <span style={{ fontWeight: 700 }}>la otra Buenos Aires seguirá existiendo sin Estado</span>.
             </p>
             <div style={{ marginTop: 32, display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
               <a
@@ -1078,10 +1041,8 @@ export default function InformeRENABAP() {
                 target="_blank" rel="noopener noreferrer"
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'rgba(255,255,255,0.1)', color: '#fff', textDecoration: 'none',
-                  borderRadius: 2, padding: '10px 20px',
+                  color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
                   fontSize: '0.82rem', fontWeight: 600,
-                  border: '1px solid rgba(255,255,255,0.15)',
                 }}
               >
                 Sitio oficial RENABAP <ExternalLink className="w-3.5 h-3.5" />
@@ -1101,14 +1062,14 @@ export default function InformeRENABAP() {
               </a>
             </div>
           </div>
-        </m.div>
+        </div>
       </div>
 
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold" style={{ color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+            <p className="text-sm font-semibold" style={{ color: C.ink }}>
               Fuentes
             </p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>
