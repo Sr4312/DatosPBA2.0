@@ -474,6 +474,122 @@ function IndicatorBar({ ind, data }) {
   )
 }
 
+/* ── Ranking provincial por temática (estado por defecto del panel) ─────── */
+
+const NAME_BY_NORM = {}
+MUNICIPIOS_DATA.forEach(d => { NAME_BY_NORM[normName(d.nombre)] = d.nombre })
+
+function displayName(key) {
+  return NAME_BY_NORM[key] ?? key.replace(/\b\p{L}/gu, c => c.toUpperCase())
+}
+
+const fmtPct1 = v => (v * 100).toLocaleString('es-AR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%'
+
+const RANKINGS = {
+  general: {
+    titulo: 'Los 10 partidos más poblados',
+    fuente: 'INDEC, Censo 2022',
+    rows: [...MUNICIPIOS_DATA]
+      .filter(d => d.poblacion != null && d.nombre !== 'Buenos Aires')
+      .sort((a, b) => b.poblacion - a.poblacion)
+      .slice(0, 10)
+      .map(d => ({ nombre: d.nombre, valor: d.poblacion.toLocaleString('es-AR') })),
+  },
+  produccion: {
+    titulo: 'Mayor tasa de empleo adulto',
+    fuente: 'CAF, en base a Censo 2022',
+    rows: [...MUNICIPIOS_DATA]
+      .filter(d => d.desempleo_adulto != null)
+      .sort((a, b) => a.desempleo_adulto - b.desempleo_adulto)
+      .slice(0, 10)
+      .map(d => ({ nombre: d.nombre, valor: fmtPct1(1 - d.desempleo_adulto) })),
+  },
+  tasavial: {
+    titulo: 'Alícuotas más altas por litro',
+    fuente: 'Ministerio de Economía de la Nación, mar. 2025',
+    rows: Object.entries(TASA_VIAL_RAW)
+      .filter(([k, v]) => v.tipo === 'pct' && k !== 'presidente juan domingo peron')
+      .sort((a, b) => b[1].valor - a[1].valor)
+      .slice(0, 10)
+      .map(([k, v]) => ({ nombre: displayName(k), valor: v.valor.toFixed(2).replace('.', ',') + '%' })),
+  },
+  transparencia: {
+    titulo: 'Mejor índice de transparencia',
+    fuente: 'ASAP, Filial PBA',
+    rows: [...TRANSPARENCIA_RAW]
+      .sort((a, b) => b.indice - a.indice)
+      .slice(0, 10)
+      .map(d => ({ nombre: d.municipio, valor: `${d.indice}/100` })),
+  },
+  concejales: {
+    titulo: 'Mayor gasto en concejales por habitante',
+    fuente: 'Fundación Libertad',
+    rows: [...CONCEJALES_RAW]
+      .sort((a, b) => b.por_habitante - a.por_habitante)
+      .slice(0, 10)
+      .map(d => ({ nombre: d.municipio, valor: `$ ${d.por_habitante.toLocaleString('es-AR')}` })),
+  },
+}
+
+function RankingDefault({ tema }) {
+  if (tema === 'economia') {
+    return (
+      <div className="p-5 border-t-2 border-[#0F172A] flex-1 overflow-y-auto">
+        <p className="text-label font-semibold uppercase tracking-wider text-slate-500 mb-3">
+          Partidos por categoría productiva
+        </p>
+        <div className="flex flex-col">
+          {Object.entries(CADENA_CATEGORIAS).map(([key, c]) => (
+            <div key={key} className="flex items-baseline justify-between gap-3 py-2 border-b" style={{ borderColor: 'var(--rule)' }}>
+              <span className="text-xs text-slate-700 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 shrink-0" style={{ backgroundColor: c.color }} />
+                {c.label}
+              </span>
+              <span className="text-xs font-semibold text-slate-900 tabular-nums">
+                {CADENA_MUNICIPIOS[key].length} partidos · {c.vab} del VAB
+              </span>
+            </div>
+          ))}
+        </div>
+        <p className="text-caption text-slate-500 mt-3">
+          Hacé clic en un partido del mapa para ver su trayectoria de corto y largo plazo.
+        </p>
+      </div>
+    )
+  }
+
+  const ranking = RANKINGS[tema]
+  if (!ranking) {
+    return (
+      <div className="p-5 border-t-2 border-[#0F172A]">
+        <p className="text-sm text-slate-700 leading-relaxed">
+          Los datos de tasas municipales se publican próximamente.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="p-5 border-t-2 border-[#0F172A] flex-1 overflow-y-auto">
+      <p className="text-label font-semibold uppercase tracking-wider text-slate-500 mb-3">
+        {ranking.titulo}
+      </p>
+      <ol className="flex flex-col">
+        {ranking.rows.map((r, i) => (
+          <li key={r.nombre} className="flex items-baseline gap-2.5 py-1.5 border-b" style={{ borderColor: 'var(--rule)' }}>
+            <span className="text-xs text-slate-400 tabular-nums w-4 shrink-0 text-right">{i + 1}</span>
+            <span className="text-xs text-slate-700 flex-1 min-w-0 truncate">{r.nombre}</span>
+            <span className="text-xs font-semibold text-slate-900 tabular-nums">{r.valor}</span>
+          </li>
+        ))}
+      </ol>
+      <p className="text-caption text-slate-500 mt-3">
+        Fuente: {ranking.fuente}. Hacé clic en un partido del mapa para ver su detalle.
+      </p>
+    </div>
+  )
+}
+
 /* ── Concejales legend ──────────────────────────────────────────────────── */
 function ConcejalesLegend() {
   return (
@@ -696,15 +812,7 @@ export default function AtlasMunicipal() {
   /* Panel content */
   function PanelContent() {
     if (!selected) {
-      return (
-        <div className="p-5 border-t-2 border-[#0F172A]">
-          <p className="text-sm font-medium text-slate-700 leading-relaxed">
-            {tema === 'concejales'
-              ? 'Hacé clic en un municipio coloreado para ver su gasto en concejales: presupuesto del concejo, gasto por concejal y por habitante.'
-              : 'Hacé clic en un partido del mapa para ver sus indicadores: población, servicios, educación y empleo, con su fuente.'}
-          </p>
-        </div>
-      )
+      return <RankingDefault tema={tema} />
     }
 
     if (selected._noData) {
@@ -965,29 +1073,24 @@ export default function AtlasMunicipal() {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            {TEMAS.map(t => {
-              const colors = {
-                general:    tema === t.id ? 'bg-[#0F172A] text-white border-[#0F172A]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#1a3d7c] hover:text-[#1a3d7c]',
-                produccion: tema === t.id ? 'bg-[#063d2f] text-white border-[#063d2f]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#0a5240] hover:text-[#0a5240]',
-                economia:   tema === t.id ? 'bg-[#334155] text-white border-[#334155]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#475569] hover:text-[#475569]',
-                tasas:      tema === t.id ? 'bg-[#4c1d95] text-white border-[#4c1d95]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#6d28d9] hover:text-[#6d28d9]',
-                tasavial:   tema === t.id ? 'bg-[#991b1b] text-white border-[#991b1b]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#7f1d1d] hover:text-[#7f1d1d]',
-                transparencia: tema === t.id ? 'bg-[#14532d] text-white border-[#14532d]' : 'bg-white text-slate-500 border-slate-200 hover:border-[#15803d] hover:text-[#15803d]',
-                concejales: tema === t.id ? 'bg-[#7b2d00] text-white border-[#7b2d00]'  : 'bg-white text-slate-500 border-slate-200 hover:border-[#5c2000] hover:text-[#5c2000]',
-              }
-              return (
-                <button
-                  key={t.id}
-                  onClick={() => setTema(t.id)}
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${colors[t.id]}`}
-                >
-                  {t.label}
-                  {t.id === 'tasas' && (
-                    <span className="ml-2 text-[10px] font-semibold uppercase tracking-wider opacity-60">próx.</span>
-                  )}
-                </button>
-              )
-            })}
+            {TEMAS.map(t => (
+              <button
+                key={t.id}
+                onClick={() => setTema(t.id)}
+                aria-pressed={tema === t.id}
+                className={`px-4 py-1.5 text-sm font-medium transition-colors border ${
+                  tema === t.id
+                    ? 'bg-[#0F172A] text-white border-[#0F172A]'
+                    : 'bg-white text-slate-500 hover:text-[#0F172A] hover:border-slate-400'
+                }`}
+                style={tema === t.id ? undefined : { borderColor: 'var(--rule)' }}
+              >
+                {t.label}
+                {t.id === 'tasas' && (
+                  <span className="ml-2 text-[10px] font-semibold uppercase tracking-wider opacity-60">próx.</span>
+                )}
+              </button>
+            ))}
           </div>
 
           {(tema === 'general' || tema === 'produccion') && (
