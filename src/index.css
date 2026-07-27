@@ -100,7 +100,27 @@ body {
   background-color: var(--c-bg);
 }
 
+/* Franja de indicadores del home: desplazamiento continuo y sin costura.
+   La pista se renderiza dos veces y se desplaza el 50%. */
+@keyframes ticker-h {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-track {
+  animation: ticker-h var(--ticker-duracion, 60s) linear infinite;
+}
+
+/* Se detiene para poder leer y para no arrastrar el foco del teclado */
+.ticker-track:hover,
+.ticker-track:focus-within {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: none;
+  }
   html {
     scroll-behavior: auto;
   }
