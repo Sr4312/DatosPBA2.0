@@ -142,44 +142,37 @@ async function downloadVizContainer(node, title, fuente) {
   triggerDownload(out, title)
 }
 
-function DownloadableViz({ title, fuente = 'Ministerio Público · PBA', children }) {
-  const ref    = useRef(null)
-  const btnRef = useRef(null)
+/* Descarga como link de texto bajo el gráfico, alineado a su borde izquierdo.
+   El botón queda fuera del nodo capturado, así el PNG no lo incluye. */
+function DownloadableViz({ title, fuente, children }) {
+  const ref = useRef(null)
   const [busy, setBusy] = useState(false)
 
   async function handleDownload() {
     if (!ref.current || busy) return
     setBusy(true)
-    if (btnRef.current) btnRef.current.style.visibility = 'hidden'
     try { await downloadVizContainer(ref.current, title, fuente) }
     catch (e) { console.error(e) }
-    if (btnRef.current) btnRef.current.style.visibility = ''
     setBusy(false)
   }
 
   return (
-    <div style={{ position: 'relative' }}>
-      <div ref={btnRef} style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
-        <button
-          onClick={handleDownload}
-          disabled={busy}
-          title="Descargar PNG con marca DatosPBA"
-          style={{
-            background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2,
-            padding: '6px 10px', cursor: busy ? 'wait' : 'pointer', color: C.inkMid,
-            display: 'inline-flex', alignItems: 'center', gap: 6,
-            fontSize: '0.72rem', fontWeight: 600, transition: 'color 0.15s, border-color 0.15s',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.color = C.accent; e.currentTarget.style.borderColor = C.accent }}
-          onMouseLeave={e => { e.currentTarget.style.color = C.inkMid; e.currentTarget.style.borderColor = C.rule }}
-        >
-          <Download style={{ width: 13, height: 13 }} />
-          {busy ? 'generando…' : 'Descargar PNG'}
-        </button>
-      </div>
-      <div ref={ref} style={{ background: C.bg }}>
+    <div>
+      <div ref={ref} style={{ background: 'var(--c-bg)' }}>
         {children}
       </div>
+      <button
+        onClick={handleDownload}
+        disabled={busy}
+        style={{
+          background: 'none', border: 'none', padding: 0, marginTop: 8,
+          fontSize: '0.75rem', fontWeight: 600, color: 'var(--c-ink-mid)',
+          textDecoration: 'underline', textUnderlineOffset: 3,
+          cursor: busy ? 'wait' : 'pointer', fontFamily: 'inherit',
+        }}
+      >
+        {busy ? 'Generando la imagen…' : 'Descargar el gráfico (PNG)'}
+      </button>
     </div>
   )
 }

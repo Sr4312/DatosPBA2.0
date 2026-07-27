@@ -184,45 +184,37 @@ async function downloadVizContainer(node, title, fuente) {
   triggerDownload(out, title)
 }
 
+/* Descarga como link de texto bajo el gráfico, alineado a su borde izquierdo.
+   El botón queda fuera del nodo capturado, así el PNG no lo incluye. */
 function DownloadableViz({ title, fuente, children }) {
-  const ref    = useRef(null)
-  const btnRef = useRef(null)
+  const ref = useRef(null)
   const [busy, setBusy] = useState(false)
 
   async function handleDownload() {
     if (!ref.current || busy) return
     setBusy(true)
-    if (btnRef.current) btnRef.current.style.visibility = 'hidden'
     try { await downloadVizContainer(ref.current, title, fuente) }
     catch (e) { console.error(e) }
-    if (btnRef.current) btnRef.current.style.visibility = ''
     setBusy(false)
   }
 
   return (
-    <div style={{ position: 'relative' }}>
-      <div ref={btnRef} style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
-        <button
-          onClick={handleDownload}
-          disabled={busy}
-          title="Descargar PNG con marca DatosPBA"
-          style={{
-            background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2,
-            padding: '6px 10px', cursor: busy ? 'wait' : 'pointer', color: C.inkMid,
-            display: 'inline-flex', alignItems: 'center', gap: 6,
-            fontSize: '0.72rem', fontWeight: 600, transition: 'color 0.15s, border-color 0.15s',
-            fontFamily: 'Archivo, sans-serif',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.color = C.accent; e.currentTarget.style.borderColor = C.accent }}
-          onMouseLeave={e => { e.currentTarget.style.color = C.inkMid; e.currentTarget.style.borderColor = C.rule }}
-        >
-          <Download style={{ width: 13, height: 13 }} />
-          {busy ? 'generando…' : 'Descargar PNG'}
-        </button>
-      </div>
-      <div ref={ref} style={{ background: C.bg }}>
+    <div>
+      <div ref={ref} style={{ background: 'var(--c-bg)' }}>
         {children}
       </div>
+      <button
+        onClick={handleDownload}
+        disabled={busy}
+        style={{
+          background: 'none', border: 'none', padding: 0, marginTop: 8,
+          fontSize: '0.75rem', fontWeight: 600, color: 'var(--c-ink-mid)',
+          textDecoration: 'underline', textUnderlineOffset: 3,
+          cursor: busy ? 'wait' : 'pointer', fontFamily: 'inherit',
+        }}
+      >
+        {busy ? 'Generando la imagen…' : 'Descargar el gráfico (PNG)'}
+      </button>
     </div>
   )
 }
@@ -338,7 +330,7 @@ function ChartComparacion() {
           }}
         />
       </div>
-      <p className="text-[11px] mt-3 px-1" style={{ color: C.inkLight, fontStyle: 'italic' }}>
+      <p className="text-[11px] mt-3" style={{ color: C.inkMid, borderTop: '1px solid var(--c-rule)', paddingTop: '0.625rem' }}>
         * EE.UU.: ajustado incorporando docentes K-12, que en ese país dependen de distritos locales y no del gobierno estadual.
         Fuente: Presupuesto PBA 2026 · Gobierno de Minas Gerais · SAEB Bahia · Gobierno RS (jun. 2024) ·
         Dept. de Administración de Florida (2021-22) · Empire Center NY (oct. 2024) · State Auditor's Office Texas, rep. 24-703 (feb. 2024).
@@ -382,7 +374,7 @@ function ChartBrasil() {
           },
         }} />
       </div>
-      <p className="text-[11px] mt-3 px-1" style={{ color: C.inkLight, fontStyle: 'italic' }}>
+      <p className="text-[11px] mt-3" style={{ color: C.inkMid, borderTop: '1px solid var(--c-rule)', paddingTop: '0.625rem' }}>
         Fuente: Presupuesto PBA 2026 · Gobierno de Minas Gerais (transparencia.mg.gov.br) · SAEB Bahia · Gobierno RS, jun. 2024.
       </p>
     </div>
@@ -445,7 +437,7 @@ function ChartEEUU() {
           },
         }} />
       </div>
-      <p className="text-[11px] mt-3 px-1" style={{ color: C.inkLight, fontStyle: 'italic' }}>
+      <p className="text-[11px] mt-3" style={{ color: C.inkMid, borderTop: '1px solid var(--c-rule)', paddingTop: '0.625rem' }}>
         Referencia: PBA = 30,2 emp./1.000 hab. - Fuente: Dept. de Administración de Florida (2021-22) · Empire Center NY (oct. 2024) · State Auditor's Office Texas, rep. 24-703 (feb. 2024).
       </p>
     </div>
@@ -488,7 +480,7 @@ function ChartCargosEquivalentes() {
           },
         }} />
       </div>
-      <p className="text-[11px] mt-3 px-1" style={{ color: C.inkLight, fontStyle: 'italic' }}>
+      <p className="text-[11px] mt-3" style={{ color: C.inkMid, borderTop: '1px solid var(--c-rule)', paddingTop: '0.625rem' }}>
         Proyección sobre 17,6 millones de habitantes (PBA 2026). Elaboración propia DatosPBA en base a fuentes primarias de cada jurisdicción.
       </p>
     </div>
@@ -749,7 +741,7 @@ export default function InformeEmpleoPblicoPBA() {
                   ))}
                 </tbody>
               </table>
-              <p style={{ fontSize: '0.625rem', color: C.inkLight, padding: '0.5rem 1rem 0.75rem', fontStyle: 'italic' }}>
+              <p style={{ fontSize: '0.625rem', color: C.inkLight, padding: '0.5rem 1rem 0.75rem' }}>
                 * EE.UU.: ajustado incorporando docentes K-12, que en ese país dependen de distritos locales y no del gobierno estadual.
               </p>
             </div>
