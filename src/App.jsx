@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout'
 import ScrollToTop from './components/ScrollToTop'
+import DocumentTitle from './components/DocumentTitle'
 import { ThemeProvider } from './context/ThemeContext'
 
 const Home            = lazy(() => import('./pages/Home'))
@@ -27,12 +28,15 @@ const InformeMercadoTrabajoGBA      = lazy(() => import('./pages/InformeMercadoT
 const InformePBGPBA                 = lazy(() => import('./pages/InformePBGPBA'))
 const Beta            = lazy(() => import('./pages/Beta'))
 const QuienesSomos    = lazy(() => import('./pages/QuienesSomos'))
+const Metodologia     = lazy(() => import('./pages/Metodologia'))
+const NotFound        = lazy(() => import('./pages/NotFound'))
 
 export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
         <ScrollToTop />
+        <DocumentTitle />
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Suspense fallback={null}><Home /></Suspense>} />
@@ -58,6 +62,8 @@ export default function App() {
             <Route path="reportes" element={<Suspense fallback={null}><ReportesRapidos /></Suspense>} />
             <Route path="beta" element={<Suspense fallback={null}><Beta /></Suspense>} />
             <Route path="quienes-somos" element={<Suspense fallback={null}><QuienesSomos /></Suspense>} />
+            <Route path="metodologia" element={<Suspense fallback={null}><Metodologia /></Suspense>} />
+            <Route path="*" element={<Suspense fallback={null}><NotFound /></Suspense>} />
           </Route>
         </Routes>
       </BrowserRouter>

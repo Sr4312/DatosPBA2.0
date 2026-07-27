@@ -120,7 +120,7 @@ export default function Layout() {
           <div>
             <p className="text-label uppercase text-slate-500 mb-4">Contenido</p>
             <ul className="space-y-2.5">
-              {NAV.map(l => (
+              {[...NAV, { to: '/metodologia', label: 'Metodología' }].map(l => (
                 <li key={l.to}>
                   <NavLink
                     to={l.to}
