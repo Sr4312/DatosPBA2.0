@@ -6,14 +6,23 @@
 -- chart_options guardados en `visualizaciones` referencian la
 -- familia por nombre y pisan el default de Chart.js, así que hay
 -- que actualizarlos en los datos.
+--
+-- OJO — la primera versión de este script no hacía nada:
+-- buscaba el literal '"family":"Poppins"', pero postgres imprime
+-- el jsonb con un espacio después de los dos puntos
+-- ('"family": "Poppins"'), así que el replace() nunca encontraba
+-- el patrón y reescribía el mismo valor sin error. Ahora se
+-- reemplaza solo el nombre entrecomillado, que es indiferente al
+-- espaciado. Verificado contra la base viva: el único valor de
+-- font.family almacenado es exactamente "Poppins".
 -- ============================================================
 
 UPDATE visualizaciones
-SET chart_options = replace(chart_options::text, '"family":"Poppins"', '"family":"Archivo"')::jsonb
+SET chart_options = replace(chart_options::text, '"Poppins"', '"Archivo"')::jsonb
 WHERE chart_options::text LIKE '%Poppins%';
 
 UPDATE visualizaciones
-SET chart_data = replace(chart_data::text, '"family":"Poppins"', '"family":"Archivo"')::jsonb
+SET chart_data = replace(chart_data::text, '"Poppins"', '"Archivo"')::jsonb
 WHERE chart_data::text LIKE '%Poppins%';
 
 -- Diagnóstico: no debería devolver filas

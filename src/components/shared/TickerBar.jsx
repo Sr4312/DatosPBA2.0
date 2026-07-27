@@ -79,7 +79,9 @@ export default function TickerBar({ reportes }) {
             key={i}
             className="w-60 shrink-0 px-5 py-4 border-r"
             style={{ borderColor: 'var(--rule)' }}
-            aria-hidden={i >= vuelta.length || undefined}
+            /* Solo la primera pasada de la lista se anuncia: todo lo que
+               sigue son copias para llenar la pantalla y cerrar el bucle. */
+            aria-hidden={i >= reportes.length || undefined}
           >
             <Indicador reporte={r} />
           </div>
