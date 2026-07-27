@@ -621,12 +621,34 @@ function Hero() {
   )
 }
 
+// ─── TESIS ───────────────────────────────────────────────────
+
+function Tesis() {
+  return (
+    <div className="max-w-5xl mx-auto px-6 pt-10">
+      <div style={{ borderTop: `2px solid ${C.ink}`, paddingTop: '1.25rem' }}>
+        <h2 style={{ fontSize: 'clamp(1.3rem, 2.6vw, 1.75rem)', fontWeight: 700, color: C.ink, lineHeight: 1.2, letterSpacing: '-0.015em', marginBottom: '0.75rem', maxWidth: 800 }}>
+          El rebote de marzo se apoya en una base de comparación baja y en dos bloques
+        </h2>
+        <p style={{ color: C.inkMid, fontSize: 'clamp(1.05rem, 2.2vw, 1.25rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
+          La industria bonaerense creció <strong>13,2% interanual en marzo</strong>, el mayor salto reciente para ese mes,
+          pero sobre una base de comparación baja: enero y febrero cerraron en caída y <strong>7 de 11 bloques</strong> siguen por debajo de 2012.
+          Además, el alza estuvo muy concentrada en Productos químicos y Máquinas y equipos.{' '}
+          Los datos no alcanzan para saber si marzo inicia una tendencia o responde a factores puntuales de comparación.
+        </p>
+      </div>
+    </div>
+  )
+}
+
 // ─── PAGE ────────────────────────────────────────────────────
 
 export default function InformeIndustriaManufactureraPBA() {
   return (
     <div style={{ background: C.bg, minHeight: '100vh' }}>
       <Hero />
+
+      <Tesis />
 
       <div className="max-w-5xl mx-auto px-6 py-12">
 
@@ -636,10 +658,9 @@ export default function InformeIndustriaManufactureraPBA() {
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El Indicador Sintético de la Industria Manufacturera de la provincia de Buenos Aires (ISIM-PBA) es elaborado por la Dirección Provincial de Estadística del Ministerio de Economía bonaerense a partir de un relevamiento propio sobre establecimientos industriales de la Provincia. Tiene base 2012=100 y sigue la evolución de corto plazo de la actividad fabril, una referencia clave dado que la Provincia concentra una porción sustancial de la producción manufacturera del país.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5" style={{ maxWidth: 580 }}>
             <CifraCard label="Índice ISIM-PBA (mar. 2026)" valor="94,7" periodo="base 2012=100 · dato preliminar" />
             <CifraCard label="Bloques sectoriales relevados" valor="11" periodo="ramas de la industria manufacturera" />
-            <CifraCard label="Bloques en alza interanual" valor="9 de 11" periodo="en marzo de 2026" />
           </div>
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El indicador se desagrega en once bloques: alimentos y bebidas, tabaco, textiles y cueros, papel y cartón, refinación de petróleo, productos químicos, caucho y plástico, minerales no metálicos, metales comunes, máquinas y equipos, y vehículos automotores. El dato de marzo de 2026 es preliminar y está sujeto a revisión.
@@ -743,50 +764,6 @@ export default function InformeIndustriaManufactureraPBA() {
 
       </div>
 
-      {/* CONCLUSIÓN */}
-      <div className="max-w-5xl mx-auto px-6 pb-16">
-        <div
-         
-          style={{
-            background: C.hero, borderRadius: 2,
-            padding: '44px 48px', position: 'relative', overflow: 'hidden',
-          }}
-        >
-
-          <div className="relative z-10">
-            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
-              El argumento
-            </p>
-            <p style={{
-              color: '#fff', fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)',
-              lineHeight: 1.6, fontWeight: 500, maxWidth: 800,
-            }}>
-              La industria bonaerense creció{' '}
-              <span style={{ fontWeight: 700 }}>13,2% interanual en marzo</span>, el mayor salto reciente para ese mes,
-              pero sobre una base de comparación baja: enero y febrero cerraron en caída y{' '}
-              <span style={{ fontWeight: 700 }}>7 de 11 bloques</span> siguen por debajo de 2012.
-              Además, el alza estuvo muy concentrada en Productos químicos y Máquinas y equipos.{' '}
-              <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
-                Los datos no alcanzan para saber si marzo inicia una tendencia o responde a factores puntuales de comparación.
-              </span>
-            </p>
-            <div style={{ marginTop: 32, display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-              <a
-                href="https://www.ec.gba.gov.ar"
-                target="_blank" rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
-                  fontSize: '0.82rem', fontWeight: 600,
-                }}
-              >
-                Ministerio de Economía PBA <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -797,6 +774,14 @@ export default function InformeIndustriaManufactureraPBA() {
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>
               Dirección Provincial de Estadística, Ministerio de Economía de la Provincia de Buenos Aires — Indicador Sintético de la Industria Manufacturera de la provincia de Buenos Aires (ISIM-PBA). Datos a marzo de 2026, difundidos en junio de 2026 · ec.gba.gov.ar
             </p>
+            <a
+              href="https://www.ec.gba.gov.ar"
+              target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm mt-2"
+              style={{ color: C.ink, textDecoration: 'underline', textUnderlineOffset: 3, fontWeight: 600 }}
+            >
+              Ministerio de Economía PBA <ExternalLink className="w-3.5 h-3.5" />
+            </a>
           </div>
           <Link to="/informes" className="text-sm no-underline font-medium" style={{ color: C.inkLight }}>
             ← Ver todos los informes

@@ -26,10 +26,6 @@ const C = {
 }
 
 // ── Paleta de datos ──────────────────────────────────────────────
-// D.red queda solo como acento del titular y de la conclusión (no es color de dato).
-const D = {
-  red: '#dc2626',
-}
 
 /* Colores categóricos por provincia: paleta DATA del sistema
    (Buenos Aires = serie principal DATA[1]). */
@@ -210,6 +206,21 @@ export default function InformeMedicamentosTISH() {
         </div>
       </div>
 
+      {/* ── TESIS ──────────────────────────────────────────────── */}
+      <div className="max-w-5xl mx-auto px-6 pt-10">
+        <div style={{ borderTop: `2px solid ${C.ink}`, paddingTop: '1.25rem' }}>
+          <h2 style={{ fontSize: 'clamp(1.3rem, 2.6vw, 1.75rem)', fontWeight: 700, color: C.ink, lineHeight: 1.2, letterSpacing: '-0.015em', marginBottom: '0.75rem', maxWidth: 800 }}>
+            La TISH opera como un impuesto encubierto sobre los medicamentos
+          </h2>
+          <p style={{ color: C.inkMid, fontSize: 'clamp(1.05rem, 2.2vw, 1.25rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
+            La TISH y tributos complementarios como la DIPE operan muchas veces como verdaderos
+            impuestos sobre la actividad económica y no como tasas asociadas estrictamente a
+            servicios municipales. El diseño fragmentado genera distorsiones en decisiones de
+            inversión, localización y comercialización.
+          </p>
+        </div>
+      </div>
+
       {/* ── GRÁFICO INTERACTIVO ───────────────────────────────── */}
       <div style={{ background: C.card, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
@@ -344,32 +355,20 @@ export default function InformeMedicamentosTISH() {
 
           <div className="grid sm:grid-cols-2 gap-5">
             {[
-              { icon: '📊', title: 'TISH sobre facturación', desc: 'La tasa se aplica sobre cada transacción a lo largo de la cadena, acumulándose en laboratorio, droguería y farmacia. Genera el 1,44% en droguerías y el 1,24% en farmacias.' },
-              { icon: '🔒', title: 'Monto fijo anual > $2,4 M', desc: 'Independientemente del nivel de ingresos, el municipio cobra un monto fijo anual superior a $2,4 millones bajo el concepto de TISH.' },
-              { icon: '⚙️', title: 'DIPE - triple variable', desc: 'La "Tasa para el Desarrollo de la Infraestructura y Promoción del Empleo local" determina la carga combinando superficie del establecimiento, cantidad de empleados e ingresos brutos generados en el partido.' },
-              { icon: '📈', title: 'Módulos fiscales y complejidad', desc: 'Cada variable se transforma en índices y categorías que determinan módulos fiscales a pagar. El diseño "agrega un alto grado de complejidad y puede resultar en cargas significativas para contribuyentes de gran escala".' },
+              { title: 'TISH sobre facturación', desc: 'La tasa se aplica sobre cada transacción a lo largo de la cadena, acumulándose en laboratorio, droguería y farmacia. Genera el 1,44% en droguerías y el 1,24% en farmacias.' },
+              { title: 'Monto fijo anual > $2,4 M', desc: 'Independientemente del nivel de ingresos, el municipio cobra un monto fijo anual superior a $2,4 millones bajo el concepto de TISH.' },
+              { title: 'DIPE - triple variable', desc: 'La "Tasa para el Desarrollo de la Infraestructura y Promoción del Empleo local" determina la carga combinando superficie del establecimiento, cantidad de empleados e ingresos brutos generados en el partido.' },
+              { title: 'Módulos fiscales y complejidad', desc: 'Cada variable se transforma en índices y categorías que determinan módulos fiscales a pagar. El diseño "agrega un alto grado de complejidad y puede resultar en cargas significativas para contribuyentes de gran escala".' },
             ].map((s, i) => (
               <div key={i}
                 style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
                 className="p-6">
-                <div style={{ fontSize: 28, marginBottom: 10 }}>{s.icon}</div>
                 <h3 style={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem', marginBottom: 8 }}>{s.title}</h3>
                 <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.84rem', lineHeight: 1.65 }}>{s.desc}</p>
               </div>
             ))}
           </div>
 
-          <div
-            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 2, marginTop: 24 }}
-            className="p-5">
-            <p className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.75)' }}>
-              <span style={{ fontWeight: 700 }}>Conclusión del informe: </span>
-              La TISH y tributos complementarios como la DIPE operan muchas veces como verdaderos
-              impuestos sobre la actividad económica y no como tasas asociadas estrictamente a
-              servicios municipales. El diseño fragmentado genera distorsiones en decisiones de
-              inversión, localización y comercialización.
-            </p>
-          </div>
         </div>
       </div>
 
@@ -403,7 +402,7 @@ export default function InformeMedicamentosTISH() {
             style={{ background: '#edf1f8', border: `1px solid #d0daf0`, borderRadius: 2 }}
             className="p-5">
             <p className="text-sm leading-relaxed" style={{ color: C.inkMid }}>
-              <span style={{ color: C.accent, fontWeight: 700 }}>Heterogeneidad extrema: </span>
+              <span style={{ color: C.ink, fontWeight: 700 }}>Heterogeneidad extrema: </span>
               empresas con exactamente la misma estructura operativa pueden enfrentar cargas fiscales
               muy distintas según el municipio donde estén radicadas. Pilar (3,73%) casi triplica
               a Bahía Blanca (1,40%) y supera ampliamente a Córdoba Capital (2,52%), Río Cuarto (2,22%)

@@ -528,12 +528,34 @@ function Hero() {
   )
 }
 
+// ─── TESIS ───────────────────────────────────────────────────
+
+function Tesis() {
+  return (
+    <div className="max-w-5xl mx-auto px-6 pt-10">
+      <div style={{ borderTop: `2px solid ${C.ink}`, paddingTop: '1.25rem' }}>
+        <h2 style={{ fontSize: 'clamp(1.3rem, 2.6vw, 1.75rem)', fontWeight: 700, color: C.ink, lineHeight: 1.2, letterSpacing: '-0.015em', marginBottom: '0.75rem', maxWidth: 800 }}>
+          Casi el 90% de los impuestos al agro bonaerense los recauda la Nación
+        </h2>
+        <p style={{ color: C.inkMid, fontSize: 'clamp(1.05rem, 2.2vw, 1.25rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
+          De cada hectárea agrícola bonaerense, el Estado se queda con el{' '}
+          <strong>59% de la renta</strong>, y casi el 90% de esos impuestos son nacionales.
+          Los recursos que genera el campo bonaerense no vuelven de forma directa a la provincia ni a sus municipios,
+          que apenas capturan el 9,3% y el 1,1% del total.{' '}
+          El problema no es solo cuánto se paga, sino quién lo recauda.
+        </p>
+      </div>
+    </div>
+  )
+}
+
 // ─── PAGE ────────────────────────────────────────────────────
 
 export default function InformeIndiceFADA() {
   return (
     <div style={{ background: C.bg, minHeight: '100vh' }}>
       <Hero />
+      <Tesis />
 
       <div className="max-w-5xl mx-auto px-6 py-12">
 
@@ -543,8 +565,7 @@ export default function InformeIndiceFADA() {
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El Índice FADA es elaborado trimestralmente por la Fundación Agropecuaria para el Desarrollo de Argentina y mide la participación del Estado (impuestos nacionales, provinciales y municipales) sobre la renta agrícola: lo que queda de restar al valor de la producción los costos necesarios para producir. Esa renta se distribuye en tres componentes: los impuestos, la renta de la tierra y el resultado del productor.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <CifraCard label="Índice FADA nacional (jun. 2026)" valor="61,9%" periodo="de la renta agrícola va a impuestos" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5" style={{ maxWidth: 600 }}>
             <CifraCard label="Variación vs. marzo 2026" valor="−0,7" unidad="pp" periodo="desde el 62,5% de la medición anterior" />
             <CifraCard label="Resultado para el productor" valor="8,5%" periodo="de la renta; el 29,7% restante es costo de la tierra" />
           </div>
@@ -596,8 +617,7 @@ export default function InformeIndiceFADA() {
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Dentro de Buenos Aires, el maíz presenta la menor carga relativa entre los cuatro cultivos ponderados, mientras que trigo y soja muestran valores casi idénticos y el girasol se ubica en un nivel intermedio. A nivel nacional, el informe señala al trigo como "el caso más crítico" (73,6%), golpeado por la suba del 49% anual en el precio de la urea que FADA atribuye a las tensiones geopolíticas en Medio Oriente.
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-            <CifraCard label="Maíz" valor="51,4%" periodo="la menor carga en PBA" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
             <CifraCard label="Girasol" valor="60,2%" periodo="nivel intermedio" />
             <CifraCard label="Soja" valor="62,1%" periodo="similar al trigo" />
             <CifraCard label="Trigo" valor="62,2%" periodo="la mayor carga en PBA" />
@@ -682,49 +702,6 @@ export default function InformeIndiceFADA() {
 
       </div>
 
-      {/* CONCLUSIÓN */}
-      <div className="max-w-5xl mx-auto px-6 pb-16">
-        <div
-         
-          style={{
-            background: C.hero, borderRadius: 2,
-            padding: '44px 48px', position: 'relative', overflow: 'hidden',
-          }}
-        >
-
-          <div className="relative z-10">
-            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
-              El argumento
-            </p>
-            <p style={{
-              color: '#fff', fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)',
-              lineHeight: 1.6, fontWeight: 500, maxWidth: 800,
-            }}>
-              De cada hectárea agrícola bonaerense, el Estado se queda con el{' '}
-              <span style={{ fontWeight: 700 }}>59% de la renta</span>, y casi el 90% de esos impuestos son nacionales.
-              Los recursos que genera el campo bonaerense no vuelven de forma directa a la provincia ni a sus municipios,
-              que apenas capturan el 9,3% y el 1,1% del total.{' '}
-              <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
-                El problema no es solo cuánto se paga, sino quién lo recauda.
-              </span>
-            </p>
-            <div style={{ marginTop: 32, display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-              <a
-                href="https://fundacionfada.org"
-                target="_blank" rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
-                  fontSize: '0.82rem', fontWeight: 600,
-                }}
-              >
-                Fundación FADA <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -733,7 +710,14 @@ export default function InformeIndiceFADA() {
               Fuentes
             </p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>
-              Fundación Agropecuaria para el Desarrollo de Argentina (FADA), Índice FADA: Participación del Estado en la renta agrícola, junio de 2026 · Autoras: Nicolle Pisani Claro (Economista Jefe) y Antonella Semadeni (Economista) · fundacionfada.org
+              Fundación Agropecuaria para el Desarrollo de Argentina (FADA), Índice FADA: Participación del Estado en la renta agrícola, junio de 2026 · Autoras: Nicolle Pisani Claro (Economista Jefe) y Antonella Semadeni (Economista) ·{' '}
+              <a
+                href="https://fundacionfada.org"
+                target="_blank" rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 4, color: C.ink, textDecoration: 'underline', textUnderlineOffset: 3, fontWeight: 600 }}
+              >
+                fundacionfada.org <ExternalLink className="w-3.5 h-3.5" />
+              </a>
             </p>
           </div>
           <Link to="/informes" className="text-sm no-underline font-medium" style={{ color: C.inkLight }}>

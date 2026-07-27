@@ -562,12 +562,34 @@ function Hero() {
   )
 }
 
+// ─── TESIS ───────────────────────────────────────────────────
+
+function Tesis() {
+  return (
+    <div className="max-w-5xl mx-auto px-6 pt-10">
+      <div style={{ borderTop: `2px solid ${C.ink}`, paddingTop: '1.25rem' }}>
+        <h2 style={{ fontSize: 'clamp(1.3rem, 2.6vw, 1.75rem)', fontWeight: 700, color: C.ink, lineHeight: 1.2, letterSpacing: '-0.015em', marginBottom: '0.75rem', maxWidth: 800 }}>
+          La brecha de empleo público es estructural, no ideológica
+        </h2>
+        <p style={{ color: C.inkMid, fontSize: 'clamp(1.05rem, 2.2vw, 1.25rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
+          Texas y Nueva York tienen ideologías opuestas y el mismo ratio de empleo público por habitante.
+          Buenos Aires supera a ambos.{' '}
+          <strong style={{ color: C.ink }}>La brecha no es ideológica: es estructural.</strong>{' '}
+          Minas Gerais administra más habitantes con funciones equivalentes y 185.000 empleados menos.
+          Ese número es el punto de partida del debate, no el final.
+        </p>
+      </div>
+    </div>
+  )
+}
+
 // ─── EXPORT ──────────────────────────────────────────────────
 
 export default function InformeEmpleoPblicoPBA() {
   return (
     <div style={{ background: C.bg, fontFamily: 'Archivo, sans-serif' }}>
       <Hero />
+      <Tesis />
 
       <div className="max-w-5xl mx-auto px-6 py-16 space-y-2">
 
@@ -583,11 +605,6 @@ export default function InformeEmpleoPblicoPBA() {
             47 cada 1.000, de acuerdo con estimaciones de la Fundación Ecosur de la Bolsa de
             Comercio de Córdoba para 2024.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <CifraCard label="Cargos presupuestados 2026" valor="530.922" periodo="adm. central + organismos + previsión social" />
-            <CifraCard label="Ratio provincial" valor="30,2" periodo="empleados provinciales cada 1.000 hab." />
-            <CifraCard label="Ratio consolidado" valor="~47" periodo="incluyendo empleo municipal bonaerense" />
-          </div>
           <p className="text-base leading-relaxed" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             Para evaluar si esa cifra es alta, media o baja, el ejercicio correcto es comparar con
             jurisdicciones de escala similar. La comparación con provincias argentinas pequeñas
@@ -786,7 +803,7 @@ export default function InformeEmpleoPblicoPBA() {
       </div>
 
       {/* NOTA METODOLÓGICA */}
-      <div className="max-w-5xl mx-auto px-6 pb-6">
+      <div className="max-w-5xl mx-auto px-6 pb-16">
         <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, padding: '1.25rem 1.5rem' }}>
           <p style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: B[400], marginBottom: '0.5rem' }}>Nota metodológica</p>
           <p style={{ fontSize: '0.8rem', color: C.inkMid, lineHeight: 1.7 }}>
@@ -798,45 +815,6 @@ export default function InformeEmpleoPblicoPBA() {
             de la Fundación Ecosur / Bolsa de Comercio de Córdoba para 2024 y no forman parte del cuadro
             comparativo principal, que solo considera el nivel de gobierno provincial/estadual.
           </p>
-        </div>
-      </div>
-
-      {/* CONCLUSIÓN */}
-      <div className="max-w-5xl mx-auto px-6 pb-16">
-        <div
-         
-          style={{ background: C.hero, borderRadius: 2, padding: '44px 48px', position: 'relative', overflow: 'hidden' }}
-        >
-          <div className="relative z-10">
-            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
-              El argumento
-            </p>
-            <p style={{ color: '#fff', fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
-              Texas y Nueva York tienen ideologías opuestas y el mismo ratio de empleo público por habitante.
-              Buenos Aires supera a ambos.{' '}
-              <span style={{ fontWeight: 700 }}>La brecha no es ideológica: es estructural.</span>{' '}
-              <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
-                Minas Gerais administra más habitantes con funciones equivalentes y 185.000 empleados menos.
-                Ese número es el punto de partida del debate, no el final.
-              </span>
-            </p>
-            <div style={{ marginTop: 32, display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-              <a
-                href="https://www.ec.gba.gov.ar"
-                target="_blank" rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4, fontSize: '0.82rem', fontWeight: 600 }}
-              >
-                Ministerio de Economía PBA <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href="https://www.transparencia.mg.gov.br"
-                target="_blank" rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.65)', textDecoration: 'underline', textUnderlineOffset: 4, fontSize: '0.82rem', fontWeight: 600 }}
-              >
-                Portal Minas Gerais <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -853,6 +831,22 @@ export default function InformeEmpleoPblicoPBA() {
               Empire Center for Public Policy NY, oct. 2024 · State Auditor's Office Texas, rep. 24-703, feb. 2024 ·
               Fundación Ecosur / Bolsa de Comercio de Córdoba, 2024 · Elaboración propia DatosPBA · 2026
             </p>
+            <div style={{ marginTop: 12, display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+              <a
+                href="https://www.ec.gba.gov.ar"
+                target="_blank" rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: C.ink, textDecoration: 'underline', textUnderlineOffset: 4, fontSize: '0.82rem', fontWeight: 600 }}
+              >
+                Ministerio de Economía PBA <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href="https://www.transparencia.mg.gov.br"
+                target="_blank" rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: C.ink, textDecoration: 'underline', textUnderlineOffset: 4, fontSize: '0.82rem', fontWeight: 600 }}
+              >
+                Portal Minas Gerais <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
         </div>
       </div>

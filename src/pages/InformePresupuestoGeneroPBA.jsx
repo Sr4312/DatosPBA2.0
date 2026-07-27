@@ -404,13 +404,35 @@ function Hero() {
   )
 }
 
+// ─── TESIS ───────────────────────────────────────────────────
+
+function Tesis() {
+  return (
+    <div className="max-w-5xl mx-auto px-6 pt-10">
+      <div style={{ borderTop: `2px solid ${C.ink}`, paddingTop: '1.25rem' }}>
+        <h2 style={{ fontSize: 'clamp(1.3rem, 2.6vw, 1.75rem)', fontWeight: 700, color: C.ink, lineHeight: 1.2, letterSpacing: '-0.015em', marginBottom: '0.75rem', maxWidth: 800 }}>
+          De cada peso presentado como gasto de género, solo veinte centavos cierran brechas
+        </h2>
+        <p style={{ color: C.inkMid, fontSize: 'clamp(1.05rem, 2.2vw, 1.25rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
+          El Gobierno distribuye la etiqueta "género" por todas las áreas para inflar la cifra en el
+          discurso, pero deja a la cartera específicamente creada para la igualdad con un
+          presupuesto marginal. Solo el{' '}
+          <strong>0,82% del presupuesto provincial</strong>{' '}
+          cierra brechas específicas de género. Esconder el gasto real dentro de otras
+          jurisdicciones no es transparencia: es marketing presupuestario.
+        </p>
+      </div>
+    </div>
+  )
+}
+
 // ─── PAGE ────────────────────────────────────────────────────
 
 export default function InformePresupuestoGeneroPBA() {
   return (
     <div style={{ background: C.bg, minHeight: '100vh' }}>
       <Hero />
-
+      <Tesis />
       <div className="max-w-5xl mx-auto px-6 py-12">
 
         {/* 01 */}
@@ -464,11 +486,10 @@ export default function InformePresupuestoGeneroPBA() {
             jornada extendida, maternidades provinciales— y lo etiqueta como gasto de género. Son
             políticas legítimas, pero el Estado las financiaría igual sin ese rótulo.
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5">
             <CifraCard label="PPG total 2026" valor="$1,79 B" periodo="1.787.636,8 millones" />
             <CifraCard label="Iniciativas" valor="158" periodo="ejecutadas en el ejercicio" />
             <CifraCard label="Organismos" valor="26" periodo="jurisdicciones ejecutoras" />
-            <CifraCard label="Concentración en TYC" valor="80,2%" periodo="del PPG total" />
           </div>
           <DownloadableViz title="Distribución del PPG 2026 por brecha de impacto" fuente="Presupuesto 2026 PBA, Planilla 35">
             <ChartBrechas />
@@ -548,29 +569,6 @@ export default function InformePresupuestoGeneroPBA() {
               absorbe gasto social universal que el Estado gastaría de igual forma sin etiqueta de
               género, inflando la magnitud del PPG en el discurso oficial. Todos los datos provienen de
               la Planilla 35 del Presupuesto 2026 de la Provincia de Buenos Aires.
-            </p>
-          </div>
-        </div>
-
-        {/* Conclusión */}
-        <div
-         
-          style={{ background: C.hero, borderRadius: 2, padding: '44px 48px', position: 'relative', overflow: 'hidden', margin: '2rem 0' }}
-        >
-          <div className="relative z-10">
-            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
-              El argumento
-            </p>
-            <p style={{ color: '#fff', fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
-              El Gobierno distribuye la etiqueta "género" por todas las áreas para inflar la cifra en el
-              discurso, pero deja a la cartera específicamente creada para la igualdad con un
-              presupuesto marginal. Solo el{' '}
-              <span style={{ fontWeight: 700 }}>0,82% del presupuesto provincial</span>{' '}
-              cierra brechas específicas de género.{' '}
-              <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
-                Esconder el gasto real dentro de otras jurisdicciones no es transparencia: es marketing
-                presupuestario.
-              </span>
             </p>
           </div>
         </div>

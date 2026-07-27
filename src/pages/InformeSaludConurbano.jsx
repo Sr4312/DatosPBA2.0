@@ -326,6 +326,29 @@ function Hero() {
   )
 }
 
+// ───────────────── TESIS ─────────────────────────────────────
+function Tesis() {
+  return (
+    <div className="max-w-5xl mx-auto px-6 pt-10">
+      <div style={{ borderTop: `2px solid ${C.ink}`, paddingTop: '1.25rem' }}>
+        <h2 style={{ fontSize: 'clamp(1.3rem, 2.6vw, 1.75rem)', fontWeight: 700, color: C.ink, lineHeight: 1.2, letterSpacing: '-0.015em', marginBottom: '0.75rem', maxWidth: 800 }}>
+          La red pública está sobrecargada donde más se la necesita
+        </h2>
+        <p style={{ color: C.inkMid, fontSize: 'clamp(1.05rem, 2.2vw, 1.25rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
+          El conurbano bonaerense no tiene un problema de cobertura: tiene un problema de{' '}
+          <strong>distribución</strong>.
+          Los <strong>1.088 establecimientos públicos</strong> existen, pero su asignación territorial
+          está descoordinada con la demanda real. La Matanza necesita atender 846.000 personas con 90 centros;
+          Vicente López, 38.000 con 32. La salud pública del conurbano está{' '}
+          <strong>sobrecargada donde más se la necesita</strong>{' '}
+          y holgada donde la demanda es menor. Cerrar la brecha no requiere inventar un sistema:
+          requiere redistribuir, ampliar y planificar el que ya existe.
+        </p>
+      </div>
+    </div>
+  )
+}
+
 // ───────────────── COBERTURA DOUGHNUT ────────────────────────
 function CoberturaDonut() {
   const sinCobPct = (TOT.sinCob / TOT.pop) * 100
@@ -853,8 +876,7 @@ function RankingPodios() {
                 </div>
                 <div style={{ background: bg, height: 6, borderRadius: 6, overflow: 'hidden' }}>
                   <div
-                    whileInView={{ width: `${pct}%` }}
-                    style={{ height: '100%', background: color, borderRadius: 6 }}
+                    style={{ width: `${pct}%`, height: '100%', background: color, borderRadius: 6 }}
                   />
                 </div>
                 <div className="flex justify-between mt-1.5" style={{ fontSize: '0.7rem', color: C.inkLight }}>
@@ -1044,11 +1066,13 @@ export default function InformeSaludConurbano() {
 
       <Hero />
 
+      <Tesis />
+
       {/* SECCIÓN 1 - COBERTURA */}
       <div style={{ background: C.card, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
           <div className="mb-10">
-            <SectionLabel>Sección 1 · Quién depende del sistema público</SectionLabel>
+            <SectionLabel>Quién depende del sistema público</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Casi 4 de cada 10 bonaerenses depende del sistema público
             </h2>
@@ -1069,7 +1093,7 @@ export default function InformeSaludConurbano() {
       {/* SECCIÓN 2 - DEPENDIENTES POR PARTIDO */}
       <div className="max-w-5xl mx-auto px-6 py-16">
         <div className="mb-8">
-          <SectionLabel>Sección 2 · Demanda territorial</SectionLabel>
+          <SectionLabel>Demanda territorial</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             La demanda no se reparte por igual
           </h2>
@@ -1092,7 +1116,7 @@ export default function InformeSaludConurbano() {
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-6xl mx-auto px-6 py-16">
           <div className="mb-8 max-w-5xl mx-auto">
-            <SectionLabel>Sección 3 · El indicador clave</SectionLabel>
+            <SectionLabel>El indicador clave</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Barómetro de carga sanitaria
             </h2>
@@ -1113,7 +1137,7 @@ export default function InformeSaludConurbano() {
       {/* SECCIÓN 4 - CUADRANTE DE GESTIÓN */}
       <div className="max-w-5xl mx-auto px-6 py-16">
         <div className="mb-8">
-          <SectionLabel>Sección 4 · Mapa de gestión</SectionLabel>
+          <SectionLabel>Mapa de gestión</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             Cuántos establecimientos para cuánta demanda
           </h2>
@@ -1135,7 +1159,7 @@ export default function InformeSaludConurbano() {
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
           <div className="mb-8">
-            <SectionLabel>Sección 5 · Los dos extremos</SectionLabel>
+            <SectionLabel>Los dos extremos</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Vicente López vs. La Matanza
             </h2>
@@ -1154,7 +1178,7 @@ export default function InformeSaludConurbano() {
       {/* SECCIÓN 6 - RANKINGS */}
       <div className="max-w-5xl mx-auto px-6 py-16">
         <div className="mb-8">
-          <SectionLabel>Sección 6 · Top 5 mejor y peor gestionados</SectionLabel>
+          <SectionLabel>Top 5 mejor y peor gestionados</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             Quiénes lideran y quiénes se quedaron atrás
           </h2>
@@ -1172,7 +1196,7 @@ export default function InformeSaludConurbano() {
       <div style={{ background: C.card, borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
           <div className="mb-8">
-            <SectionLabel>Sección 7 · Tabla detallada</SectionLabel>
+            <SectionLabel>Tabla detallada</SectionLabel>
             <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
               Los 24 partidos del conurbano
             </h2>
@@ -1192,7 +1216,7 @@ export default function InformeSaludConurbano() {
       {/* SECCIÓN 8 - HIPÓTESIS Y LECTURA */}
       <div className="max-w-5xl mx-auto px-6 py-16">
         <div className="mb-8">
-          <SectionLabel>Sección 8 · Hipótesis y lectura</SectionLabel>
+          <SectionLabel>Hipótesis y lectura</SectionLabel>
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-2" style={{ color: C.ink }}>
             Tres patrones que explican la brecha
           </h2>
@@ -1239,50 +1263,6 @@ export default function InformeSaludConurbano() {
         </div>
       </div>
 
-      {/* CONCLUSIÓN */}
-      <div className="max-w-5xl mx-auto px-6 py-16">
-        <div
-         
-          style={{
-            background: C.hero, borderRadius: 2,
-            padding: '44px 48px', position: 'relative', overflow: 'hidden',
-          }}
-        >
-
-          <div className="relative z-10">
-            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
-              La conclusión
-            </p>
-            <p style={{
-              color: '#fff', fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)',
-              lineHeight: 1.6, fontWeight: 500, maxWidth: 800,
-            }}>
-              El conurbano bonaerense no tiene un problema de cobertura: tiene un problema de{' '}
-              <span style={{ fontWeight: 700 }}>distribución</span>.
-              Los <strong style={{ color: '#fff' }}>1.088 establecimientos públicos</strong> existen, pero su asignación territorial
-              está descoordinada con la demanda real. La Matanza necesita atender 846.000 personas con 90 centros;
-              Vicente López, 38.000 con 32. La salud pública del conurbano está{' '}
-              <span style={{ fontWeight: 700 }}>sobrecargada donde más se la necesita</span>{' '}
-              y holgada donde la demanda es menor. Cerrar la brecha no requiere inventar un sistema:
-              requiere redistribuir, ampliar y planificar el que ya existe.
-            </p>
-            <div style={{ marginTop: 32, display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-              <a
-                href="https://pec.ungs.edu.ar/"
-                target="_blank" rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
-                  fontSize: '0.82rem', fontWeight: 600,
-                }}
-              >
-                PEC - Programa de Estudios del Conurbano <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -1293,6 +1273,14 @@ export default function InformeSaludConurbano() {
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>
               PEC - Programa de Estudios del Conurbano · Censo Nacional 2022 · Elaboración propia DatosPBA · 2026
             </p>
+            <a
+              href="https://pec.ungs.edu.ar/"
+              target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-sm mt-1"
+              style={{ color: C.ink, textDecoration: 'underline', textUnderlineOffset: 4, fontWeight: 600 }}
+            >
+              PEC - Programa de Estudios del Conurbano <ExternalLink className="w-3.5 h-3.5" />
+            </a>
           </div>
           <Link to="/informes" className="text-sm no-underline font-medium" style={{ color: C.inkLight }}>
             ← Ver todos los informes

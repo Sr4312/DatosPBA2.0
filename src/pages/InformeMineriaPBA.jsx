@@ -270,6 +270,28 @@ function Hero() {
   )
 }
 
+// ─── TESIS ───────────────────────────────────────────────────
+
+function Tesis() {
+  return (
+    <div className="max-w-5xl mx-auto px-6 pt-10">
+      <div style={{ borderTop: `2px solid ${C.ink}`, paddingTop: '1.25rem' }}>
+        <h2 style={{ fontSize: 'clamp(1.3rem, 2.6vw, 1.75rem)', fontWeight: 700, color: C.ink, lineHeight: 1.2, letterSpacing: '-0.015em', marginBottom: '0.75rem', maxWidth: 800 }}>
+          La minería bonaerense mueve 50 millones de toneladas al año sin política sectorial
+        </h2>
+        <p style={{ color: C.inkMid, fontSize: 'clamp(1.05rem, 2.2vw, 1.25rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
+          Todos hablan de la minería en la cordillera y nadie habla de la minería en Buenos Aires.
+          Mientras el gobierno provincial ignora un sector que produce{' '}
+          <strong>50 millones de toneladas al año</strong>{' '}
+          y da trabajo a miles de familias en el interior bonaerense,
+          la política sectorial está ausente.{' '}
+          Menos trabas, más inversión, más producción.
+        </p>
+      </div>
+    </div>
+  )
+}
+
 // ─── SECCIÓN 1: PRODUCCIÓN POR PROVINCIA ─────────────────────
 
 function ProduccionChart() {
@@ -635,6 +657,8 @@ export default function InformeMineriaPBA() {
 
       <Hero />
 
+      <Tesis />
+
       {/* SECCIÓN 1 - PRODUCCIÓN POR PROVINCIA */}
       <div style={{ background: C.card, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
@@ -739,63 +763,6 @@ export default function InformeMineriaPBA() {
         <NotaMetodologica />
       </div>
 
-      {/* CONCLUSIÓN */}
-      <div className="max-w-5xl mx-auto px-6 pb-16">
-        <div
-         
-          style={{
-            background: C.hero, borderRadius: 2,
-            padding: '44px 48px', position: 'relative', overflow: 'hidden',
-          }}
-        >
-
-          <div className="relative z-10">
-            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
-              El argumento
-            </p>
-            <p style={{
-              color: '#fff', fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)',
-              lineHeight: 1.6, fontWeight: 500, maxWidth: 800,
-            }}>
-              Todos hablan de la minería en la cordillera y nadie habla de la minería en Buenos Aires.
-              Mientras el gobierno provincial ignora un sector que produce{' '}
-              <span style={{ fontWeight: 700 }}>50 millones de toneladas al año</span>{' '}
-              y da trabajo a miles de familias en el interior bonaerense,
-              la política sectorial está ausente.{' '}
-              <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
-                Menos trabas, más inversión, más producción.
-              </span>
-            </p>
-            <div style={{ marginTop: 32, display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-              <a
-                href="https://www.gba.gob.ar/mineria"
-                target="_blank" rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
-                  fontSize: '0.82rem', fontWeight: 600,
-                }}
-              >
-                Dirección Provincial de Minería <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href="https://segemar.gov.ar"
-                target="_blank" rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.65)', textDecoration: 'none',
-                  borderRadius: 2, padding: '10px 20px',
-                  fontSize: '0.82rem', fontWeight: 600,
-                  border: '1px solid rgba(255,255,255,0.10)',
-                }}
-              >
-                SEGEMAR <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -806,6 +773,24 @@ export default function InformeMineriaPBA() {
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>
               DPM - Dirección Provincial de Minería · SIACAM (abr. 2025) · AFCP · DIPEC · UNPaz (2022) · Elaboración propia DatosPBA · 2025
             </p>
+            <div className="flex items-center gap-5 mt-2 flex-wrap">
+              <a
+                href="https://www.gba.gob.ar/mineria"
+                target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-medium"
+                style={{ color: C.ink, textDecoration: 'underline', textUnderlineOffset: 3 }}
+              >
+                Dirección Provincial de Minería <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href="https://segemar.gov.ar"
+                target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-medium"
+                style={{ color: C.ink, textDecoration: 'underline', textUnderlineOffset: 3 }}
+              >
+                SEGEMAR <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
           <Link to="/informes" className="text-sm no-underline font-medium" style={{ color: C.inkLight }}>
             ← Ver todos los informes

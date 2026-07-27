@@ -291,6 +291,28 @@ function Hero() {
   )
 }
 
+// ─── TESIS ───────────────────────────────────────────────────
+
+function Tesis() {
+  return (
+    <div className="max-w-5xl mx-auto px-6 pt-10">
+      <div style={{ borderTop: `2px solid ${C.ink}`, paddingTop: '1.25rem' }}>
+        <h2 style={{ fontSize: 'clamp(1.3rem, 2.6vw, 1.75rem)', fontWeight: 700, color: C.ink, lineHeight: 1.2, letterSpacing: '-0.015em', marginBottom: '0.75rem', maxWidth: 800 }}>
+          El déficit provincial volvió por el gasto en personal y jubilaciones, no por la obra pública
+        </h2>
+        <p style={{ color: C.inkMid, fontSize: 'clamp(1.05rem, 2.2vw, 1.25rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
+          Por primera vez en 25 años, la Nación corrige sus cuentas y las provincias las
+          empeoran. El gasto en personal y jubilaciones, no la obra pública, es lo que rompió
+          el equilibrio. Buenos Aires resume la tensión:{' '}
+          <strong>alta presión tributaria, déficit fiscal y la mayor deuda del país</strong>{' '}
+          en la jurisdicción económica más importante de la Argentina. Sin equilibrio fiscal,
+          no hay margen para reducir la exposición financiera.
+        </p>
+      </div>
+    </div>
+  )
+}
+
 // ─── SECCIÓN 1: CUADRANTE NACIÓN VS PROVINCIAS ────────────────
 
 function ResultadoPrimarioQuadrante() {
@@ -535,6 +557,8 @@ export default function InformeRankingFiscalPBA() {
 
       <Hero />
 
+      <Tesis />
+
       {/* SECCIÓN 1 - CUADRANTE NACIÓN VS PROVINCIAS */}
       <div style={{ background: C.card, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-16">
@@ -626,37 +650,6 @@ export default function InformeRankingFiscalPBA() {
       {/* NOTA METODOLÓGICA */}
       <div className="max-w-5xl mx-auto px-6 py-10">
         <NotaMetodologica />
-      </div>
-
-      {/* CONCLUSIÓN */}
-      <div className="max-w-5xl mx-auto px-6 pb-16">
-        <div
-         
-          style={{
-            background: C.hero, borderRadius: 2,
-            padding: '44px 48px', position: 'relative', overflow: 'hidden',
-          }}
-        >
-
-          <div className="relative z-10">
-            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
-              El argumento
-            </p>
-            <p style={{
-              color: '#fff', fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)',
-              lineHeight: 1.6, fontWeight: 500, maxWidth: 800,
-            }}>
-              Por primera vez en 25 años, la Nación corrige sus cuentas y las provincias las
-              empeoran. El gasto en personal y jubilaciones, no la obra pública, es lo que rompió
-              el equilibrio. Buenos Aires resume la tensión:{' '}
-              <span style={{ fontWeight: 700 }}>alta presión tributaria, déficit fiscal y la mayor deuda del país</span>{' '}
-              en la jurisdicción económica más importante de la Argentina.{' '}
-              <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
-                Sin equilibrio fiscal, no hay margen para reducir la exposición financiera.
-              </span>
-            </p>
-          </div>
-        </div>
       </div>
 
       {/* FOOTER */}

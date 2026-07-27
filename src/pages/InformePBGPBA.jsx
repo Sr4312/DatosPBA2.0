@@ -478,6 +478,26 @@ function Hero() {
   )
 }
 
+// ─── TESIS ───────────────────────────────────────────────────
+
+function Tesis() {
+  return (
+    <div className="max-w-5xl mx-auto px-6 pt-10">
+      <div style={{ borderTop: `2px solid ${C.ink}`, paddingTop: '1.25rem' }}>
+        <h2 style={{ fontSize: 'clamp(1.3rem, 2.6vw, 1.75rem)', fontWeight: 700, color: C.ink, lineHeight: 1.2, letterSpacing: '-0.015em', marginBottom: '0.75rem', maxWidth: 800 }}>
+          El repunte de 4,2% fue de base amplia, con 14 de los 16 sectores en alza
+        </h2>
+        <p style={{ color: C.inkMid, fontSize: 'clamp(1.05rem, 2.2vw, 1.25rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
+          Tras dos años de contracción, la economía bonaerense se recuperó en 2025 con un crecimiento de{' '}
+          <strong>4,2%</strong>, el segundo mejor de la serie 2004-2025 y de base amplia: 14 de los 16
+          sectores en alza, con Industria, Comercio y Agro como motores. La Provincia sigue explicando
+          más de un tercio del producto nacional.
+        </p>
+      </div>
+    </div>
+  )
+}
+
 // ─── NOTA METODOLÓGICA ───────────────────────────────────────
 
 function NotaMetodologica() {
@@ -515,6 +535,8 @@ export default function InformePBGPBA() {
     <div style={{ background: C.bg, minHeight: '100vh' }}>
       <Hero />
 
+      <Tesis />
+
       {/* 01 — NIVEL Y EVOLUCIÓN */}
       <div className="max-w-5xl mx-auto px-6 pt-2 pb-12">
         <div>
@@ -525,8 +547,7 @@ export default function InformePBGPBA() {
             de 2022, y que sucede a dos años consecutivos de contracción (2023 y 2024). A precios corrientes,
             el producto provincial alcanzó $288.853.456 millones, con un alza interanual de 44,0%.
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-            <CifraCard label="Crecimiento real 2025" valor="+4,2%" variacion="+4,2%" polaridad="mayor-es-mejor" periodo="a precios constantes de 2004" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
             <CifraCard label="Suba a precios corrientes" valor="+44,0%" variacion="+44,0%" polaridad="neutro" periodo="vs. +45,2% de Nación" />
             <CifraCard label="Inflación implícita (IPI-PBA)" valor="+38,3%" variacion="+38,3%" polaridad="neutro" periodo="variación de precios 2025" />
             <CifraCard label="Crecimiento real de Nación" valor="+4,4%" variacion="+4,4%" polaridad="mayor-es-mejor" periodo="PBI, a precios constantes" />
@@ -646,49 +667,6 @@ export default function InformePBGPBA() {
         <NotaMetodologica />
       </div>
 
-      {/* CONCLUSIÓN */}
-      <div className="max-w-5xl mx-auto px-6 pb-16">
-        <div
-         
-          style={{
-            background: C.hero, borderRadius: 2,
-            padding: '44px 48px', position: 'relative', overflow: 'hidden',
-          }}
-        >
-
-          <div className="relative z-10">
-            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
-              El argumento
-            </p>
-            <p style={{
-              color: '#fff', fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)',
-              lineHeight: 1.6, fontWeight: 500, maxWidth: 800,
-            }}>
-              Tras dos años de contracción, la economía bonaerense se recuperó en 2025 con un crecimiento de{' '}
-              <span style={{ fontWeight: 700 }}>4,2%</span>, el segundo mejor de la serie
-              2004-2025 y de base amplia: 14 de los 16 sectores en alza, con Industria, Comercio y Agro como
-              motores.{' '}
-              <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
-                La Provincia sigue explicando más de un tercio del producto nacional.
-              </span>
-            </p>
-            <div style={{ marginTop: 32, display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-              <a
-                href="https://www.estadistica.ec.gba.gov.ar/"
-                target="_blank" rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
-                  fontSize: '0.82rem', fontWeight: 600,
-                }}
-              >
-                Dirección Provincial de Estadística <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8">
@@ -700,6 +678,18 @@ export default function InformePBGPBA() {
             Bruto Geográfico de la Provincia de Buenos Aires (PBG-PBA). Año 2025", base 2004, publicado en julio de
             2026 · INDEC, para las comparaciones con el PBI de Nación · Elaboración propia DatosPBA · 2026
           </p>
+          <a
+            href="https://www.estadistica.ec.gba.gov.ar/"
+            target="_blank" rel="noopener noreferrer"
+            className="text-sm mt-2"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              color: C.ink, textDecoration: 'underline', textUnderlineOffset: 4,
+              fontWeight: 600,
+            }}
+          >
+            Dirección Provincial de Estadística <ExternalLink className="w-3.5 h-3.5" />
+          </a>
         </div>
       </div>
     </div>

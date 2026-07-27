@@ -188,8 +188,7 @@ function MuniCard({ m: muni, delay = 0 }) {
         </div>
         <div style={{ marginTop: 16, background: bg, borderRadius: 2, height: 6, overflow: 'hidden' }}>
           <div
-            whileInView={{ width: `${(muni.pct / MAX) * 100}%` }}
-            style={{ height: '100%', background: col, borderRadius: 2 }}
+            style={{ width: `${(muni.pct / MAX) * 100}%`, height: '100%', background: col, borderRadius: 2 }}
           />
         </div>
         <div style={{ fontSize: '0.68rem', color: C.inkLight, marginTop: 6, textAlign: 'right' }}>
@@ -251,6 +250,24 @@ function Dumbbell() {
         En Alberti, <strong>casi 4 de cada 10 empleados</strong> trabaja en la administración pública municipal.
         En Vicente López, menos de 1 de cada 20. La misma Provincia de Buenos Aires. Dos mundos fiscales completamente distintos.
       </p>
+    </div>
+  )
+}
+
+function Tesis() {
+  return (
+    <div className="max-w-5xl mx-auto px-6 pt-10">
+      <div style={{ borderTop: `2px solid ${C.ink}`, paddingTop: '1.25rem' }}>
+        <h2 style={{ fontSize: 'clamp(1.3rem, 2.6vw, 1.75rem)', fontWeight: 700, color: C.ink, lineHeight: 1.2, letterSpacing: '-0.015em', marginBottom: '0.75rem', maxWidth: 800 }}>
+          El modelo de Estado municipal es una decisión política que pagan los vecinos
+        </h2>
+        <p style={{ color: C.inkMid, fontSize: 'clamp(1.05rem, 2.2vw, 1.25rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
+          Más empleo en la administración pública no es un indicador de mejor servicio:
+          es una señal de <strong>mayor carga tributaria</strong> y menos espacio para el
+          sector privado. El Atlas de CAF muestra que la elección del modelo de Estado es
+          una decisión política - y sus consecuencias fiscales las pagan los vecinos.
+        </p>
+      </div>
     </div>
   )
 }
@@ -322,6 +339,8 @@ export default function InformeCAFEstadoMunicipal() {
           </div>
         </div>
       </div>
+
+      <Tesis />
 
       {/* SPECTRUM */}
       <div style={{ background: '#fff', borderBottom: `1px solid ${C.rule}` }}>
@@ -409,55 +428,26 @@ export default function InformeCAFEstadoMunicipal() {
         </div>
       </div>
 
-      {/* CONCLUSIÓN */}
-      <div className="max-w-5xl mx-auto px-6 py-14">
-        <div
-         
-          style={{
-            background: '#0F172A',
-            borderRadius: 2,
-            padding: '40px 44px',
-            position: 'relative',
-            overflow: 'hidden',
-          }}
-        >
-
-          <div className="relative z-10">
-            <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
-              La conclusión
-            </p>
-            <p style={{ color: '#fff', fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 680 }}>
-              Más empleo en la administración pública no es un indicador de mejor servicio:
-              es una señal de{' '}
-              <span style={{ fontWeight: 700 }}>mayor carga tributaria</span>{' '}
-              y menos espacio para el sector privado. El Atlas de CAF muestra que la elección
-              del modelo de Estado es una decisión política - y sus consecuencias fiscales
-              las pagan los vecinos.
-            </p>
-            <div style={{ marginTop: 28, display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-              <a
-                href="https://atlasgobiernoslocales.caf.com/es/jurisdicciones/ARG6"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 6,
-                  color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
-                  fontSize: '0.78rem', fontWeight: 600,
-                }}
-              >
-                Ver Atlas CAF - Buenos Aires <ExternalLink className="w-3 h-3" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* FOOTER */}
       <div style={{ borderTop: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <p style={{ fontSize: '0.78rem', color: C.inkLight }}>
-            Fuente: Atlas de Gobiernos Locales · CAF - Banco de Desarrollo de América Latina · 2024
-          </p>
+          <div>
+            <p style={{ fontSize: '0.78rem', color: C.inkLight }}>
+              Fuente: Atlas de Gobiernos Locales · CAF - Banco de Desarrollo de América Latina · 2024
+            </p>
+            <a
+              href="https://atlasgobiernoslocales.caf.com/es/jurisdicciones/ARG6"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                color: C.ink, textDecoration: 'underline', textUnderlineOffset: 4,
+                fontSize: '0.78rem', fontWeight: 600, marginTop: 6,
+              }}
+            >
+              Ver Atlas CAF - Buenos Aires <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
           <Link to="/informes" className="text-sm no-underline" style={{ color: C.inkLight }}>
             ← Ver todos los informes
           </Link>

@@ -195,8 +195,7 @@ export default function InformeKPMGIIBB() {
                   </div>
                   <div style={{ background: 'rgba(13,17,23,0.08)', borderRadius: 2, height: 8, overflow: 'hidden' }}>
                     <div
-                      whileInView={{ width: `${imp.pct}%` }}
-                      style={{ height: '100%', borderRadius: 2, background: imp.color }}
+                      style={{ width: `${imp.pct}%`, height: '100%', borderRadius: 2, background: imp.color }}
                     />
                   </div>
                 </div>
@@ -209,7 +208,7 @@ export default function InformeKPMGIIBB() {
             className="p-5"
           >
             <p className="text-sm leading-relaxed" style={{ color: C.inkMid }}>
-              <span style={{ color: C.accent, fontWeight: 700 }}>Conclusión de KPMG: </span>
+              <span style={{ color: C.ink, fontWeight: 700 }}>Conclusión de KPMG: </span>
               Es bastante improbable el éxito de una reforma fiscal pro empleo y producción sin una
               readecuación del IIBB y sin moderar la superposición de regímenes de recaudación provinciales.
             </p>
@@ -250,8 +249,7 @@ export default function InformeKPMGIIBB() {
                 </div>
                 <div style={{ background: 'rgba(13,17,23,0.07)', borderRadius: 2, height: p.rank === 1 ? 14 : 10, overflow: 'hidden' }}>
                   <div
-                    whileInView={{ width: `${p.pct}%` }}
-                    style={{
+                    style={{ width: `${p.pct}%`,
                       height: '100%',
                       borderRadius: 2,
                       background: p.rank === 1
@@ -311,8 +309,7 @@ export default function InformeKPMGIIBB() {
                   </div>
                   <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: 2, height: 8, overflow: 'hidden' }}>
                     <div
-                      whileInView={{ width: `${s.pct * 2.5}%` }}
-                      style={{ height: '100%', borderRadius: 2, background: s.color }}
+                      style={{ width: `${s.pct * 2.5}%`, height: '100%', borderRadius: 2, background: s.color }}
                     />
                   </div>
                 </div>
