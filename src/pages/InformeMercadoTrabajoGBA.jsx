@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, Download, ExternalLink } from 'lucide-react'
+import { ArrowLeft, ExternalLink } from 'lucide-react'
 import html2canvas from 'html2canvas'
 import {
   Chart as ChartJS,
@@ -31,17 +31,6 @@ const C = {
   accent:   '#3d65b2',
 }
 
-const B = {
-  700: '#152952',
-  600: '#1a3d7c',
-  500: '#1f4795',
-  400: '#3d65b2',
-  300: '#6a8bca',
-  200: '#a1b4e0',
-  100: '#d0daf0',
-  50:  '#edf1f8',
-}
-
 // ─── DATOS ───────────────────────────────────────────────────
 
 const TASAS_PRINCIPALES = [
@@ -54,12 +43,6 @@ const SUBOCUPACION = [
   { label: 'Subocupación total',         t2025: 10.9, t2026: 12.1 },
   { label: 'Subocup. demandante',        t2025: 7.7,  t2026: 7.2  },
   { label: 'Subocup. no demandante',     t2025: 3.3,  t2026: 4.9  },
-]
-
-const VARIACION_POBLACION = [
-  { label: 'Población subocupada', value: 76 },
-  { label: 'Población ocupada',    value: 10 },
-  { label: 'Población desocupada', value: 2  },
 ]
 
 const POBLACION_TABLA = [
@@ -79,10 +62,10 @@ const DESOCUPACION_CONTEXTO = [
 /* La valoración de cada cifra se declara acá y el color lo deriva <Cifra>:
    nunca se asigna un color a mano. */
 const HERO_STATS = [
-  { label: 'Tasa de desocupación', valor: '9,7%',   variacion: '0,0 pp',  polaridad: 'menor-es-mejor', periodo: 'vs. 1T2025' },
-  { label: 'Subocupación horaria', valor: '12,1%',  variacion: '+1,2 pp', polaridad: 'menor-es-mejor', periodo: 'desde 10,9% en 1T2025' },
-  { label: 'Población subocupada', valor: '770 mil', variacion: '+76 mil', polaridad: 'menor-es-mejor', periodo: 'vs. 1T2025' },
-  { label: 'Tasa de actividad',    valor: '48,0%',  variacion: '−0,5 pp', polaridad: 'mayor-es-mejor', periodo: 'desde 48,5% en 1T2025' },
+  { label: 'Tasa de desocupación', valor: '9,7%',  variacion: '0,0 pp',  polaridad: 'menor-es-mejor', periodo: 'vs. 1T2025' },
+  { label: 'Tasa de actividad',    valor: '48,0%', variacion: '−0,5 pp', polaridad: 'mayor-es-mejor', periodo: 'desde 48,5% en 1T2025' },
+  { label: 'Tasa de empleo',       valor: '43,4%', variacion: '−0,4 pp', polaridad: 'mayor-es-mejor', periodo: 'desde 43,8% en 1T2025' },
+  { label: 'Subocupación horaria', valor: '12,1%', variacion: '+1,2 pp', polaridad: 'menor-es-mejor', periodo: 'desde 10,9% en 1T2025' },
 ]
 
 // ─── DOWNLOAD ────────────────────────────────────────────────
@@ -137,45 +120,37 @@ async function downloadVizContainer(node, title, fuente) {
   triggerDownload(out, title)
 }
 
+/* La descarga es un link de texto debajo del gráfico, alineado a su borde
+   izquierdo. El botón queda fuera del nodo capturado, así el PNG no lo incluye. */
 function DownloadableViz({ title, fuente, children }) {
-  const ref    = useRef(null)
-  const btnRef = useRef(null)
+  const ref = useRef(null)
   const [busy, setBusy] = useState(false)
 
   async function handleDownload() {
     if (!ref.current || busy) return
     setBusy(true)
-    if (btnRef.current) btnRef.current.style.visibility = 'hidden'
     try { await downloadVizContainer(ref.current, title, fuente) }
     catch (e) { console.error(e) }
-    if (btnRef.current) btnRef.current.style.visibility = ''
     setBusy(false)
   }
 
   return (
-    <div style={{ position: 'relative' }}>
-      <div ref={btnRef} style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
-        <button
-          onClick={handleDownload}
-          disabled={busy}
-          title="Descargar PNG con marca DatosPBA"
-          style={{
-            background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2,
-            padding: '6px 10px', cursor: busy ? 'wait' : 'pointer', color: C.inkMid,
-            display: 'inline-flex', alignItems: 'center', gap: 6,
-            fontSize: '0.72rem', fontWeight: 600, transition: 'color 0.15s, border-color 0.15s',
-            fontFamily: 'Archivo, sans-serif',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.color = C.accent; e.currentTarget.style.borderColor = C.accent }}
-          onMouseLeave={e => { e.currentTarget.style.color = C.inkMid; e.currentTarget.style.borderColor = C.rule }}
-        >
-          <Download style={{ width: 13, height: 13 }} />
-          {busy ? 'generando…' : 'Descargar PNG'}
-        </button>
-      </div>
+    <div>
       <div ref={ref} style={{ background: C.bg }}>
         {children}
       </div>
+      <button
+        onClick={handleDownload}
+        disabled={busy}
+        style={{
+          background: 'none', border: 'none', padding: 0, marginTop: 8,
+          fontSize: '0.75rem', fontWeight: 600, color: C.inkMid,
+          textDecoration: 'underline', textUnderlineOffset: 3,
+          cursor: busy ? 'wait' : 'pointer', fontFamily: 'inherit',
+        }}
+      >
+        {busy ? 'Generando la imagen…' : 'Descargar el gráfico (PNG)'}
+      </button>
     </div>
   )
 }
@@ -195,7 +170,7 @@ function SectionLabel({ children, dark = false, color }) {
 
 function SH({ title }) {
   return (
-    <div style={{ borderBottom: `2px solid ${C.ink}`, paddingBottom: '0.75rem', marginBottom: '1.75rem', marginTop: '3rem' }}>
+    <div style={{ borderBottom: `2px solid ${C.ink}`, paddingBottom: '0.75rem', marginBottom: '1.5rem', marginTop: '2.25rem' }}>
       <h2 style={{ fontSize: 'clamp(1.4rem, 2.8vw, 1.875rem)', fontWeight: 700, color: C.ink, lineHeight: 1.05, letterSpacing: '-0.015em' }}>{title}</h2>
     </div>
   )
@@ -207,14 +182,31 @@ function CifraCard(props) {
       background: '#fff', borderRadius: 2,
       border: `1px solid ${C.rule}`,
       padding: '1.125rem 1.125rem 1rem',
-      
     }}>
       <Cifra size="md" {...props} />
     </div>
   )
 }
 
-function ChartCard({ title, fuente, legend, height = 220, children }) {
+/* Ficha técnica del gráfico: fuente, período, universo, unidad y CV cuando
+   aplica, como elemento de diseño visible bajo cada visualización. */
+function FichaTecnica({ items }) {
+  return (
+    <div style={{
+      borderTop: `1px solid ${C.rule}`, marginTop: '0.75rem', paddingTop: '0.625rem',
+      display: 'flex', flexWrap: 'wrap', gap: '0.375rem 1.75rem',
+    }}>
+      {items.map(([k, v]) => (
+        <div key={k}>
+          <span style={{ fontSize: '0.62rem', color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block' }}>{k}</span>
+          <span style={{ fontSize: '0.72rem', fontWeight: 600, color: C.inkMid }}>{v}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function ChartCard({ title, ficha, legend, height = 220, children }) {
   return (
     <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, padding: '1.25rem 1.25rem 0.875rem', margin: '1.25rem 0' }}>
       {title && <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#334155', marginBottom: '0.75rem' }}>{title}</p>}
@@ -229,7 +221,7 @@ function ChartCard({ title, fuente, legend, height = 220, children }) {
         </div>
       )}
       <div style={{ position: 'relative', height }}>{children}</div>
-      {fuente && <p style={{ fontSize: '0.625rem', color: '#94a3b8', textAlign: 'right', marginTop: '0.625rem', fontStyle: 'italic' }}>{fuente}</p>}
+      {ficha && <FichaTecnica items={ficha} />}
     </div>
   )
 }
@@ -292,9 +284,15 @@ function ChartTasas() {
   return (
     <ChartCard
       title="Tasas de actividad, empleo y desocupación — Partidos del GBA"
-      fuente="INDEC, EPH, cuadro 3.1 — 1° trim. 2025 y 1° trim. 2026"
+      ficha={[
+        ['Fuente', 'INDEC, EPH — cuadro 3.1'],
+        ['Período', '1° trim. 2025 y 1° trim. 2026'],
+        ['Universo', '24 partidos del GBA'],
+        ['Unidad', 'actividad y empleo: % de la población · desocupación: % de la PEA'],
+        ['CV', 'desocupación 1T2026: 7,1%'],
+      ]}
       legend={[{ label: '1° trim. 2025', color: DATA[2] }, { label: '1° trim. 2026', color: DATA[1] }]}
-      height={240}
+      height={230}
     >
       <Bar
         data={data}
@@ -327,9 +325,14 @@ function ChartSubocupacion() {
   return (
     <ChartCard
       title="Subocupación horaria como % de la PEA — Partidos del GBA"
-      fuente="INDEC, EPH, cuadro 3.1 — 1° trim. 2025 y 1° trim. 2026"
+      ficha={[
+        ['Fuente', 'INDEC, EPH — cuadro 3.1'],
+        ['Período', '1° trim. 2025 y 1° trim. 2026'],
+        ['Universo', '24 partidos del GBA'],
+        ['Unidad', '% de la PEA'],
+      ]}
       legend={[{ label: '1° trim. 2025', color: DATA[2] }, { label: '1° trim. 2026', color: DATA[1] }]}
-      height={240}
+      height={230}
     >
       <Bar
         data={data}
@@ -351,41 +354,6 @@ function ChartSubocupacion() {
   )
 }
 
-function ChartVariacionAbsoluta() {
-  const data = {
-    labels: VARIACION_POBLACION.map(d => d.label),
-    datasets: [{
-      data: VARIACION_POBLACION.map(d => d.value),
-      backgroundColor: DATA[1],
-      borderRadius: 4, barPercentage: 0.6,
-    }],
-  }
-  return (
-    <ChartCard
-      title="Variación interanual de población por condición de actividad (en miles de personas)"
-      fuente="INDEC, EPH, cuadro 3.2 — 1° trim. 2025 vs. 1° trim. 2026"
-      height={195}
-    >
-      <Bar
-        data={data}
-        plugins={[makeHValueLabels(v => `+${v} mil`)]}
-        options={{
-          indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-          layout: { padding: { right: 64 } },
-          plugins: {
-            legend: { display: false },
-            tooltip: { ...tooltipBase, callbacks: { label: ctx => `  +${ctx.raw}.000 personas` } },
-          },
-          scales: {
-            x: { ticks: { callback: v => '+' + v + ' mil' }, grid: { color: 'rgba(13,17,23,0.08)' } },
-            y: { grid: { display: false } },
-          },
-        }}
-      />
-    </ChartCard>
-  )
-}
-
 function ChartContexto() {
   const data = {
     labels: DESOCUPACION_CONTEXTO.map(d => d.label),
@@ -398,7 +366,12 @@ function ChartContexto() {
   return (
     <ChartCard
       title="Tasa de desocupación por área geográfica — 1° trimestre 2026"
-      fuente="INDEC, EPH, cuadro 3.1 — 1° trim. 2026"
+      ficha={[
+        ['Fuente', 'INDEC, EPH — cuadro 3.1'],
+        ['Período', '1° trim. 2026'],
+        ['Universo', 'GBA, CABA y total de 31 aglomerados urbanos'],
+        ['Unidad', '% de la PEA'],
+      ]}
       height={195}
     >
       <Bar
@@ -426,7 +399,7 @@ function ChartContexto() {
 function Hero() {
   return (
     <div style={{ background: C.hero }}>
-      <div className="max-w-5xl mx-auto px-6 pt-10 pb-16">
+      <div className="max-w-5xl mx-auto px-6 pt-10 pb-12">
         <Link to="/informes" className="inline-flex items-center gap-1.5 text-sm no-underline mb-10" style={{ color: 'rgba(255,255,255,0.62)' }}>
           <ArrowLeft className="w-4 h-4" /> Volver a informes
         </Link>
@@ -450,7 +423,7 @@ function Hero() {
           trabajadas, no por despidos hacia la desocupación abierta.
         </p>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10">
           {HERO_STATS.map((s, i) => (
             <div
               key={i}
@@ -476,6 +449,27 @@ function Hero() {
             </div>
           ))}
         </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── TESIS ───────────────────────────────────────────────────
+
+/* La tesis va primero y la evidencia después: este bloque abre el informe
+   inmediatamente después del hero. */
+function Tesis() {
+  return (
+    <div className="max-w-5xl mx-auto px-6 pt-10">
+      <div style={{ borderTop: `2px solid ${C.ink}`, paddingTop: '1.25rem' }}>
+        <h2 style={{ fontSize: 'clamp(1.3rem, 2.6vw, 1.75rem)', fontWeight: 700, color: C.ink, lineHeight: 1.2, letterSpacing: '-0.015em', marginBottom: '0.75rem', maxWidth: 800 }}>
+          El deterioro vino por las horas trabajadas, no por los despidos
+        </h2>
+        <p style={{ color: C.inkMid, fontSize: 'clamp(1.05rem, 2.2vw, 1.25rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
+          La desocupación del conurbano no subió, pero el mercado de trabajo se deterioró igual:
+          cayeron la actividad y el empleo, y <strong>76.000 personas más</strong> pasaron a trabajar
+          menos horas de las que necesitan. La brecha con CABA sigue duplicando la desocupación.
+        </p>
       </div>
     </div>
   )
@@ -519,170 +513,124 @@ export default function InformeMercadoTrabajoGBA() {
     <div style={{ background: C.bg, minHeight: '100vh' }}>
       <Hero />
 
-      {/* 01 — PANORAMA GENERAL */}
-      <div className="max-w-5xl mx-auto px-6 pt-2 pb-12">
-        <div >
-          <SH title="Las tasas principales" />
-          <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            Los partidos del Gran Buenos Aires concentran la mayor densidad poblacional de la Provincia y son,
-            según la propia EPH, la subregión bonaerense con peor desempeño relativo del mercado de trabajo.
-            En el primer trimestre de 2026, sobre una población de referencia de 13.229.000 personas,
-            6.356.000 integraban la población económicamente activa (PEA).
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
-            <CifraCard label="Tasa de desocupación" valor="9,7%" variacion="0,0 pp" polaridad="menor-es-mejor" periodo="vs. 1T2025" />
-            <CifraCard label="Tasa de actividad" valor="48,0%" variacion="−0,5 pp" polaridad="mayor-es-mejor" periodo="interanual" />
-            <CifraCard label="Tasa de empleo" valor="43,4%" variacion="−0,4 pp" polaridad="mayor-es-mejor" periodo="interanual" />
-            <CifraCard label="Ocupados demandantes" valor="15,8%" variacion="−2,0 pp" polaridad="menor-es-mejor" periodo="interanual" />
+      <Tesis />
+
+      {/* LAS TASAS PRINCIPALES — texto y gráfico a dos columnas */}
+      <div className="max-w-5xl mx-auto px-6 pb-10">
+        <SH title="Las tasas principales" />
+        <div className="grid lg:grid-cols-2 gap-x-10 items-start">
+          <div>
+            <p className="text-base leading-relaxed mb-4" style={{ color: C.inkMid }}>
+              Los partidos del Gran Buenos Aires concentran la mayor densidad poblacional de la Provincia y son,
+              según la propia EPH, la subregión bonaerense con peor desempeño relativo del mercado de trabajo.
+              En el primer trimestre de 2026, sobre una población de referencia de 13.229.000 personas,
+              6.356.000 integraban la población económicamente activa (PEA).
+            </p>
+            <p className="text-base leading-relaxed mb-4" style={{ color: C.inkMid }}>
+              La estabilidad de la desocupación en 9,7% no debe leerse de manera aislada: se explica, en parte,
+              por la caída simultánea de la tasa de actividad, que retrajo a personas del mercado laboral en lugar
+              de que fueran absorbidas por el empleo. Una porción de quienes dejaron de buscar trabajo activamente
+              pasó a la inactividad, lo que morigera el efecto sobre la tasa de desocupación aun cuando el empleo
+              también retrocedió.
+            </p>
+            <p className="text-base leading-relaxed" style={{ color: C.inkMid }}>
+              En el mismo período, la proporción de ocupados que demandan otro empleo bajó de 17,8% a 15,8%
+              de la PEA (−2,0 puntos porcentuales).
+            </p>
           </div>
           <DownloadableViz title="Tasas de actividad, empleo y desocupación — Partidos del GBA" fuente="INDEC, EPH — 1T2025 y 1T2026">
             <ChartTasas />
           </DownloadableViz>
-          <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            La estabilidad de la desocupación en 9,7% no debe leerse de manera aislada: se explica, en parte,
-            por la caída simultánea de la tasa de actividad, que retrajo a personas del mercado laboral en lugar
-            de que fueran absorbidas por el empleo. Una porción de quienes dejaron de buscar trabajo activamente
-            pasó a la inactividad, lo que morigera el efecto sobre la tasa de desocupación aun cuando el empleo
-            también retrocedió.
-          </p>
         </div>
       </div>
 
-      {/* 02 — SUBOCUPACIÓN (fondo blanco alternado) */}
+      {/* EL AJUSTE POR HORAS (fondo blanco alternado) */}
       <div style={{ background: '#fff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
-        <div className="max-w-5xl mx-auto px-6 pb-12">
-          <div >
-            <SH title="El ajuste por horas" />
-            <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-              El indicador que más se movió en la comparación interanual es la subocupación horaria, que agrupa
-              a las personas ocupadas que trabajan menos de 35 horas semanales por causas involuntarias y están
-              dispuestas a trabajar más. En los partidos del GBA pasó de 10,9% a 12,1% de la PEA entre el primer
-              trimestre de 2025 y el mismo trimestre de 2026.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-              <CifraCard label="Subocupación no demandante" valor="4,9%" variacion="+1,6 pp" polaridad="menor-es-mejor" periodo="desde 3,3% en 1T2025" />
-              <CifraCard label="Subocupación total" valor="12,1%" variacion="+1,2 pp" polaridad="menor-es-mejor" periodo="desde 10,9% en 1T2025" />
-              <CifraCard label="Subocupación demandante" valor="7,2%" variacion="−0,5 pp" polaridad="menor-es-mejor" periodo="desde 7,7% en 1T2025" />
-            </div>
-            <DownloadableViz title="Subocupación horaria — Partidos del GBA" fuente="INDEC, EPH — 1T2025 y 1T2026">
-              <ChartSubocupacion />
-            </DownloadableViz>
-            <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-              La suba se concentró en la subocupación no demandante —personas que no buscan activamente otro
-              empleo pero están disponibles para trabajar más horas—, que creció de 3,3% a 4,9%, mientras que la
-              subocupación demandante descendió levemente, de 7,7% a 7,2%.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* 03 — MAGNITUDES ABSOLUTAS */}
-      <div className="max-w-5xl mx-auto px-6 pb-12">
-        <div >
-          <SH title="De tasas a personas" />
+        <div className="max-w-5xl mx-auto px-6 pb-10">
+          <SH title="El ajuste por horas" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            Más allá de las tasas, la EPH permite dimensionar estos cambios en términos de personas. El dato más
-            relevante: el incremento de la población subocupada (+76.000 personas) superó ampliamente al de la
-            población ocupada (+10.000) y al de la desocupada (+2.000) en el mismo período. Buena parte del ajuste
-            se dio por reducción de horas trabajadas dentro del universo de ocupados, no por un pasaje directo
-            hacia la desocupación abierta.
+            El indicador que más se movió en la comparación interanual es la subocupación horaria, que agrupa
+            a las personas ocupadas que trabajan menos de 35 horas semanales por causas involuntarias y están
+            dispuestas a trabajar más. En los partidos del GBA pasó de 10,9% a 12,1% de la PEA entre el primer
+            trimestre de 2025 y el mismo trimestre de 2026. La suba se concentró en la subocupación no
+            demandante —personas que no buscan activamente otro empleo pero están disponibles para trabajar
+            más horas—, mientras que la demandante descendió levemente.
           </p>
-          <DownloadableViz title="Variación interanual de población por condición de actividad — Partidos del GBA" fuente="INDEC, EPH — 1T2025 vs. 1T2026">
-            <ChartVariacionAbsoluta />
-          </DownloadableViz>
-          <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, overflow: 'hidden', margin: '1.25rem 0', overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 480 }}>
-              <thead>
-                <tr style={{ background: '#f8fafc' }}>
-                  {['Indicador', '1° trim. 2025 (miles)', '1° trim. 2026 (miles)', 'Variación (miles)'].map((h, i) => (
-                    <th key={h} style={{ textAlign: i === 0 ? 'left' : 'right', fontSize: '0.625rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0.75rem 1rem', borderBottom: `1px solid ${C.rule}` }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {POBLACION_TABLA.map((r, i, arr) => (
-                  <tr key={i} style={{ borderBottom: i < arr.length - 1 ? `0.5px solid #f1f5f9` : 'none' }}>
-                    <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.ink, fontWeight: 600 }}>{r.ind}</td>
-                    <td className="tabular-nums" style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.inkMid, textAlign: 'right' }}>{r.t2025}</td>
-                    <td className="tabular-nums" style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.inkMid, textAlign: 'right' }}>{r.t2026}</td>
-                    <td
-                      className="tabular-nums"
-                      style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', fontWeight: 600, textAlign: 'right', color: getColorVariacion({ variacion: r.variacion, polaridad: r.polaridad, texto: true }) }}
-                    >
-                      {r.variacion}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5" style={{ maxWidth: 560 }}>
+            <CifraCard label="Subocupación no demandante" valor="4,9%" variacion="+1,6 pp" polaridad="menor-es-mejor" periodo="desde 3,3% en 1T2025" />
+            <CifraCard label="Subocupación demandante" valor="7,2%" variacion="−0,5 pp" polaridad="menor-es-mejor" periodo="desde 7,7% en 1T2025" />
           </div>
+          <DownloadableViz title="Subocupación horaria — Partidos del GBA" fuente="INDEC, EPH — 1T2025 y 1T2026">
+            <ChartSubocupacion />
+          </DownloadableViz>
         </div>
       </div>
 
-      {/* 04 — CONTEXTO (fondo blanco alternado) */}
+      {/* DE TASAS A PERSONAS — solo tabla densa */}
+      <div className="max-w-5xl mx-auto px-6 pb-10">
+        <SH title="De tasas a personas" />
+        <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          Más allá de las tasas, la EPH permite dimensionar estos cambios en términos de personas. El dato más
+          relevante: el incremento de la población subocupada (+76.000 personas) superó ampliamente al de la
+          población ocupada (+10.000) y al de la desocupada (+2.000) en el mismo período. Buena parte del ajuste
+          se dio por reducción de horas trabajadas dentro del universo de ocupados, no por un pasaje directo
+          hacia la desocupación abierta.
+        </p>
+        <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, overflow: 'hidden', margin: '1.25rem 0 0', overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 480 }}>
+            <thead>
+              <tr style={{ background: '#f8fafc' }}>
+                {['Indicador', '1° trim. 2025 (miles)', '1° trim. 2026 (miles)', 'Variación (miles)'].map((h, i) => (
+                  <th key={h} style={{ textAlign: i === 0 ? 'left' : 'right', fontSize: '0.625rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0.75rem 1rem', borderBottom: `1px solid ${C.rule}` }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {POBLACION_TABLA.map((r, i, arr) => (
+                <tr key={i} style={{ borderBottom: i < arr.length - 1 ? `0.5px solid #f1f5f9` : 'none' }}>
+                  <td style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.ink, fontWeight: 600 }}>{r.ind}</td>
+                  <td className="tabular-nums" style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.inkMid, textAlign: 'right' }}>{r.t2025}</td>
+                  <td className="tabular-nums" style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', color: C.inkMid, textAlign: 'right' }}>{r.t2026}</td>
+                  <td
+                    className="tabular-nums"
+                    style={{ padding: '0.75rem 1rem', fontSize: '0.8125rem', fontWeight: 600, textAlign: 'right', color: getColorVariacion({ variacion: r.variacion, polaridad: r.polaridad, texto: true }) }}
+                  >
+                    {r.variacion}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <FichaTecnica items={[
+          ['Fuente', 'INDEC, EPH — cuadro 3.2'],
+          ['Período', '1° trim. 2025 vs. 1° trim. 2026'],
+          ['Universo', '24 partidos del GBA'],
+          ['Unidad', 'miles de personas'],
+        ]} />
+      </div>
+
+      {/* LA BRECHA CON CABA (fondo blanco alternado) */}
       <div style={{ background: '#fff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
-        <div className="max-w-5xl mx-auto px-6 pb-12">
-          <div >
-            <SH title="La brecha con CABA" />
-            <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-              La desocupación en los partidos del GBA (9,7%) continúa siendo considerablemente más alta que la de
-              la Ciudad Autónoma de Buenos Aires (4,8%) y que el promedio del total de 31 aglomerados urbanos
-              relevados por la EPH (7,8%). La brecha con CABA equivale a 4,9 puntos porcentuales: la desocupación
-              del conurbano duplica con creces a la de la Ciudad.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-              <CifraCard label="Partidos del GBA" valor="9,7%" periodo="tasa de desocupación 1T2026" />
-              <CifraCard label="Total 31 aglomerados" valor="7,8%" periodo="promedio nacional urbano EPH" />
-              <CifraCard label="CABA" valor="4,8%" periodo="brecha de 4,9 pp con el GBA" />
-            </div>
-            <DownloadableViz title="Tasa de desocupación por área geográfica — 1T2026" fuente="INDEC, EPH — 1T2026">
-              <ChartContexto />
-            </DownloadableViz>
-            <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-              Esta diferencia es estructural: se repite, con oscilaciones menores, en los sucesivos informes
-              trimestrales de la EPH desde que existe esta desagregación geográfica.
-            </p>
-          </div>
+        <div className="max-w-5xl mx-auto px-6 pb-10">
+          <SH title="La brecha con CABA" />
+          <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+            La desocupación en los partidos del GBA (9,7%) continúa siendo considerablemente más alta que la de
+            la Ciudad Autónoma de Buenos Aires (4,8%) y que el promedio del total de 31 aglomerados urbanos
+            relevados por la EPH (7,8%). La brecha con CABA equivale a 4,9 puntos porcentuales: la desocupación
+            del conurbano duplica con creces a la de la Ciudad. Esta diferencia es estructural: se repite, con
+            oscilaciones menores, en los sucesivos informes trimestrales de la EPH desde que existe esta
+            desagregación geográfica.
+          </p>
+          <DownloadableViz title="Tasa de desocupación por área geográfica — 1T2026" fuente="INDEC, EPH — 1T2026">
+            <ChartContexto />
+          </DownloadableViz>
         </div>
       </div>
 
       {/* NOTA METODOLÓGICA */}
       <div className="max-w-5xl mx-auto px-6 py-10">
         <NotaMetodologica />
-      </div>
-
-      {/* CONCLUSIÓN */}
-      <div className="max-w-5xl mx-auto px-6 pb-16">
-        <div style={{ background: C.hero, padding: '44px 48px' }}>
-          <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.9rem', fontWeight: 600, marginBottom: 16 }}>
-            El argumento
-          </p>
-          <p style={{
-            color: '#fff', fontSize: 'clamp(1.15rem, 2.5vw, 1.45rem)',
-            lineHeight: 1.6, fontWeight: 500, maxWidth: 800,
-          }}>
-            La desocupación del conurbano no subió, pero el mercado de trabajo se deterioró igual:
-            cayeron la actividad y el empleo, y{' '}
-            <span style={{ fontWeight: 700 }}>76.000 personas más</span>{' '}
-            pasaron a trabajar menos horas de las que necesitan.{' '}
-            <span style={{ color: 'rgba(255,255,255,0.75)', fontWeight: 400 }}>
-              El ajuste fue por horas, no por despidos. La brecha con CABA sigue duplicando la desocupación.
-            </span>
-          </p>
-          <div style={{ marginTop: 32 }}>
-            <a
-              href="https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-31-58"
-              target="_blank" rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 6,
-                color: '#fff', textDecoration: 'underline', textUnderlineOffset: 4,
-                fontSize: '0.82rem', fontWeight: 600,
-              }}
-            >
-              INDEC — Mercado de trabajo (EPH) <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-          </div>
-        </div>
       </div>
 
       {/* FOOTER */}
@@ -697,6 +645,14 @@ export default function InformeMercadoTrabajoGBA() {
             indicadores socioeconómicos (EPH). Primer trimestre de 2025". Informes técnicos, Vol. 9, n° 144 — 19 de
             junio de 2025 · Elaboración propia DatosPBA · 2026
           </p>
+          <a
+            href="https://www.indec.gob.ar/indec/web/Nivel4-Tema-4-31-58"
+            target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold mt-3"
+            style={{ color: C.ink, textDecoration: 'underline', textUnderlineOffset: 4 }}
+          >
+            INDEC — Mercado de trabajo (EPH) <ExternalLink className="w-3.5 h-3.5" />
+          </a>
         </div>
       </div>
     </div>
