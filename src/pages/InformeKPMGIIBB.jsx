@@ -177,7 +177,7 @@ export default function InformeKPMGIIBB() {
 
           <div className="flex flex-col lg:flex-row gap-10 items-center">
             {/* donut */}
-            <div className="relative shrink-0" style={{ width: 260, height: 260 }}>
+            <div className="relative shrink-0" style={{ width: 260, height: 260 }} role="img" aria-label="Gráfico de anillos: el 61% de las empresas señala a Ingresos Brutos como el impuesto que más encarece los precios, contra 12% el IVA, 8% Ganancias, 5% Débitos y Créditos y 14% otros">
               <Doughnut data={doughnutData} options={doughnutOpts} />
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                 <span className="font-display text-5xl font-bold" style={{ color: DATA[1] }}>61%</span>

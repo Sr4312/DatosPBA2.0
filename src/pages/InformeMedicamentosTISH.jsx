@@ -256,7 +256,9 @@ export default function InformeMedicamentosTISH() {
           </div>
 
           <div
-            style={{ height: Math.max(280, filtered.length * 54) }}>
+            style={{ height: Math.max(280, filtered.length * 54) }}
+            role="img"
+            aria-label="Gráfico de barras apiladas: la presión TISH acumulada sobre medicamentos va del 3,73% del precio final en Pilar a 1,11% en Luján de Cuyo; Pilar casi triplica a Bahía Blanca (1,40%) y supera a Córdoba Capital (2,52%)">
             <Bar data={chartData} options={chartOptions} />
           </div>
 

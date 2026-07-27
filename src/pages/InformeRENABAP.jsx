@@ -386,7 +386,7 @@ function EvolucionChart() {
     },
   }
   return (
-    <div style={{ height: 360 }}>
+    <div style={{ height: 360 }} role="img" aria-label="Gráfico de líneas: los barrios populares registrados en PBA pasaron de 1.650 en 2017 a 2.327 en 2023, un crecimiento del 41% en el relevamiento">
       <Line data={data} options={opts} />
     </div>
   )
@@ -428,7 +428,7 @@ function TopMunicipiosChart() {
     },
   }
   return (
-    <div style={{ height: 520 }}>
+    <div style={{ height: 520 }} role="img" aria-label="Gráfico de barras horizontales: La Matanza encabeza el ranking con 141 barrios populares, seguida por Moreno (108), Quilmes (96), Almirante Brown (87) y Merlo (86)">
       <Bar data={data} options={opts} />
     </div>
   )
@@ -468,7 +468,7 @@ function ServicioDonut({ srv, delay = 0 }) {
       }}>
         {srv.label}
       </p>
-      <div style={{ position: 'relative', width: '100%', height: 180 }}>
+      <div style={{ position: 'relative', width: '100%', height: 180 }} role="img" aria-label={`Gráfico de anillos: solo el ${srv.pct}% de los hogares en barrios populares tiene ${srv.label.toLowerCase()}; el ${100 - srv.pct}% no tiene acceso`}>
         <Doughnut data={data} options={opts} />
         <div style={{
           position: 'absolute', inset: 0,
@@ -525,7 +525,7 @@ function DecadasChart() {
     },
   }
   return (
-    <div style={{ height: 340 }}>
+    <div style={{ height: 340 }} role="img" aria-label="Gráfico de barras: el 61% de los barrios populares de PBA se fundó después de 2000 (28% en 2000-2009, 28% en 2010-2019 y 5% desde 2020), contra 18% en los noventa y 21% antes de 1990">
       <Bar data={data} options={opts} />
     </div>
   )

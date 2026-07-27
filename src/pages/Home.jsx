@@ -164,7 +164,7 @@ function FeaturedInformeCard({ inf, viz }) {
 
       <div className="lg:col-span-2 bg-[#0F172A] p-6 sm:p-7 flex flex-col">
         {viz && ChartComponent ? (
-          <div className="flex-1 min-h-[240px]">
+          <div className="flex-1 min-h-[240px]" role="img" aria-label={`Gráfico del informe: ${inf.titulo}`}>
             <ChartComponent ref={chartRef} data={chartData} options={options} />
           </div>
         ) : (
@@ -220,7 +220,7 @@ function HeroVizPanel({ informe, viz }) {
         {informe.titulo}
       </p>
 
-      <div style={{ height: 260 }}>
+      <div style={{ height: 260 }} role="img" aria-label={`Gráfico del informe: ${informe.titulo}`}>
         <ChartComponent ref={chartRef} data={chartData} options={options} />
       </div>
 

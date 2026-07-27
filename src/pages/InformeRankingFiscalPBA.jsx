@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, Download } from 'lucide-react'
-import html2canvas from 'html2canvas'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -118,6 +117,7 @@ function triggerDownload(canvas, filename) {
 }
 
 async function downloadVizContainer(node, title, fuente) {
+  const { default: html2canvas } = await import('html2canvas')
   const captured = await html2canvas(node, { scale: 2, useCORS: true, backgroundColor: '#ffffff' })
   const upscale = Math.max(1, DL_MIN_W / captured.width)
   const innerW  = Math.round(captured.width * upscale)
@@ -453,7 +453,7 @@ function GastoIngresosChart() {
 
   return (
     <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
-      <div style={{ height: 300 }}>
+      <div style={{ height: 300 }} role="img" aria-label="Gráfico de barras: el gasto total provincial creció 6% real interanual contra 3% de los ingresos; personal subió 7%, jubilaciones 11%, obra pública 3%, mientras el gasto de Nación cayó 2%">
         <Bar data={data} options={opts} />
       </div>
       <p className="text-[11px] mt-3 px-1" style={{ color: C.inkLight }}>
@@ -508,7 +508,7 @@ function ObraPublicaChart() {
 
   return (
     <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
-      <div style={{ height: 220 }}>
+      <div style={{ height: 220 }} role="img" aria-label="Gráfico de barras horizontales: Río Negro (+93%) y Santa Cruz (+78%) lideran las subas reales del gasto en obra pública, mientras San Luis (-49%) y Chaco (-37%) registran las mayores caídas">
         <Bar data={data} options={opts} />
       </div>
       <p className="text-[11px] mt-3 px-1" style={{ color: C.inkLight }}>

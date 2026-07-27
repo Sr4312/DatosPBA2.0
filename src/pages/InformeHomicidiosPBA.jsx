@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ExternalLink, Download } from 'lucide-react'
-import html2canvas from 'html2canvas'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -113,6 +112,7 @@ function triggerDownload(canvas, filename) {
 }
 
 async function downloadVizContainer(node, title, fuente) {
+  const { default: html2canvas } = await import('html2canvas')
   const captured = await html2canvas(node, { scale: 2, useCORS: true, backgroundColor: '#ffffff' })
   const upscale = Math.max(1, DL_MIN_W / captured.width)
   const innerW  = Math.round(captured.width * upscale)
@@ -356,7 +356,7 @@ function BrechaChart() {
 
   return (
     <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
-      <div style={{ height: 300 }}>
+      <div style={{ height: 300 }} role="img" aria-label="Gráfico de barras: el conurbano, La Plata y Mar del Plata registran una tasa de 5,48 homicidios cada 100.000 habitantes, contra 4,6 del promedio provincial y 2,42 del interior bonaerense">
         <Bar data={data} options={opts} />
       </div>
       <p className="text-[11px] mt-3 px-1" style={{ color: C.inkLight }}>
@@ -409,7 +409,7 @@ function RankingTasaChart() {
       <p style={{ fontSize: '0.78rem', fontWeight: 700, color: C.ink, marginBottom: 12 }}>
         Por tasa de homicidios dolosos
       </p>
-      <div style={{ height: 220 }}>
+      <div style={{ height: 220 }} role="img" aria-label="Gráfico de barras horizontales: La Matanza encabeza el ranking con una tasa de 8,02 homicidios cada 100.000 habitantes, seguida por Moreno-General Rodríguez (7,66), Lomas de Zamora (5,92) y San Martín (5,57)">
         <Bar data={data} options={opts} />
       </div>
     </div>
@@ -456,7 +456,7 @@ function RankingAbsChart() {
       <p style={{ fontSize: '0.78rem', fontWeight: 700, color: C.ink, marginBottom: 12 }}>
         Por cantidad absoluta de homicidios
       </p>
-      <div style={{ height: 220 }}>
+      <div style={{ height: 220 }} role="img" aria-label="Gráfico de barras horizontales: La Matanza registra 147 homicidios consumados, seguida por Lomas de Zamora (106), San Martín (103) y Quilmes (68)">
         <Bar data={data} options={opts} />
       </div>
     </div>
@@ -502,7 +502,7 @@ function MatanzaComparacionChart() {
 
   return (
     <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
-      <div style={{ height: 280 }}>
+      <div style={{ height: 280 }} role="img" aria-label="Gráfico de barras: La Matanza tiene una tasa de 8,02 homicidios cada 100.000 habitantes, frente a 4,6 del promedio de PBA, 2,5 de CABA y 2,42 del interior bonaerense">
         <Bar data={data} options={opts} />
       </div>
       <p className="text-[11px] mt-3 px-1" style={{ color: C.inkLight }}>

@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, Download, ExternalLink } from 'lucide-react'
-import html2canvas from 'html2canvas'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -112,6 +111,7 @@ function triggerDownload(canvas, filename) {
 }
 
 async function downloadVizContainer(node, title, fuente) {
+  const { default: html2canvas } = await import('html2canvas')
   const captured = await html2canvas(node, { scale: 2, useCORS: true, backgroundColor: '#ffffff' })
   const upscale  = Math.max(1, DL_MIN_W / captured.width)
   const innerW   = Math.round(captured.width * upscale)
@@ -220,7 +220,7 @@ function ChartCard({ title, fuente, legend, height = 220, children }) {
           ))}
         </div>
       )}
-      <div style={{ position: 'relative', height }}>{children}</div>
+      <div style={{ position: 'relative', height }} role="img" aria-label={title}>{children}</div>
       {fuente && (
         <div style={{ borderTop: '1px solid var(--c-rule)', marginTop: '0.75rem', paddingTop: '0.625rem' }}>
           <span style={{ fontSize: '0.62rem', color: 'var(--c-ink-light)', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block' }}>Fuente y período</span>

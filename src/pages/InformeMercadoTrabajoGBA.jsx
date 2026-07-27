@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
-import html2canvas from 'html2canvas'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -95,6 +94,7 @@ function triggerDownload(canvas, filename) {
 }
 
 async function downloadVizContainer(node, title, fuente) {
+  const { default: html2canvas } = await import('html2canvas')
   const captured = await html2canvas(node, { scale: 2, useCORS: true, backgroundColor: '#ffffff' })
   const upscale  = Math.max(1, DL_MIN_W / captured.width)
   const innerW   = Math.round(captured.width * upscale)
@@ -206,12 +206,12 @@ function FichaTecnica({ items }) {
   )
 }
 
-function ChartCard({ title, ficha, legend, height = 220, children }) {
+function ChartCard({ title, hallazgo, ficha, tabla, legend, height = 220, children }) {
   return (
     <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, padding: '1.25rem 1.25rem 0.875rem', margin: '1.25rem 0' }}>
       {title && <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#334155', marginBottom: '0.75rem' }}>{title}</p>}
       {legend && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.875rem', marginBottom: '0.625rem' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.875rem', marginBottom: '0.625rem' }} aria-hidden="true">
           {legend.map(l => (
             <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.6875rem', color: '#64748b', fontWeight: 500 }}>
               <span style={{ width: 10, height: 10, borderRadius: 2, background: l.color, flexShrink: 0 }} />
@@ -220,7 +220,32 @@ function ChartCard({ title, ficha, legend, height = 220, children }) {
           ))}
         </div>
       )}
-      <div style={{ position: 'relative', height }}>{children}</div>
+      <div style={{ position: 'relative', height }} role="img" aria-label={hallazgo || title}>{children}</div>
+      {tabla && (
+        <details style={{ marginTop: '0.625rem' }}>
+          <summary style={{ fontSize: '0.72rem', fontWeight: 600, color: C.inkMid, cursor: 'pointer' }}>
+            Ver los datos del gráfico en tabla
+          </summary>
+          <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '0.5rem' }}>
+            <thead>
+              <tr>
+                {tabla.columnas.map((c, i) => (
+                  <th key={c} style={{ textAlign: i === 0 ? 'left' : 'right', fontSize: '0.68rem', color: C.inkMid, fontWeight: 700, padding: '0.3rem 0.5rem', borderBottom: `1px solid ${C.rule}` }}>{c}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {tabla.filas.map((fila, i) => (
+                <tr key={i}>
+                  {fila.map((celda, j) => (
+                    <td key={j} className="tabular-nums" style={{ textAlign: j === 0 ? 'left' : 'right', fontSize: '0.75rem', color: j === 0 ? C.ink : C.inkMid, padding: '0.3rem 0.5rem', borderBottom: `1px solid var(--surface-2)` }}>{celda}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </details>
+      )}
       {ficha && <FichaTecnica items={ficha} />}
     </div>
   )
@@ -284,6 +309,11 @@ function ChartTasas() {
   return (
     <ChartCard
       title="Tasas de actividad, empleo y desocupación — Partidos del GBA"
+      hallazgo="Gráfico de barras: entre el 1° trimestre de 2025 y el de 2026 la actividad cayó de 48,5% a 48,0%, el empleo de 43,8% a 43,4% y la desocupación se mantuvo en 9,7%."
+      tabla={{
+        columnas: ['Tasa', '1° trim. 2025', '1° trim. 2026'],
+        filas: TASAS_PRINCIPALES.map(d => [d.label, fmtPct(d.t2025), fmtPct(d.t2026)]),
+      }}
       ficha={[
         ['Fuente', 'INDEC, EPH — cuadro 3.1'],
         ['Período', '1° trim. 2025 y 1° trim. 2026'],
@@ -325,6 +355,11 @@ function ChartSubocupacion() {
   return (
     <ChartCard
       title="Subocupación horaria como % de la PEA — Partidos del GBA"
+      hallazgo="Gráfico de barras: la subocupación total pasó de 10,9% a 12,1% de la PEA; la no demandante subió de 3,3% a 4,9% y la demandante bajó de 7,7% a 7,2%."
+      tabla={{
+        columnas: ['Indicador', '1° trim. 2025', '1° trim. 2026'],
+        filas: SUBOCUPACION.map(d => [d.label, fmtPct(d.t2025), fmtPct(d.t2026)]),
+      }}
       ficha={[
         ['Fuente', 'INDEC, EPH — cuadro 3.1'],
         ['Período', '1° trim. 2025 y 1° trim. 2026'],
@@ -366,6 +401,11 @@ function ChartContexto() {
   return (
     <ChartCard
       title="Tasa de desocupación por área geográfica — 1° trimestre 2026"
+      hallazgo="Gráfico de barras horizontales: la desocupación de los partidos del GBA (9,7%) duplica con creces la de CABA (4,8%) y supera el promedio de los 31 aglomerados (7,8%)."
+      tabla={{
+        columnas: ['Área', 'Tasa de desocupación'],
+        filas: DESOCUPACION_CONTEXTO.map(d => [d.label, fmtPct(d.value)]),
+      }}
       ficha={[
         ['Fuente', 'INDEC, EPH — cuadro 3.1'],
         ['Período', '1° trim. 2026'],

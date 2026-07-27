@@ -19,10 +19,17 @@ export default function InformeDetalle() {
       setInforme(inf)
       setVizRelacionadas(viz || [])
       setLoading(false)
+      if (inf?.titulo) document.title = inf.titulo + ' — DatosPBA'
     })
   }, [id])
 
-  if (loading) return null
+  if (loading) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-24">
+        <p className="text-sm text-slate-500">Cargando informe…</p>
+      </div>
+    )
+  }
 
   if (!informe) {
     return (

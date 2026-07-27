@@ -1,7 +1,6 @@
 import { useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ExternalLink, Download } from 'lucide-react'
-import html2canvas from 'html2canvas'
 import {
   Chart as ChartJS,
   ArcElement,
@@ -155,6 +154,7 @@ function triggerDownload(canvas, filename) {
 }
 
 async function downloadVizContainer(node, title, fuente) {
+  const { default: html2canvas } = await import('html2canvas')
   const captured = await html2canvas(node, {
     scale: 2,
     useCORS: true,
@@ -380,7 +380,7 @@ function CoberturaDonut() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-      <div className="relative mx-auto" style={{ width: 250, height: 250 }}>
+      <div className="relative mx-auto" style={{ width: 250, height: 250 }} role="img" aria-label="Gráfico de anillos: el 37,6% de la población del conurbano no tiene cobertura formal de salud (4.056.187 personas), el 59,9% tiene obra social, prepaga o PAMI y el 2,6% accede vía programas estatales">
         <Doughnut data={data} options={opts} />
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
           <span className="font-display text-4xl font-bold" style={{ color: DATA[1] }}>{PCT_DEP_PUBLICO.toFixed(1).replace('.', ',')}%</span>
@@ -957,7 +957,7 @@ function DependientesBar() {
     },
   }
   return (
-    <div style={{ height: 640 }}>
+    <div style={{ height: 640 }} role="img" aria-label="Gráfico de barras horizontales: La Matanza concentra 846.383 personas sin cobertura formal de salud, seguida por Moreno (289.261), Merlo (270.298) y Lomas de Zamora (260.643); Vicente López registra la menor cantidad (37.976)">
       <Bar data={data} options={opts} />
     </div>
   )

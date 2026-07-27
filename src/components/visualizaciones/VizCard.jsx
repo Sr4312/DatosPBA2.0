@@ -2,7 +2,6 @@ import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Badge } from '@/components/ui/badge'
 import { Download } from 'lucide-react'
-import html2canvas from 'html2canvas'
 import {
   Chart as ChartJS,
   CategoryScale, LinearScale,
@@ -229,7 +228,7 @@ export default function VizCard({ viz, index = 0 }) {
 
     if (viz.tipo === 'tabla' || !chartData) {
       actionsRef.current.style.visibility = 'hidden'
-      const captured = await html2canvas(cardRef.current, {
+      await (await import('html2canvas')).default(cardRef.current, {
         scale: 2,
         useCORS: true,
         backgroundColor: '#ffffff',
@@ -286,11 +285,15 @@ export default function VizCard({ viz, index = 0 }) {
       {viz.tipo === 'tabla' ? (
         <TableContent tableData={tableData} />
       ) : (
-        <div style={{
-          height: chartOptions?.indexAxis === 'y' && (chartData?.labels?.length ?? 0) > 8
-            ? `${Math.max(300, (chartData.labels.length) * 25)}px`
-            : '256px'
-        }}>
+        <div
+          role="img"
+          aria-label={viz.titulo ? `Gráfico: ${viz.titulo}` : 'Gráfico'}
+          style={{
+            height: chartOptions?.indexAxis === 'y' && (chartData?.labels?.length ?? 0) > 8
+              ? `${Math.max(300, (chartData.labels.length) * 25)}px`
+              : '256px'
+          }}
+        >
           <ChartComponent ref={chartRef} data={chartData} options={resolveChartOptions(chartOptions)} />
         </div>
       )}

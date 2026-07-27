@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ExternalLink, Download } from 'lucide-react'
-import html2canvas from 'html2canvas'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -159,6 +158,7 @@ function triggerDownload(canvas, filename) {
 }
 
 async function downloadVizContainer(node, title, fuente) {
+  const { default: html2canvas } = await import('html2canvas')
   const captured = await html2canvas(node, { scale: 2, useCORS: true, backgroundColor: '#ffffff' })
   const upscale  = Math.max(1, DL_MIN_W / captured.width)
   const innerW   = Math.round(captured.width * upscale)
@@ -298,7 +298,7 @@ function ChartComparacion() {
           </div>
         ))}
       </div>
-      <div style={{ height: 310 }}>
+      <div style={{ height: 310 }} role="img" aria-label="Gráfico de barras horizontales: Buenos Aires tiene 30,2 empleados estatales cada 1.000 habitantes, por encima de Texas (22,8), Nueva York (22,4), Minas Gerais (19,7), Rio Grande do Sul (17,5), Florida (15,3) y Bahia (11,7)">
         <Bar
           data={data}
           options={{
@@ -351,7 +351,7 @@ function ChartBrasil() {
   }
   return (
     <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
-      <div style={{ height: 220 }}>
+      <div style={{ height: 220 }} role="img" aria-label="Gráfico de barras horizontales: PBA registra 30,2 empleados estaduales cada 1.000 habitantes, frente a 19,7 de Minas Gerais, 17,5 de Rio Grande do Sul y 11,7 de Bahia">
         <Bar data={data} options={{
           indexAxis: 'y',
           responsive: true,
@@ -414,7 +414,7 @@ function ChartEEUU() {
           </div>
         ))}
       </div>
-      <div style={{ height: 240 }}>
+      <div style={{ height: 240 }} role="img" aria-label="Gráfico de barras: con el ajuste por docentes K-12, Florida pasa de 9,6 a 15,3 empleados cada 1.000 habitantes, Nueva York de 11,4 a 22,4 y Texas de 11,4 a 22,8; todos quedan por debajo de los 30,2 de PBA">
         <Bar data={data} options={{
           responsive: true,
           maintainAspectRatio: false,
@@ -456,7 +456,7 @@ function ChartCargosEquivalentes() {
   }
   return (
     <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
-      <div style={{ height: 310 }}>
+      <div style={{ height: 310 }} role="img" aria-label="Gráfico de barras horizontales: PBA tiene 530.922 cargos presupuestados; con el ratio de Texas tendría 401.280, con el de Nueva York 394.240, con el de Minas Gerais 346.720, con el de Río Grande do Sul 308.000, con el de Florida 269.280 y con el de Bahia 205.920">
         <Bar data={data} options={{
           indexAxis: 'y',
           responsive: true,

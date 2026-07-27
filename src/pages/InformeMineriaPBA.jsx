@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, ExternalLink, Download } from 'lucide-react'
-import html2canvas from 'html2canvas'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -109,6 +108,7 @@ function triggerDownload(canvas, filename) {
 }
 
 async function downloadVizContainer(node, title, fuente) {
+  const { default: html2canvas } = await import('html2canvas')
   const captured = await html2canvas(node, { scale: 2, useCORS: true, backgroundColor: '#ffffff' })
   const upscale = Math.max(1, DL_MIN_W / captured.width)
   const innerW  = Math.round(captured.width * upscale)
@@ -339,7 +339,7 @@ function ProduccionChart() {
 
   return (
     <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
-      <div style={{ height: 280 }}>
+      <div style={{ height: 280 }} role="img" aria-label="Gráfico de barras horizontales: Buenos Aires lidera la producción de áridos y minerales no metalíferos con 50 millones de toneladas anuales, seguida por Córdoba (48), Santa Fe (14), San Juan (10) y Mendoza (7)">
         <Bar data={data} options={opts} />
       </div>
       <p className="text-[11px] mt-3 px-1" style={{ color: C.inkLight }}>
@@ -400,7 +400,7 @@ function PBGHistorico() {
 
   return (
     <div style={{ background: '#fff', border: `1px solid ${C.rule}`, borderRadius: 2, padding: '22px 24px' }}>
-      <div style={{ height: 340 }}>
+      <div style={{ height: 340 }} role="img" aria-label="Gráfico de líneas: el valor agregado de minas y canteras en PBA creció de 380 millones de pesos constantes de 2004 en ese año a un pico de 823 millones en 2023, con caída a 468 en 2020 por COVID y 618 millones en 2024">
         <Line data={data} options={opts} />
       </div>
       <div className="flex items-center gap-6 mt-3 px-1 flex-wrap">
