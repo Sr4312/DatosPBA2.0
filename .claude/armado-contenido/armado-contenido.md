@@ -22,9 +22,10 @@ un informe JSX listo para publicar, con el diseño del informe de referencia.
 El informe de referencia es **`src/pages/InformeMercadoTrabajoGBA.jsx`**. Todo informe
 nuevo replica su estructura y sus componentes.
 
-La fuente de verdad del sistema de diseño es **`SKILL.md` en la raíz del repo**
-(design-system-datospba). Ante cualquier duda de color, tipografía o densidad que
-este documento no resuelva, manda `SKILL.md`.
+La fuente de verdad del sistema de diseño es el skill **`design-system-datospba`**
+(`.claude/skills/design-system-datospba/skill.md`). Ante cualquier duda de color,
+tipografía o densidad que este documento no resuelva, manda ese skill. Antes de
+dar un informe por terminado, pasalo por **`anti-slop-audit`**.
 
 Los informes anteriores a julio de 2026 (`InformeAgroindustriaPBA.jsx`,
 `InformeEmpleoPblicoPBA.jsx`) todavía conservan restos del diseño viejo —
