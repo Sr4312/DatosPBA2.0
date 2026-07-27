@@ -8,7 +8,6 @@ import {
 } from 'chart.js'
 import { Bar, Line } from 'react-chartjs-2'
 import { supabase } from '@/lib/supabase'
-import EntryCard from '@/components/shared/EntryCard'
 import TickerBar from '@/components/shared/TickerBar'
 import MedidorMunicipal from '@/components/MedidorMunicipal'
 import { Badge } from '@/components/ui/badge'
@@ -34,23 +33,21 @@ const XLogo = () => (
   </svg>
 )
 
-function PublicacionesTicker({ hilos }) {
+function PublicacionesGrid({ hilos }) {
   if (!hilos.length) return null
-  const doubled = [...hilos, ...hilos]
+  const visibles = hilos.slice(0, 3)
   return (
     <section className="mb-16 py-10 border-y" style={{ borderColor: 'var(--rule)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <SectionHeader title="Publicaciones" href="/hilos" />
-      </div>
-      <div className="max-w-7xl mx-auto pl-4 sm:pl-6 overflow-hidden relative">
-        <div className="flex gap-4 ticker-track" style={{ width: 'max-content' }}>
-          {doubled.map((h, i) => (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {visibles.map((h, i) => (
             <a
               key={i}
               href={h.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-72 shrink-0 bg-white border p-4 flex flex-col gap-3 no-underline hover:border-slate-300 transition-colors"
+              className="bg-white border p-4 flex flex-col gap-3 no-underline hover:border-slate-300 transition-colors"
               style={{ borderColor: 'var(--rule)' }}
             >
               <div className="flex items-center justify-between">
@@ -154,7 +151,12 @@ function FeaturedInformeCard({ inf, viz }) {
         <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#0F172A] leading-tight tracking-tight">
           {inf.titulo}
         </h3>
-        {inf.bajada && <p className="text-sm text-slate-600 leading-relaxed line-clamp-4">{inf.bajada}</p>}
+        {inf.bajada && <p className="text-sm text-slate-600 leading-relaxed line-clamp-3">{inf.bajada}</p>}
+        {inf.insights?.[0] && (
+          <p className="text-base font-semibold text-[#0F172A] leading-snug border-t pt-3" style={{ borderColor: 'var(--rule)' }}>
+            {inf.insights[0]}
+          </p>
+        )}
         <Link to={inf.url} className="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:text-brand-700 no-underline pt-2">
           Leer informe →
         </Link>
@@ -237,11 +239,43 @@ function HeroVizPanel({ informe, viz }) {
   )
 }
 
+/* Lista densa: fecha, tema, título, bajada de una línea, hallazgo principal.
+   Filas separadas por regla de 1px, sin cards. */
+function InformesListaDensa({ informes }) {
+  return (
+    <div className="border-t" style={{ borderColor: 'var(--rule)' }}>
+      {informes.map(inf => (
+        <Link
+          key={inf.id}
+          to={inf.url}
+          className="grid sm:grid-cols-[130px_1fr] gap-x-6 gap-y-1 py-4 border-b no-underline group"
+          style={{ borderColor: 'var(--rule)' }}
+        >
+          <div className="flex sm:flex-col gap-2 sm:gap-0.5">
+            {inf.fecha && <span className="text-xs text-slate-500 tabular-nums">{inf.fecha}</span>}
+            {inf.tema && <span className="text-xs text-slate-500">{inf.tema}</span>}
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-base font-semibold text-slate-900 leading-snug group-hover:underline underline-offset-4">
+              {inf.titulo}
+            </h3>
+            {inf.bajada && <p className="text-sm text-slate-500 truncate mt-0.5">{inf.bajada}</p>}
+            {inf.insights?.[0] && (
+              <p className="text-sm font-semibold text-[#0F172A] mt-1 leading-snug">{inf.insights[0]}</p>
+            )}
+          </div>
+        </Link>
+      ))}
+    </div>
+  )
+}
+
 export default function Home() {
   const [informes, setInformes] = useState([])
   const [reportes, setReportes] = useState([])
   const [hilos, setHilos] = useState([])
   const [visualizaciones, setVisualizaciones] = useState([])
+  const [estado, setEstado] = useState('cargando') // 'cargando' | 'ok' | 'error'
 
   useEffect(() => {
     Promise.all([
@@ -249,12 +283,14 @@ export default function Home() {
       supabase.from('reportes_rapidos').select('*').order('fecha_orden', { ascending: false }),
       supabase.from('hilos').select('*').order('fecha_orden', { ascending: false }),
       supabase.from('visualizaciones').select('*'),
-    ]).then(([{ data: inf }, { data: rep }, { data: hil }, { data: viz }]) => {
+    ]).then(results => {
+      const [inf, rep, hil, viz] = results.map(r => r.data)
       setInformes(inf || [])
       setReportes(rep || [])
       setHilos(hil || [])
       setVisualizaciones(viz || [])
-    })
+      setEstado(results.some(r => r.error) ? 'error' : 'ok')
+    }).catch(() => setEstado('error'))
   }, [])
 
   const heroData = informes.length && visualizaciones.length
@@ -265,9 +301,9 @@ export default function Home() {
     ? getFeaturedInforme(informes, visualizaciones)
     : null
 
-  const gridInformes = featuredInforme
-    ? informes.filter(i => i.id !== featuredInforme.inf.id).slice(0, 4)
-    : informes.slice(0, 4)
+  const listaInformes = featuredInforme
+    ? informes.filter(i => i.id !== featuredInforme.inf.id).slice(0, 6)
+    : informes.slice(0, 6)
 
   return (
     <div>
@@ -305,30 +341,24 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <SectionHeader title="Informes" href="/informes" />
 
+            {estado === 'cargando' && (
+              <p className="text-sm text-slate-500 py-8">Cargando informes…</p>
+            )}
+            {estado === 'error' && (
+              <p className="text-sm text-slate-500 py-8">
+                No se pudieron cargar los informes. Recargá la página o volvé a intentar en unos minutos.
+              </p>
+            )}
+
             {featuredInforme && (
               <FeaturedInformeCard inf={featuredInforme.inf} viz={featuredInforme.viz} />
             )}
 
-            <div className="grid sm:grid-cols-2 gap-5">
-              {gridInformes.map((inf, i) => (
-                <EntryCard
-                  key={inf.id}
-                  titulo={inf.titulo}
-                  resumen={inf.bajada}
-                  fecha={inf.fecha}
-                  tema={inf.tema}
-                  municipio={inf.municipios?.join(', ')}
-                  insights={inf.insights}
-                  url={inf.url}
-                  imagen={inf.imagen}
-                  index={i}
-                />
-              ))}
-            </div>
+            {listaInformes.length > 0 && <InformesListaDensa informes={listaInformes} />}
           </div>
         </section>
 
-        <PublicacionesTicker hilos={hilos} />
+        <PublicacionesGrid hilos={hilos} />
       </div>
     </div>
   )

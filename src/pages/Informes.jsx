@@ -5,12 +5,17 @@ import FilterBar from '@/components/shared/FilterBar'
 
 export default function Informes() {
   const [informes, setInformes] = useState([])
+  const [estado, setEstado] = useState('cargando') // 'cargando' | 'ok' | 'error'
   const [search, setSearch] = useState('')
   const [tema, setTema] = useState('all')
 
   useEffect(() => {
     supabase.from('informes').select('*').order('fecha_orden', { ascending: false })
-      .then(({ data }) => setInformes(data || []))
+      .then(({ data, error }) => {
+        setInformes(data || [])
+        setEstado(error ? 'error' : 'ok')
+      })
+      .catch(() => setEstado('error'))
   }, [])
 
   const temaOptions = [...new Set(informes.map(i => i.tema))].map(t => ({ value: t, label: t }))
@@ -37,7 +42,17 @@ export default function Informes() {
         filters={[{ key: 'tema', value: tema, onChange: setTema, placeholder: 'Temática', options: temaOptions }]}
       />
 
-      {filtered.length > 0 ? (
+      {estado === 'cargando' && (
+        <p className="text-sm text-slate-500 py-12">Cargando informes…</p>
+      )}
+
+      {estado === 'error' && (
+        <p className="text-sm text-slate-500 py-12">
+          No se pudieron cargar los informes. Recargá la página o volvé a intentar en unos minutos.
+        </p>
+      )}
+
+      {estado === 'ok' && (filtered.length > 0 ? (
         <div className="grid sm:grid-cols-2 gap-5">
           {filtered.map((inf, i) => (
             <EntryCard
@@ -55,10 +70,14 @@ export default function Informes() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-20">
-          <p className="text-slate-500 text-sm">No se encontraron informes con los filtros seleccionados.</p>
+        <div className="py-12">
+          <p className="text-slate-500 text-sm">
+            {informes.length === 0
+              ? 'Todavía no hay informes publicados.'
+              : 'Ningún informe coincide con la búsqueda o el filtro elegido.'}
+          </p>
         </div>
-      )}
+      ))}
     </div>
   )
 }
