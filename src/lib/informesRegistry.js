@@ -13,6 +13,14 @@ export const SITE_DESC =
 
 export const INFORMES = [
   {
+    path: '/informes/planta-ocupada-provincial-2024',
+    titulo: 'La planta ocupada del Estado bonaerense, de 2000 a 2024',
+    descripcion:
+      'El sector público provincial pasó de 428.408 a 657.328 agentes en veinticuatro años. Creció menos que Córdoba y, medido por habitante, emplea menos que Mendoza y Santa Fe.',
+    tema: 'Estado',
+    fecha: '2026-07-28',
+  },
+  {
     path: '/informes/pbg-pba-2025',
     titulo: 'Producto Bruto Geográfico de la Provincia de Buenos Aires',
     descripcion:

@@ -26,6 +26,7 @@ const InformeIndiceFADA           = lazy(() => import('./pages/InformeIndiceFADA
 const InformeIndustriaManufacturera = lazy(() => import('./pages/InformeIndustriaManufactureraPBA'))
 const InformeMercadoTrabajoGBA      = lazy(() => import('./pages/InformeMercadoTrabajoGBA'))
 const InformePBGPBA                 = lazy(() => import('./pages/InformePBGPBA'))
+const InformePlantaOcupadaProv      = lazy(() => import('./pages/InformePlantaOcupadaProvincial'))
 const Beta            = lazy(() => import('./pages/Beta'))
 const QuienesSomos    = lazy(() => import('./pages/QuienesSomos'))
 const Metodologia     = lazy(() => import('./pages/Metodologia'))
@@ -56,6 +57,7 @@ export default function App() {
             <Route path="informes/industria-manufacturera-pba-2026" element={<Suspense fallback={null}><InformeIndustriaManufacturera /></Suspense>} />
             <Route path="informes/mercado-trabajo-gba-2026" element={<Suspense fallback={null}><InformeMercadoTrabajoGBA /></Suspense>} />
             <Route path="informes/pbg-pba-2025" element={<Suspense fallback={null}><InformePBGPBA /></Suspense>} />
+            <Route path="informes/planta-ocupada-provincial-2024" element={<Suspense fallback={null}><InformePlantaOcupadaProv /></Suspense>} />
             <Route path="informes/:id" element={<Suspense fallback={null}><InformeDetalle /></Suspense>} />
             <Route path="datos" element={<Suspense fallback={null}><Datos /></Suspense>} />
             <Route path="hilos" element={<Suspense fallback={null}><Hilos /></Suspense>} />
