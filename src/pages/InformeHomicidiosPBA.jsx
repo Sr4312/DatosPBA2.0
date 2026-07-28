@@ -12,6 +12,7 @@ import {
 import { Bar } from 'react-chartjs-2'
 import Cifra from '@/components/shared/Cifra'
 import { DATA, colorEscalaValoracion } from '@/lib/variacion'
+import partidosGeojsonUrl from '@/assets/partidos.geojson?url'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 ChartJS.defaults.font.family = 'Archivo, sans-serif'
@@ -623,13 +624,11 @@ function HomicidiosMap() {
         maxZoom: 15, opacity: 0.45,
       }).addTo(map)
 
-      /* Geometría de los partidos bonaerenses, servida desde el propio origen.
-         Antes se pedía al WFS del IGN —dado de baja, el host ya no resuelve— con
-         caída a un repo personal de GitHub. Ahora el archivo vive en public/ y lo
-         sirve el CDN: sin dependencia de terceros y con cacheo del propio dominio. */
-      const PARTIDOS_URL = '/partidos.geojson'
-
-      const res = await fetch(PARTIDOS_URL)
+      /* La geometría entra por el pipeline de assets de Vite (?url): sale del
+         build con hash de contenido, así que vercel.json la puede cachear como
+         inmutable y un cambio del dato invalida la URL solo. Antes se pedía al
+         WFS del IGN, dado de baja, con caída a un repo personal de GitHub. */
+      const res = await fetch(partidosGeojsonUrl)
       if (!res.ok) throw new Error(`partidos.geojson: HTTP ${res.status}`)
       const geojson = await res.json()
       if (!mounted) return

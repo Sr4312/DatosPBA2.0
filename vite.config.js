@@ -9,6 +9,10 @@ export default defineConfig({
   plugins: [
     react(),
   ],
+  /* .geojson no es un tipo de asset conocido por Vite: sin esto lo trataría
+     como módulo. Declarado acá, sale del build con hash de contenido en el
+     nombre, que es lo que habilita cachearlo como inmutable (ver vercel.json). */
+  assetsInclude: ['**/*.geojson'],
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),

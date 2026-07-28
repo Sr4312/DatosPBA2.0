@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { MUNICIPIOS_DATA } from '@/lib/municipiosData'
 import { getColorVariacion, colorEscalaValoracion } from '@/lib/variacion'
 import 'leaflet/dist/leaflet.css'
+import partidosGeojsonUrl from '@/assets/partidos.geojson?url'
 
 /* ── Concejales data ────────────────────────────────────────────────────── */
 const CONCEJALES_RAW = [
@@ -695,13 +696,11 @@ export default function AtlasMunicipal() {
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', { maxZoom: 15, opacity: 0.65 }).addTo(map)
 
-        /* Geometría de los partidos bonaerenses, servida desde el propio origen.
-           Antes se pedía al WFS del IGN —dado de baja, el host ya no resuelve— con
-           caída a un repo personal de GitHub. Ahora el archivo vive en public/ y lo
-           sirve el CDN: sin dependencia de terceros y con cacheo del propio dominio. */
-        const PARTIDOS_URL = '/partidos.geojson'
-
-        const res = await fetch(PARTIDOS_URL)
+        /* La geometría entra por el pipeline de assets de Vite (?url): sale del
+           build con hash de contenido, así que vercel.json la puede cachear como
+           inmutable y un cambio del dato invalida la URL solo. Antes se pedía al
+           WFS del IGN, dado de baja, con caída a un repo personal de GitHub. */
+        const res = await fetch(partidosGeojsonUrl)
         if (!res.ok) throw new Error(`partidos.geojson: HTTP ${res.status}`)
         const geojson = await res.json()
         if (!mounted) return
