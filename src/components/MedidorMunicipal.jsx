@@ -444,6 +444,15 @@ const INDICATORS = {
   concejales: 'custom',
 }
 
+/* El geojson de partidos etiqueta a Chascomús y a Lezama con el mismo código,
+   06217, que no es el de ninguno de los dos: Lezama se separó de Chascomús en
+   2009 y tiene código INDEC propio. Sin esta corrección ninguno de los dos
+   cruza contra MUNICIPIOS_DATA y los dos quedan sin datos en el mapa. */
+const IN1_CORREGIDO = {
+  'Chascomús': '06218',
+  'Lezama':    '06466',
+}
+
 // in1 "06441" → MUNICIPIOS_DATA codigo "ARG064410441"
 function in1ToCode(in1) {
   const tail = in1.slice(2)
@@ -686,21 +695,15 @@ export default function AtlasMunicipal() {
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', { maxZoom: 15, opacity: 0.65 }).addTo(map)
 
-        const IGN_URL =
-          'https://wfs.ign.gob.ar/geoserver/ign/ows?service=WFS&version=2.0.0&request=GetFeature' +
-          '&typeName=ign:departamento&CQL_FILTER=provincia_id%3D%2706%27' +
-          '&outputFormat=application/json&srsName=EPSG:4326'
-        const FALLBACK_URL = 'https://raw.githubusercontent.com/agburgos83/partidosBA/main/partidos.geojson'
+        /* El WFS del IGN que se usaba como fuente primaria (wfs.ign.gob.ar) fue dado
+           de baja: el host ya no resuelve en DNS, así que ese fetch fallaba siempre y
+           el mapa terminaba dibujándose con el fallback tras un round-trip perdido.
+           Queda una sola fuente, la que de hecho venía sirviendo todos los mapas. */
+        const PARTIDOS_URL = 'https://raw.githubusercontent.com/agburgos83/partidosBA/main/partidos.geojson'
 
-        let geojson = null
-        try {
-          const res = await fetch(IGN_URL)
-          if (!res.ok) throw new Error('IGN down')
-          geojson = await res.json()
-        } catch {
-          const res = await fetch(FALLBACK_URL)
-          geojson = await res.json()
-        }
+        const res = await fetch(PARTIDOS_URL)
+        if (!res.ok) throw new Error(`partidos.geojson: HTTP ${res.status}`)
+        const geojson = await res.json()
         if (!mounted) return
 
         const geoLayer = L.geoJSON(geojson, {
@@ -708,8 +711,8 @@ export default function AtlasMunicipal() {
 
           onEachFeature(feature, layer) {
             const p      = feature.properties
-            const in1    = p.in1 || p.cde
             const name   = p.nombre || p.nam || ''
+            const in1    = IN1_CORREGIDO[name] || p.in1 || p.cde
             const codigo = in1 ? in1ToCode(in1) : null
 
             layer._municipiosData    = codigo ? dataByCode[codigo] : null

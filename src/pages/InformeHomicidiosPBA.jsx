@@ -623,21 +623,15 @@ function HomicidiosMap() {
         maxZoom: 15, opacity: 0.45,
       }).addTo(map)
 
-      const IGN_URL =
-        'https://wfs.ign.gob.ar/geoserver/ign/ows?service=WFS&version=2.0.0&request=GetFeature' +
-        '&typeName=ign:departamento&CQL_FILTER=provincia_id%3D%2706%27' +
-        '&outputFormat=application/json&srsName=EPSG:4326'
-      const FALLBACK_URL = 'https://raw.githubusercontent.com/agburgos83/partidosBA/main/partidos.geojson'
+      /* El WFS del IGN que se usaba como fuente primaria (wfs.ign.gob.ar) fue dado
+         de baja: el host ya no resuelve en DNS, así que ese fetch fallaba siempre y
+         el mapa terminaba dibujándose con el fallback tras un round-trip perdido.
+         Queda una sola fuente, la que de hecho venía sirviendo todos los mapas. */
+      const PARTIDOS_URL = 'https://raw.githubusercontent.com/agburgos83/partidosBA/main/partidos.geojson'
 
-      let geojson
-      try {
-        const res = await fetch(IGN_URL)
-        if (!res.ok) throw new Error()
-        geojson = await res.json()
-      } catch {
-        const res = await fetch(FALLBACK_URL)
-        geojson = await res.json()
-      }
+      const res = await fetch(PARTIDOS_URL)
+      if (!res.ok) throw new Error(`partidos.geojson: HTTP ${res.status}`)
+      const geojson = await res.json()
       if (!mounted) return
 
       L.geoJSON(geojson, {
@@ -656,7 +650,9 @@ function HomicidiosMap() {
       if (mounted) setLoading(false)
     }
 
-    init().catch(console.error)
+    /* Sin la fuente de respaldo, un fallo del fetch es terminal: hay que salir
+       del estado de carga o el mapa queda con el spinner girando para siempre. */
+    init().catch(e => { console.error(e); if (mounted) setLoading(false) })
     return () => {
       mounted = false
       if (map) map.remove()
