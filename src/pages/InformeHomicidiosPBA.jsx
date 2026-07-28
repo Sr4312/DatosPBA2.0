@@ -623,11 +623,11 @@ function HomicidiosMap() {
         maxZoom: 15, opacity: 0.45,
       }).addTo(map)
 
-      /* El WFS del IGN que se usaba como fuente primaria (wfs.ign.gob.ar) fue dado
-         de baja: el host ya no resuelve en DNS, así que ese fetch fallaba siempre y
-         el mapa terminaba dibujándose con el fallback tras un round-trip perdido.
-         Queda una sola fuente, la que de hecho venía sirviendo todos los mapas. */
-      const PARTIDOS_URL = 'https://raw.githubusercontent.com/agburgos83/partidosBA/main/partidos.geojson'
+      /* Geometría de los partidos bonaerenses, servida desde el propio origen.
+         Antes se pedía al WFS del IGN —dado de baja, el host ya no resuelve— con
+         caída a un repo personal de GitHub. Ahora el archivo vive en public/ y lo
+         sirve el CDN: sin dependencia de terceros y con cacheo del propio dominio. */
+      const PARTIDOS_URL = '/partidos.geojson'
 
       const res = await fetch(PARTIDOS_URL)
       if (!res.ok) throw new Error(`partidos.geojson: HTTP ${res.status}`)
