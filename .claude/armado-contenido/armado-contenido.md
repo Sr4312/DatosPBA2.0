@@ -189,7 +189,7 @@ período, universo, unidad y CV. Se pasa como prop `ficha`:
 
 ```jsx
 ficha={[
-  ['Fuente', 'INDEC, EPH — cuadro 3.1'],
+  ['Fuente', 'INDEC, EPH - cuadro 3.1'],
   ['Período', '1° trim. 2025 y 1° trim. 2026'],
   ['Universo', '24 partidos del GBA'],
   ['Unidad', '% de la PEA'],
@@ -247,6 +247,11 @@ y las tarjetas al final. Dos secciones consecutivas no repiten estructura.
 **Ritmo de oraciones.** Después de dos frases largas va una corta. Los dos
 puntos y las rayas se usan a lo sumo una vez por párrafo. Punto y seguido
 antes que subordinada encadenada.
+
+**El em dash (—) está prohibido en todo el contenido publicado**: prosa,
+títulos de gráfico, fichas técnicas, fuentes, insights y filas de Supabase.
+La raya se escribe con guion simple (`-`). Aplica también al texto que se
+carga en la base viva, no solo al JSX.
 
 **Reemplazos directos** — donde el borrador diga lo de la izquierda,
 reescribí como la derecha:

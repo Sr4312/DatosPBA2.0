@@ -19,7 +19,7 @@ export default function InformeDetalle() {
       setInforme(inf)
       setVizRelacionadas(viz || [])
       setLoading(false)
-      if (inf?.titulo) document.title = inf.titulo + ' — DatosPBA'
+      if (inf?.titulo) document.title = inf.titulo + ' - DatosPBA'
     })
   }, [id])
 

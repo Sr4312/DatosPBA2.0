@@ -1009,7 +1009,7 @@ export default function AtlasMunicipal() {
                   </div>
                   <p className="text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">{c.desc}</p>
                   <p className="text-[11px] text-slate-500 leading-snug border-t border-slate-100 pt-3">
-                    Fuente: "Cadenas Productivas en los Municipios de la Provincia de Buenos Aires 2016/2025" — A. Lodola, Comisión de Asuntos Municipales, Senado PBA.
+                    Fuente: "Cadenas Productivas en los Municipios de la Provincia de Buenos Aires 2016/2025" - A. Lodola, Comisión de Asuntos Municipales, Senado PBA.
                   </p>
                 </div>
               )

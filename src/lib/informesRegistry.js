@@ -88,7 +88,7 @@ export const INFORMES = [
     path: '/informes/mineria-pba-2025',
     titulo: 'La minería que nadie mira en Buenos Aires',
     descripcion:
-      'Buenos Aires mueve 50 millones de toneladas de minerales por año —la mitad del cemento nacional— sin política sectorial ni visibilidad pública.',
+      'Buenos Aires mueve 50 millones de toneladas de minerales por año -la mitad del cemento nacional- sin política sectorial ni visibilidad pública.',
     tema: 'Producción',
     fecha: '2026-05-11',
   },
@@ -144,12 +144,12 @@ export const INFORMES = [
 
 /* Rutas estáticas del sitio (para sitemap y títulos de documento). */
 export const RUTAS_ESTATICAS = [
-  { path: '/', titulo: 'DatosPBA — Periodismo de datos sobre la provincia de Buenos Aires' },
-  { path: '/informes', titulo: 'Informes — DatosPBA' },
-  { path: '/hilos', titulo: 'Publicaciones — DatosPBA' },
-  { path: '/reportes', titulo: 'Reportes rápidos — DatosPBA' },
-  { path: '/datos', titulo: 'Base de datos y descargas — DatosPBA' },
-  { path: '/quienes-somos', titulo: 'Qué es DatosPBA — DatosPBA' },
-  { path: '/metodologia', titulo: 'Metodología — DatosPBA' },
-  { path: '/beta', titulo: 'Buscador — DatosPBA' },
+  { path: '/', titulo: 'DatosPBA - Periodismo de datos sobre la provincia de Buenos Aires' },
+  { path: '/informes', titulo: 'Informes - DatosPBA' },
+  { path: '/hilos', titulo: 'Publicaciones - DatosPBA' },
+  { path: '/reportes', titulo: 'Reportes rápidos - DatosPBA' },
+  { path: '/datos', titulo: 'Base de datos y descargas - DatosPBA' },
+  { path: '/quienes-somos', titulo: 'Qué es DatosPBA - DatosPBA' },
+  { path: '/metodologia', titulo: 'Metodología - DatosPBA' },
+  { path: '/beta', titulo: 'Buscador - DatosPBA' },
 ]

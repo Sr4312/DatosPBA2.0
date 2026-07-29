@@ -9,7 +9,7 @@ const PILARES = [
   },
   {
     title: 'Precisión',
-    desc: 'Usamos microdatos oficiales —EPH, Censo 2022, presupuesto ejecutado— procesados con criterios estadísticos explícitos.',
+    desc: 'Usamos microdatos oficiales -EPH, Censo 2022, presupuesto ejecutado- procesados con criterios estadísticos explícitos.',
   },
   {
     title: 'Relevancia',
@@ -48,12 +48,12 @@ export default function QuienesSomos() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-20 border-t-2 border-[#0F172A] pt-6">
         <Cifra
           label="Informes publicados"
-          valor={conteos.informes != null ? String(conteos.informes) : '—'}
+          valor={conteos.informes != null ? String(conteos.informes) : '-'}
           fuente="Publicados en este sitio"
         />
         <Cifra
           label="Datasets documentados"
-          valor={conteos.datasets != null ? String(conteos.datasets) : '—'}
+          valor={conteos.datasets != null ? String(conteos.datasets) : '-'}
           fuente="En preparación para descarga"
         />
         <Cifra label="Municipios" valor="135" fuente="División política de la PBA" />

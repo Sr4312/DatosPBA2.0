@@ -357,8 +357,8 @@ function ChartSerie() {
   }
   return (
     <ChartCard
-      title="ISIM-PBA — nivel general y serie desestacionalizada (marzo 2025 – marzo 2026, base 2012=100)"
-      fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA"
+      title="ISIM-PBA - nivel general y serie desestacionalizada (marzo 2025 – marzo 2026, base 2012=100)"
+      fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA - ISIM-PBA"
       legend={[{ label: 'Nivel general', color: DATA[1] }, { label: 'Desestacionalizado', color: DATA[2] }]}
       height={270}
     >
@@ -392,8 +392,8 @@ function ChartVarInteranual() {
   }
   return (
     <ChartCard
-      title="ISIM-PBA — variación interanual mensual (marzo 2025 – marzo 2026)"
-      fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA"
+      title="ISIM-PBA - variación interanual mensual (marzo 2025 – marzo 2026)"
+      fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA - ISIM-PBA"
       legend={[{ label: 'Alza interanual', color: VALORACION_HEX.better.base }, { label: 'Caída interanual', color: VALORACION_HEX.worse.base }]}
       height={260}
     >
@@ -432,7 +432,7 @@ function ChartBloques() {
   return (
     <ChartCard
       title="Variación interanual por bloque industrial (marzo 2026)"
-      fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA"
+      fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA - ISIM-PBA"
       legend={[{ label: 'Alza interanual', color: VALORACION_HEX.better.base }, { label: 'Caída interanual', color: VALORACION_HEX.worse.base }]}
       height={340}
     >
@@ -472,7 +472,7 @@ function ChartIncidencias() {
   return (
     <ChartCard
       title="Incidencia de cada bloque en la variación interanual del ISIM-PBA (marzo 2026, en p.p.)"
-      fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA"
+      fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA - ISIM-PBA"
       legend={[{ label: 'Aporte positivo', color: VALORACION_HEX.better.base }, { label: 'Aporte negativo', color: VALORACION_HEX.worse.base }]}
       height={340}
     >
@@ -688,7 +688,7 @@ export default function InformeIndustriaManufactureraPBA() {
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El repunte contrasta con la desaceleración de fines de 2025, cuando el índice había caído 10,2% interanual en noviembre. La serie de los últimos doce meses muestra la recuperación de marzo tras el piso del verano.
           </p>
-          <DownloadableViz title="ISIM-PBA: nivel general y serie desestacionalizada (mar. 2025 – mar. 2026)" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA">
+          <DownloadableViz title="ISIM-PBA: nivel general y serie desestacionalizada (mar. 2025 – mar. 2026)" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA - ISIM-PBA">
             <ChartSerie />
           </DownloadableViz>
         </div>
@@ -697,14 +697,14 @@ export default function InformeIndustriaManufactureraPBA() {
         <div>
           <SH title="De tres meses en rojo al salto del 13,2%" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            El primer bimestre de 2026 había mostrado variaciones interanuales negativas —enero −1,6% y febrero −1,3%—, en línea con la caída de noviembre de 2025 (−10,2%), la mayor del período. Con el salto de marzo (+13,2%), el acumulado del primer trimestre se ubicó 3,5% por encima de igual período de 2025.
+            El primer bimestre de 2026 había mostrado variaciones interanuales negativas -enero −1,6% y febrero −1,3%-, en línea con la caída de noviembre de 2025 (−10,2%), la mayor del período. Con el salto de marzo (+13,2%), el acumulado del primer trimestre se ubicó 3,5% por encima de igual período de 2025.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
             <CifraCard label="Acumulado 1er trimestre 2026" valor="+3,5%" variacion="+3,5%" polaridad="mayor-es-mejor" periodo="respecto de igual período de 2025" />
             <CifraCard label="Enero / febrero 2026" valor="−1,6% / −1,3%" variacion="−1,6% / −1,3%" polaridad="mayor-es-mejor" periodo="caídas interanuales" />
             <CifraCard label="Noviembre 2025" valor="−10,2%" variacion="−10,2%" polaridad="mayor-es-mejor" periodo="la mayor caída del período" />
           </div>
-          <DownloadableViz title="ISIM-PBA: variación interanual mensual (mar. 2025 – mar. 2026)" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA">
+          <DownloadableViz title="ISIM-PBA: variación interanual mensual (mar. 2025 – mar. 2026)" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA - ISIM-PBA">
             <ChartVarInteranual />
           </DownloadableViz>
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
@@ -724,7 +724,7 @@ export default function InformeIndustriaManufactureraPBA() {
             <CifraCard label="Minerales no metálicos" valor="+25,5%" variacion="+25,5%" polaridad="mayor-es-mejor" periodo="segunda mayor suba" />
             <CifraCard label="Metales comunes" valor="−14,0%" variacion="−14,0%" polaridad="mayor-es-mejor" periodo="la mayor caída del mes" />
           </div>
-          <DownloadableViz title="Variación interanual por bloque industrial (marzo 2026)" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA">
+          <DownloadableViz title="Variación interanual por bloque industrial (marzo 2026)" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA - ISIM-PBA">
             <ChartBloques />
           </DownloadableViz>
           <TablaBloques />
@@ -741,7 +741,7 @@ export default function InformeIndustriaManufactureraPBA() {
             <CifraCard label="Máquinas y equipos" valor="1,96 pp" periodo="segundo mayor aporte" />
             <CifraCard label="Químicos + Máquinas" valor=">2/3" periodo="de la incidencia positiva total" />
           </div>
-          <DownloadableViz title="Incidencia de cada bloque en la variación interanual del ISIM-PBA (marzo 2026)" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA — ISIM-PBA">
+          <DownloadableViz title="Incidencia de cada bloque en la variación interanual del ISIM-PBA (marzo 2026)" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA - ISIM-PBA">
             <ChartIncidencias />
           </DownloadableViz>
         </div>
@@ -779,7 +779,7 @@ export default function InformeIndustriaManufactureraPBA() {
               Fuentes
             </p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>
-              Dirección Provincial de Estadística, Ministerio de Economía de la Provincia de Buenos Aires — Indicador Sintético de la Industria Manufacturera de la provincia de Buenos Aires (ISIM-PBA). Datos a marzo de 2026, difundidos en junio de 2026 · ec.gba.gov.ar
+              Dirección Provincial de Estadística, Ministerio de Economía de la Provincia de Buenos Aires - Indicador Sintético de la Industria Manufacturera de la provincia de Buenos Aires (ISIM-PBA). Datos a marzo de 2026, difundidos en junio de 2026 · ec.gba.gov.ar
             </p>
             <a
               href="https://www.ec.gba.gov.ar"

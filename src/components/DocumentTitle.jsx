@@ -12,10 +12,10 @@ export default function DocumentTitle() {
     const informe = INFORMES.find(i => i.path === pathname)
     const ruta = RUTAS_ESTATICAS.find(r => r.path === pathname)
     document.title = informe
-      ? `${informe.titulo} — ${SITE_NAME}`
+      ? `${informe.titulo} - ${SITE_NAME}`
       : ruta
         ? ruta.titulo
-        : `${SITE_NAME} — Periodismo de datos sobre la provincia de Buenos Aires`
+        : `${SITE_NAME} - Periodismo de datos sobre la provincia de Buenos Aires`
   }, [pathname])
 
   return null

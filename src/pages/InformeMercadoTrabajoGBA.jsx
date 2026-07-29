@@ -315,14 +315,14 @@ function ChartTasas() {
   }
   return (
     <ChartCard
-      title="Tasas de actividad, empleo y desocupación — Partidos del GBA"
+      title="Tasas de actividad, empleo y desocupación - Partidos del GBA"
       hallazgo="Gráfico de barras: entre el 1° trimestre de 2025 y el de 2026 la actividad cayó de 48,5% a 48,0%, el empleo de 43,8% a 43,4% y la desocupación se mantuvo en 9,7%."
       tabla={{
         columnas: ['Tasa', '1° trim. 2025', '1° trim. 2026'],
         filas: TASAS_PRINCIPALES.map(d => [d.label, fmtPct(d.t2025), fmtPct(d.t2026)]),
       }}
       ficha={[
-        ['Fuente', 'INDEC, EPH — cuadro 3.1'],
+        ['Fuente', 'INDEC, EPH - cuadro 3.1'],
         ['Período', '1° trim. 2025 y 1° trim. 2026'],
         ['Universo', '24 partidos del GBA'],
         ['Unidad', 'actividad y empleo: % de la población · desocupación: % de la PEA'],
@@ -361,14 +361,14 @@ function ChartSubocupacion() {
   }
   return (
     <ChartCard
-      title="Subocupación horaria como % de la PEA — Partidos del GBA"
+      title="Subocupación horaria como % de la PEA - Partidos del GBA"
       hallazgo="Gráfico de barras: la subocupación total pasó de 10,9% a 12,1% de la PEA; la no demandante subió de 3,3% a 4,9% y la demandante bajó de 7,7% a 7,2%."
       tabla={{
         columnas: ['Indicador', '1° trim. 2025', '1° trim. 2026'],
         filas: SUBOCUPACION.map(d => [d.label, fmtPct(d.t2025), fmtPct(d.t2026)]),
       }}
       ficha={[
-        ['Fuente', 'INDEC, EPH — cuadro 3.1'],
+        ['Fuente', 'INDEC, EPH - cuadro 3.1'],
         ['Período', '1° trim. 2025 y 1° trim. 2026'],
         ['Universo', '24 partidos del GBA'],
         ['Unidad', '% de la PEA'],
@@ -407,14 +407,14 @@ function ChartContexto() {
   }
   return (
     <ChartCard
-      title="Tasa de desocupación por área geográfica — 1° trimestre 2026"
+      title="Tasa de desocupación por área geográfica - 1° trimestre 2026"
       hallazgo="Gráfico de barras horizontales: la desocupación de los partidos del GBA (9,7%) duplica con creces la de CABA (4,8%) y supera el promedio de los 31 aglomerados (7,8%)."
       tabla={{
         columnas: ['Área', 'Tasa de desocupación'],
         filas: DESOCUPACION_CONTEXTO.map(d => [d.label, fmtPct(d.value)]),
       }}
       ficha={[
-        ['Fuente', 'INDEC, EPH — cuadro 3.1'],
+        ['Fuente', 'INDEC, EPH - cuadro 3.1'],
         ['Período', '1° trim. 2026'],
         ['Universo', 'GBA, CABA y total de 31 aglomerados urbanos'],
         ['Unidad', '% de la PEA'],
@@ -485,7 +485,7 @@ function Hero() {
         <div style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}
         >
           {[
-            { label: 'Fuente',        val: 'INDEC — EPH, informes técnicos' },
+            { label: 'Fuente',        val: 'INDEC - EPH, informes técnicos' },
             { label: 'Universo',      val: '24 partidos del GBA · 13.229.000 personas' },
             { label: 'Período',       val: '1° trim. 2026 vs. 1° trim. 2025' },
             { label: 'Actualización', val: 'Julio 2026' },
@@ -585,7 +585,7 @@ export default function InformeMercadoTrabajoGBA() {
               de la PEA (−2,0 puntos porcentuales).
             </p>
           </div>
-          <DownloadableViz title="Tasas de actividad, empleo y desocupación — Partidos del GBA" fuente="INDEC, EPH — 1T2025 y 1T2026">
+          <DownloadableViz title="Tasas de actividad, empleo y desocupación - Partidos del GBA" fuente="INDEC, EPH - 1T2025 y 1T2026">
             <ChartTasas />
           </DownloadableViz>
         </div>
@@ -600,14 +600,14 @@ export default function InformeMercadoTrabajoGBA() {
             a las personas ocupadas que trabajan menos de 35 horas semanales por causas involuntarias y están
             dispuestas a trabajar más. En los partidos del GBA pasó de 10,9% a 12,1% de la PEA entre el primer
             trimestre de 2025 y el mismo trimestre de 2026. La suba se concentró en la subocupación no
-            demandante —personas que no buscan activamente otro empleo pero están disponibles para trabajar
-            más horas—, mientras que la demandante descendió levemente.
+            demandante -personas que no buscan activamente otro empleo pero están disponibles para trabajar
+            más horas-, mientras que la demandante descendió levemente.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5" style={{ maxWidth: 560 }}>
             <CifraCard label="Subocupación no demandante" valor="4,9%" variacion="+1,6 pp" polaridad="menor-es-mejor" periodo="desde 3,3% en 1T2025" />
             <CifraCard label="Subocupación demandante" valor="7,2%" variacion="−0,5 pp" polaridad="menor-es-mejor" periodo="desde 7,7% en 1T2025" />
           </div>
-          <DownloadableViz title="Subocupación horaria — Partidos del GBA" fuente="INDEC, EPH — 1T2025 y 1T2026">
+          <DownloadableViz title="Subocupación horaria - Partidos del GBA" fuente="INDEC, EPH - 1T2025 y 1T2026">
             <ChartSubocupacion />
           </DownloadableViz>
         </div>
@@ -650,7 +650,7 @@ export default function InformeMercadoTrabajoGBA() {
           </table>
         </div>
         <FichaTecnica items={[
-          ['Fuente', 'INDEC, EPH — cuadro 3.2'],
+          ['Fuente', 'INDEC, EPH - cuadro 3.2'],
           ['Período', '1° trim. 2025 vs. 1° trim. 2026'],
           ['Universo', '24 partidos del GBA'],
           ['Unidad', 'miles de personas'],
@@ -669,7 +669,7 @@ export default function InformeMercadoTrabajoGBA() {
             oscilaciones menores, en los sucesivos informes trimestrales de la EPH desde que existe esta
             desagregación geográfica.
           </p>
-          <DownloadableViz title="Tasa de desocupación por área geográfica — 1T2026" fuente="INDEC, EPH — 1T2026">
+          <DownloadableViz title="Tasa de desocupación por área geográfica - 1T2026" fuente="INDEC, EPH - 1T2026">
             <ChartContexto />
           </DownloadableViz>
         </div>
@@ -688,8 +688,8 @@ export default function InformeMercadoTrabajoGBA() {
           </p>
           <p className="text-sm mt-1" style={{ color: C.inkMid }}>
             INDEC (2026). "Mercado de trabajo. Tasas e indicadores socioeconómicos (EPH). Primer trimestre de 2026".
-            Informes técnicos, Vol. 10, n° 151 — 22 de junio de 2026 · INDEC (2025). "Mercado de trabajo. Tasas e
-            indicadores socioeconómicos (EPH). Primer trimestre de 2025". Informes técnicos, Vol. 9, n° 144 — 19 de
+            Informes técnicos, Vol. 10, n° 151 - 22 de junio de 2026 · INDEC (2025). "Mercado de trabajo. Tasas e
+            indicadores socioeconómicos (EPH). Primer trimestre de 2025". Informes técnicos, Vol. 9, n° 144 - 19 de
             junio de 2025 · Elaboración propia DatosPBA · 2026
           </p>
           <a
@@ -698,7 +698,7 @@ export default function InformeMercadoTrabajoGBA() {
             className="inline-flex items-center gap-1.5 text-sm font-semibold mt-3"
             style={{ color: C.ink, textDecoration: 'underline', textUnderlineOffset: 4 }}
           >
-            INDEC — Mercado de trabajo (EPH) <ExternalLink className="w-3.5 h-3.5" />
+            INDEC - Mercado de trabajo (EPH) <ExternalLink className="w-3.5 h-3.5" />
           </a>
         </div>
       </div>

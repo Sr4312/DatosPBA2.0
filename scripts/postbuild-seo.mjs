@@ -47,7 +47,7 @@ function conFallback(html, { titulo, descripcion }) {
 let generados = 0
 for (const inf of INFORMES) {
   const url = SITE_URL + inf.path
-  let html = conMeta(base, { titulo: `${inf.titulo} — ${SITE_NAME}`, descripcion: inf.descripcion, url, fecha: inf.fecha })
+  let html = conMeta(base, { titulo: `${inf.titulo} - ${SITE_NAME}`, descripcion: inf.descripcion, url, fecha: inf.fecha })
   html = conFallback(html, inf)
   const dir = join(DIST, ...inf.path.split('/').filter(Boolean))
   mkdirSync(dir, { recursive: true })
@@ -93,7 +93,7 @@ const items = [...INFORMES]
 const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${esc(SITE_NAME)} — Informes</title>
+    <title>${esc(SITE_NAME)} - Informes</title>
     <link>${SITE_URL}</link>
     <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml" />
     <description>${esc(SITE_DESC)}</description>

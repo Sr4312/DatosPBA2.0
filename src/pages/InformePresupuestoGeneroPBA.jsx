@@ -375,7 +375,7 @@ function Hero() {
         >
           La Provincia presenta un Presupuesto con Perspectiva de Género (PPG) de{' '}
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>$1,79 billones</strong>, el 4,2% del
-          presupuesto total. Al abrir las planillas, solo $353.439 millones —el 0,82%— corresponden
+          presupuesto total. Al abrir las planillas, solo $353.439 millones -el 0,82%- corresponden
           efectivamente a políticas focalizadas en cerrar brechas de género.
         </p>
 
@@ -489,8 +489,8 @@ export default function InformePresupuestoGeneroPBA() {
           <SH title="Dónde dice ir la plata del 'presupuesto de género'" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             La categoría Tiempo y Cuidados concentra el 80,2% del PPG 2026. Funciona como un recipiente
-            amplio que absorbe gasto social universal —Servicio Alimentario Escolar, MESA Bonaerense,
-            jornada extendida, maternidades provinciales— y lo etiqueta como gasto de género. Son
+            amplio que absorbe gasto social universal -Servicio Alimentario Escolar, MESA Bonaerense,
+            jornada extendida, maternidades provinciales- y lo etiqueta como gasto de género. Son
             políticas legítimas, pero el Estado las financiaría igual sin ese rótulo.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5">
@@ -509,8 +509,8 @@ export default function InformePresupuestoGeneroPBA() {
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             El PPG es ejecutado por 26 organismos, pero está extremadamente concentrado: tres
             jurisdicciones acumulan el 88% del total. El Ministerio de Desarrollo de la Comunidad
-            administra el 60% del PPG, mientras el Ministerio de Mujeres y Diversidad —la única cartera
-            creada específicamente para coordinar la política de género— apenas ejecuta el 1,2%.
+            administra el 60% del PPG, mientras el Ministerio de Mujeres y Diversidad -la única cartera
+            creada específicamente para coordinar la política de género- apenas ejecuta el 1,2%.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
             <CifraCard label="Min. Desarrollo de la Comunidad" valor="60,0%" periodo="$1.072.626,8 M del PPG" />
@@ -544,8 +544,8 @@ export default function InformePresupuestoGeneroPBA() {
         <div>
           <SH title="Lo que queda si se saca el maquillaje" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            Si se elimina del cómputo la categoría Tiempo y Cuidados —que captura gasto social
-            universal— el gasto estrictamente focalizado en brechas de género cae a $353.439 millones:
+            Si se elimina del cómputo la categoría Tiempo y Cuidados -que captura gasto social
+            universal- el gasto estrictamente focalizado en brechas de género cae a $353.439 millones:
             el 0,82% del presupuesto provincial, frente al 4,2% discursivo. Por cada peso presentado
             como "de género", solo 20 centavos corresponden a una política específicamente focalizada.
           </p>

@@ -323,7 +323,7 @@ function ChartSerieNacional() {
   }
   return (
     <ChartCard
-      title="Índice FADA nacional — puntos de referencia de la serie 2007–2026 (% de la renta agrícola)"
+      title="Índice FADA nacional - puntos de referencia de la serie 2007–2026 (% de la renta agrícola)"
       fuente="FADA, Índice FADA junio 2026"
       height={260}
     >

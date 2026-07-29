@@ -469,7 +469,7 @@ function Hero() {
           style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}
         >
           {[
-            { label: 'Fuente',        val: 'DPE — Ministerio de Economía PBA' },
+            { label: 'Fuente',        val: 'DPE - Ministerio de Economía PBA' },
             { label: 'Serie',         val: 'Base 2004 = 100 · 2004-2025' },
             { label: 'Carácter',      val: 'Estimación preliminar, sujeta a revisión' },
             { label: 'Actualización', val: 'Julio 2026' },
@@ -681,7 +681,7 @@ export default function InformePBGPBA() {
             Fuentes
           </p>
           <p className="text-sm mt-1" style={{ color: C.inkMid }}>
-            Dirección Provincial de Estadística, Ministerio de Economía de la Provincia de Buenos Aires — "Producto
+            Dirección Provincial de Estadística, Ministerio de Economía de la Provincia de Buenos Aires - "Producto
             Bruto Geográfico de la Provincia de Buenos Aires (PBG-PBA). Año 2025", base 2004, publicado en julio de
             2026 · INDEC, para las comparaciones con el PBI de Nación · Elaboración propia DatosPBA · 2026
           </p>

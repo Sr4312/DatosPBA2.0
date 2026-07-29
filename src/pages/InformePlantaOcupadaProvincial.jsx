@@ -378,7 +378,7 @@ function ChartSeriePBA() {
         filas: SERIE_PBA.map(d => [String(d.anio), fmtAgentes(d.planta)]),
       }}
       ficha={[
-        ['Fuente', 'DNAP, Ministerio de Economía — Ocupación y gastos salariales provinciales'],
+        ['Fuente', 'DNAP, Ministerio de Economía - Ocupación y gastos salariales provinciales'],
         ['Período', '2000-2024, años de corte'],
         ['Universo', 'Administración central, organismos descentralizados y cuentas especiales'],
         ['Unidad', 'agentes'],
@@ -426,7 +426,7 @@ function ChartComparacion() {
         filas: COMPARACION.map(d => [String(d.anio), fmtAgentes(d.ba), fmtAgentes(d.sf), fmtAgentes(d.cba), fmtAgentes(d.mza)]),
       }}
       ficha={[
-        ['Fuente', 'DNAP, Ministerio de Economía — Ocupación y gastos salariales provinciales'],
+        ['Fuente', 'DNAP, Ministerio de Economía - Ocupación y gastos salariales provinciales'],
         ['Período', '2000-2024, años de corte'],
         ['Universo', 'Buenos Aires, Santa Fe, Córdoba y Mendoza · sin municipios'],
         ['Unidad', 'agentes'],
@@ -474,7 +474,7 @@ function ChartCrecimiento() {
         filas: CRECIMIENTO.map(d => [d.prov, fmtAgentes(d.de), fmtAgentes(d.a), fmtPct1(d.pct)]),
       }}
       ficha={[
-        ['Fuente', 'DNAP, Ministerio de Economía — Ocupación y gastos salariales provinciales'],
+        ['Fuente', 'DNAP, Ministerio de Economía - Ocupación y gastos salariales provinciales'],
         ['Período', '2000 y 2024'],
         ['Universo', 'Buenos Aires, Santa Fe, Córdoba y Mendoza · sin municipios'],
         ['Unidad', '% de variación sobre la planta de 2000'],
@@ -531,7 +531,7 @@ function ChartCadaMil() {
         filas: CADA_MIL.map(d => [String(d.anio), fmtRatio(d.ba), fmtRatio(d.sf), fmtRatio(d.cba), fmtRatio(d.mza)]),
       }}
       ficha={[
-        ['Fuente', 'DNAP, Ministerio de Economía — Ocupación y gastos salariales provinciales'],
+        ['Fuente', 'DNAP, Ministerio de Economía - Ocupación y gastos salariales provinciales'],
         ['Período', '2000, 2010 y 2024'],
         ['Universo', 'Buenos Aires, Santa Fe, Córdoba y Mendoza · sin municipios'],
         ['Unidad', 'empleados provinciales cada mil habitantes'],
@@ -584,7 +584,7 @@ function Hero() {
         >
           El sector público provincial sumó{' '}
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>228.920 agentes</strong> en veinticuatro años.
-          El recorrido no fue lineal: dos contracciones —la de la crisis de 2001-2002 y la de 2015-2019—
+          El recorrido no fue lineal: dos contracciones -la de la crisis de 2001-2002 y la de 2015-2019-
           cortaron una expansión que se concentró entre 2003 y 2015.
         </p>
 
@@ -603,7 +603,7 @@ function Hero() {
         <div style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}
         >
           {[
-            { label: 'Fuente',        val: 'DNAP — Ministerio de Economía de la Nación' },
+            { label: 'Fuente',        val: 'DNAP - Ministerio de Economía de la Nación' },
             { label: 'Universo',      val: 'Sector público provincial no financiero · sin municipios' },
             { label: 'Período',       val: '2000-2024' },
             { label: 'Actualización', val: 'Julio 2026' },
@@ -664,7 +664,7 @@ function NotaMetodologica() {
       </p>
       <p style={{ fontSize: '0.82rem', color: C.inkMid, lineHeight: 1.6, marginBottom: 8 }}>
         Los gráficos usan los <strong style={{ color: C.ink }}>años de corte</strong> que publica la tabla
-        de la fuente —2000 a 2003 anuales, y luego 2007, 2011, 2015, 2019, 2023 y 2024—, no la serie anual
+        de la fuente -2000 a 2003 anuales, y luego 2007, 2011, 2015, 2019, 2023 y 2024-, no la serie anual
         completa. Los tramos entre esos años se dibujan como interpolación y no representan el valor de
         cada año intermedio. Un caso concreto: la serie anual alcanza su máximo en 2017 y cae desde ahí,
         de manera que la contracción del tramo 2015-2019 empezó después de ese pico y no en 2015.
@@ -742,7 +742,7 @@ export default function InformePlantaOcupadaProvincial() {
             </table>
           </div>
           <FichaTecnica items={[
-            ['Fuente', 'DNAP, Ministerio de Economía — Ocupación y gastos salariales provinciales'],
+            ['Fuente', 'DNAP, Ministerio de Economía - Ocupación y gastos salariales provinciales'],
             ['Período', '2000-2024, tramos de la serie'],
             ['Universo', 'Sector público provincial no financiero de Buenos Aires'],
             ['Unidad', 'agentes y % de variación'],
@@ -795,15 +795,15 @@ export default function InformePlantaOcupadaProvincial() {
           </DownloadableViz>
           <p className="text-base leading-relaxed mt-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             La posición bonaerense no fue estable. En 2000 estaba por debajo de Santa Fe y de Mendoza, con
-            30,5 empleados cada mil habitantes. Para 2010 había pasado a Santa Fe —39,4 contra 34,2— y se
+            30,5 empleados cada mil habitantes. Para 2010 había pasado a Santa Fe -39,4 contra 34,2- y se
             mantuvo arriba hasta el final de esa década, cuando Santa Fe volvió a superarla. Frente a
             Mendoza quedó siempre debajo; frente a Córdoba, siempre arriba.
           </p>
           <p className="text-base leading-relaxed mt-4" style={{ color: C.inkMid, maxWidth: '72ch' }}>
             La discusión pública sobre el tamaño del Estado bonaerense suele apoyarse en el número absoluto,
             que es el más alto del país por definición demográfica. El indicador que compara ubica a la
-            Provincia en el medio del pelotón. La pregunta que sigue —en qué funciones están esos agentes,
-            cuántos son docentes, personal de salud o policías— esta serie no la responde.
+            Provincia en el medio del pelotón. La pregunta que sigue -en qué funciones están esos agentes,
+            cuántos son docentes, personal de salud o policías- esta serie no la responde.
           </p>
         </div>
       </div>
@@ -830,7 +830,7 @@ export default function InformePlantaOcupadaProvincial() {
             className="inline-flex items-center gap-1.5 text-sm font-semibold mt-3"
             style={{ color: C.ink, textDecoration: 'underline', textUnderlineOffset: 4 }}
           >
-            DNAP — Información fiscal provincial y municipal <ExternalLink className="w-3.5 h-3.5" />
+            DNAP - Información fiscal provincial y municipal <ExternalLink className="w-3.5 h-3.5" />
           </a>
         </div>
       </div>

@@ -15,7 +15,7 @@ const SECCIONES = [
     titulo: 'Qué significa el color de una cifra',
     cuerpo: [
       'El color nunca indica si un número subió o bajó: indica si ese movimiento es una buena o una mala noticia para el indicador. Una suba del empleo y una baja de la desocupación se pintan igual, porque ambas son mejoras.',
-      'Para eso cada indicador declara su polaridad — si un valor mayor es mejor, peor o neutro — y el color se deriva de la polaridad y del signo de la variación. Los indicadores sin dirección deseable clara (composiciones, totales de referencia) quedan en gris neutro.',
+      'Para eso cada indicador declara su polaridad - si un valor mayor es mejor, peor o neutro - y el color se deriva de la polaridad y del signo de la variación. Los indicadores sin dirección deseable clara (composiciones, totales de referencia) quedan en gris neutro.',
       'Además del color, toda variación lleva flecha y texto: ningún significado depende solo del color.',
     ],
   },
