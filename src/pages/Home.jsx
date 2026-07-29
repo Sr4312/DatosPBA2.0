@@ -316,7 +316,7 @@ export default function Home() {
 
             <div className="flex-1">
               <h1 className="font-display text-4xl sm:text-6xl font-bold text-white tracking-tight leading-[1.08]">
-                Periodismo de datos sobre la provincia de Buenos Aires.
+                Información sobre la Provincia de Buenos Aires.
               </h1>
               <p className="text-slate-400 text-sm sm:text-base leading-relaxed mt-5 max-w-md">
                 Informes sobre economía, trabajo y gestión pública de los 135 municipios.

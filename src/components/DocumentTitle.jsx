@@ -15,7 +15,7 @@ export default function DocumentTitle() {
       ? `${informe.titulo} - ${SITE_NAME}`
       : ruta
         ? ruta.titulo
-        : `${SITE_NAME} - Periodismo de datos sobre la provincia de Buenos Aires`
+        : `${SITE_NAME} - Información sobre la Provincia de Buenos Aires`
   }, [pathname])
 
   return null

@@ -144,7 +144,7 @@ export const INFORMES = [
 
 /* Rutas estáticas del sitio (para sitemap y títulos de documento). */
 export const RUTAS_ESTATICAS = [
-  { path: '/', titulo: 'DatosPBA - Periodismo de datos sobre la provincia de Buenos Aires' },
+  { path: '/', titulo: 'DatosPBA - Información sobre la Provincia de Buenos Aires' },
   { path: '/informes', titulo: 'Informes - DatosPBA' },
   { path: '/hilos', titulo: 'Publicaciones - DatosPBA' },
   { path: '/reportes', titulo: 'Reportes rápidos - DatosPBA' },
