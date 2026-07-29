@@ -9,7 +9,7 @@
 export const SITE_URL = 'https://www.datospba.com'
 export const SITE_NAME = 'DatosPBA'
 export const SITE_DESC =
-  'Publicación independiente de periodismo de datos sobre la Provincia de Buenos Aires. Cada cifra publica su fuente, su período y su metodología.'
+  'Publicación independiente sobre la Provincia de Buenos Aires. Cada cifra publica su fuente, su período y su metodología.'
 
 export const INFORMES = [
   {

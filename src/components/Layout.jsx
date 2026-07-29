@@ -112,8 +112,8 @@ export default function Layout() {
           <div className="md:col-span-1">
             <img src="/logo-bars.svg" alt="DatosPBA" className="h-10 w-auto mb-4" />
             <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
-              Publicación independiente de periodismo de datos sobre la Provincia de
-              Buenos Aires. Cada cifra publica su fuente, su período y su metodología.
+              Publicación independiente sobre la Provincia de Buenos Aires. Cada
+              cifra publica su fuente, su período y su metodología.
             </p>
           </div>
 

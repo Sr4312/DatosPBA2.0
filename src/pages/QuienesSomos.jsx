@@ -38,9 +38,9 @@ export default function QuienesSomos() {
           Qué es DatosPBA
         </h1>
         <p className="text-lg text-slate-600 leading-relaxed">
-          DatosPBA es una publicación independiente de periodismo de datos sobre la
-          Provincia de Buenos Aires. Procesamos datos públicos para hacer accesible
-          lo que las estadísticas oficiales dejan sin explicar.
+          DatosPBA es una publicación independiente sobre la Provincia de Buenos
+          Aires. Procesamos datos públicos para hacer accesible lo que las
+          estadísticas oficiales dejan sin explicar.
         </p>
       </div>
 
