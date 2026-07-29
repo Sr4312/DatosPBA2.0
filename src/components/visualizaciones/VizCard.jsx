@@ -228,10 +228,13 @@ export default function VizCard({ viz, index = 0 }) {
 
     if (viz.tipo === 'tabla' || !chartData) {
       actionsRef.current.style.visibility = 'hidden'
-      await (await import('html2canvas')).default(cardRef.current, {
+      // html2canvas no respeta el estado colapsado de <details>: lo pintaria
+      // encima del contenido siguiente. Lo excluimos de la captura.
+      const captured = await (await import('html2canvas')).default(cardRef.current, {
         scale: 2,
         useCORS: true,
         backgroundColor: '#ffffff',
+        ignoreElements: el => el.tagName === 'DETAILS',
       })
       // Keep natural proportions, scale up to at least MIN_W
       const upscale = Math.max(1, MIN_W / captured.width)

@@ -159,7 +159,14 @@ function triggerDownload(canvas, filename) {
 
 async function downloadVizContainer(node, title, fuente) {
   const { default: html2canvas } = await import('html2canvas')
-  const captured = await html2canvas(node, { scale: 2, useCORS: true, backgroundColor: '#ffffff' })
+  // html2canvas no respeta el estado colapsado de <details>: pintaria la tabla
+  // encima de la ficha tecnica. La excluimos de la captura.
+  const captured = await html2canvas(node, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: '#ffffff',
+    ignoreElements: el => el.tagName === 'DETAILS',
+  })
   const upscale  = Math.max(1, DL_MIN_W / captured.width)
   const innerW   = Math.round(captured.width * upscale)
   const innerH   = Math.round(captured.height * upscale)
