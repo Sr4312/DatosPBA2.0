@@ -13,6 +13,14 @@ export const SITE_DESC =
 
 export const INFORMES = [
   {
+    path: '/informes/empleo-privado-gba-2025',
+    titulo: 'Empleo asalariado privado en los partidos del GBA',
+    descripcion:
+      'El empleo privado registrado cayó 3,1% en los 40 partidos del GBA entre diciembre de 2023 y diciembre de 2025. Solo 7 partidos sumaron puestos; Ensenada perdió 18,9%.',
+    tema: 'Trabajo',
+    fecha: '2026-08-04',
+  },
+  {
     path: '/informes/planta-ocupada-provincial-2024',
     titulo: 'La planta ocupada del Estado bonaerense, de 2000 a 2024',
     descripcion:
