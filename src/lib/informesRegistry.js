@@ -13,6 +13,14 @@ export const SITE_DESC =
 
 export const INFORMES = [
   {
+    path: '/informes/empleo-industrial-conurbano-2025',
+    titulo: 'Empleo industrial en los municipios del Conurbano',
+    descripcion:
+      'El Conurbano tenía 339.110 puestos industriales formales en junio de 2025, 2,3% menos que en 2019. Ocho municipios ganaron empleo en el último año, pero reúnen apenas el 23% de los puestos.',
+    tema: 'Trabajo',
+    fecha: '2026-08-05',
+  },
+  {
     path: '/informes/empleo-privado-gba-2025',
     titulo: 'Empleo asalariado privado en los partidos del GBA',
     descripcion:
