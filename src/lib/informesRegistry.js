@@ -13,6 +13,14 @@ export const SITE_DESC =
 
 export const INFORMES = [
   {
+    path: '/informes/empleo-privado-135-municipios-2025',
+    titulo: 'El empleo privado en los 135 municipios bonaerenses',
+    descripcion:
+      'El empleo asalariado privado de la Provincia cerró 2025 en 2.013.084 puestos, 2,8% debajo del máximo de enero de 2024. En el último bienio 84 de los 135 municipios perdieron puestos.',
+    tema: 'Trabajo',
+    fecha: '2026-08-07',
+  },
+  {
     path: '/informes/empleo-industrial-conurbano-2025',
     titulo: 'Empleo industrial en los municipios del Conurbano',
     descripcion:
