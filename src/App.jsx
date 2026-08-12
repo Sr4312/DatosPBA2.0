@@ -30,6 +30,11 @@ const InformePlantaOcupadaProv      = lazy(() => import('./pages/InformePlantaOc
 const InformeEmpleoPrivadoGBA       = lazy(() => import('./pages/InformeEmpleoPrivadoGBA'))
 const InformeEmpleoIndustrialConurbano = lazy(() => import('./pages/InformeEmpleoIndustrialConurbano'))
 const InformeEmpleoPrivado135       = lazy(() => import('./pages/InformeEmpleoPrivado135Municipios'))
+const InformeCargosPoliticosPBA     = lazy(() => import('./pages/InformeCargosPoliticosPBA'))
+const InformeVentasSupermercados    = lazy(() => import('./pages/InformeVentasSupermercadosPBA'))
+const InformeISIMAbril2026          = lazy(() => import('./pages/InformeISIMAbril2026'))
+const InformeCoparticipacionPBA     = lazy(() => import('./pages/InformeCoparticipacionMunicipalPBA'))
+const InformeFondoEducativoPBA      = lazy(() => import('./pages/InformeFondoEducativoMunicipiosPBA'))
 const Beta            = lazy(() => import('./pages/Beta'))
 const QuienesSomos    = lazy(() => import('./pages/QuienesSomos'))
 const Metodologia     = lazy(() => import('./pages/Metodologia'))
@@ -64,6 +69,11 @@ export default function App() {
             <Route path="informes/empleo-privado-gba-2025" element={<Suspense fallback={null}><InformeEmpleoPrivadoGBA /></Suspense>} />
             <Route path="informes/empleo-industrial-conurbano-2025" element={<Suspense fallback={null}><InformeEmpleoIndustrialConurbano /></Suspense>} />
             <Route path="informes/empleo-privado-135-municipios-2025" element={<Suspense fallback={null}><InformeEmpleoPrivado135 /></Suspense>} />
+            <Route path="informes/cargos-politicos-pba-2026" element={<Suspense fallback={null}><InformeCargosPoliticosPBA /></Suspense>} />
+            <Route path="informes/ventas-supermercados-pba-mayo-2026" element={<Suspense fallback={null}><InformeVentasSupermercados /></Suspense>} />
+            <Route path="informes/isim-pba-abril-2026" element={<Suspense fallback={null}><InformeISIMAbril2026 /></Suspense>} />
+            <Route path="informes/coparticipacion-municipal-pba-2025" element={<Suspense fallback={null}><InformeCoparticipacionPBA /></Suspense>} />
+            <Route path="informes/fondo-educativo-municipios-pba-2025" element={<Suspense fallback={null}><InformeFondoEducativoPBA /></Suspense>} />
             <Route path="informes/:id" element={<Suspense fallback={null}><InformeDetalle /></Suspense>} />
             <Route path="datos" element={<Suspense fallback={null}><Datos /></Suspense>} />
             <Route path="hilos" element={<Suspense fallback={null}><Hilos /></Suspense>} />

@@ -13,6 +13,46 @@ export const SITE_DESC =
 
 export const INFORMES = [
   {
+    path: '/informes/fondo-educativo-municipios-pba-2025',
+    titulo: 'El Fondo Educativo en los municipios bonaerenses, medido por habitante',
+    descripcion:
+      'La Provincia repartió $444.611 millones de Fondo Educativo en 2025. Los quince municipios que más reciben por habitante son del interior y los quince que menos reciben son del conurbano.',
+    tema: 'Fiscal',
+    fecha: '2026-08-12',
+  },
+  {
+    path: '/informes/coparticipacion-municipal-pba-2025',
+    titulo: 'La coparticipación municipal bonaerense, medida por habitante',
+    descripcion:
+      'La Provincia repartió $3,60 billones entre sus 135 municipios en 2025. Puán recibió $1.280.240 por habitante y Tres de Febrero $99.225, con el mismo régimen de coeficientes.',
+    tema: 'Fiscal',
+    fecha: '2026-08-12',
+  },
+  {
+    path: '/informes/isim-pba-abril-2026',
+    titulo: 'La industria manufacturera bonaerense en abril de 2026',
+    descripcion:
+      'El ISIM-PBA creció 2,5% interanual en abril, tras el 13,5% de marzo. Productos químicos aportó 4,66 puntos: sin ese bloque el indicador habría cerrado en baja.',
+    tema: 'Industria',
+    fecha: '2026-08-11',
+  },
+  {
+    path: '/informes/ventas-supermercados-pba-mayo-2026',
+    titulo: 'Ventas en supermercados de la Provincia de Buenos Aires',
+    descripcion:
+      'En mayo de 2026 los supermercados bonaerenses facturaron 25,0% más que un año atrás y vendieron 3,4% menos en volumen. El resto de la Provincia creció 2,3% y el conurbano cayó 6,0%.',
+    tema: 'Economía',
+    fecha: '2026-08-11',
+  },
+  {
+    path: '/informes/cargos-politicos-pba-2026',
+    titulo: 'Los cargos políticos y directivos del Ejecutivo bonaerense',
+    descripcion:
+      'El Mapa del Estado provincial permite contar 3.353 cargos directivos en 48 jurisdicciones y organismos. El Ministerio de Seguridad tiene 352 y una de cada cuatro unidades no publica quién la conduce.',
+    tema: 'Estado',
+    fecha: '2026-08-11',
+  },
+  {
     path: '/informes/empleo-privado-135-municipios-2025',
     titulo: 'El empleo privado en los 135 municipios bonaerenses',
     descripcion:
@@ -62,7 +102,7 @@ export const INFORMES = [
   },
   {
     path: '/informes/industria-manufacturera-pba-2026',
-    titulo: 'La industria manufacturera bonaerense rebotó 13,2% en marzo',
+    titulo: 'La industria manufacturera bonaerense rebotó 13,5% en marzo',
     descripcion:
       'El ISIM-PBA marcó en marzo su mayor suba interanual reciente para ese mes. Nueve de once bloques crecieron, sobre una base de comparación baja.',
     tema: 'Industria',
