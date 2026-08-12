@@ -339,6 +339,53 @@ function makeHValueLabels(fmt) {
 
 const tooltipBase = { backgroundColor: '#0F172A', titleColor: '#fff', bodyColor: '#cbd5e1', padding: 12, cornerRadius: 8 }
 
+/* Eje de valor oculto: cuando cada barra lleva su cifra escrita al lado, el eje
+   repite el dato y le come ancho al gráfico. La unidad va en la ficha técnica. */
+const ejeValorOculto = {
+  min: 0,
+  ticks: { display: false },
+  grid: { display: false },
+  border: { display: false },
+}
+
+/* En pantallas chicas los nombres largos se parten en dos líneas: si no, el eje
+   se queda con todo el ancho y las barras se reducen a un muñón. Se corta por
+   el punto que deja la línea más larga lo más corta posible. */
+function partirEtiqueta(texto, anchoCanvas) {
+  if (anchoCanvas > 560 || texto.length <= 20) return texto
+  const palabras = texto.split(' ')
+  if (palabras.length < 2) return texto
+  let mejor = null
+  for (let i = 1; i < palabras.length; i++) {
+    const lineas = [palabras.slice(0, i).join(' '), palabras.slice(i).join(' ')]
+    const costo = Math.max(lineas[0].length, lineas[1].length)
+    if (!mejor || costo < mejor.costo) mejor = { costo, lineas }
+  }
+  return mejor.lineas
+}
+
+/* Eje de categorías. Chart.js le da como máximo el 30% del canvas y ahí
+   "Adolfo Gonzales Chaves" pierde letras; se le permite el ancho que necesita,
+   pero sin pasar del 45% para que la barra siga siendo lo que se lee. */
+function ejeCategorias(anchoDeseado) {
+  return {
+    grid: { display: false },
+    border: { display: false },
+    ticks: {
+      font: { size: 11 },
+      /* Con etiquetas de dos líneas Chart.js saltea categorías por falta de
+         alto: acá ninguna puede faltar. */
+      autoSkip: false,
+      callback(value) {
+        return partirEtiqueta(this.getLabelForValue(value), this.chart.width)
+      },
+    },
+    afterFit(scale) {
+      scale.width = Math.max(scale.width, Math.min(anchoDeseado, scale.chart.width * 0.45))
+    },
+  }
+}
+
 function ChartTop15() {
   const data = {
     labels: TOP15.map(d => d.muni),
@@ -350,7 +397,7 @@ function ChartTop15() {
   }
   return (
     <ChartCard
-      title="Los 15 municipios con mayor Fondo Educativo por habitante - Acumulado 2025"
+      title="Los 15 municipios con mayor Fondo Educativo por habitante - En miles de $, acumulado 2025"
       hallazgo="Gráfico de barras horizontales: Pila encabeza el ranking con $161.960 de Fondo Educativo por habitante, seguida por General Guido con $159.918 y General Lavalle con $138.969; el decimoquinto, Adolfo Alsina, recibe $79.714. Los quince son municipios del interior."
       tabla={{
         columnas: ['Municipio', 'Población 2022', 'Fondo Educativo por habitante'],
@@ -362,21 +409,21 @@ function ChartTop15() {
         ['Universo', '135 municipios bonaerenses'],
         ['Unidad', 'miles de $ por habitante (Censo 2022)'],
       ]}
-      height={400}
+      height={430}
     >
       <Bar
         data={data}
         plugins={[makeHValueLabels(fmtMiles1)]}
         options={{
           indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-          layout: { padding: { right: 44 } },
+          layout: { padding: { right: 52 } },
           plugins: {
             legend: { display: false },
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${fmtMiles1(ctx.raw)} mil por habitante` } },
           },
           scales: {
-            x: { max: 180, ticks: { callback: v => fmtNum(v) }, grid: { color: 'rgba(13,17,23,0.08)' }, title: { display: true, text: 'Miles de $ por habitante', font: { size: 10 } } },
-            y: { ticks: { font: { size: 10 } }, grid: { display: false } },
+            x: ejeValorOculto,
+            y: ejeCategorias(132),
           },
         }}
       />
@@ -387,9 +434,11 @@ function ChartTop15() {
 function ChartGrupos() {
   const data = {
     labels: ['Población (Censo 2022)', 'Fondo Educativo 2025'],
+    /* Con solo dos categorías, los valores por defecto reparten las barras a lo
+       ancho de todo el canvas y el par deja de leerse como par. */
     datasets: [
-      { label: 'GBA (24 partidos)', data: [GRUPOS[0].pobPct, GRUPOS[0].fondosPct], backgroundColor: DATA[1], borderRadius: 4, barPercentage: 0.6 },
-      { label: 'Resto de la Provincia (111)', data: [GRUPOS[1].pobPct, GRUPOS[1].fondosPct], backgroundColor: DATA[2], borderRadius: 4, barPercentage: 0.6 },
+      { label: 'GBA (24 partidos)', data: [GRUPOS[0].pobPct, GRUPOS[0].fondosPct], backgroundColor: DATA[1], borderRadius: 4, categoryPercentage: 0.4, barPercentage: 0.92 },
+      { label: 'Resto de la Provincia (111)', data: [GRUPOS[1].pobPct, GRUPOS[1].fondosPct], backgroundColor: DATA[2], borderRadius: 4, categoryPercentage: 0.4, barPercentage: 0.92 },
     ],
   }
   return (
@@ -420,8 +469,8 @@ function ChartGrupos() {
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${ctx.dataset.label}: ${fmtPct(ctx.raw)}` } },
           },
           scales: {
-            y: { max: 75, ticks: { callback: v => v + '%' }, grid: { color: 'rgba(13,17,23,0.08)' } },
-            x: { ticks: { font: { size: 10 }, maxRotation: 0 }, grid: { display: false } },
+            y: { max: 70, ticks: { stepSize: 10, callback: v => v + '%' }, grid: { color: 'rgba(13,17,23,0.08)' }, border: { display: false } },
+            x: { ticks: { font: { size: 11 }, maxRotation: 0 }, grid: { display: false } },
           },
         }}
       />

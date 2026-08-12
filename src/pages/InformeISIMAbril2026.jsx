@@ -285,9 +285,9 @@ const fmtPP = v =>
 const fmtIndice = v => v.toLocaleString('es-AR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 
 /* Los ticks del eje no llevan signo "+", pero sí el menos tipográfico, para no
-   mezclar guion y U+2212 dentro del mismo gráfico. */
-const fmtEjePct = v => `${v < 0 ? '−' : ''}${Math.abs(v)}%`
-const fmtEjePP  = v => `${v < 0 ? '−' : ''}${Math.abs(v)}`
+   mezclar guion y U+2212 dentro del mismo gráfico. Chart.js dibuja además un
+   tick sobre el límite del eje: si no cae en la grilla de a 5, se omite. */
+const fmtEjePct = v => (v % 5 === 0 ? `${v < 0 ? '−' : ''}${Math.abs(v)}%` : '')
 
 const etiquetaMes = m => `${m[0]}. ${m[1]}`
 
@@ -316,11 +316,15 @@ const labelsVerticales = {
   },
 }
 
-/* Barras horizontales con signo: la etiqueta queda afuera de la punta. */
+/* Barras horizontales con signo: la etiqueta queda afuera de la punta. En
+   pantallas chicas el área de trazado se angosta y la cifra de las barras
+   negativas terminaba encima del nombre del bloque: ahí las cifras pasan todas
+   a una columna a la derecha. */
 const labelsIncidencia = {
   id: 'labelsIncidencia',
   afterDatasetsDraw(chart) {
     const { ctx } = chart
+    const columna = chart.width < 560
     chart.getDatasetMeta(0).data.forEach((bar, i) => {
       const v = chart.data.datasets[0].data[i]
       ctx.save()
@@ -329,8 +333,13 @@ const labelsIncidencia = {
         : '#334155'
       ctx.font = 'bold 11px Archivo, sans-serif'
       ctx.textBaseline = 'middle'
-      ctx.textAlign = v < 0 ? 'right' : 'left'
-      ctx.fillText(fmtPP(v), v < 0 ? bar.x - 6 : bar.x + 6, bar.y)
+      if (columna) {
+        ctx.textAlign = 'right'
+        ctx.fillText(fmtPP(v), chart.width - 4, bar.y)
+      } else {
+        ctx.textAlign = v < 0 ? 'right' : 'left'
+        ctx.fillText(fmtPP(v), v < 0 ? bar.x - 6 : bar.x + 6, bar.y)
+      }
       ctx.restore()
     })
   },
@@ -343,6 +352,48 @@ const tooltipBase = { backgroundColor: '#0F172A', titleColor: '#fff', bodyColor:
 /* El cero es la referencia que separa crecer de caer: se pinta más marcado que
    el resto de la grilla. */
 const gridCero = ctx => (ctx.tick.value === 0 ? 'rgba(13,17,23,0.30)' : 'rgba(13,17,23,0.08)')
+
+/* Cuando cada barra lleva su cifra escrita, el eje de valor repite el dato: se
+   oculta y queda solo el cero, que es la referencia que el ranking necesita. */
+const gridSoloCero = ctx => (ctx.tick.value === 0 ? 'rgba(13,17,23,0.30)' : 'transparent')
+
+/* En pantallas chicas los nombres largos se parten en dos líneas: si no, el eje
+   se queda con todo el ancho y las barras se reducen a un muñón. Se corta por
+   el punto que deja la línea más larga lo más corta posible. */
+function partirEtiqueta(texto, anchoCanvas) {
+  if (anchoCanvas > 560 || texto.length <= 20) return texto
+  const palabras = texto.split(' ')
+  if (palabras.length < 2) return texto
+  let mejor = null
+  for (let i = 1; i < palabras.length; i++) {
+    const lineas = [palabras.slice(0, i).join(' '), palabras.slice(i).join(' ')]
+    const costo = Math.max(lineas[0].length, lineas[1].length)
+    if (!mejor || costo < mejor.costo) mejor = { costo, lineas }
+  }
+  return mejor.lineas
+}
+
+/* Eje de categorías. Chart.js le da como máximo el 30% del canvas y ahí
+   "Minerales no metálicos" pierde letras; se le permite el ancho que necesita,
+   pero sin pasar del 45% para que la barra siga siendo lo que se lee. */
+function ejeCategorias(anchoDeseado) {
+  return {
+    grid: { display: false },
+    border: { display: false },
+    ticks: {
+      font: { size: 11 },
+      /* Con etiquetas de dos líneas Chart.js saltea categorías por falta de
+         alto: acá ninguna puede faltar. */
+      autoSkip: false,
+      callback(value) {
+        return partirEtiqueta(this.getLabelForValue(value), this.chart.width)
+      },
+    },
+    afterFit(scale) {
+      scale.width = Math.max(scale.width, Math.min(anchoDeseado, scale.chart.width * 0.45))
+    },
+  }
+}
 
 function ChartSerie() {
   const data = {
@@ -385,8 +436,8 @@ function ChartSerie() {
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${fmtPct(ctx.raw)} interanual` } },
           },
           scales: {
-            y: { suggestedMin: -13, suggestedMax: 16, ticks: { callback: fmtEjePct }, grid: { color: gridCero } },
-            x: { ticks: { font: { size: 9.5 }, maxRotation: 0, autoSkip: false }, grid: { display: false } },
+            y: { min: -12, max: 15, ticks: { stepSize: 5, callback: fmtEjePct }, grid: { color: gridCero }, border: { display: false } },
+            x: { ticks: { font: { size: 10.5 }, maxRotation: 0, autoSkip: false }, grid: { display: false } },
           },
         }}
       />
@@ -435,8 +486,8 @@ function ChartIncidencias() {
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${fmtPP(ctx.raw)} pp · variación ${fmtPct(BLOQUES[ctx.dataIndex].ia)}` } },
           },
           scales: {
-            x: { suggestedMin: -2.5, suggestedMax: 5.5, ticks: { callback: fmtEjePP }, grid: { color: gridCero } },
-            y: { grid: { display: false }, ticks: { font: { size: 11 } } },
+            x: { min: -2.2, max: 5.2, ticks: { display: false }, grid: { color: gridSoloCero }, border: { display: false } },
+            y: ejeCategorias(150),
           },
         }}
       />
@@ -644,31 +695,28 @@ export default function InformeISIMAbril2026() {
 
       <Tesis />
 
-      {/* LA SERIE — dos columnas, texto y gráfico */}
+      {/* LA SERIE — prosa y gráfico a lo ancho: trece barras rotuladas se
+          pisaban entre sí en media columna */}
       <div className="max-w-5xl mx-auto px-6 pb-10">
         <SH title="El repunte de marzo duró un mes" />
-        <div className="grid lg:grid-cols-2 gap-x-10 items-start">
-          <div>
-            <p className="text-base leading-relaxed mb-4" style={{ color: C.inkMid }}>
-              El ISIM-PBA cerró abril en 91,8 puntos, contra 89,6 de abril de 2025. La suba de 2,5% deja al
-              indicador en terreno positivo por segundo mes seguido, después de cuatro meses consecutivos en
-              baja entre noviembre de 2025 y febrero de 2026.
-            </p>
-            <p className="text-base leading-relaxed mb-4" style={{ color: C.inkMid }}>
-              La comparación con marzo es la que define el tono del mes. Aquel 13,5% fue el mejor registro de
-              los últimos trece meses y abril devuelve al indicador a la zona donde se movió buena parte de
-              2025: cinco de los nueve meses de ese año que cubre la serie quedaron entre 0,4% y 3,1%.
-            </p>
-            <p className="text-base leading-relaxed" style={{ color: C.inkMid }}>
-              El acumulado del cuatrimestre queda 3,4% arriba de 2025, sostenido por marzo. Enero y febrero
-              habían cerrado en baja, y el peor mes de toda la serie sigue siendo noviembre de 2025, con una
-              caída interanual de 10,2%.
-            </p>
-          </div>
-          <DownloadableViz title="ISIM-PBA. Variación interanual mensual" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA">
-            <ChartSerie />
-          </DownloadableViz>
-        </div>
+        <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          El ISIM-PBA cerró abril en 91,8 puntos, contra 89,6 de abril de 2025. La suba de 2,5% deja al
+          indicador en terreno positivo por segundo mes seguido, después de cuatro meses consecutivos en
+          baja entre noviembre de 2025 y febrero de 2026.
+        </p>
+        <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          La comparación con marzo es la que define el tono del mes. Aquel 13,5% fue el mejor registro de
+          los últimos trece meses y abril devuelve al indicador a la zona donde se movió buena parte de
+          2025: cinco de los nueve meses de ese año que cubre la serie quedaron entre 0,4% y 3,1%.
+        </p>
+        <p className="text-base leading-relaxed" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          El acumulado del cuatrimestre queda 3,4% arriba de 2025, sostenido por marzo. Enero y febrero
+          habían cerrado en baja, y el peor mes de toda la serie sigue siendo noviembre de 2025, con una
+          caída interanual de 10,2%.
+        </p>
+        <DownloadableViz title="ISIM-PBA. Variación interanual mensual" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA">
+          <ChartSerie />
+        </DownloadableViz>
       </div>
 
       {/* LAS INCIDENCIAS — gráfico primero, después prosa */}

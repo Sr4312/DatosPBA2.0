@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowLeft, Download, ExternalLink } from 'lucide-react'
+import { ArrowLeft, ExternalLink } from 'lucide-react'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -28,19 +28,7 @@ const C = {
   inkLight: 'var(--c-ink-light)',
   rule:     'var(--c-rule)',
   hero:     '#0F172A',
-  accent:   '#15803d',
-}
-
-// Paleta verde (análoga a la azul de los informes de referencia)
-const G = {
-  700: '#14532d',
-  600: '#166534',
-  500: '#15803d',
-  400: '#16a34a',
-  300: '#4ade80',
-  200: '#86efac',
-  100: '#bbf7d0',
-  50:  '#f0fdf4',
+  accent:   '#3d65b2',
 }
 
 // ─── DATOS ───────────────────────────────────────────────────
@@ -78,10 +66,10 @@ const NACION = [
 /* La valoración de cada cifra se declara acá y el color lo deriva <Cifra>:
    nunca se asigna un color a mano. */
 const HERO_STATS = [
-  { valor: '+4,2%', variacion: '+4,2%', polaridad: 'mayor-es-mejor', periodo: 'crecimiento real en 2025, segundo mejor de la serie 2004-2025' },
-  { valor: '$263.668 M', periodo: 'PBG-PBA a precios constantes de 2004' },
-  { valor: '35,7%',      periodo: 'participación en el PBI de Nación' },
-  { valor: '14 de 16',   periodo: 'sectores registraron alzas interanuales' },
+  { label: 'Crecimiento real',      valor: '+4,2%',    variacion: '+4,2%', polaridad: 'mayor-es-mejor', periodo: 'en 2025, segundo mejor de la serie 2004-2025' },
+  { label: 'PBG-PBA',               valor: '$263.668', unidad: 'millones', polaridad: 'neutro', periodo: 'a precios constantes de 2004' },
+  { label: 'Peso en el PBI de Nación', valor: '35,7%', polaridad: 'neutro', periodo: 'en línea con el promedio 2004-2024' },
+  { label: 'Sectores en alza',      valor: '14',       unidad: 'de 16',    polaridad: 'neutro', periodo: 'solo Salud y Administración pública cayeron' },
 ]
 
 // ─── DOWNLOAD ────────────────────────────────────────────────
@@ -213,12 +201,30 @@ function CifraCard(props) {
   )
 }
 
-function ChartCard({ title, fuente, legend, height = 220, children }) {
+/* Ficha técnica del gráfico: fuente, período, universo y unidad, como elemento
+   de diseño visible bajo cada visualización. */
+function FichaTecnica({ items }) {
+  return (
+    <div style={{
+      borderTop: `1px solid ${C.rule}`, marginTop: '0.75rem', paddingTop: '0.625rem',
+      display: 'flex', flexWrap: 'wrap', gap: '0.375rem 1.75rem',
+    }}>
+      {items.map(([k, v]) => (
+        <div key={k}>
+          <span style={{ fontSize: '0.62rem', color: C.inkLight, textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block' }}>{k}</span>
+          <span style={{ fontSize: '0.72rem', fontWeight: 600, color: C.inkMid }}>{v}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function ChartCard({ title, hallazgo, ficha, tabla, legend, height = 220, children }) {
   return (
     <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, padding: '1.25rem 1.25rem 0.875rem', margin: '1.25rem 0' }}>
       {title && <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#334155', marginBottom: '0.75rem' }}>{title}</p>}
       {legend && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.875rem', marginBottom: '0.625rem' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.875rem', marginBottom: '0.625rem' }} aria-hidden="true">
           {legend.map(l => (
             <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem', fontSize: '0.6875rem', color: '#64748b', fontWeight: 500 }}>
               <span style={{ width: 10, height: 10, borderRadius: 2, background: l.color, flexShrink: 0 }} />
@@ -227,13 +233,33 @@ function ChartCard({ title, fuente, legend, height = 220, children }) {
           ))}
         </div>
       )}
-      <div style={{ position: 'relative', height }} role="img" aria-label={title}>{children}</div>
-      {fuente && (
-        <div style={{ borderTop: '1px solid var(--c-rule)', marginTop: '0.75rem', paddingTop: '0.625rem' }}>
-          <span style={{ fontSize: '0.62rem', color: 'var(--c-ink-light)', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block' }}>Fuente y período</span>
-          <span style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--c-ink-mid)' }}>{fuente}</span>
-        </div>
+      <div style={{ position: 'relative', height }} role="img" aria-label={hallazgo || title}>{children}</div>
+      {tabla && (
+        <details style={{ marginTop: '0.625rem' }}>
+          <summary style={{ fontSize: '0.72rem', fontWeight: 600, color: C.inkMid, cursor: 'pointer' }}>
+            Ver los datos del gráfico en tabla
+          </summary>
+          <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '0.5rem' }}>
+            <thead>
+              <tr>
+                {tabla.columnas.map((c, i) => (
+                  <th key={c} style={{ textAlign: i === 0 ? 'left' : 'right', fontSize: '0.68rem', color: C.inkMid, fontWeight: 700, padding: '0.3rem 0.5rem', borderBottom: `1px solid ${C.rule}` }}>{c}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {tabla.filas.map((fila, i) => (
+                <tr key={i}>
+                  {fila.map((celda, j) => (
+                    <td key={j} className="tabular-nums" style={{ textAlign: j === 0 ? 'left' : 'right', fontSize: '0.75rem', color: j === 0 ? C.ink : C.inkMid, padding: '0.3rem 0.5rem', borderBottom: `1px solid var(--surface-2)` }}>{celda}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </details>
       )}
+      {ficha && <FichaTecnica items={ficha} />}
     </div>
   )
 }
@@ -289,6 +315,56 @@ function makeHValueLabels(fmt) {
 
 const tooltipBase = { backgroundColor: '#0F172A', titleColor: '#fff', bodyColor: '#cbd5e1', padding: 12, cornerRadius: 8 }
 
+/* Cuando cada barra lleva su cifra escrita, el eje de valor repite el dato: se
+   oculta y queda solo el cero, que es la referencia que la serie necesita. */
+const gridSoloCero = ctx => (ctx.tick.value === 0 ? 'rgba(13,17,23,0.30)' : 'transparent')
+
+/* Eje de valor oculto para los rankings horizontales, por el mismo motivo. */
+const ejeValorOculto = {
+  min: 0,
+  ticks: { display: false },
+  grid: { display: false },
+  border: { display: false },
+}
+
+/* En pantallas chicas los nombres largos se parten en dos líneas: si no, el eje
+   se queda con todo el ancho y las barras se reducen a un muñón. Se corta por
+   el punto que deja la línea más larga lo más corta posible. */
+function partirEtiqueta(texto, anchoCanvas) {
+  if (anchoCanvas > 560 || texto.length <= 20) return texto
+  const palabras = texto.split(' ')
+  if (palabras.length < 2) return texto
+  let mejor = null
+  for (let i = 1; i < palabras.length; i++) {
+    const lineas = [palabras.slice(0, i).join(' '), palabras.slice(i).join(' ')]
+    const costo = Math.max(lineas[0].length, lineas[1].length)
+    if (!mejor || costo < mejor.costo) mejor = { costo, lineas }
+  }
+  return mejor.lineas
+}
+
+/* Eje de categorías. Chart.js le da como máximo el 30% del canvas y ahí
+   "Ss. inmobiliarios y empresariales" pierde letras; se le permite el ancho que
+   necesita, pero sin pasar del 45% para que la barra siga siendo lo que se lee. */
+function ejeCategorias(anchoDeseado) {
+  return {
+    grid: { display: false },
+    border: { display: false },
+    ticks: {
+      font: { size: 11 },
+      /* Con etiquetas de dos líneas Chart.js saltea categorías por falta de
+         alto: acá ninguna puede faltar. */
+      autoSkip: false,
+      callback(value) {
+        return partirEtiqueta(this.getLabelForValue(value), this.chart.width)
+      },
+    },
+    afterFit(scale) {
+      scale.width = Math.max(scale.width, Math.min(anchoDeseado, scale.chart.width * 0.45))
+    },
+  }
+}
+
 function ChartSerie() {
   const data = {
     labels: SERIE_VARIACION.map(d => d.year),
@@ -305,7 +381,18 @@ function ChartSerie() {
   return (
     <ChartCard
       title="Variación interanual del PBG-PBA a precios constantes de 2004"
-      fuente="Dirección Provincial de Estadística. (*) Provisorio. (**) Preliminar."
+      hallazgo="Gráfico de barras: tras la caída de 9,8% de 2020 y el rebote de 11,8% de 2021, el PBG-PBA se contrajo 0,9% en 2023 y 3,6% en 2024, y volvió a crecer 4,2% en 2025."
+      tabla={{
+        columnas: ['Año', 'Variación interanual'],
+        filas: SERIE_VARIACION.map(d => [d.year, fmtPct(d.value)]),
+      }}
+      ficha={[
+        ['Fuente', 'Dirección Provincial de Estadística, Ministerio de Economía PBA'],
+        ['Período', '2020-2025'],
+        ['Universo', 'toda la provincia de Buenos Aires, 135 municipios'],
+        ['Unidad', 'variación interanual en % a precios constantes de 2004'],
+        ['Estado', '2023 y 2024 provisorios; 2025 estimación preliminar'],
+      ]}
       legend={[{ label: 'Años de crecimiento', color: VALORACION_HEX.better.base }, { label: 'Años de caída', color: VALORACION_HEX.worse.base }]}
       height={240}
     >
@@ -320,8 +407,10 @@ function ChartSerie() {
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${fmtPct(ctx.raw)}` } },
           },
           scales: {
-            y: { ticks: { callback: v => v + '%' }, grid: { color: 'rgba(13,17,23,0.08)' } },
-            x: { grid: { display: false } },
+            /* Las seis barras llevan su cifra escrita encima: el eje repetiría el
+               dato. Queda el cero, que separa crecer de caer. */
+            y: { min: -12.5, max: 14, ticks: { display: false }, grid: { color: gridSoloCero }, border: { display: false } },
+            x: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 11 } } },
           },
         }}
       />
@@ -337,7 +426,18 @@ function ChartComposicion() {
   return (
     <ChartCard
       title="Composición del PBG-PBA 2025 por grandes componentes"
-      fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA"
+      hallazgo="Gráfico de anillo: los sectores productores de servicios explican el 47,0% del producto provincial, los productores de bienes el 34,5% y el IVA y otros impuestos a los productos el 18,5% restante."
+      tabla={{
+        columnas: ['Componente', '% del PBG-PBA'],
+        filas: COMPOSICION.map(d => [d.label, d.value.toLocaleString('es-AR', { minimumFractionDigits: 1 }) + '%']),
+      }}
+      ficha={[
+        ['Fuente', 'Dirección Provincial de Estadística, Ministerio de Economía PBA'],
+        ['Período', '2025'],
+        ['Universo', 'el total del producto bruto geográfico provincial'],
+        ['Unidad', '% del PBG-PBA a precios corrientes'],
+        ['Estado', 'estimación preliminar, sujeta a revisión'],
+      ]}
       legend={COMPOSICION.map(d => ({ label: `${d.label}: ${d.value.toLocaleString('es-AR', { minimumFractionDigits: 1 })}%`, color: d.color }))}
       height={260}
     >
@@ -364,7 +464,18 @@ function ChartSectores() {
   return (
     <ChartCard
       title="Incidencia de cada sector en el crecimiento del PBG-PBA 2025 (en puntos porcentuales)"
-      fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA"
+      hallazgo="Gráfico de barras horizontales: Industria aportó 0,59 puntos porcentuales al crecimiento de 4,2% del PBG-PBA, seguida por Comercio con 0,45, Agropecuario y Servicios inmobiliarios y empresariales con 0,44 cada uno."
+      tabla={{
+        columnas: ['Sector', 'Var. interanual', 'Participación', 'Incidencia (p.p.)'],
+        filas: SECTORES.map(s => [s.label, s.var, s.part, s.inc.toLocaleString('es-AR', { minimumFractionDigits: 2 })]),
+      }}
+      ficha={[
+        ['Fuente', 'Dirección Provincial de Estadística, Ministerio de Economía PBA'],
+        ['Período', '2025 vs. 2024'],
+        ['Universo', 'los 6 sectores de mayor incidencia, sobre los 16 del indicador'],
+        ['Unidad', 'puntos porcentuales de aporte al crecimiento agregado'],
+        ['Estado', 'estimación preliminar, sujeta a revisión'],
+      ]}
       height={250}
     >
       <Bar
@@ -378,8 +489,8 @@ function ChartSectores() {
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${ctx.raw.toLocaleString('es-AR', { minimumFractionDigits: 2 })} p.p. de incidencia` } },
           },
           scales: {
-            x: { grid: { color: 'rgba(13,17,23,0.08)' }, ticks: { callback: v => v.toLocaleString('es-AR') } },
-            y: { ticks: { font: { size: 10 } }, grid: { display: false } },
+            x: ejeValorOculto,
+            y: ejeCategorias(190),
           },
         }}
       />
@@ -399,7 +510,18 @@ function ChartNacion() {
   return (
     <ChartCard
       title="Participación bonaerense en el total nacional, 2025"
-      fuente="Dirección Provincial de Estadística · INDEC"
+      hallazgo="Gráfico de barras horizontales: la Provincia aporta el 40,3% del valor agregado nacional de bienes, el 35,7% del producto total del país y el 32,4% del valor agregado de servicios."
+      tabla={{
+        columnas: ['Agregado', '% del total nacional'],
+        filas: NACION.map(d => [d.label, d.value.toLocaleString('es-AR', { minimumFractionDigits: 1 }) + '%']),
+      }}
+      ficha={[
+        ['Fuente', 'Dirección Provincial de Estadística e INDEC'],
+        ['Período', '2025'],
+        ['Universo', 'PBG-PBA sobre el PBI de Nación'],
+        ['Unidad', '% del total nacional'],
+        ['Estado', 'estimación preliminar, sujeta a revisión'],
+      ]}
       height={195}
     >
       <Bar
@@ -413,8 +535,8 @@ function ChartNacion() {
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${ctx.raw.toLocaleString('es-AR', { minimumFractionDigits: 1 })}% del total nacional` } },
           },
           scales: {
-            x: { max: 50, ticks: { callback: v => v + '%' }, grid: { color: 'rgba(13,17,23,0.08)' } },
-            y: { grid: { display: false } },
+            x: ejeValorOculto,
+            y: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 11 } } },
           },
         }}
       />
@@ -460,7 +582,7 @@ function Hero() {
               style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 2 }}
               className="p-5"
             >
-              <Cifra dark size="xl" label={s.label} valor={s.valor} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
+              <Cifra dark size="xl" label={s.label} valor={s.valor} unidad={s.unidad} variacion={s.variacion} polaridad={s.polaridad} periodo={s.periodo} />
             </div>
           ))}
         </div>

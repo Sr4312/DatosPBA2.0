@@ -5,6 +5,7 @@ import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
+  LogarithmicScale,
   BarElement,
   PointElement,
   LineElement,
@@ -15,7 +16,7 @@ import { Bar, Line } from 'react-chartjs-2'
 import Cifra from '@/components/shared/Cifra'
 import { DATA, DATA_BORDES, VALORACION_HEX, getColorVariacion } from '@/lib/variacion'
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Tooltip, Legend)
+ChartJS.register(CategoryScale, LinearScale, LogarithmicScale, BarElement, PointElement, LineElement, Tooltip, Legend)
 ChartJS.defaults.font.family = 'Archivo, sans-serif'
 ChartJS.defaults.font.size = 12
 ChartJS.defaults.color = '#475569'
@@ -382,6 +383,7 @@ function ChartSeriePBA() {
         ['Período', '2000-2024, años de corte'],
         ['Universo', 'Administración central, organismos descentralizados y cuentas especiales'],
         ['Unidad', 'agentes'],
+        ['Escala', 'eje truncado en 380.000 agentes para leer el recorrido de la serie'],
       ]}
       height={260}
     >
@@ -419,8 +421,8 @@ function ChartComparacion() {
   }
   return (
     <ChartCard
-      title="Planta ocupada del sector público provincial por jurisdicción"
-      hallazgo="Gráfico de líneas: la planta bonaerense (657.328 agentes en 2024) corre muy por encima de Santa Fe (151.850), Córdoba (131.305) y Mendoza (91.784), que se mueven juntas por debajo de los 160.000 agentes en todo el período."
+      title="Planta ocupada del sector público provincial por jurisdicción - Escala logarítmica"
+      hallazgo="Gráfico de líneas en escala logarítmica: la planta bonaerense (657.328 agentes en 2024) corre muy por encima de Santa Fe (151.850), Córdoba (131.305) y Mendoza (91.784), que se mueven juntas por debajo de los 160.000 agentes en todo el período."
       tabla={{
         columnas: ['Año', 'Buenos Aires', 'Santa Fe', 'Córdoba', 'Mendoza'],
         filas: COMPARACION.map(d => [String(d.anio), fmtAgentes(d.ba), fmtAgentes(d.sf), fmtAgentes(d.cba), fmtAgentes(d.mza)]),
@@ -429,10 +431,11 @@ function ChartComparacion() {
         ['Fuente', 'DNAP, Ministerio de Economía - Ocupación y gastos salariales provinciales'],
         ['Período', '2000-2024, años de corte'],
         ['Universo', 'Buenos Aires, Santa Fe, Córdoba y Mendoza · sin municipios'],
-        ['Unidad', 'agentes'],
+        ['Unidad', 'agentes, en escala logarítmica'],
+        ['Escala', 'logarítmica: en escala lineal las otras tres provincias se superponen'],
       ]}
       legend={PROVINCIAS.map(p => ({ label: p.nombre, color: p.borde }))}
-      height={280}
+      height={300}
     >
       <Line
         data={data}
@@ -443,7 +446,20 @@ function ChartComparacion() {
             tooltip: { ...tooltipBase, callbacks: { title: ctx => String(ctx[0].parsed.x), label: ctx => `  ${ctx.dataset.label}: ${fmtAgentes(ctx.parsed.y)}` } },
           },
           scales: {
-            y: { min: 0, max: 700000, ticks: { callback: v => fmtAgentes(v) }, grid: { color: 'rgba(13,17,23,0.08)' } },
+            /* Buenos Aires septuplica a Mendoza: en escala lineal las otras tres
+               provincias se apilan en la franja baja y no se distinguen entre
+               sí. La escala se declara en la ficha técnica y la tabla del
+               desplegable conserva los valores exactos. */
+            y: {
+              type: 'logarithmic',
+              min: 50000,
+              max: 800000,
+              ticks: {
+                callback: v => ([50000, 100000, 200000, 400000, 800000].includes(v) ? fmtAgentes(v) : ''),
+                font: { size: 10 },
+              },
+              grid: { color: 'rgba(13,17,23,0.08)' },
+            },
             x: ejeAnios,
           },
         }}
@@ -492,8 +508,10 @@ function ChartCrecimiento() {
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${fmtPct1(ctx.raw)}` } },
           },
           scales: {
-            x: { max: 85, ticks: { callback: v => v + '%' }, grid: { color: 'rgba(13,17,23,0.08)' } },
-            y: { grid: { display: false } },
+            /* Las cuatro barras llevan su cifra escrita al lado: el eje de valor
+               sería el mismo dato dos veces. */
+            x: { min: 0, ticks: { display: false }, grid: { display: false }, border: { display: false } },
+            y: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 11 } } },
           },
         }}
       />
@@ -550,8 +568,10 @@ function ChartCadaMil() {
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${ctx.dataset.label}: ${fmtRatio(ctx.raw)}` } },
           },
           scales: {
-            y: { max: 50, ticks: { stepSize: 10, callback: v => String(v) }, grid: { color: 'rgba(13,17,23,0.08)' } },
-            x: { ticks: { font: { size: 10 }, maxRotation: 0 }, grid: { display: false } },
+            /* Chart.js agrega un tick sobre el límite del eje: se omite el 48
+               para que la escala quede en múltiplos de 10. */
+            y: { max: 48, ticks: { stepSize: 10, callback: v => (v % 10 === 0 ? String(v) : '') }, grid: { color: 'rgba(13,17,23,0.08)' }, border: { display: false } },
+            x: { ticks: { font: { size: 11 }, maxRotation: 0 }, grid: { display: false }, border: { display: false } },
           },
         }}
       />

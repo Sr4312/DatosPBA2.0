@@ -326,6 +326,53 @@ function makeHValueLabels(fmt) {
 
 const tooltipBase = { backgroundColor: '#0F172A', titleColor: '#fff', bodyColor: '#cbd5e1', padding: 12, cornerRadius: 8 }
 
+/* Eje de valor oculto: cuando cada barra lleva su cifra escrita al lado, el eje
+   repite el dato y le come ancho al gráfico. La unidad va en la ficha técnica. */
+const ejeValorOculto = {
+  min: 0,
+  ticks: { display: false },
+  grid: { display: false },
+  border: { display: false },
+}
+
+/* En pantallas chicas los nombres largos se parten en dos líneas: si no, el eje
+   se queda con todo el ancho y las barras se reducen a un muñón. Se corta por
+   el punto que deja la línea más larga lo más corta posible. */
+function partirEtiqueta(texto, anchoCanvas) {
+  if (anchoCanvas > 560 || texto.length <= 20) return texto
+  const palabras = texto.split(' ')
+  if (palabras.length < 2) return texto
+  let mejor = null
+  for (let i = 1; i < palabras.length; i++) {
+    const lineas = [palabras.slice(0, i).join(' '), palabras.slice(i).join(' ')]
+    const costo = Math.max(lineas[0].length, lineas[1].length)
+    if (!mejor || costo < mejor.costo) mejor = { costo, lineas }
+  }
+  return mejor.lineas
+}
+
+/* Eje de categorías. Chart.js le da como máximo el 30% del canvas y ahí
+   "Adolfo Gonzales Chaves" pierde letras; se le permite el ancho que necesita,
+   pero sin pasar del 45% para que la barra siga siendo lo que se lee. */
+function ejeCategorias(anchoDeseado) {
+  return {
+    grid: { display: false },
+    border: { display: false },
+    ticks: {
+      font: { size: 11 },
+      /* Con etiquetas de dos líneas Chart.js saltea categorías por falta de
+         alto: acá ninguna puede faltar. */
+      autoSkip: false,
+      callback(value) {
+        return partirEtiqueta(this.getLabelForValue(value), this.chart.width)
+      },
+    },
+    afterFit(scale) {
+      scale.width = Math.max(scale.width, Math.min(anchoDeseado, scale.chart.width * 0.45))
+    },
+  }
+}
+
 function ChartTop15() {
   const data = {
     labels: TOP15.map(d => d.muni),
@@ -337,7 +384,7 @@ function ChartTop15() {
   }
   return (
     <ChartCard
-      title="Los 15 municipios con mayor coparticipación por habitante - Acumulado 2025"
+      title="Los 15 municipios con mayor coparticipación por habitante - En miles de $, acumulado 2025"
       hallazgo="Gráfico de barras horizontales: Puán encabeza el ranking con $1.280.240 de coparticipación por habitante, seguido por Pila con $1.245.532 y San Cayetano con $1.150.854; el decimoquinto, General Pinto, recibe $832.799."
       tabla={{
         columnas: ['Municipio', 'Población 2022', 'Coparticipación por habitante'],
@@ -349,21 +396,21 @@ function ChartTop15() {
         ['Universo', '135 municipios bonaerenses'],
         ['Unidad', 'miles de $ por habitante (Censo 2022)'],
       ]}
-      height={400}
+      height={430}
     >
       <Bar
         data={data}
         plugins={[makeHValueLabels(fmtMiles)]}
         options={{
           indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-          layout: { padding: { right: 44 } },
+          layout: { padding: { right: 52 } },
           plugins: {
             legend: { display: false },
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${fmtMiles(ctx.raw)} mil por habitante` } },
           },
           scales: {
-            x: { max: 1400, ticks: { callback: v => fmtNum(v) }, grid: { color: 'rgba(13,17,23,0.08)' }, title: { display: true, text: 'Miles de $ por habitante', font: { size: 10 } } },
-            y: { ticks: { font: { size: 10 } }, grid: { display: false } },
+            x: ejeValorOculto,
+            y: ejeCategorias(132),
           },
         }}
       />
@@ -374,9 +421,11 @@ function ChartTop15() {
 function ChartGrupos() {
   const data = {
     labels: ['Población (Censo 2022)', 'Coparticipación bruta 2025'],
+    /* Con solo dos categorías, los valores por defecto reparten las barras a lo
+       ancho de todo el canvas y el par deja de leerse como par. */
     datasets: [
-      { label: 'GBA (24 partidos)', data: [GRUPOS[0].pobPct, GRUPOS[0].fondosPct], backgroundColor: DATA[1], borderRadius: 4, barPercentage: 0.6 },
-      { label: 'Resto de la Provincia (111)', data: [GRUPOS[1].pobPct, GRUPOS[1].fondosPct], backgroundColor: DATA[2], borderRadius: 4, barPercentage: 0.6 },
+      { label: 'GBA (24 partidos)', data: [GRUPOS[0].pobPct, GRUPOS[0].fondosPct], backgroundColor: DATA[1], borderRadius: 4, categoryPercentage: 0.4, barPercentage: 0.92 },
+      { label: 'Resto de la Provincia (111)', data: [GRUPOS[1].pobPct, GRUPOS[1].fondosPct], backgroundColor: DATA[2], borderRadius: 4, categoryPercentage: 0.4, barPercentage: 0.92 },
     ],
   }
   return (
@@ -407,8 +456,8 @@ function ChartGrupos() {
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${ctx.dataset.label}: ${fmtPct(ctx.raw)}` } },
           },
           scales: {
-            y: { max: 75, ticks: { callback: v => v + '%' }, grid: { color: 'rgba(13,17,23,0.08)' } },
-            x: { ticks: { font: { size: 10 }, maxRotation: 0 }, grid: { display: false } },
+            y: { max: 70, ticks: { stepSize: 10, callback: v => v + '%' }, grid: { color: 'rgba(13,17,23,0.08)' }, border: { display: false } },
+            x: { ticks: { font: { size: 11 }, maxRotation: 0 }, grid: { display: false } },
           },
         }}
       />
@@ -435,7 +484,7 @@ function ChartDispersion() {
   return (
     <ChartCard
       title="Coparticipación por habitante según población del municipio - Extremos del ranking"
-      hallazgo="Gráfico de dispersión con población en escala logarítmica: los municipios de menos de 20.000 habitantes se ubican entre 833 y 1.280 miles de pesos por habitante, y todos los distritos de más de 90.000 habitantes quedan por debajo de 136 mil, pertenezcan o no al conurbano."
+      hallazgo="Gráfico de dispersión con los dos ejes en escala logarítmica: los municipios de menos de 20.000 habitantes se ubican entre 833 y 1.280 miles de pesos por habitante, y todos los distritos de más de 90.000 habitantes quedan por debajo de 136 mil, pertenezcan o no al conurbano."
       tabla={{
         columnas: ['Municipio', 'Población 2022', 'Coparticipación por habitante'],
         filas: [...TOP15, ...BOTTOM15].map(d => [d.muni, fmtNum(d.pob), fmtPesos(d.perCapita)]),
@@ -444,7 +493,8 @@ function ChartDispersion() {
         ['Fuente', 'Ministerio de Economía PBA y Dirección Provincial de Estadística'],
         ['Período', 'acumulado enero-diciembre 2025'],
         ['Universo', 'los 30 municipios de los dos extremos del ranking'],
-        ['Unidad', 'miles de $ por habitante · población en escala logarítmica'],
+        ['Unidad', 'miles de $ por habitante y población, los dos en escala logarítmica'],
+        ['Escala', 'ejes logarítmicos: sin ellos los 15 distritos grandes se apilan sobre el eje'],
       ]}
       legend={[{ label: 'GBA (24 partidos)', color: DATA[1] }, { label: 'Resto de la Provincia', color: DATA[2] }]}
       height={300}
@@ -469,10 +519,15 @@ function ChartDispersion() {
               ticks: { callback: v => ([1000, 10000, 100000, 1000000].includes(v) ? fmtNum(v) : ''), font: { size: 10 } },
               grid: { color: 'rgba(13,17,23,0.08)' },
             },
+            /* Los quince distritos grandes caen entre 99 y 135 mil y los quince
+               chicos entre 833 y 1.280: en escala lineal el primer grupo queda
+               aplastado contra el eje. La escala se declara en la ficha. */
             y: {
-              max: 1400,
-              title: { display: true, text: 'Miles de $ por habitante', font: { size: 10 } },
-              ticks: { callback: v => fmtNum(v) },
+              type: 'logarithmic',
+              min: 80,
+              max: 1600,
+              title: { display: true, text: 'Miles de $ por habitante (escala logarítmica)', font: { size: 10 } },
+              ticks: { callback: v => ([100, 200, 500, 1000].includes(v) ? fmtNum(v) : ''), font: { size: 10 } },
               grid: { color: 'rgba(13,17,23,0.08)' },
             },
           },
@@ -610,31 +665,28 @@ export default function InformeCoparticipacionMunicipalPBA() {
 
       <Tesis />
 
-      {/* LOS QUINCE PRIMEROS — texto y gráfico a dos columnas */}
+      {/* LOS QUINCE PRIMEROS — prosa y gráfico a lo ancho: quince barras con
+          nombre de municipio no entran en media columna */}
       <div className="max-w-5xl mx-auto px-6 pb-10">
         <SH title="Los quince primeros del ranking no llegan a 19.000 habitantes" />
-        <div className="grid lg:grid-cols-2 gap-x-10 items-start">
-          <div>
-            <p className="text-base leading-relaxed mb-4" style={{ color: C.inkMid }}>
-              Puán encabeza la tabla con 16.613 habitantes y $21.269 millones cobrados en el año. Detrás
-              aparecen Pila, con 4.642 habitantes, y San Cayetano, con 8.994. Ninguno de los quince primeros
-              supera los 18.422 vecinos del Censo 2022, y tres de ellos no llegan a los 5.000.
-            </p>
-            <p className="text-base leading-relaxed mb-4" style={{ color: C.inkMid }}>
-              La lista es de geografía homogénea: son distritos del sudoeste bonaerense, de la cuenca del
-              Salado y del noroeste agropecuario. Tordillo, con 2.542 habitantes, cobra $2.401 millones, una
-              cifra menor en el total provincial que igual le alcanza para ubicarse octavo por habitante.
-            </p>
-            <p className="text-base leading-relaxed" style={{ color: C.inkMid }}>
-              La escala importa para leer estos números. Un municipio de 3.000 habitantes necesita una
-              comuna, un hospital y una red vial rural igual que uno de 30.000, y el costo fijo de esa
-              estructura se reparte entre muchos menos contribuyentes.
-            </p>
-          </div>
-          <DownloadableViz title="Los 15 municipios con mayor coparticipación por habitante - 2025" fuente="Ministerio de Economía PBA y DPE, acumulado 2025">
-            <ChartTop15 />
-          </DownloadableViz>
-        </div>
+        <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          Puán encabeza la tabla con 16.613 habitantes y $21.269 millones cobrados en el año. Detrás
+          aparecen Pila, con 4.642 habitantes, y San Cayetano, con 8.994. Ninguno de los quince primeros
+          supera los 18.422 vecinos del Censo 2022, y tres de ellos no llegan a los 5.000.
+        </p>
+        <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          La lista es de geografía homogénea: son distritos del sudoeste bonaerense, de la cuenca del
+          Salado y del noroeste agropecuario. Tordillo, con 2.542 habitantes, cobra $2.401 millones, una
+          cifra menor en el total provincial que igual le alcanza para ubicarse octavo por habitante.
+        </p>
+        <p className="text-base leading-relaxed" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          La escala importa para leer estos números. Un municipio de 3.000 habitantes necesita una
+          comuna, un hospital y una red vial rural igual que uno de 30.000, y el costo fijo de esa
+          estructura se reparte entre muchos menos contribuyentes.
+        </p>
+        <DownloadableViz title="Los 15 municipios con mayor coparticipación por habitante - 2025" fuente="Ministerio de Economía PBA y DPE, acumulado 2025">
+          <ChartTop15 />
+        </DownloadableViz>
       </div>
 
       {/* EL OTRO EXTREMO (fondo blanco alternado) — solo tabla densa */}

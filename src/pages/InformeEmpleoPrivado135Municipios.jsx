@@ -433,10 +433,6 @@ const fmtPct = v =>
 
 const fmtNum = v => v.toLocaleString('es-AR')
 
-/* Los ticks del eje no llevan signo "+", pero sí el menos tipográfico, para no
-   mezclar guion y U+2212 dentro del mismo gráfico. */
-const fmtEje = v => `${v < 0 ? '−' : ''}${Math.abs(v)}%`
-
 const fmtAbs = v => `${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v).toLocaleString('es-AR')}`
 
 // ─── VALUE LABELS PLUGINS ────────────────────────────────────
@@ -463,12 +459,16 @@ const valueLabelsSigned = {
 }
 
 /* Barras horizontales con signo: la etiqueta queda afuera de la punta de la
-   barra. El tono lo deriva el helper de valoración, no un color a mano. */
+   barra. El tono lo deriva el helper de valoración, no un color a mano. En
+   pantallas chicas el área de trazado se angosta y la cifra de las barras
+   negativas terminaba encima del nombre del partido: ahí las cifras pasan todas
+   a una columna a la derecha. */
 function makeHSignedLabels(id) {
   return {
     id,
     afterDatasetsDraw(chart) {
       const { ctx } = chart
+      const columna = chart.width < 560
       chart.getDatasetMeta(0).data.forEach((bar, i) => {
         const v = chart.data.datasets[0].data[i]
         ctx.save()
@@ -477,8 +477,13 @@ function makeHSignedLabels(id) {
           : '#334155'
         ctx.font = 'bold 11px Archivo, sans-serif'
         ctx.textBaseline = 'middle'
-        ctx.textAlign = v < 0 ? 'right' : 'left'
-        ctx.fillText(fmtPct(v), v < 0 ? bar.x - 6 : bar.x + 6, bar.y)
+        if (columna) {
+          ctx.textAlign = 'right'
+          ctx.fillText(fmtPct(v), chart.width - 4, bar.y)
+        } else {
+          ctx.textAlign = v < 0 ? 'right' : 'left'
+          ctx.fillText(fmtPct(v), v < 0 ? bar.x - 6 : bar.x + 6, bar.y)
+        }
         ctx.restore()
       })
     },
@@ -492,12 +497,56 @@ const labelsBienio = makeHSignedLabels('labelsBienio')
 
 const tooltipBase = { backgroundColor: '#0F172A', titleColor: '#fff', bodyColor: '#cbd5e1', padding: 12, cornerRadius: 8 }
 
+/* Con las cuatro barras rotuladas, el eje de valor repite el dato: se oculta y
+   queda solo el cero, que es lo que separa crecer de caer. */
+const gridSoloCero = ctx => (ctx.tick.value === 0 ? 'rgba(13,17,23,0.30)' : 'transparent')
+
+/* En pantallas chicas los nombres largos se parten en dos líneas: si no, el eje
+   se queda con todo el ancho y las barras se reducen a un muñón. Se corta por
+   el punto que deja la línea más larga lo más corta posible. */
+function partirEtiqueta(texto, anchoCanvas) {
+  if (anchoCanvas > 560 || texto.length <= 20) return texto
+  const palabras = texto.split(' ')
+  if (palabras.length < 2) return texto
+  let mejor = null
+  for (let i = 1; i < palabras.length; i++) {
+    const lineas = [palabras.slice(0, i).join(' '), palabras.slice(i).join(' ')]
+    const costo = Math.max(lineas[0].length, lineas[1].length)
+    if (!mejor || costo < mejor.costo) mejor = { costo, lineas }
+  }
+  return mejor.lineas
+}
+
+/* Eje de categorías. Chart.js le da como máximo el 30% del canvas y ahí
+   "Exaltación de la Cruz" pierde letras; se le permite el ancho que necesita,
+   pero sin pasar del 45% para que la barra siga siendo lo que se lee. */
+function ejeCategorias(anchoDeseado) {
+  return {
+    grid: { display: false },
+    border: { display: false },
+    ticks: {
+      font: { size: 11 },
+      /* Con etiquetas de dos líneas Chart.js saltea categorías por falta de
+         alto: acá ninguna puede faltar. */
+      autoSkip: false,
+      callback(value) {
+        return partirEtiqueta(this.getLabelForValue(value), this.chart.width)
+      },
+    },
+    afterFit(scale) {
+      scale.width = Math.max(scale.width, Math.min(anchoDeseado, scale.chart.width * 0.45))
+    },
+  }
+}
+
 function ChartRegiones() {
   const data = {
     labels: REGIONES.map(d => d.label),
+    /* Con solo dos categorías, los valores por defecto reparten las barras a lo
+       ancho de todo el canvas y el par deja de leerse como par. */
     datasets: [
-      { label: 'Dic. 2019 - dic. 2025', data: REGIONES.map(d => d.seis),   backgroundColor: DATA[2], borderRadius: 4, barPercentage: 0.6 },
-      { label: 'Dic. 2023 - dic. 2025', data: REGIONES.map(d => d.bienio), backgroundColor: DATA[1], borderRadius: 4, barPercentage: 0.6 },
+      { label: 'Dic. 2019 - dic. 2025', data: REGIONES.map(d => d.seis),   backgroundColor: DATA[2], borderRadius: 4, categoryPercentage: 0.45, barPercentage: 0.92 },
+      { label: 'Dic. 2023 - dic. 2025', data: REGIONES.map(d => d.bienio), backgroundColor: DATA[1], borderRadius: 4, categoryPercentage: 0.45, barPercentage: 0.92 },
     ],
   }
   return (
@@ -531,8 +580,8 @@ function ChartRegiones() {
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${ctx.dataset.label}: ${fmtPct(ctx.raw)}` } },
           },
           scales: {
-            y: { suggestedMin: -6, suggestedMax: 12, ticks: { callback: fmtEje }, grid: { color: 'rgba(13,17,23,0.08)' } },
-            x: { ticks: { font: { size: 10 }, maxRotation: 0 }, grid: { display: false } },
+            y: { min: -5.5, max: 11.5, ticks: { display: false }, grid: { color: gridSoloCero }, border: { display: false } },
+            x: { ticks: { font: { size: 11 }, maxRotation: 0 }, grid: { display: false }, border: { display: false } },
           },
         }}
       />
@@ -580,8 +629,8 @@ function ChartExtremos({ datos, titulo, hallazgo, columnasTabla, periodoFicha, p
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${fmtPct(ctx.raw)}` } },
           },
           scales: {
-            x: { suggestedMin: min, suggestedMax: max, ticks: { callback: fmtEje }, grid: { color: 'rgba(13,17,23,0.08)' } },
-            y: { grid: { display: false }, ticks: { font: { size: 11 } } },
+            x: { min, max, ticks: { display: false }, grid: { color: gridSoloCero }, border: { display: false } },
+            y: ejeCategorias(132),
           },
         }}
       />
@@ -844,8 +893,8 @@ export default function InformeEmpleoPrivado135Municipios() {
             columnasTabla={['Partido', 'Dic. 2019', 'Dic. 2025', 'Var. abs.', 'Var. %']}
             periodoFicha="dic. 2019 - dic. 2025"
             plugin={labelsSeis}
-            min={-25}
-            max={38}
+            min={-23}
+            max={36}
           />
         </DownloadableViz>
         <p className="text-base leading-relaxed mt-6 mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
@@ -864,8 +913,8 @@ export default function InformeEmpleoPrivado135Municipios() {
             columnasTabla={['Partido', 'Dic. 2023', 'Dic. 2025', 'Var. abs.', 'Var. %']}
             periodoFicha="dic. 2023 - dic. 2025"
             plugin={labelsBienio}
-            min={-25}
-            max={16}
+            min={-23}
+            max={14}
           />
         </DownloadableViz>
         <p className="text-base leading-relaxed mt-6" style={{ color: C.inkMid, maxWidth: '72ch' }}>

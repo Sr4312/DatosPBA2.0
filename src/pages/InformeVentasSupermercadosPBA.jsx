@@ -267,8 +267,9 @@ const fmtPct = v =>
   `${v > 0 ? '+' : v < 0 ? '−' : ''}${Math.abs(v).toLocaleString('es-AR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`
 
 /* Los ticks del eje no llevan signo "+", pero sí el menos tipográfico, para no
-   mezclar guion y U+2212 dentro del mismo gráfico. */
-const fmtEje = v => `${v < 0 ? '−' : ''}${Math.abs(v)}%`
+   mezclar guion y U+2212 dentro del mismo gráfico. Chart.js dibuja además un
+   tick sobre el límite del eje: si no cae en la grilla de a 5, se omite. */
+const fmtEje = v => (v % 5 === 0 ? `${v < 0 ? '−' : ''}${Math.abs(v)}%` : '')
 
 const fmtMill = v => v.toLocaleString('es-AR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 
@@ -277,26 +278,40 @@ const etiquetaMes = m => `${m[0]}. ${m[1]}`
 // ─── VALUE LABELS PLUGIN ─────────────────────────────────────
 
 /* En una serie de 13 puntos rotular todo satura el gráfico. Se rotula el último
-   valor de cada línea, que es el dato del mes que informa esta edición. */
+   valor de cada línea, que es el dato del mes que informa esta edición.
+   Los rótulos se apilan afuera del área de trazado, a la derecha del último
+   punto, y se separan entre sí cuando dos líneas cierran cerca: con tres series
+   el GBA y la Provincia terminaban a 2,6 puntos y las cifras se pisaban. */
+const ALTO_LABEL = 14
+
 const lastPointLabels = {
   id: 'lastPointLabels',
   afterDatasetsDraw(chart) {
-    const { ctx } = chart
-    chart.data.datasets.forEach((dataset, di) => {
+    const { ctx, chartArea } = chart
+
+    const rotulos = chart.data.datasets.map((dataset, di) => {
       const puntos = chart.getDatasetMeta(di).data
       const ultimo = puntos[puntos.length - 1]
-      if (!ultimo) return
-      const v = dataset.data[dataset.data.length - 1]
-      ctx.save()
-      // Color uniforme y no el de la serie: a 11px el teal no llega a 4.5:1
-      // sobre blanco. La asociación con su línea la da la posición del label.
-      ctx.fillStyle = '#334155'
-      ctx.font = 'bold 11px Archivo, sans-serif'
-      ctx.textAlign = 'right'
-      ctx.textBaseline = 'bottom'
-      ctx.fillText(fmtPct(v), ultimo.x - 4, ultimo.y - 8)
-      ctx.restore()
+      if (!ultimo) return null
+      return { y: ultimo.y, texto: fmtPct(dataset.data[dataset.data.length - 1]) }
+    }).filter(Boolean).sort((a, b) => a.y - b.y)
+
+    // De arriba hacia abajo: si un rótulo cae sobre el anterior, se lo empuja.
+    let piso = chartArea.top + ALTO_LABEL / 2
+    rotulos.forEach(r => {
+      r.y = Math.max(r.y, piso)
+      piso = r.y + ALTO_LABEL
     })
+
+    ctx.save()
+    // Color uniforme y no el de la serie: a 11px el teal no llega a 4.5:1
+    // sobre blanco. La asociación con su línea la da la posición del label.
+    ctx.fillStyle = '#334155'
+    ctx.font = 'bold 11px Archivo, sans-serif'
+    ctx.textAlign = 'left'
+    ctx.textBaseline = 'middle'
+    rotulos.forEach(r => ctx.fillText(r.texto, chartArea.right + 6, r.y))
+    ctx.restore()
   },
 }
 
@@ -345,14 +360,14 @@ function ChartTijera() {
         plugins={[lastPointLabels]}
         options={{
           responsive: true, maintainAspectRatio: false,
-          layout: { padding: { top: 14, right: 8 } },
+          layout: { padding: { top: 14, right: 48 } },
           interaction: { mode: 'index', intersect: false },
           plugins: {
             legend: { display: false },
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${ctx.dataset.label}: ${fmtPct(ctx.raw)}` } },
           },
           scales: {
-            y: { suggestedMin: -14, suggestedMax: 44, ticks: { callback: fmtEje }, grid: { color: gridCero } },
+            y: { min: -13, max: 42, ticks: { stepSize: 10, callback: fmtEje }, grid: { color: gridCero }, border: { display: false } },
             x: escalaMeses,
           },
         }}
@@ -396,14 +411,14 @@ function ChartRegiones() {
         plugins={[lastPointLabels]}
         options={{
           responsive: true, maintainAspectRatio: false,
-          layout: { padding: { top: 14, right: 8 } },
+          layout: { padding: { top: 14, right: 48 } },
           interaction: { mode: 'index', intersect: false },
           plugins: {
             legend: { display: false },
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${ctx.dataset.label}: ${fmtPct(ctx.raw)}` } },
           },
           scales: {
-            y: { suggestedMin: -14, suggestedMax: 12, ticks: { callback: fmtEje }, grid: { color: gridCero } },
+            y: { min: -14, max: 11, ticks: { stepSize: 5, callback: fmtEje }, grid: { color: gridCero }, border: { display: false } },
             x: escalaMeses,
           },
         }}
@@ -422,7 +437,8 @@ function TablaAcumulado() {
         <thead>
           <tr style={{ background: '#f8fafc' }}>
             {head.map((h, i) => (
-              <th key={h} style={{ textAlign: i === 0 ? 'left' : 'right', fontSize: '0.625rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0.75rem 1rem', borderBottom: `1px solid ${C.rule}` }}>{h}</th>
+              /* Hay dos columnas "Var. i.a.": la key va por posición */
+              <th key={i} style={{ textAlign: i === 0 ? 'left' : 'right', fontSize: '0.625rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0.75rem 1rem', borderBottom: `1px solid ${C.rule}` }}>{h}</th>
             ))}
           </tr>
         </thead>
@@ -456,7 +472,8 @@ function TablaSerie() {
           <thead>
             <tr style={{ background: '#f8fafc' }}>
               {head.map((h, i) => (
-                <th key={h} style={{ position: 'sticky', top: 0, background: '#f8fafc', textAlign: i === 0 ? 'left' : 'right', fontSize: '0.625rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0.625rem 1rem', borderBottom: `1px solid ${C.rule}` }}>{h}</th>
+                /* Hay dos columnas "Var. i.a.": la key va por posición */
+              <th key={i} style={{ position: 'sticky', top: 0, background: '#f8fafc', textAlign: i === 0 ? 'left' : 'right', fontSize: '0.625rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0.625rem 1rem', borderBottom: `1px solid ${C.rule}` }}>{h}</th>
               ))}
             </tr>
           </thead>
@@ -608,33 +625,30 @@ export default function InformeVentasSupermercadosPBA() {
 
       <Tesis />
 
-      {/* LA TIJERA — dos columnas, texto y gráfico */}
+      {/* LA TIJERA — prosa y gráfico a lo ancho: trece meses de dos series no
+          entran en media columna sin apretar los puntos */}
       <div className="max-w-5xl mx-auto px-6 pb-10">
         <SH title="La facturación subió 25,0% y los precios implícitos, 29,4%" />
-        <div className="grid lg:grid-cols-2 gap-x-10 items-start">
-          <div>
-            <p className="text-base leading-relaxed mb-4" style={{ color: C.inkMid }}>
-              Los supermercados bonaerenses facturaron $839.081,7 millones en mayo. Es el registro nominal
-              más alto de 2026 y solo diciembre lo supera en los últimos trece meses. Medida a precios
-              constantes de diciembre de 2016, esa misma facturación equivale a $7.514,2 millones, un 3,4%
-              menos que un año atrás.
-            </p>
-            <p className="text-base leading-relaxed mb-4" style={{ color: C.inkMid }}>
-              La distancia entre las dos lecturas es el índice de precios implícitos de la góndola
-              bonaerense, que subió 29,4% interanual y 1,5% respecto de abril. Con precios creciendo más
-              rápido que las ventas, la facturación sube y el volumen baja al mismo tiempo.
-            </p>
-            <p className="text-base leading-relaxed" style={{ color: C.inkMid }}>
-              Las dos curvas no se cruzaron en ningún momento de la serie: el volumen cayó en doce de los
-              trece meses relevados y la única suba fue la de mayo de 2025. El peor registro real es el de
-              marzo de 2026, con la facturación creciendo 16,7% y el volumen cayendo 10,2%. Mayo es el mejor
-              dato real desde diciembre.
-            </p>
-          </div>
-          <DownloadableViz title="Ventas en supermercados de la PBA a precios corrientes y constantes" fuente="Dir. Prov. de Estadística sobre Encuesta de supermercados del INDEC">
-            <ChartTijera />
-          </DownloadableViz>
-        </div>
+        <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          Los supermercados bonaerenses facturaron $839.081,7 millones en mayo. Es el registro nominal
+          más alto de 2026 y solo diciembre lo supera en los últimos trece meses. Medida a precios
+          constantes de diciembre de 2016, esa misma facturación equivale a $7.514,2 millones, un 3,4%
+          menos que un año atrás.
+        </p>
+        <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          La distancia entre las dos lecturas es el índice de precios implícitos de la góndola
+          bonaerense, que subió 29,4% interanual y 1,5% respecto de abril. Con precios creciendo más
+          rápido que las ventas, la facturación sube y el volumen baja al mismo tiempo.
+        </p>
+        <p className="text-base leading-relaxed" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          Las dos curvas no se cruzaron en ningún momento de la serie: el volumen cayó en doce de los
+          trece meses relevados y la única suba fue la de mayo de 2025. El peor registro real es el de
+          marzo de 2026, con la facturación creciendo 16,7% y el volumen cayendo 10,2%. Mayo es el mejor
+          dato real desde diciembre.
+        </p>
+        <DownloadableViz title="Ventas en supermercados de la PBA a precios corrientes y constantes" fuente="Dir. Prov. de Estadística sobre Encuesta de supermercados del INDEC">
+          <ChartTijera />
+        </DownloadableViz>
       </div>
 
       {/* LA DIVERGENCIA TERRITORIAL — gráfico primero, después prosa */}

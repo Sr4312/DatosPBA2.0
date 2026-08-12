@@ -369,6 +369,46 @@ const hValueLabels = {
 
 const tooltipBase = { backgroundColor: '#0F172A', titleColor: '#fff', bodyColor: '#cbd5e1', padding: 12, cornerRadius: 8 }
 
+/* En pantallas chicas los nombres largos se parten en dos líneas: si no, el eje
+   se queda con todo el ancho y las barras se reducen a un muñón. Se corta por
+   el punto que deja la línea más larga lo más corta posible: partir por la
+   mitad de los caracteres desbalancea cuando hay una palabra dominante
+   ("Min. de" / "Infraestructura y Serv. Públicos"). */
+function partirEtiqueta(texto, anchoCanvas) {
+  if (anchoCanvas > 560 || texto.length <= 20) return texto
+  const palabras = texto.split(' ')
+  if (palabras.length < 2) return texto
+  let mejor = null
+  for (let i = 1; i < palabras.length; i++) {
+    const lineas = [palabras.slice(0, i).join(' '), palabras.slice(i).join(' ')]
+    const costo = Math.max(lineas[0].length, lineas[1].length)
+    if (!mejor || costo < mejor.costo) mejor = { costo, lineas }
+  }
+  return mejor.lineas
+}
+
+/* Eje de categorías. Chart.js le da como máximo el 30% del canvas y ahí los
+   nombres largos pierden letras; se le permite el ancho que necesita, pero sin
+   pasar del 45% para que la barra siga siendo lo que se lee. */
+function ejeCategorias(anchoDeseado) {
+  return {
+    grid: { display: false },
+    border: { display: false },
+    ticks: {
+      font: { size: 11 },
+      /* Con etiquetas de dos líneas Chart.js saltea categorías por falta de
+         alto: acá ninguna puede faltar. */
+      autoSkip: false,
+      callback(value) {
+        return partirEtiqueta(this.getLabelForValue(value), this.chart.width)
+      },
+    },
+    afterFit(scale) {
+      scale.width = Math.max(scale.width, Math.min(anchoDeseado, scale.chart.width * 0.45))
+    },
+  }
+}
+
 function ChartUniversos() {
   const data = {
     labels: UNIVERSOS.map(u => u.label),
@@ -447,8 +487,10 @@ function ChartRanking() {
             tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${fmtNum(ctx.raw)} cargos (${share(ctx.raw)})` } },
           },
           scales: {
-            x: { suggestedMax: 400, grid: { color: 'rgba(13,17,23,0.08)' } },
-            y: { grid: { display: false }, ticks: { font: { size: 10.5 } } },
+            /* Cada barra lleva su cifra escrita al lado: el eje de valor sería
+               el mismo dato dos veces y le come ancho al gráfico. */
+            x: { min: 0, ticks: { display: false }, grid: { display: false }, border: { display: false } },
+            y: ejeCategorias(210),
           },
         }}
       />
