@@ -47,20 +47,23 @@ const B = {
 
 // ─── DATOS ───────────────────────────────────────────────────
 
+/* Serie actualizada con las estimaciones revisadas que publicó la Dirección
+   Provincial de Estadística en la edición de abril de 2026. Marzo de 2025 es la
+   única fila sin revisar: queda fuera de la ventana de esa publicación. */
 const SERIE = [
   { label: 'Mar-25', gen: 83.7, des: 85.0 },
-  { label: 'Abr-25', gen: 89.6, des: 89.9 },
-  { label: 'May-25', gen: 90.5, des: 89.3 },
+  { label: 'Abr-25', gen: 89.6, des: 89.7 },
+  { label: 'May-25', gen: 90.5, des: 89.4 },
   { label: 'Jun-25', gen: 85.9, des: 87.7 },
-  { label: 'Jul-25', gen: 91.4, des: 86.8 },
+  { label: 'Jul-25', gen: 91.4, des: 86.7 },
   { label: 'Ago-25', gen: 92.9, des: 91.0 },
-  { label: 'Sep-25', gen: 92.3, des: 88.0 },
-  { label: 'Oct-25', gen: 93.8, des: 87.8 },
-  { label: 'Nov-25', gen: 83.7, des: 83.0 },
-  { label: 'Dic-25', gen: 86.4, des: 86.4 },
-  { label: 'Ene-26', gen: 81.8, des: 90.6 },
-  { label: 'Feb-26', gen: 80.5, des: 88.8 },
-  { label: 'Mar-26', gen: 94.7, des: 94.1 },
+  { label: 'Sep-25', gen: 92.3, des: 88.1 },
+  { label: 'Oct-25', gen: 93.8, des: 88.0 },
+  { label: 'Nov-25', gen: 83.7, des: 83.1 },
+  { label: 'Dic-25', gen: 86.4, des: 86.6 },
+  { label: 'Ene-26', gen: 82.0, des: 90.7 },
+  { label: 'Feb-26', gen: 80.5, des: 88.7 },
+  { label: 'Mar-26', gen: 95.0, des: 94.3 },
 ]
 
 const VAR_INTERANUAL = [
@@ -74,26 +77,26 @@ const VAR_INTERANUAL = [
   { label: 'Oct-25', value: 0.4 },
   { label: 'Nov-25', value: -10.2 },
   { label: 'Dic-25', value: -3.5 },
-  { label: 'Ene-26', value: -1.6 },
-  { label: 'Feb-26', value: -1.3 },
-  { label: 'Mar-26', value: 13.2 },
+  { label: 'Ene-26', value: -1.3 },
+  { label: 'Feb-26', value: -1.2 },
+  { label: 'Mar-26', value: 13.5 },
 ]
 
 // Cuadro 1 completo: [Período, Índice, Desestac., Var. mensual desestac., Var. interanual, Var. acumulada]
 const TABLA_SERIE = [
   ['Mar-25', '83,7', '85,0', '−5,9', '2,3', '5,4'],
-  ['Abr-25', '89,6', '89,9', '5,8', '8,4', '6,2'],
-  ['May-25', '90,5', '89,3', '−0,6', '3,1', '5,5'],
-  ['Jun-25', '85,9', '87,7', '−1,8', '8,7', '6,0'],
-  ['Jul-25', '91,4', '86,8', '−1,1', '1,1', '5,3'],
-  ['Ago-25', '92,9', '91,0', '4,9', '1,2', '4,7'],
-  ['Sep-25', '92,3', '88,0', '−3,3', '2,9', '4,5'],
-  ['Oct-25', '93,8', '87,8', '−0,2', '0,4', '4,0'],
-  ['Nov-25', '83,7', '83,0', '−5,5', '−10,2', '2,6'],
-  ['Dic-25', '86,4', '86,4', '4,1', '−3,5', '2,1'],
-  ['Ene-26', '81,8', '90,6', '4,8', '−1,6', '−1,6'],
-  ['Feb-26', '80,5', '88,8', '−1,9', '−1,3', '−1,4'],
-  ['Mar-26', '94,7', '94,1', '5,9', '13,2', '3,5'],
+  ['Abr-25', '89,6', '89,7', '5,6', '8,4', '6,2'],
+  ['May-25', '90,5', '89,4', '−0,3', '3,1', '5,5'],
+  ['Jun-25', '85,9', '87,7', '−2,0', '8,7', '6,0'],
+  ['Jul-25', '91,4', '86,7', '−1,1', '1,1', '5,3'],
+  ['Ago-25', '92,9', '91,0', '5,0', '1,2', '4,7'],
+  ['Sep-25', '92,3', '88,1', '−3,3', '2,9', '4,5'],
+  ['Oct-25', '93,8', '88,0', '−0,1', '0,4', '4,0'],
+  ['Nov-25', '83,7', '83,1', '−5,5', '−10,2', '2,6'],
+  ['Dic-25', '86,4', '86,6', '4,1', '−3,5', '2,1'],
+  ['Ene-26', '82,0', '90,7', '4,8', '−1,3', '−1,3'],
+  ['Feb-26', '80,5', '88,7', '−2,2', '−1,2', '−1,3'],
+  ['Mar-26', '95,0', '94,3', '6,3', '13,5', '3,7'],
 ]
 
 // Cuadro 2: bloques industriales (marzo 2026), ordenados por var. interanual desc.
@@ -111,16 +114,17 @@ const BLOQUES = [
   { label: 'Metales comunes',        indice: 63.8,  varia: -14.0, acum: -7.1,  inc: -0.89 },
 ]
 
-// Incidencia sobre el +13,2% agregado, ordenada desc.
+// Incidencia sobre el agregado de marzo, ordenada desc. Suma 13,20 pp: es la
+// apertura original, que la fuente no republicó al revisar el agregado a 13,5%.
 const INCIDENCIAS = [...BLOQUES].sort((a, b) => b.inc - a.inc)
 
 /* La valoración de cada cifra se declara acá y el color lo deriva <Cifra>:
    nunca se asigna un color a mano. */
 const HERO_STATS = [
-  { valor: '+13,2%', variacion: '+13,2%', polaridad: 'mayor-es-mejor', periodo: 'suba interanual del ISIM-PBA en marzo de 2026' },
-  { valor: '+5,9%',  variacion: '+5,9%',  polaridad: 'mayor-es-mejor', periodo: 'variación mensual desestacionalizada frente a febrero' },
+  { valor: '+13,5%', variacion: '+13,5%', polaridad: 'mayor-es-mejor', periodo: 'suba interanual del ISIM-PBA en marzo de 2026' },
+  { valor: '+6,3%',  variacion: '+6,3%',  polaridad: 'mayor-es-mejor', periodo: 'variación mensual desestacionalizada frente a febrero' },
   { valor: '9 de 11', periodo: 'bloques industriales con alza interanual en marzo' },
-  { valor: '+3,5%',  variacion: '+3,5%',  polaridad: 'mayor-es-mejor', periodo: 'acumulado del primer trimestre 2026 vs. 2025' },
+  { valor: '+3,7%',  variacion: '+3,7%',  polaridad: 'mayor-es-mejor', periodo: 'acumulado del primer trimestre 2026 vs. 2025' },
 ]
 
 // ─── DOWNLOAD ────────────────────────────────────────────────
@@ -563,6 +567,13 @@ function TablaBloques() {
           </tr>
         </tbody>
       </table>
+      {/* La revisión de la fuente alcanzó al agregado, no a la apertura por
+          bloque: el cuadro se deja tal como se publicó, sin mezclar cifras
+          revisadas con originales en la misma tabla. */}
+      <p style={{ fontSize: '0.72rem', color: C.inkLight, lineHeight: 1.5, padding: '0.625rem 1rem', borderTop: `1px solid ${C.rule}` }}>
+        Apertura por bloque según la publicación original de junio de 2026, no alcanzada por la revisión
+        posterior de la fuente. El agregado revisado es 95,0 puntos y 13,5% interanual.
+      </p>
     </div>
   )
 }
@@ -586,14 +597,14 @@ function Hero() {
           style={{ fontSize: 'clamp(2rem, 4.6vw, 3.2rem)', fontWeight: 700, color: '#fff', lineHeight: 1.12, marginBottom: 20, maxWidth: 820 }}
         >
           La industria manufacturera bonaerense<br />
-          <span>rebotó 13,2% en marzo</span>
+          <span>rebotó 13,5% en marzo</span>
         </h1>
 
         <p
           style={{ color: 'rgba(255,255,255,0.60)', maxWidth: 720, lineHeight: 1.7, fontSize: '1.05rem' }}
         >
           Tras un primer bimestre de 2026 en baja, el ISIM-PBA marcó en marzo su mayor suba interanual reciente para ese mes, impulsada por{' '}
-          <strong style={{ color: 'rgba(255,255,255,0.9)' }}>Productos químicos y Máquinas y equipos</strong>. Nueve de once bloques crecieron, aunque siete siguen por debajo de los niveles de actividad de 2012.
+          <strong style={{ color: 'rgba(255,255,255,0.9)' }}>Productos químicos y Máquinas y equipos</strong>. Nueve de once bloques crecieron, aunque nueve siguen por debajo de los niveles de actividad de 2012.
         </p>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12">
@@ -614,8 +625,8 @@ function Hero() {
           {[
             { label: 'Fuente',       val: 'Dirección Provincial de Estadística · ME PBA' },
             { label: 'Indicador',    val: 'ISIM-PBA · base 2012=100' },
-            { label: 'Dato',         val: 'Marzo 2026 (preliminar)' },
-            { label: 'Actualización', val: 'Julio 2026' },
+            { label: 'Dato',         val: 'Marzo 2026 (revisado)' },
+            { label: 'Actualización', val: 'Agosto 2026' },
           ].map(item => (
             <div key={item.label}>
               <div style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{item.label}</div>
@@ -638,8 +649,8 @@ function Tesis() {
           El rebote de marzo se apoya en una base de comparación baja y en dos bloques
         </h2>
         <p style={{ color: C.inkMid, fontSize: 'clamp(1.05rem, 2.2vw, 1.25rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
-          La industria bonaerense creció <strong>13,2% interanual en marzo</strong>, el mayor salto reciente para ese mes,
-          pero sobre una base de comparación baja: enero y febrero cerraron en caída y <strong>7 de 11 bloques</strong> siguen por debajo de 2012.
+          La industria bonaerense creció <strong>13,5% interanual en marzo</strong>, el mayor salto reciente para ese mes,
+          pero sobre una base de comparación baja: enero y febrero cerraron en caída y <strong>9 de 11 bloques</strong> siguen por debajo de 2012.
           Además, el alza estuvo muy concentrada en Productos químicos y Máquinas y equipos.{' '}
           Los datos no alcanzan para saber si marzo inicia una tendencia o responde a factores puntuales de comparación.
         </p>
@@ -666,11 +677,11 @@ export default function InformeIndustriaManufactureraPBA() {
             El Indicador Sintético de la Industria Manufacturera de la provincia de Buenos Aires (ISIM-PBA) es elaborado por la Dirección Provincial de Estadística del Ministerio de Economía bonaerense a partir de un relevamiento propio sobre establecimientos industriales de la Provincia. Tiene base 2012=100 y sigue la evolución de corto plazo de la actividad fabril, una referencia clave dado que la Provincia concentra una porción sustancial de la producción manufacturera del país.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5" style={{ maxWidth: 580 }}>
-            <CifraCard label="Índice ISIM-PBA (mar. 2026)" valor="94,7" periodo="base 2012=100 · dato preliminar" />
+            <CifraCard label="Índice ISIM-PBA (mar. 2026)" valor="95,0" periodo="base 2012=100 · dato revisado" />
             <CifraCard label="Bloques sectoriales relevados" valor="11" periodo="ramas de la industria manufacturera" />
           </div>
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            El indicador se desagrega en once bloques: alimentos y bebidas, tabaco, textiles y cueros, papel y cartón, refinación de petróleo, productos químicos, caucho y plástico, minerales no metálicos, metales comunes, máquinas y equipos, y vehículos automotores. El dato de marzo de 2026 es preliminar y está sujeto a revisión.
+            El indicador se desagrega en once bloques: alimentos y bebidas, tabaco, textiles y cueros, papel y cartón, refinación de petróleo, productos químicos, caucho y plástico, minerales no metálicos, metales comunes, máquinas y equipos, y vehículos automotores. El dato de marzo de 2026 se publicó como preliminar y la fuente ya lo revisó: esta página recoge los valores corregidos.
           </p>
         </div>
 
@@ -678,11 +689,11 @@ export default function InformeIndustriaManufactureraPBA() {
         <div>
           <SH title="El rebote de marzo revierte el arranque de año" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            En marzo de 2026 el ISIM-PBA alcanzó 94,7 puntos, frente a 83,7 en marzo de 2025: una suba interanual del 13,2%. En la comparación desestacionalizada, el índice se ubicó en 94,1 puntos, con un alza del 5,9% respecto de febrero, que había marcado 80,5 puntos, el nivel más bajo del período analizado.
+            En marzo de 2026 el ISIM-PBA alcanzó 95,0 puntos, frente a 83,7 en marzo de 2025: una suba interanual del 13,5%. En la comparación desestacionalizada, el índice se ubicó en 94,3 puntos, con un alza del 6,3% respecto de febrero, que había marcado 80,5 puntos, el nivel más bajo del período analizado.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <CifraCard label="ISIM-PBA (mar. 2026)" valor="94,7" periodo="vs. 83,7 en marzo de 2025" />
-            <CifraCard label="Serie desestacionalizada" valor="94,1" variacion="+5,9%" polaridad="mayor-es-mejor" periodo="respecto de febrero" />
+            <CifraCard label="ISIM-PBA (mar. 2026)" valor="95,0" periodo="vs. 83,7 en marzo de 2025" />
+            <CifraCard label="Serie desestacionalizada" valor="94,3" variacion="+6,3%" polaridad="mayor-es-mejor" periodo="respecto de febrero" />
             <CifraCard label="Piso reciente (feb. 2026)" valor="80,5" periodo="el nivel más bajo del período" />
           </div>
           <p className="text-base leading-relaxed mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
@@ -695,13 +706,13 @@ export default function InformeIndustriaManufactureraPBA() {
 
         {/* 03 */}
         <div>
-          <SH title="De tres meses en rojo al salto del 13,2%" />
+          <SH title="De cuatro meses en rojo al salto del 13,5%" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            El primer bimestre de 2026 había mostrado variaciones interanuales negativas -enero −1,6% y febrero −1,3%-, en línea con la caída de noviembre de 2025 (−10,2%), la mayor del período. Con el salto de marzo (+13,2%), el acumulado del primer trimestre se ubicó 3,5% por encima de igual período de 2025.
+            El indicador acumuló cuatro caídas interanuales seguidas entre noviembre de 2025 y febrero de 2026: −10,2%, −3,5%, −1,3% y −1,2%. La de noviembre es la mayor del período. Con el salto de marzo (+13,5%), el acumulado del primer trimestre se ubicó 3,7% por encima de igual período de 2025.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <CifraCard label="Acumulado 1er trimestre 2026" valor="+3,5%" variacion="+3,5%" polaridad="mayor-es-mejor" periodo="respecto de igual período de 2025" />
-            <CifraCard label="Enero / febrero 2026" valor="−1,6% / −1,3%" variacion="−1,6% / −1,3%" polaridad="mayor-es-mejor" periodo="caídas interanuales" />
+            <CifraCard label="Acumulado 1er trimestre 2026" valor="+3,7%" variacion="+3,7%" polaridad="mayor-es-mejor" periodo="respecto de igual período de 2025" />
+            <CifraCard label="Enero / febrero 2026" valor="−1,3% / −1,2%" variacion="−1,3% / −1,2%" polaridad="mayor-es-mejor" periodo="caídas interanuales" />
             <CifraCard label="Noviembre 2025" valor="−10,2%" variacion="−10,2%" polaridad="mayor-es-mejor" periodo="la mayor caída del período" />
           </div>
           <DownloadableViz title="ISIM-PBA: variación interanual mensual (mar. 2025 – mar. 2026)" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA - ISIM-PBA">
@@ -734,12 +745,12 @@ export default function InformeIndustriaManufactureraPBA() {
         <div>
           <SH title="El alza la explican dos bloques" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            Detrás del +13,2% agregado hay un crecimiento fuertemente concentrado. Productos químicos aportó 6,78 puntos porcentuales y Máquinas y equipos 1,96: entre ambos explican más de dos tercios de la incidencia positiva total. Les siguieron Alimentos y bebidas (1,89 p.p.), Refinación de petróleo (1,27) y Textiles y cueros (1,20).
+            Detrás del salto agregado hay un crecimiento fuertemente concentrado. Productos químicos aportó 6,78 puntos porcentuales y Máquinas y equipos 1,96: entre ambos explican dos tercios de la variación agregada del mes. Les siguieron Alimentos y bebidas (1,89 p.p.), Refinación de petróleo (1,27) y Textiles y cueros (1,20).
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
-            <CifraCard label="Productos químicos" valor="6,78 pp" periodo="de incidencia en el +13,2%" />
+            <CifraCard label="Productos químicos" valor="6,78 pp" periodo="el mayor aporte del mes" />
             <CifraCard label="Máquinas y equipos" valor="1,96 pp" periodo="segundo mayor aporte" />
-            <CifraCard label="Químicos + Máquinas" valor=">2/3" periodo="de la incidencia positiva total" />
+            <CifraCard label="Químicos + Máquinas" valor="2/3" periodo="de la variación agregada del mes" />
           </div>
           <DownloadableViz title="Incidencia de cada bloque en la variación interanual del ISIM-PBA (marzo 2026)" fuente="Dirección Provincial de Estadística, Ministerio de Economía PBA - ISIM-PBA">
             <ChartIncidencias />
@@ -750,12 +761,12 @@ export default function InformeIndustriaManufactureraPBA() {
         <div>
           <SH title="Autos, metales y una base todavía baja" />
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            El repunte tiene matices. Vehículos automotores acumuló su quinta baja interanual consecutiva (−6,8%) y Metales comunes cayó 14,0%, con incidencias negativas de 0,62 y 0,89 puntos porcentuales respectivamente. Además, pese al crecimiento generalizado, siete de los once bloques permanecen por debajo de los niveles de actividad del año base 2012, lo que matiza la lectura del salto interanual de marzo.
+            El repunte tiene matices. Vehículos automotores acumuló su quinta baja interanual consecutiva (−6,8%) y Metales comunes cayó 14,0%, con incidencias negativas de 0,62 y 0,89 puntos porcentuales respectivamente. Además, pese al crecimiento generalizado, nueve de los once bloques permanecen por debajo de los niveles de actividad del año base 2012: solo Refinación de petróleo (129,0) y Productos químicos (124,5) lo superan. Eso matiza la lectura del salto interanual de marzo.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
             <CifraCard label="Vehículos automotores" valor="−6,8%" variacion="−6,8%" polaridad="mayor-es-mejor" periodo="quinta baja interanual seguida" />
             <CifraCard label="Metales comunes" valor="−14,0%" variacion="−14,0%" polaridad="mayor-es-mejor" periodo="incidencia de −0,89 p.p." />
-            <CifraCard label="Bloques bajo el nivel 2012" valor="7 de 11" periodo="aún por debajo del año base" />
+            <CifraCard label="Bloques bajo el nivel 2012" valor="9 de 11" periodo="aún por debajo del año base" />
           </div>
         </div>
 
@@ -764,7 +775,13 @@ export default function InformeIndustriaManufactureraPBA() {
           <div style={{ borderTop: `1px solid ${C.rule}`, marginTop: '3rem', paddingTop: '1.5rem' }}>
             <SectionLabel>Nota metodológica</SectionLabel>
             <p style={{ fontSize: '0.8125rem', color: C.inkMid, lineHeight: 1.75, maxWidth: '72ch' }}>
-              El ISIM-PBA se construye con base 2012=100 a partir de un relevamiento propio de la Dirección Provincial de Estadística sobre establecimientos industriales bonaerenses. El dato de marzo de 2026 es preliminar y los meses de 2025 y 2026 son provisorios, por lo que pueden revisarse en publicaciones posteriores. La serie desestacionalizada corrige los efectos de calendario y estacionalidad, y puede diferir del nivel general en la lectura mensual. La "incidencia" mide el aporte, en puntos porcentuales, de cada bloque a la variación interanual del índice agregado. Los datos corresponden a información difundida en junio de 2026.
+              El ISIM-PBA se construye con base 2012=100 a partir de un relevamiento propio de la Dirección Provincial de Estadística sobre establecimientos industriales bonaerenses. La serie desestacionalizada corrige los efectos de calendario y estacionalidad, y puede diferir del nivel general en la lectura mensual. La "incidencia" mide el aporte, en puntos porcentuales, de cada bloque a la variación interanual del índice agregado.
+            </p>
+            <p style={{ fontSize: '0.8125rem', color: C.inkMid, lineHeight: 1.75, maxWidth: '72ch', marginTop: '0.75rem' }}>
+              <strong style={{ color: C.ink }}>Actualización de agosto de 2026.</strong> Este informe se publicó en julio con los datos difundidos en junio de 2026. En su edición de abril, la Dirección Provincial de Estadística revisó las estimaciones de los meses anteriores y las cifras de esta página se actualizaron en consecuencia: la variación interanual de marzo pasó de 13,2% a 13,5%, el índice de 94,7 a 95,0 puntos, la variación mensual desestacionalizada de 5,9% a 6,3% y el acumulado del trimestre de 3,5% a 3,7%. Marzo de 2025 es la única fila del cuadro que conserva su valor original, por quedar fuera de la ventana revisada.
+            </p>
+            <p style={{ fontSize: '0.8125rem', color: C.inkMid, lineHeight: 1.75, maxWidth: '72ch', marginTop: '0.75rem' }}>
+              La apertura por bloque industrial <strong style={{ color: C.ink }}>no fue republicada</strong> con la revisión: los índices, variaciones e incidencias de cada rama son los originales y suman 13,2 puntos, no los 13,5 del agregado revisado. La diferencia, de tres décimas, no altera el orden de los bloques ni la lectura de concentración del mes.
             </p>
           </div>
         </div>
@@ -779,7 +796,7 @@ export default function InformeIndustriaManufactureraPBA() {
               Fuentes
             </p>
             <p className="text-sm mt-1" style={{ color: C.inkMid }}>
-              Dirección Provincial de Estadística, Ministerio de Economía de la Provincia de Buenos Aires - Indicador Sintético de la Industria Manufacturera de la provincia de Buenos Aires (ISIM-PBA). Datos a marzo de 2026, difundidos en junio de 2026 · ec.gba.gov.ar
+              Dirección Provincial de Estadística, Ministerio de Economía de la Provincia de Buenos Aires - Indicador Sintético de la Industria Manufacturera de la provincia de Buenos Aires (ISIM-PBA). Datos a marzo de 2026, difundidos en junio de 2026 y revisados en la edición de abril de 2026, publicada en julio · ec.gba.gov.ar
             </p>
             <a
               href="https://www.ec.gba.gov.ar"
