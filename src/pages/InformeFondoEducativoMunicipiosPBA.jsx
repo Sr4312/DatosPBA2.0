@@ -31,71 +31,87 @@ const C = {
 
 // ─── DATOS ───────────────────────────────────────────────────
 
-/* Fondo de Financiamiento Educativo acumulado enero-diciembre 2025 y población
-   del Censo 2022. `fondo` va en millones de pesos; `perCapita`, en pesos por
-   habitante. */
+/* Fondo de Financiamiento Educativo acumulado enero-diciembre 2025 sobre la
+   matrícula estatal 2025 de cada distrito. `fondo` va en millones de pesos;
+   `matricula`, en alumnos del sistema estatal; `porAlumno`, en pesos. */
 const TOP15 = [
-  { pos: 1,  muni: 'Pila',                   pob: 4642,  fondo: 752,   perCapita: 161960 },
-  { pos: 2,  muni: 'General Guido',          pob: 3174,  fondo: 508,   perCapita: 159918 },
-  { pos: 3,  muni: 'General Lavalle',        pob: 4870,  fondo: 677,   perCapita: 138969 },
-  { pos: 4,  muni: 'Tordillo',               pob: 2542,  fondo: 303,   perCapita: 119093 },
-  { pos: 5,  muni: 'Guaminí',                pob: 11801, fondo: 1277,  perCapita: 108234 },
-  { pos: 6,  muni: 'General La Madrid',      pob: 11618, fondo: 1161,  perCapita: 99953  },
-  { pos: 7,  muni: 'Tapalqué',               pob: 10783, fondo: 1073,  perCapita: 99509  },
-  { pos: 8,  muni: 'Ayacucho',               pob: 21977, fondo: 1883,  perCapita: 85696  },
-  { pos: 9,  muni: 'Laprida',                pob: 11646, fondo: 982,   perCapita: 84317  },
-  { pos: 10, muni: 'Carlos Tejedor',         pob: 14079, fondo: 1169,  perCapita: 83047  },
-  { pos: 11, muni: 'General Alvear',         pob: 13031, fondo: 1079,  perCapita: 82823  },
-  { pos: 12, muni: 'Adolfo Gonzales Chaves', pob: 12914, fondo: 1061,  perCapita: 82162  },
-  { pos: 13, muni: 'Lobería',                pob: 18243, fondo: 1488,  perCapita: 81541  },
-  { pos: 14, muni: 'Villarino',              pob: 32717, fondo: 2645,  perCapita: 80838  },
-  { pos: 15, muni: 'Adolfo Alsina',          pob: 17552, fondo: 1399,  perCapita: 79714  },
+  { pos: 1,  muni: 'Puán',                   matricula: 1804, fondo: 1323, porAlumno: 733196 },
+  { pos: 2,  muni: 'General Guido',          matricula: 719,  fondo: 508,  porAlumno: 705954 },
+  { pos: 3,  muni: 'Pila',                   matricula: 1079, fondo: 752,  porAlumno: 696774 },
+  { pos: 4,  muni: 'General Alvear',         matricula: 1892, fondo: 1079, porAlumno: 570434 },
+  { pos: 5,  muni: 'Rauch',                  matricula: 2136, fondo: 1162, porAlumno: 544076 },
+  { pos: 6,  muni: 'Adolfo Gonzales Chaves', matricula: 1985, fondo: 1061, porAlumno: 534527 },
+  { pos: 7,  muni: 'Carlos Tejedor',         matricula: 2188, fondo: 1169, porAlumno: 534378 },
+  { pos: 8,  muni: 'Tordillo',               matricula: 585,  fondo: 303,  porAlumno: 517496 },
+  { pos: 9,  muni: 'Guaminí',                matricula: 2486, fondo: 1277, porAlumno: 513783 },
+  { pos: 10, muni: 'Pellegrini',             matricula: 1074, fondo: 532,  porAlumno: 495203 },
+  { pos: 11, muni: 'Tapalqué',               matricula: 2202, fondo: 1073, porAlumno: 487287 },
+  { pos: 12, muni: 'Lezama',                 matricula: 887,  fondo: 425,  porAlumno: 479032 },
+  { pos: 13, muni: 'San Cayetano',           matricula: 1487, fondo: 704,  porAlumno: 473605 },
+  { pos: 14, muni: 'Adolfo Alsina',          matricula: 3070, fondo: 1399, porAlumno: 455745 },
+  { pos: 15, muni: 'General La Madrid',      matricula: 2553, fondo: 1161, porAlumno: 454858 },
 ]
 
-/* Los quince últimos son, sin excepción, partidos de los 24 del GBA. */
+/* Medido por habitante, los quince últimos eran los 15 partidos del GBA. Por
+   alumno son ocho del GBA y siete de afuera, por eso la columna `gba`. */
 const BOTTOM15 = [
-  { pos: 121, muni: 'Quilmes',              pob: 633391,  fondo: 12874, perCapita: 20326 },
-  { pos: 122, muni: 'La Matanza',           pob: 1841247, fondo: 37289, perCapita: 20252 },
-  { pos: 123, muni: 'Almirante Brown',      pob: 584827,  fondo: 11798, perCapita: 20174 },
-  { pos: 124, muni: 'Hurlingham',           pob: 185641,  fondo: 3653,  perCapita: 19678 },
-  { pos: 125, muni: 'Morón',                pob: 331183,  fondo: 6403,  perCapita: 19335 },
-  { pos: 126, muni: 'San Fernando',         pob: 171616,  fondo: 3304,  perCapita: 19250 },
-  { pos: 127, muni: 'Lanús',                pob: 461267,  fondo: 8713,  perCapita: 18890 },
-  { pos: 128, muni: 'Tigre',                pob: 446949,  fondo: 8431,  perCapita: 18863 },
-  { pos: 129, muni: 'San Miguel',           pob: 328835,  fondo: 6167,  perCapita: 18754 },
-  { pos: 130, muni: 'Malvinas Argentinas',  pob: 350674,  fondo: 6374,  perCapita: 18176 },
-  { pos: 131, muni: 'Ituzaingó',            pob: 180232,  fondo: 3068,  perCapita: 17023 },
-  { pos: 132, muni: 'General San Martín',   pob: 450575,  fondo: 7528,  perCapita: 16707 },
-  { pos: 133, muni: 'Tres de Febrero',      pob: 364176,  fondo: 5911,  perCapita: 16232 },
-  { pos: 134, muni: 'San Isidro',           pob: 297282,  fondo: 4311,  perCapita: 14500 },
-  { pos: 135, muni: 'Vicente López',        pob: 282281,  fondo: 3762,  perCapita: 13328 },
+  { pos: 121, muni: 'Berazategui',        matricula: 59682,  fondo: 8161,  porAlumno: 136741, gba: true  },
+  { pos: 122, muni: 'Almirante Brown',    matricula: 89845,  fondo: 11798, porAlumno: 131319, gba: true  },
+  { pos: 123, muni: 'Florencio Varela',   matricula: 90082,  fondo: 11827, porAlumno: 131295, gba: true  },
+  { pos: 124, muni: 'Pinamar',            matricula: 8283,   fondo: 1086,  porAlumno: 131145, gba: false },
+  { pos: 125, muni: 'La Costa',           matricula: 19485,  fondo: 2545,  porAlumno: 130621, gba: false },
+  { pos: 126, muni: 'Escobar',            matricula: 46799,  fondo: 6002,  porAlumno: 128240, gba: false },
+  { pos: 127, muni: 'Esteban Echeverría', matricula: 61133,  fondo: 7761,  porAlumno: 126950, gba: true  },
+  { pos: 128, muni: 'Merlo',              matricula: 105659, fondo: 13134, porAlumno: 124301, gba: true  },
+  { pos: 129, muni: 'Presidente Perón',   matricula: 23069,  fondo: 2855,  porAlumno: 123757, gba: false },
+  { pos: 130, muni: 'Pilar',              matricula: 68595,  fondo: 8318,  porAlumno: 121269, gba: false },
+  { pos: 131, muni: 'Moreno',             matricula: 111894, fondo: 13558, porAlumno: 121170, gba: true  },
+  { pos: 132, muni: 'San Vicente',        matricula: 24016,  fondo: 2899,  porAlumno: 120722, gba: false },
+  { pos: 133, muni: 'José C. Paz',        matricula: 59469,  fondo: 7164,  porAlumno: 120473, gba: true  },
+  { pos: 134, muni: 'Ezeiza',             matricula: 41179,  fondo: 4916,  porAlumno: 119370, gba: true  },
+  { pos: 135, muni: 'General Rodríguez',  matricula: 34334,  fondo: 3786,  porAlumno: 110256, gba: false },
 ]
 
 const GRUPOS = [
-  { grupo: 'GBA (24 partidos)',           pobPct: 61.9, fondosPct: 49.3 },
-  { grupo: 'Resto de la Provincia (111)', pobPct: 38.1, fondosPct: 50.7 },
+  { grupo: 'GBA (24 partidos)',           matriculaPct: 58.1, fondosPct: 49.3 },
+  { grupo: 'Resto de la Provincia (111)', matriculaPct: 41.9, fondosPct: 50.7 },
 ]
 
-/* Los dos instrumentos de transferencia, lado a lado. La columna de
-   coparticipación sale del informe anterior de esta serie. */
-const COMPARACION = [
-  { concepto: 'Monto repartido en 2025',              copa: '$3.605.037 millones', ffe: '$444.611 millones' },
-  { concepto: 'Por habitante, promedio provincial',   copa: '$205.720',            ffe: '$25.372' },
-  { concepto: 'Participación del GBA en los fondos',  copa: '46,4%',               ffe: '49,3%' },
-  { concepto: 'Por habitante, GBA',                   copa: '$154.122',            ffe: '$20.215' },
-  { concepto: 'Por habitante, interior',              copa: '$289.590',            ffe: '$33.753' },
-  { concepto: 'Diferencia a favor del interior',      copa: '88%',                 ffe: '67%' },
-  { concepto: 'Partidos del GBA entre los 15 últimos', copa: '10 de 15',           ffe: '15 de 15' },
-  { concepto: 'Brecha entre el primero y el último',  copa: '12,9 veces',          ffe: '12,2 veces' },
+/* Los 135 municipios ordenados por tamaño de su matrícula estatal y partidos en
+   cinco grupos de 27. `porAlumno` es el promedio ponderado de cada grupo: el
+   fondo total del grupo sobre su matrícula total.
+
+   `eje` es la etiqueta del gráfico, partida en dos líneas: en una sola, las
+   cinco no entran a 390px de ancho y Chart.js saltea dos. `rango` es el corte
+   exacto del grupo y va en la tabla de datos. */
+const TRAMOS = [
+  { eje: ['Menos de', '2.600'], rango: '585 a 2.553 alumnos',      porAlumno: 433960, gba: 0 },
+  { eje: ['2.600 a', '4.800'],  rango: '2.582 a 4.794 alumnos',    porAlumno: 315007, gba: 0 },
+  { eje: ['4.800 a', '9.200'],  rango: '4.990 a 9.149 alumnos',    porAlumno: 252047, gba: 0 },
+  { eje: ['9.200 a', '23.500'], rango: '9.164 a 23.507 alumnos',   porAlumno: 182770, gba: 5 },
+  { eje: ['Más de', '23.500'],  rango: '24.016 a 252.635 alumnos', porAlumno: 141126, gba: 19 },
+]
+
+/* El mismo fondo con los dos denominadores. La columna por habitante es la que
+   publicó la primera versión de este informe. */
+const DENOMINADOR = [
+  { concepto: 'Promedio provincial',                     hab: '$25.372',              alu: '$167.729' },
+  { concepto: 'GBA (24 partidos)',                       hab: '$20.215',              alu: '$142.486' },
+  { concepto: 'Resto de la Provincia (111 municipios)',  hab: '$33.753',              alu: '$202.684' },
+  { concepto: 'Diferencia a favor del interior',         hab: '67%',                  alu: '42,2%' },
+  { concepto: 'Brecha entre el primero y el último',     hab: '12,2 veces',           alu: '6,6 veces' },
+  { concepto: 'Partidos del GBA entre los 15 últimos',   hab: '15 de 15',             alu: '8 de 15' },
+  { concepto: 'Puesto de Vicente López',                 hab: '135º',                 alu: '65º' },
+  { concepto: 'Peso del GBA en el denominador',          hab: '61,9% de la población', alu: '58,1% de la matrícula' },
 ]
 
 /* La valoración de cada cifra se declara acá y el color lo deriva <Cifra>. Un
    reparto de fondos no tiene dirección deseable propia: todas van en neutro. */
 const HERO_STATS = [
   { label: 'Fondo Educativo repartido', valor: '$444.611', unidad: 'millones', polaridad: 'neutro', periodo: 'acumulado enero-diciembre 2025' },
-  { label: 'Promedio provincial',       valor: '$25.372', polaridad: 'neutro', periodo: 'por habitante, 135 municipios' },
-  { label: 'Brecha entre extremos',     valor: '12,2', unidad: 'veces', polaridad: 'neutro', periodo: 'Pila sobre Vicente López' },
-  { label: 'Tamaño frente a la coparticipación', valor: '12,3%', polaridad: 'neutro', periodo: 'de lo repartido por coparticipación bruta' },
+  { label: 'Promedio provincial',       valor: '$167.729', polaridad: 'neutro', periodo: 'por alumno estatal, 135 municipios' },
+  { label: 'Brecha entre extremos',     valor: '6,6', unidad: 'veces', polaridad: 'neutro', periodo: 'Puán sobre General Rodríguez' },
+  { label: 'Interior sobre GBA',        valor: '42,2%', polaridad: 'neutro', periodo: 'más por alumno estatal' },
 ]
 
 // ─── DOWNLOAD ────────────────────────────────────────────────
@@ -297,22 +313,26 @@ const fmtMiles1 = v => v.toLocaleString('es-AR', { minimumFractionDigits: 1, max
 const fmtPct    = v => v.toLocaleString('es-AR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%'
 
 // Barras verticales: valor arriba de cada barra
-const valueLabelsPct = {
-  id: 'valueLabelsPct',
-  afterDatasetsDraw(chart) {
-    const { ctx } = chart
-    chart.data.datasets.forEach((dataset, di) => {
-      chart.getDatasetMeta(di).data.forEach((bar, i) => {
-        ctx.save()
-        ctx.fillStyle = '#334155'
-        ctx.font = 'bold 11px Archivo, sans-serif'
-        ctx.textAlign = 'center'
-        ctx.fillText(fmtPct(dataset.data[i]), bar.x, bar.y - 7)
-        ctx.restore()
+function makeVValueLabels(fmt) {
+  return {
+    id: 'vValueLabels',
+    afterDatasetsDraw(chart) {
+      const { ctx } = chart
+      chart.data.datasets.forEach((dataset, di) => {
+        chart.getDatasetMeta(di).data.forEach((bar, i) => {
+          ctx.save()
+          ctx.fillStyle = '#334155'
+          ctx.font = 'bold 11px Archivo, sans-serif'
+          ctx.textAlign = 'center'
+          ctx.fillText(fmt(dataset.data[i]), bar.x, bar.y - 7)
+          ctx.restore()
+        })
       })
-    })
-  },
+    },
+  }
 }
+
+const valueLabelsPct = makeVValueLabels(fmtPct)
 
 // Barras horizontales: valor a la derecha de cada barra
 function makeHValueLabels(fmt) {
@@ -340,13 +360,17 @@ function makeHValueLabels(fmt) {
 const tooltipBase = { backgroundColor: '#0F172A', titleColor: '#fff', bodyColor: '#cbd5e1', padding: 12, cornerRadius: 8 }
 
 /* Eje de valor oculto: cuando cada barra lleva su cifra escrita al lado, el eje
-   repite el dato y le come ancho al gráfico. La unidad va en la ficha técnica. */
-const ejeValorOculto = {
+   repite el dato y le come ancho al gráfico. La unidad va en la ficha técnica.
+   Es una función y no un objeto porque Chart.js escribe dentro de las opciones
+   de escala que recibe. Acá la misma configuración la usan un gráfico
+   horizontal (como eje x) y uno vertical (como eje y), y compartir el objeto
+   entre los dos deja que lo que escribe el primero llegue al segundo. */
+const ejeValorOculto = () => ({
   min: 0,
   ticks: { display: false },
   grid: { display: false },
   border: { display: false },
-}
+})
 
 /* En pantallas chicas los nombres largos se parten en dos líneas: si no, el eje
    se queda con todo el ancho y las barras se reducen a un muñón. Se corta por
@@ -390,24 +414,24 @@ function ChartTop15() {
   const data = {
     labels: TOP15.map(d => d.muni),
     datasets: [{
-      data: TOP15.map(d => Number((d.perCapita / 1000).toFixed(1))),
+      data: TOP15.map(d => Number((d.porAlumno / 1000).toFixed(1))),
       backgroundColor: DATA[2],
       borderRadius: 4, barPercentage: 0.72,
     }],
   }
   return (
     <ChartCard
-      title="Los 15 municipios con mayor Fondo Educativo por habitante - En miles de $, acumulado 2025"
-      hallazgo="Gráfico de barras horizontales: Pila encabeza el ranking con $161.960 de Fondo Educativo por habitante, seguida por General Guido con $159.918 y General Lavalle con $138.969; el decimoquinto, Adolfo Alsina, recibe $79.714. Los quince son municipios del interior."
+      title="Los 15 municipios con mayor Fondo Educativo por alumno estatal - En miles de $, acumulado 2025"
+      hallazgo="Gráfico de barras horizontales: Puán encabeza el ranking con $733.196 de Fondo Educativo por alumno estatal, seguido por General Guido con $705.954 y Pila con $696.774; el decimoquinto, General La Madrid, recibe $454.858. Los quince son municipios del interior y ninguno supera los 3.100 alumnos estatales."
       tabla={{
-        columnas: ['Municipio', 'Población 2022', 'Fondo Educativo por habitante'],
-        filas: TOP15.map(d => [d.muni, fmtNum(d.pob), fmtPesos(d.perCapita)]),
+        columnas: ['Municipio', 'Matrícula estatal 2025', 'Fondo Educativo por alumno'],
+        filas: TOP15.map(d => [d.muni, fmtNum(d.matricula), fmtPesos(d.porAlumno)]),
       }}
       ficha={[
-        ['Fuente', 'Ministerio de Economía PBA y Dirección Provincial de Estadística'],
-        ['Período', 'acumulado enero-diciembre 2025'],
+        ['Fuente', 'Ministerio de Economía PBA y DGCyE'],
+        ['Período', 'fondo acumulado enero-diciembre 2025 y matrícula 2025'],
         ['Universo', '135 municipios bonaerenses'],
-        ['Unidad', 'miles de $ por habitante (Censo 2022)'],
+        ['Unidad', 'miles de $ por alumno del sistema estatal'],
       ]}
       height={430}
     >
@@ -419,10 +443,10 @@ function ChartTop15() {
           layout: { padding: { right: 52 } },
           plugins: {
             legend: { display: false },
-            tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${fmtMiles1(ctx.raw)} mil por habitante` } },
+            tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${fmtMiles1(ctx.raw)} mil por alumno` } },
           },
           scales: {
-            x: ejeValorOculto,
+            x: ejeValorOculto(),
             y: ejeCategorias(132),
           },
         }}
@@ -433,26 +457,26 @@ function ChartTop15() {
 
 function ChartGrupos() {
   const data = {
-    labels: ['Población (Censo 2022)', 'Fondo Educativo 2025'],
+    labels: ['Matrícula estatal 2025', 'Fondo Educativo 2025'],
     /* Con solo dos categorías, los valores por defecto reparten las barras a lo
        ancho de todo el canvas y el par deja de leerse como par. */
     datasets: [
-      { label: 'GBA (24 partidos)', data: [GRUPOS[0].pobPct, GRUPOS[0].fondosPct], backgroundColor: DATA[1], borderRadius: 4, categoryPercentage: 0.4, barPercentage: 0.92 },
-      { label: 'Resto de la Provincia (111)', data: [GRUPOS[1].pobPct, GRUPOS[1].fondosPct], backgroundColor: DATA[2], borderRadius: 4, categoryPercentage: 0.4, barPercentage: 0.92 },
+      { label: 'GBA (24 partidos)', data: [GRUPOS[0].matriculaPct, GRUPOS[0].fondosPct], backgroundColor: DATA[1], borderRadius: 4, categoryPercentage: 0.4, barPercentage: 0.92 },
+      { label: 'Resto de la Provincia (111)', data: [GRUPOS[1].matriculaPct, GRUPOS[1].fondosPct], backgroundColor: DATA[2], borderRadius: 4, categoryPercentage: 0.4, barPercentage: 0.92 },
     ],
   }
   return (
     <ChartCard
-      title="Participación en la población y en el Fondo Educativo"
-      hallazgo="Gráfico de barras: el GBA reúne el 61,9% de la población provincial y recibe el 49,3% del Fondo Educativo, mientras que los 111 municipios restantes tienen el 38,1% de la población y captan el 50,7% del fondo."
+      title="Participación en la matrícula estatal y en el Fondo Educativo"
+      hallazgo="Gráfico de barras: el GBA reúne el 58,1% de la matrícula estatal de la provincia y recibe el 49,3% del Fondo Educativo, mientras que los 111 municipios restantes tienen el 41,9% de la matrícula y captan el 50,7% del fondo."
       tabla={{
-        columnas: ['Grupo', '% de la población', '% del Fondo Educativo'],
-        filas: GRUPOS.map(g => [g.grupo, fmtPct(g.pobPct), fmtPct(g.fondosPct)]),
+        columnas: ['Grupo', '% de la matrícula estatal', '% del Fondo Educativo'],
+        filas: GRUPOS.map(g => [g.grupo, fmtPct(g.matriculaPct), fmtPct(g.fondosPct)]),
       }}
       ficha={[
-        ['Fuente', 'Ministerio de Economía PBA y Dirección Provincial de Estadística'],
-        ['Período', 'acumulado enero-diciembre 2025'],
-        ['Universo', '135 municipios - 17.523.996 habitantes'],
+        ['Fuente', 'Ministerio de Economía PBA y DGCyE'],
+        ['Período', 'fondo acumulado enero-diciembre 2025 y matrícula 2025'],
+        ['Universo', '135 municipios - 2.650.770 alumnos estatales'],
         ['Unidad', '% del total provincial'],
       ]}
       legend={[{ label: 'GBA (24 partidos)', color: DATA[1] }, { label: 'Resto de la Provincia (111)', color: DATA[2] }]}
@@ -478,6 +502,53 @@ function ChartGrupos() {
   )
 }
 
+/* Los 135 municipios agrupados por tamaño de matrícula. Barras verticales
+   porque el eje de abajo es una escala ordenada, no una lista de nombres. */
+function ChartTramos() {
+  const data = {
+    labels: TRAMOS.map(t => t.eje),
+    datasets: [{
+      data: TRAMOS.map(t => Number((t.porAlumno / 1000).toFixed(1))),
+      backgroundColor: DATA[2],
+      borderRadius: 4, barPercentage: 0.62,
+    }],
+  }
+  return (
+    <ChartCard
+      title="Fondo Educativo por alumno según el tamaño de la matrícula estatal del municipio - En miles de $"
+      hallazgo="Gráfico de barras: los 27 municipios con menos de 2.600 alumnos estatales reciben $433.960 por alumno y los 27 más grandes, $141.126. El valor cae en cada uno de los cinco tramos a medida que crece la matrícula."
+      tabla={{
+        columnas: ['Tamaño de la matrícula estatal', 'Municipios', 'Del GBA', 'Fondo Educativo por alumno'],
+        filas: TRAMOS.map(t => [t.rango, '27', String(t.gba), fmtPesos(t.porAlumno)]),
+      }}
+      ficha={[
+        ['Fuente', 'Ministerio de Economía PBA y DGCyE'],
+        ['Período', 'fondo acumulado enero-diciembre 2025 y matrícula 2025'],
+        ['Universo', '135 municipios en cinco grupos de 27'],
+        ['Unidad', 'miles de $ por alumno, promedio ponderado del grupo'],
+      ]}
+      height={260}
+    >
+      <Bar
+        data={data}
+        plugins={[makeVValueLabels(fmtMiles1)]}
+        options={{
+          responsive: true, maintainAspectRatio: false,
+          layout: { padding: { top: 22 } },
+          plugins: {
+            legend: { display: false },
+            tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${fmtMiles1(ctx.raw)} mil por alumno` } },
+          },
+          scales: {
+            y: ejeValorOculto(),
+            x: { ticks: { font: { size: 11 }, maxRotation: 0 }, grid: { display: false }, border: { display: false } },
+          },
+        }}
+      />
+    </ChartCard>
+  )
+}
+
 // ─── HERO ────────────────────────────────────────────────────
 
 function Hero() {
@@ -495,7 +566,7 @@ function Hero() {
           style={{ fontSize: 'clamp(2rem, 4.6vw, 3.2rem)', fontWeight: 700, color: '#fff', lineHeight: 1.12, marginBottom: 20, maxWidth: 820 }}
         >
           El Fondo Educativo municipal,<br />
-          medido por habitante
+          medido por alumno
         </h1>
 
         <p
@@ -503,8 +574,9 @@ function Hero() {
         >
           El Fondo de Financiamiento Educativo repartió{' '}
           <strong style={{ color: 'rgba(255,255,255,0.9)' }}>$444.611 millones</strong> entre los 135
-          municipios bonaerenses durante 2025. Pila cobró $161.960 por habitante y Vicente López, $13.328.
-          Ningún partido del conurbano entra entre los quince primeros.
+          municipios bonaerenses durante 2025. Por cada alumno del sistema estatal, Puán cobró $733.196 y
+          General Rodríguez, $110.256. Los quince primeros son del interior, pero los quince últimos ya no
+          son todos del conurbano.
         </p>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10">
@@ -522,8 +594,8 @@ function Hero() {
         <div style={{ display: 'flex', gap: 32, marginTop: 28, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.10)', flexWrap: 'wrap' }}
         >
           {[
-            { label: 'Fuente',        val: 'Ministerio de Economía PBA - Coordinación Municipal' },
-            { label: 'Universo',      val: '135 municipios · 17.523.996 habitantes' },
+            { label: 'Fuente',        val: 'Ministerio de Economía PBA y DGCyE' },
+            { label: 'Universo',      val: '135 municipios · 2.650.770 alumnos estatales' },
             { label: 'Período',       val: 'acumulado enero-diciembre 2025' },
             { label: 'Actualización', val: 'Agosto 2026' },
           ].map(item => (
@@ -547,14 +619,16 @@ function Tesis() {
     <div className="max-w-5xl mx-auto px-6 pt-10">
       <div style={{ borderTop: `2px solid ${C.ink}`, paddingTop: '1.25rem' }}>
         <h2 style={{ fontSize: 'clamp(1.3rem, 2.6vw, 1.75rem)', fontWeight: 700, color: C.ink, lineHeight: 1.2, letterSpacing: '-0.015em', marginBottom: '0.75rem', maxWidth: 800 }}>
-          El Fondo Educativo profundiza la brecha que ya mostraba la coparticipación
+          Por alumno, lo que ordena el Fondo Educativo es el tamaño del distrito, no la frontera del
+          conurbano
         </h2>
         <p style={{ color: C.inkMid, fontSize: 'clamp(1.05rem, 2.2vw, 1.25rem)', lineHeight: 1.6, fontWeight: 500, maxWidth: 800 }}>
-          El Fondo Educativo no se distribuye por los coeficientes históricos de la coparticipación, y aun
-          así ordena a los municipios en el mismo sentido, con una disparidad todavía más pronunciada:{' '}
-          <strong>los quince primeros por habitante son del interior y los quince últimos son del
-          conurbano</strong>, sin una sola excepción. La asimetría territorial del financiamiento municipal
-          bonaerense no depende de un régimen en particular. Está en los dos instrumentos a la vez.
+          Dividido por la población, el fondo separaba a la provincia en dos bloques nítidos: interior arriba
+          y conurbano abajo. Dividido por la matrícula estatal, los quince primeros siguen siendo del interior
+          pero{' '}
+          <strong>el fondo de la tabla mezcla ocho partidos del GBA con siete distritos de afuera</strong>,
+          entre ellos Pinamar, La Costa y General Rodríguez. Lo que ordena el reparto es cuántos alumnos tiene
+          cada municipio: los 27 más chicos reciben tres veces más por alumno que los 27 más grandes.
         </p>
       </div>
     </div>
@@ -582,17 +656,31 @@ function NotaMetodologica() {
         describe el total de recursos que recibe de la Provincia.
       </p>
       <p style={{ fontSize: '0.82rem', color: C.inkMid, lineHeight: 1.6, marginBottom: 8 }}>
-        El monto por habitante divide el acumulado enero-diciembre de 2025 por la población del{' '}
-        <strong style={{ color: C.ink }}>Censo 2022</strong>. No hay proyección poblacional post-censal ni
-        ajuste por inflación intra-anual. El indicador reparte el fondo entre toda la población del distrito,
-        no entre su matrícula escolar: un municipio con estructura de edades más joven recibe menos pesos por
-        alumno de los que sugiere su lugar en la tabla.
+        El monto por alumno divide el acumulado enero-diciembre de 2025 por la{' '}
+        <strong style={{ color: C.ink }}>matrícula estatal del distrito en 2025</strong>: los alumnos de
+        nivel inicial, primario y secundario de gestión estatal que releva la Dirección de Información y
+        Estadística de la DGCyE. Quedan afuera el nivel superior y la matrícula de gestión privada. Los dos
+        términos del cociente son del mismo año, a diferencia de la versión por habitante, que usaba
+        población del Censo 2022. No hay ajuste por inflación intra-anual.
+      </p>
+      <p style={{ fontSize: '0.82rem', color: C.inkMid, lineHeight: 1.6, marginBottom: 8 }}>
+        El denominador elegido cambia el resultado y conviene decir cómo. Dividir por la matrícula estatal
+        mide los pesos disponibles por cada chico del sistema que el fondo financia, y por eso mejora la
+        posición de los distritos con mucha escuela privada. Dividir por la matrícula total daría un valor más
+        bajo en esos mismos distritos: con ese denominador el promedio provincial sería de $112.539 por alumno
+        en lugar de $167.729. Los dos cálculos usan el mismo fondo y la misma fuente.
+      </p>
+      <p style={{ fontSize: '0.82rem', color: C.inkMid, lineHeight: 1.6, marginBottom: 8 }}>
+        La relación entre el tamaño de la matrícula y los pesos por alumno se midió sobre los 135 municipios:
+        el coeficiente de correlación de rangos entre las dos variables es de <strong style={{ color: C.ink }}>-0,87</strong>.
+        Es una asociación fuerte, no una regla: General Pueyrredón, Villa Gesell y Pinamar quedan fuera de
+        línea. El informe no reconstruye los coeficientes con los que la Provincia reparte el fondo, sino el
+        resultado del reparto.
       </p>
       <p style={{ fontSize: '0.82rem', color: C.inkMid, lineHeight: 1.6 }}>
-        La comparación con la coparticipación bruta toma las cifras del informe anterior de esta serie, con
-        la misma fuente y el mismo período. La relación de 12,3% entre los dos fondos y la diferencia de
-        $135.468 y $13.538 por habitante entre bloques son cálculos propios sobre esos dos conjuntos de
-        datos.
+        Las cifras por habitante de la tabla comparativa son las que publicó la primera versión de este
+        informe, con población del Censo 2022. La relación de 12,3% con la coparticipación bruta toma el
+        informe anterior de esta serie, con la misma fuente y el mismo período.
       </p>
     </div>
   )
@@ -609,19 +697,20 @@ export default function InformeFondoEducativoMunicipiosPBA() {
 
       {/* LOS PRIMEROS DEL RANKING — prosa y gráfico a lo ancho */}
       <div className="max-w-5xl mx-auto px-6 pb-10">
-        <SH title="Los siete primeros del ranking no llegan a 12.000 habitantes" />
+        <SH title="Ninguno de los quince primeros llega a 3.100 alumnos estatales" />
         <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-          Pila encabeza la tabla con 4.642 habitantes y $752 millones cobrados en el año. Detrás aparecen
-          General Guido, con 3.174 habitantes, y General Lavalle, con 4.870. Entre los quince primeros solo
-          dos superan los 20.000 vecinos del Censo 2022: Ayacucho, con 21.977, y Villarino, con 32.717.
+          Puán encabeza la tabla: cobró $1.323 millones en el año y tiene 1.804 alumnos en escuelas
+          estatales, así que le corresponden $733.196 por alumno, más de cuatro veces el promedio provincial.
+          Detrás aparecen General Guido, con 719 alumnos, y Pila, con 1.079. Tordillo, que es el distrito con
+          la matrícula estatal más chica de la provincia -585 alumnos-, queda octavo.
         </p>
         <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-          Los tres primeros puestos se despegan del resto. Pila y General Guido cobran alrededor de $160.000
-          por habitante, un 50% más que el quinto de la tabla y más de seis veces el promedio provincial.
-          Del cuarto lugar hacia abajo la caída es continua y sin saltos: Adolfo Alsina cierra los quince
-          primeros con $79.714, menos de la mitad de lo que recibe Pila.
+          Del primer puesto al cuarto se pierden más de $160.000 por alumno. De ahí en adelante la pendiente
+          se aplana: entre General Alvear, cuarto con $570.434, y General La Madrid, decimoquinto con
+          $454.858, hay once municipios repartidos en un rango estrecho. Lezama, el municipio más joven de la
+          provincia, aparece duodécimo con 887 alumnos estatales.
         </p>
-        <DownloadableViz title="Los 15 municipios con mayor Fondo Educativo por habitante - 2025" fuente="Ministerio de Economía PBA y DPE, acumulado 2025">
+        <DownloadableViz title="Los 15 municipios con mayor Fondo Educativo por alumno estatal - 2025" fuente="Ministerio de Economía PBA y DGCyE, 2025">
           <ChartTop15 />
         </DownloadableViz>
       </div>
@@ -629,20 +718,26 @@ export default function InformeFondoEducativoMunicipiosPBA() {
       {/* EL FONDO DE LA TABLA (fondo blanco alternado) — solo tabla densa */}
       <div style={{ background: '#fff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 pb-10">
-          <SH title="Los quince últimos son los quince, todos del conurbano" />
+          <SH title="Los quince últimos ya no son los quince del conurbano" />
+          <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+            General Rodríguez cierra el ranking: $3.786 millones para 34.334 alumnos estatales, $110.256 por
+            alumno, 6,6 veces menos que Puán. Con él entran al fondo de la tabla otros seis municipios que no
+            son del conurbano histórico: San Vicente, Presidente Perón, Escobar, Pilar, Pinamar y La Costa.
+            Siete de los quince últimos quedan afuera de los 24 partidos del GBA.
+          </p>
           <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            Vicente López cierra el ranking con $13.328 por habitante y San Isidro lo antecede con $14.500.
-            En este extremo no hay ninguna ciudad grande del interior, a diferencia de lo que pasa con la
-            coparticipación. Adentro del conurbano, además, el tamaño deja de ordenar: Quilmes tiene 633.391
-            habitantes y encabeza este grupo con $20.326, mientras Hurlingham, con 185.641, queda tres
-            puestos más abajo.
+            Del otro lado, los dos partidos que el ranking por habitante ponía al final suben muchísimo:
+            Vicente López pasa del puesto 135 al 65 y San Isidro, del 134 al 86. En los dos, cerca de dos
+            tercios de la matrícula está en escuelas privadas -68,0% y 64,4%-, y el denominador por habitante
+            contaba a esos chicos igual que a los del sistema estatal. La Matanza, con la matrícula estatal
+            más grande de la provincia, queda 112º con $147.600.
           </p>
           <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, overflow: 'hidden', margin: '1.25rem 0 0', overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 540 }}>
               <thead>
                 <tr style={{ background: '#f8fafc' }}>
-                  {['#', 'Municipio', 'Población 2022', 'Fondo Educativo 2025 (millones de $)', 'Por habitante'].map((h, i) => (
-                    <th key={h} style={{ textAlign: i <= 1 ? 'left' : 'right', fontSize: '0.625rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0.75rem 1rem', borderBottom: `1px solid ${C.rule}` }}>{h}</th>
+                  {['#', 'Municipio', 'Bloque', 'Matrícula estatal', 'Fondo Educativo 2025 (millones de $)', 'Por alumno'].map((h, i) => (
+                    <th key={h} style={{ textAlign: i <= 2 ? 'left' : 'right', fontSize: '0.625rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0.75rem 1rem', borderBottom: `1px solid ${C.rule}` }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -651,87 +746,111 @@ export default function InformeFondoEducativoMunicipiosPBA() {
                   <tr key={r.muni} style={{ borderBottom: i < arr.length - 1 ? `0.5px solid #f1f5f9` : 'none' }}>
                     <td className="tabular-nums" style={{ padding: '0.7rem 1rem', fontSize: '0.8125rem', color: C.inkLight }}>{r.pos}</td>
                     <td style={{ padding: '0.7rem 1rem', fontSize: '0.8125rem', color: C.ink, fontWeight: 600 }}>{r.muni}</td>
-                    <td className="tabular-nums" style={{ padding: '0.7rem 1rem', fontSize: '0.8125rem', color: C.inkMid, textAlign: 'right' }}>{fmtNum(r.pob)}</td>
+                    <td style={{ padding: '0.7rem 1rem', fontSize: '0.8125rem', color: C.inkMid }}>{r.gba ? 'GBA' : 'Interior'}</td>
+                    <td className="tabular-nums" style={{ padding: '0.7rem 1rem', fontSize: '0.8125rem', color: C.inkMid, textAlign: 'right' }}>{fmtNum(r.matricula)}</td>
                     <td className="tabular-nums" style={{ padding: '0.7rem 1rem', fontSize: '0.8125rem', color: C.inkMid, textAlign: 'right' }}>{fmtNum(r.fondo)}</td>
-                    <td className="tabular-nums" style={{ padding: '0.7rem 1rem', fontSize: '0.8125rem', color: C.ink, fontWeight: 600, textAlign: 'right' }}>{fmtPesos(r.perCapita)}</td>
+                    <td className="tabular-nums" style={{ padding: '0.7rem 1rem', fontSize: '0.8125rem', color: C.ink, fontWeight: 600, textAlign: 'right' }}>{fmtPesos(r.porAlumno)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <FichaTecnica items={[
-            ['Fuente', 'Ministerio de Economía PBA y Dirección Provincial de Estadística'],
-            ['Período', 'acumulado enero-diciembre 2025'],
-            ['Universo', 'puestos 121 a 135 de los 135 municipios, todos del GBA'],
-            ['Unidad', 'millones de $ y $ por habitante'],
+            ['Fuente', 'Ministerio de Economía PBA y DGCyE'],
+            ['Período', 'fondo acumulado enero-diciembre 2025 y matrícula 2025'],
+            ['Universo', 'puestos 121 a 135 de los 135 municipios: 8 del GBA y 7 del interior'],
+            ['Unidad', 'millones de $ y $ por alumno estatal'],
           ]} />
         </div>
       </div>
 
-      {/* GBA VS RESTO */}
+      {/* EL TAMAÑO DE LA MATRÍCULA */}
       <div className="max-w-5xl mx-auto px-6 pb-10">
-        <SH title="El GBA recibe el 49,3% del fondo con el 61,9% de la población" />
-        <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-          Los 24 partidos del conurbano cobraron $219.317 millones y los 111 municipios del interior,
-          $225.294 millones. El reparto entre bloques está casi partido al medio, sobre poblaciones que no lo
-          están: 10.849.299 habitantes de un lado y 6.674.697 del otro. La diferencia por habitante entre un
-          bloque y otro es de $13.538.
+        <SH title="Cuanto más grande es la matrícula, menos pesos por alumno" />
+        <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          Ordenados de menor a mayor matrícula estatal y partidos en cinco grupos de 27, los municipios
+          muestran una escalera sin escalones invertidos: $433.960 por alumno en los más chicos, después
+          $315.007, $252.047, $182.770 y $141.126 en los 27 más grandes. Ningún partido del GBA aparece en los
+          tres primeros grupos; en el último hay diecinueve.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5" style={{ maxWidth: 760 }}>
-          <CifraCard label="GBA, por habitante" valor="$20.215" polaridad="neutro" periodo="24 partidos, promedio ponderado" />
-          <CifraCard label="Interior, por habitante" valor="$33.753" polaridad="neutro" periodo="111 municipios, promedio ponderado" />
-          <CifraCard label="Diferencia entre bloques" valor="67%" polaridad="neutro" periodo="a favor del interior" />
-        </div>
-        <DownloadableViz title="Participación en la población y en el Fondo Educativo - 2025" fuente="Ministerio de Economía PBA y DPE, acumulado 2025">
-          <ChartGrupos />
+        <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          Las excepciones son pocas y se pueden nombrar. General Pueyrredón, con 80.031 alumnos estatales,
+          queda 90º y le gana a los veinticuatro partidos del conurbano menos a Vicente López, San Isidro y
+          Tres de Febrero. En la otra dirección, Villa Gesell y Pinamar tienen menos de 8.300 alumnos
+          y caen al 110º y al 124º.
+        </p>
+        <DownloadableViz title="Fondo Educativo por alumno según el tamaño de la matrícula estatal - 2025" fuente="Ministerio de Economía PBA y DGCyE, 2025">
+          <ChartTramos />
         </DownloadableViz>
       </div>
 
-      {/* LOS DOS FONDOS, LADO A LADO (fondo blanco alternado) */}
+      {/* GBA VS RESTO (fondo blanco alternado) */}
       <div style={{ background: '#fff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 pb-10">
-          <SH title="La disparidad es más pronunciada que en la coparticipación" />
+        <SH title="El GBA recibe el 49,3% del fondo con el 58,1% de la matrícula estatal" />
+        <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          Los 24 partidos del conurbano cobraron $219.317 millones y los 111 municipios del interior,
+          $225.294 millones. El reparto entre bloques está casi partido al medio, sobre matrículas estatales
+          que no lo están: 1.539.216 alumnos de un lado y 1.111.554 del otro. La diferencia por alumno entre
+          un bloque y otro es de $60.198.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5" style={{ maxWidth: 760 }}>
+          <CifraCard label="GBA, por alumno estatal" valor="$142.486" polaridad="neutro" periodo="24 partidos, promedio ponderado" />
+          <CifraCard label="Interior, por alumno estatal" valor="$202.684" polaridad="neutro" periodo="111 municipios, promedio ponderado" />
+          <CifraCard label="Diferencia entre bloques" valor="42,2%" polaridad="neutro" periodo="a favor del interior" />
+        </div>
+        <DownloadableViz title="Participación en la matrícula estatal y en el Fondo Educativo - 2025" fuente="Ministerio de Economía PBA y DGCyE, 2025">
+          <ChartGrupos />
+        </DownloadableViz>
+        </div>
+      </div>
+
+      {/* LOS DOS DENOMINADORES, LADO A LADO */}
+      <div className="max-w-5xl mx-auto px-6 pb-10">
+          <SH title="La misma plata, con los dos denominadores" />
           <div style={{ background: '#fff', borderRadius: 2, border: `1px solid ${C.rule}`, overflow: 'hidden', margin: '0 0 0.5rem', overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 520 }}>
               <thead>
                 <tr style={{ background: '#f8fafc' }}>
-                  {['', 'Coparticipación bruta', 'Fondo Educativo'].map((h, i) => (
+                  {['', 'Por habitante', 'Por alumno estatal'].map((h, i) => (
                     <th key={h || i} style={{ textAlign: i === 0 ? 'left' : 'right', fontSize: '0.625rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', padding: '0.75rem 1rem', borderBottom: `1px solid ${C.rule}` }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {COMPARACION.map((r, i, arr) => (
+                {DENOMINADOR.map((r, i, arr) => (
                   <tr key={r.concepto} style={{ borderBottom: i < arr.length - 1 ? `0.5px solid #f1f5f9` : 'none' }}>
                     <td style={{ padding: '0.7rem 1rem', fontSize: '0.8125rem', color: C.ink, fontWeight: 600 }}>{r.concepto}</td>
-                    <td className="tabular-nums" style={{ padding: '0.7rem 1rem', fontSize: '0.8125rem', color: C.inkMid, textAlign: 'right' }}>{r.copa}</td>
-                    <td className="tabular-nums" style={{ padding: '0.7rem 1rem', fontSize: '0.8125rem', color: C.ink, fontWeight: 600, textAlign: 'right' }}>{r.ffe}</td>
+                    <td className="tabular-nums" style={{ padding: '0.7rem 1rem', fontSize: '0.8125rem', color: C.inkMid, textAlign: 'right' }}>{r.hab}</td>
+                    <td className="tabular-nums" style={{ padding: '0.7rem 1rem', fontSize: '0.8125rem', color: C.ink, fontWeight: 600, textAlign: 'right' }}>{r.alu}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <FichaTecnica items={[
-            ['Fuente', 'Ministerio de Economía PBA y Dirección Provincial de Estadística'],
+            ['Fuente', 'Ministerio de Economía PBA, Dirección Provincial de Estadística y DGCyE'],
             ['Período', 'acumulado enero-diciembre 2025'],
-            ['Universo', '135 municipios, dos instrumentos de transferencia'],
-            ['Unidad', 'millones de $, $ por habitante y % del total'],
+            ['Universo', '135 municipios, el mismo fondo con dos denominadores'],
+            ['Unidad', '$ por habitante, $ por alumno estatal y % del total'],
           ]} />
           <p className="text-base leading-relaxed mt-5 mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            Puestos uno al lado del otro, los dos fondos cuentan la misma historia. El interior recibe 67%
-            más por habitante en el fondo educativo, una brecha relativa mayor a la de la coparticipación
-            bruta, donde captaba 88% más que el GBA en términos absolutos pero sobre una base de reparto
-            distinta. El conurbano concentra el 61,9% de la población y no llega a la mitad de ninguno de
-            los dos fondos.
+            El sentido general no cambia: el interior recibe más que el conurbano con los dos denominadores y
+            ningún partido del GBA entra entre los quince primeros. Lo que cambia es la magnitud y el fondo de
+            la tabla. La brecha entre el primero y el último pasa de 12,2 veces a 6,6, y la diferencia a favor
+            del interior baja de 67% a 42,2%.
           </p>
           <p className="text-base leading-relaxed" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            La diferencia más nítida está en los extremos del ranking. En la coparticipación, cinco ciudades
-            grandes del interior comparten el fondo de la tabla con los partidos del conurbano. Acá no hay
-            mezcla en ninguna de las dos puntas: quince municipios del interior arriba, quince partidos del
-            GBA abajo. La asimetría territorial en el financiamiento municipal bonaerense no se limita a un
-            solo instrumento de transferencia.
+            La razón es que la población de un distrito y su matrícula estatal no son la misma cosa. El
+            conurbano concentra el 61,9% de los habitantes, el 60,6% de la matrícula total y el 58,1% de la
+            estatal: en el GBA el sector privado educa al 35,7% de los chicos y en el interior, al 28,6%.
+            Medir por habitante le cargaba a Vicente López y a San Isidro un denominador que incluye a los dos
+            tercios de su matrícula que van a escuelas privadas.
           </p>
-        </div>
+          <p className="text-base leading-relaxed mt-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+            La comparación con el otro instrumento de transferencia se mantiene en pie: el Fondo Educativo
+            equivale al 12,3% de lo que la Provincia repartió por coparticipación bruta durante 2025.
+          </p>
       </div>
 
       {/* NOTA METODOLÓGICA */}
@@ -748,10 +867,13 @@ export default function InformeFondoEducativoMunicipiosPBA() {
           <p className="text-sm mt-1" style={{ color: C.inkMid }}>
             Ministerio de Economía de la Provincia de Buenos Aires, Dirección Provincial de Coordinación
             Municipal. "Transferencias de Fondos a los Municipios", columna Fondo de Financ. Educativo,
-            acumulado enero-diciembre 2025 · Dirección Provincial de Estadística, Ministerio de Economía de
-            la Provincia de Buenos Aires. Población total por municipio, Censo Nacional de Población, Hogares
-            y Viviendas 2022 · DatosPBA (2026), "La coparticipación municipal bonaerense, medida por
-            habitante" · Elaboración propia DatosPBA · 2026
+            acumulado enero-diciembre 2025 · Dirección General de Cultura y Educación de la Provincia de
+            Buenos Aires, Dirección de Información y Estadística. "Matrícula por año de estudio",
+            relevamiento inicial 2025, niveles inicial, primario y secundario por distrito y sector ·
+            Dirección Provincial de Estadística, Ministerio de Economía de la Provincia de Buenos Aires.
+            Población total por municipio, Censo Nacional de Población, Hogares y Viviendas 2022 · DatosPBA
+            (2026), "La coparticipación municipal bonaerense, medida por habitante" · Elaboración propia
+            DatosPBA · 2026
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.25rem', marginTop: '0.75rem' }}>
             <a

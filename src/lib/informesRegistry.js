@@ -14,9 +14,9 @@ export const SITE_DESC =
 export const INFORMES = [
   {
     path: '/informes/fondo-educativo-municipios-pba-2025',
-    titulo: 'El Fondo Educativo en los municipios bonaerenses, medido por habitante',
+    titulo: 'El Fondo Educativo en los municipios bonaerenses, medido por alumno',
     descripcion:
-      'La Provincia repartió $444.611 millones de Fondo Educativo en 2025. Los quince municipios que más reciben por habitante son del interior y los quince que menos reciben son del conurbano.',
+      'La Provincia repartió $444.611 millones de Fondo Educativo en 2025. Por alumno estatal, Puán recibió $733.196 y General Rodríguez $110.256: lo que ordena el reparto es el tamaño de la matrícula, no la frontera del conurbano.',
     tema: 'Fiscal',
     fecha: '2026-08-12',
   },
