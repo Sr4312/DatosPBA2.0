@@ -13,6 +13,14 @@ export const SITE_DESC =
 
 export const INFORMES = [
   {
+    path: '/informes/exportaciones-pba-junio-2026',
+    titulo: 'Exportaciones de la Provincia de Buenos Aires',
+    descripcion:
+      'La Provincia exportó 2.709 millones de dólares en junio de 2026 (+3,1% i.a.) y 15.748 millones en el semestre (+8,6% i.a.), pero perdió participación en el total del país frente a un crecimiento nacional de 24,5% y 24,4%.',
+    tema: 'Economía',
+    fecha: '2026-08-13',
+  },
+  {
     path: '/informes/fondo-educativo-municipios-pba-2025',
     titulo: 'El Fondo Educativo en los municipios bonaerenses, medido por alumno',
     descripcion:
