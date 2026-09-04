@@ -598,8 +598,8 @@ function BarriosMap() {
       })
       mapInstRef.current = map
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-        maxZoom: 15, opacity: 0.55,
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 15, opacity: 0.55, attribution: '&copy; OpenStreetMap',
       }).addTo(map)
 
       /* La geometría entra por el pipeline de assets de Vite (?url): sale del

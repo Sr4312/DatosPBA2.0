@@ -694,7 +694,7 @@ export default function AtlasMunicipal() {
         })
         mapInstRef.current = map
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', { maxZoom: 15, opacity: 0.65 }).addTo(map)
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 15, opacity: 0.65, attribution: '&copy; OpenStreetMap' }).addTo(map)
 
         /* La geometría entra por el pipeline de assets de Vite (?url): sale del
            build con hash de contenido, así que vercel.json la puede cachear como
