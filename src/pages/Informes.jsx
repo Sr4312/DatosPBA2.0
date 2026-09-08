@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import EntryCard from '@/components/shared/EntryCard'
 import FilterBar from '@/components/shared/FilterBar'
+import { INFORMES_VISUALES } from '@/lib/informesVisuales'
 
 export default function Informes() {
   const [informes, setInformes] = useState([])
@@ -54,18 +55,16 @@ export default function Informes() {
 
       {estado === 'ok' && (filtered.length > 0 ? (
         <div className="grid sm:grid-cols-2 gap-5">
-          {filtered.map((inf, i) => (
+          {filtered.map(inf => (
             <EntryCard
               key={inf.id}
               titulo={inf.titulo}
               resumen={inf.bajada}
               fecha={inf.fecha}
               tema={inf.tema}
-              municipio={inf.municipios?.join(', ')}
-              insights={inf.insights}
               url={inf.url}
               imagen={inf.imagen}
-              index={i}
+              visual={INFORMES_VISUALES[inf.url]}
             />
           ))}
         </div>
