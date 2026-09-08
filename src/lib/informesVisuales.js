@@ -343,4 +343,80 @@ export const INFORMES_VISUALES = {
     series: [{ nombre: 'Menciones', valores: [61, 14, 12, 8, 5] }],
     destacado: 0,
   },
+
+  /* ── Informes cargados solo en Supabase (sin página JSX en el repo).
+     Los valores salen de la tabla `visualizaciones` y de los insights de la
+     fila del informe. ── */
+
+  '/informes/censo-pba-2022': {
+    cifra: '8,1',
+    unidad: '% de hogares con cloaca en José C. Paz',
+    periodo: 'Censo 2022',
+    fuente: 'INDEC',
+    hallazgo: 'La cobertura cloacal en el GBA va del 98,4% de Vicente López al 8,1% de José C. Paz, dos municipios vecinos',
+    tipo: 'barras',
+    etiquetas: ['V. López', 'San Isidro', 'La Matanza', 'Moreno', 'José C. Paz'],
+    series: [{ nombre: 'Hogares con cloaca', valores: [98.4, 94.6, 58.8, 32.2, 8.1] }],
+    destacado: 4,
+  },
+
+  '/informes/sectores-retroceso-pba-2025': {
+    cifra: '−31,6',
+    unidad: '% de neumáticos producidos en 2025',
+    periodo: '2025',
+    fuente: 'DPE PBA - INDEC',
+    hallazgo: 'La producción de neumáticos cayó de 89.933 unidades en 2024 a 61.555 en 2025, la baja más abrupta del período',
+    tipo: 'barras',
+    etiquetas: ['2024', '2025'],
+    series: [{ nombre: 'Neumáticos', valores: [89933, 61555] }],
+    destacado: 1,
+  },
+
+  '/informes/iaraf-transferencias-provincias-2024-2026': {
+    cifra: '−14,1',
+    unidad: 'billones de pesos menos en transferencias nacionales',
+    periodo: 'ene. 2024 - feb. 2026',
+    fuente: 'IARAF',
+    hallazgo: 'Buenos Aires acumuló 14,1 billones de pesos menos en transferencias nacionales, casi seis veces más que Santa Fe, la segunda más afectada',
+    tipo: 'barras-h',
+    etiquetas: ['Buenos Aires', 'Santa Fe', 'Córdoba', 'Chaco', 'Entre Ríos'],
+    series: [{ nombre: 'Billones de pesos', valores: [-14.1, -2.5, -2.1, -1.6, -1.3] }],
+    destacado: 0,
+  },
+
+  '/informes/tasa-vial-municipios-pba-2025': {
+    cifra: '3',
+    unidad: '% por litro de nafta en General Pueyrredón',
+    periodo: '2025',
+    fuente: 'Min. Economía Nación',
+    hallazgo: 'General Pueyrredón cobra 3% por litro de tasa vial, la alícuota más alta entre los municipios relevados, casi cuatro veces la de Marcos Paz',
+    tipo: 'barras-h',
+    etiquetas: ['G. Pueyrredón', 'Azul', 'Moreno', 'Pilar', 'Alte. Brown'],
+    series: [{ nombre: 'Tasa vial', valores: [3, 2.5, 2.5, 2.5, 2] }],
+    destacado: 0,
+  },
+
+  '/informes/exportaciones-pba-2025': {
+    cifra: '31.684',
+    unidad: 'millones de dólares',
+    periodo: '2025',
+    fuente: 'INDEC',
+    hallazgo: 'Buenos Aires exportó 31.684 millones de dólares en 2025, 7,3% más que en 2024, y concentra el 36,4% de las exportaciones del país',
+    tipo: 'barras',
+    etiquetas: ['2019', '2020', '2021', '2022', '2023', '2024', '2025'],
+    series: [{ nombre: 'Exportaciones', valores: [22500, 19700, 28000, 33000, 26500, 29500, 31684] }],
+    destacado: 6,
+  },
+
+  '/informes/uipba-presion-tributaria-2024': {
+    cifra: '10,3',
+    unidad: '% de presión tributaria promedio',
+    periodo: '2024',
+    fuente: 'UIPBA',
+    hallazgo: 'Buenos Aires tiene la mayor presión tributaria entre las grandes provincias: 10,3% contra 9,0% de Córdoba y 8,7% de Santa Fe',
+    tipo: 'barras',
+    etiquetas: ['Buenos Aires', 'Córdoba', 'Santa Fe'],
+    series: [{ nombre: 'Presión tributaria', valores: [10.3, 9.0, 8.7] }],
+    destacado: 0,
+  },
 }
