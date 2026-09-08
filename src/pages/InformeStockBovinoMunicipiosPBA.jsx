@@ -6,14 +6,16 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
+  PointElement,
+  LineElement,
   Tooltip,
   Legend,
 } from 'chart.js'
-import { Bar } from 'react-chartjs-2'
+import { Bar, Line } from 'react-chartjs-2'
 import Cifra from '@/components/shared/Cifra'
-import { DATA, VALORACION_HEX, getColorVariacion } from '@/lib/variacion'
+import { DATA, DATA_BORDES, VALORACION_HEX, getColorVariacion } from '@/lib/variacion'
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
+ChartJS.register(CategoryScale, LinearScale, BarElement, PointElement, LineElement, Tooltip, Legend)
 ChartJS.defaults.font.family = 'Archivo, sans-serif'
 ChartJS.defaults.font.size = 12
 ChartJS.defaults.color = '#475569'
@@ -63,6 +65,18 @@ const MOVIMIENTOS = TOP15
   .filter(d => d.puestos !== 0)
   .sort((a, b) => b.puestos - a.puestos)
 
+
+/* Stock de los tres primeros del ranking, en miles de cabezas, diciembre de
+   cada año. PROVISORIO: los valores de 2018 a 2022 están leídos a ojo del
+   gráfico de líneas del informe fuente (PDF), redondeados al millar; 2017 y
+   2023 salen de aplicar las variaciones publicadas al dato de 2024, y 2024 es
+   exacto. Reemplazar por la serie de la planilla cuando esté disponible. */
+const ANIOS = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]
+const TOP3_SERIE = [
+  { muni: 'Ayacucho',  color: DATA[1],        valores: [816, 832, 843, 850, 834, 838, 810, 823] },
+  { muni: 'Olavarría', color: DATA[2],        valores: [719, 723, 732, 720, 714, 754, 734, 703] },
+  { muni: 'Azul',      color: DATA_BORDES[3], valores: [597, 600, 616, 617, 606, 607, 599, 590] },
+]
 
 /* La valoración de cada cifra se declara acá y el color lo deriva <Cifra>:
    nunca se asigna un color a mano. */
@@ -472,6 +486,56 @@ function ChartMovimientos() {
   )
 }
 
+function ChartTop3Serie() {
+  const data = {
+    labels: ANIOS.map(String),
+    datasets: TOP3_SERIE.map(d => ({
+      label: d.muni,
+      data: d.valores,
+      borderColor: d.color,
+      backgroundColor: d.color,
+      borderWidth: 2,
+      pointRadius: 3,
+      pointHoverRadius: 5,
+      tension: 0,
+    })),
+  }
+  return (
+    <ChartCard
+      title="Stock bovino de los tres primeros del ranking - Miles de cabezas a diciembre de cada año"
+      hallazgo="Gráfico de líneas: Ayacucho tocó su máximo en 2020 con unas 850.000 cabezas y cerró 2024 en 823.119; Olavarría subió hasta unas 754.000 en 2022 y cayó a 702.846 en 2024; Azul se movió entre 590.000 y 617.000 en todo el período."
+      tabla={{
+        columnas: ['Año', ...TOP3_SERIE.map(d => d.muni + ' (miles)')],
+        filas: ANIOS.map((a, i) => [String(a), ...TOP3_SERIE.map(d => fmtNum(d.valores[i]))]),
+      }}
+      ficha={[
+        ['Fuente', 'Existencias bovinas por partido'],
+        ['Período', 'diciembre de 2017 a diciembre de 2024'],
+        ['Unidad', 'miles de cabezas'],
+        ['Escala', 'eje truncado en 550.000 cabezas para leer el recorrido de las series'],
+        ['Precisión', '2018 a 2022 leídos del gráfico de la fuente y redondeados al millar; 2017 y 2023 calculados desde las variaciones publicadas'],
+      ]}
+      legend={TOP3_SERIE.map(d => ({ label: d.muni, color: d.color }))}
+      height={280}
+    >
+      <Line
+        data={data}
+        options={{
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { ...tooltipBase, callbacks: { label: ctx => `  ${ctx.dataset.label}: ${fmtNum(ctx.parsed.y)} mil cabezas` } },
+          },
+          scales: {
+            y: { min: 550, max: 875, ticks: { stepSize: 50, callback: v => fmtNum(v) }, grid: { color: 'rgba(13,17,23,0.08)' } },
+            x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+          },
+        }}
+      />
+    </ChartCard>
+  )
+}
+
 // ─── HERO ────────────────────────────────────────────────────
 
 function Hero() {
@@ -591,6 +655,10 @@ function NotaMetodologica() {
         cuya causa no puede establecerse con esta fuente.
       </p>
       <p style={{ fontSize: '0.82rem', color: C.inkMid, lineHeight: 1.6 }}>
+        La serie de los tres primeros del ranking (2017-2024) se reconstruyó a partir del gráfico del
+        informe fuente: los valores de 2018 a 2022 están leídos de esa imagen y redondeados al millar,
+        así que pueden diferir en algunos miles de cabezas del dato declarado. Los de 2017 y 2023 se
+        calcularon aplicando las variaciones publicadas al stock de 2024.
         San Miguel figura con 4 o 5 cabezas hasta 2020 y sin datos desde 2021, en línea con su perfil
         urbano; el caso no afecta el ranking. La caída del stock provincial entre 2017 y 2024 no puede
         atribuirse a una causa específica sin información adicional sobre precios relativos,
@@ -732,6 +800,16 @@ export default function InformeStockBovinoMunicipiosPBA() {
             ['Período', 'diciembre de 2017, 2018 y 2024'],
             ['Unidad', 'cabezas y variación % del stock'],
           ]} />
+          <p className="text-base leading-relaxed mt-6 mb-2" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+            Los tres primeros no acompañaron la curva provincial al mismo ritmo. Ayacucho creció hasta
+            2020, con cerca de 850.000 cabezas, y desde ahí resignó parte de esa suba. Olavarría tuvo su
+            pico más tarde, en 2022, con unas 754.000 cabezas, y perdió alrededor de 50.000 en los dos
+            años siguientes. Azul es la serie más chata del grupo: se movió en una banda de menos de
+            30.000 cabezas durante todo el período.
+          </p>
+          <DownloadableViz title="Stock bovino de los tres primeros del ranking - 2017 a 2024" fuente="Existencias bovinas por partido, diciembre de cada año">
+            <ChartTop3Serie />
+          </DownloadableViz>
         </div>
       </div>
 
