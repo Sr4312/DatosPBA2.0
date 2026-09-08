@@ -271,9 +271,11 @@ card de Supabase y la tesis de apertura dicen cosas complementarias, no la misma
 oración reordenada. Hero: qué pasó. Card: por qué importa. Tesis: qué significa
 (la lectura política o económica del analista).
 
-**Los insights de la card son titulares.** Se escriben como título de diario
+**Los insights de Supabase son titulares.** Se escriben como título de diario
 (sujeto + verbo + dato), sin dos puntos ni construcción "X: explicación de X".
-El primero se muestra además como hallazgo del informe destacado en la portada.
+La card de `/informes` ya no los muestra; el primero aparece como hallazgo del
+informe destacado en la portada, y el `hallazgo` de la ficha visual (sección
+"Registro", punto 4) sigue la misma regla.
 
 **Encuadre del analista.** El rol de este skill es analista político: además
 de describir la serie, cada informe dice al menos una vez qué implica el dato
@@ -290,20 +292,25 @@ metodológica en su sección, no diluyendo cada afirmación.
 4. Listá las secciones con su título (sin numerar) y **decidí qué estructura
    tiene cada una**, verificando que al menos dos difieran.
 5. Determiná qué gráfico va en cada sección, con qué datos y con qué ficha técnica.
-6. Confirmá fuentes antes de escribir. Nunca asumir ni inventar fuentes.
-7. Mostrá el resumen al usuario y esperá confirmación antes de crear el archivo.
-8. Después de escribir los textos, pasá el filtro de la sección "Redacción":
+6. Elegí qué cifra y qué gráfico van en la **ficha visual de la tarjeta** de
+   `/informes` (sección "Registro", punto 4): la pareja que mejor cuenta el
+   hallazgo principal en 150px.
+7. Confirmá fuentes antes de escribir. Nunca asumir ni inventar fuentes.
+8. Mostrá el resumen al usuario y esperá confirmación antes de crear el archivo.
+9. Después de escribir los textos, pasá el filtro de la sección "Redacción":
    apariciones de la cifra estrella, KPIs sin duplicar entre hero y secciones,
    un solo contraste retórico, títulos con dato, reemplazos de muletillas, y que
    hero / card / tesis no repitan la misma frase.
 
 ---
 
-## Registro en tres lugares
+## Registro en cuatro lugares
 
-Un informe nuevo se registra en **App.jsx**, en **informesRegistry.js** y en
-**Supabase**. Si falta cualquiera de los tres, algo se rompe: la ruta no existe,
-el informe comparte la tarjeta OG genérica, o no aparece en el listado.
+Un informe nuevo se registra en **App.jsx**, en **informesRegistry.js**, en
+**Supabase** y en **informesVisuales.js**. Si falta cualquiera de los cuatro,
+algo se rompe: la ruta no existe, el informe comparte la tarjeta OG genérica,
+no aparece en el listado, o aparece con la tarjeta en blanco al lado de las
+demás.
 
 ### 1. `src/App.jsx`
 
@@ -341,7 +348,7 @@ La página `/informes` y la portada leen de esta tabla para las cards.
 | `fecha_orden`| date            | Fecha ISO para ordenar descendente, ej. `"2026-05-23"`      |
 | `tema`       | text            | Categoría. Debe coincidir exactamente con valores existentes |
 | `municipios` | jsonb           | Array JSON de strings, ej. `'["La Matanza", "Provincia de PBA"]'` |
-| `insights`   | jsonb           | Array JSON de strings. Los primeros 2 se muestran en la card |
+| `insights`   | jsonb           | Array JSON de strings. Ya no se muestran en la card; los usa la portada |
 | `url`        | text            | Ruta interna, ej. `"/informes/slug-del-informe"`            |
 | `imagen`     | text (nullable) | URL de imagen de portada, o `null`                          |
 
@@ -370,6 +377,53 @@ Notas:
   cifra se muestra en gris neutro en la franja de la portada. Esa columna la
   crea `supabase/migracion-fase1-semantica.sql`: si todavía no se corrió en el
   SQL Editor, correrlo antes.
+
+### 4. `src/lib/informesVisuales.js` — la imagen de la tarjeta
+
+La tarjeta de `/informes` lleva arriba una banda visual: cifra principal, mini
+gráfico sin ejes y ficha técnica (fuente · período). No es una imagen subida:
+la dibuja `src/components/shared/InformeVisual.jsx` a partir de una ficha en
+este archivo, con clave igual al `url` del informe. **Se arma en el mismo
+momento que el informe**, no después: sin ficha la tarjeta sale en blanco.
+
+```js
+'/informes/slug-del-informe': {
+  cifra: '19,4',                    // string formateada es-AR; negativo con − (U+2212)
+  unidad: 'millones de cabezas',    // corta, sentence case
+  periodo: 'dic. 2024',
+  fuente: 'SENASA',                 // 1-3 palabras
+  hallazgo: 'La Provincia perdió 1,1 millones de cabezas entre 2017 y 2024', // aria-label
+  tipo: 'barras-h',                 // 'barras-h' | 'barras' | 'linea'
+  etiquetas: ['Ayacucho', 'Olavarría', 'Azul', 'Benito Juárez', 'G. La Madrid'],
+  series: [{ nombre: 'Stock', valores: [823119, 702846, 590088, 479189, 445757] }],
+  destacado: 0,                     // índice de la barra protagonista, o null
+},
+```
+
+Reglas para elegir qué va:
+
+- **Los valores se copian de las constantes de datos de la página JSX.** Nada
+  redondeado a mano ni inventado. Si cambia el dato en la página, cambia acá.
+- **Cifra y gráfico cuentan la misma cosa.** La cifra es la del hallazgo
+  principal, que no siempre es la primera del hero: si el gráfico muestra la
+  tasa, la cifra es la tasa, no el total en otra unidad.
+- **Forma según el hallazgo:** ranking de municipios o jurisdicciones →
+  `barras-h` con los 5 primeros; comparación de pocos rubros, años o grupos →
+  `barras` (2 a 8 columnas, admite negativos); serie mensual o anual
+  equiespaciada → `linea` (6 a 24 puntos). Una serie con años salteados va en
+  `barras`, no en `linea`: la línea inventa una pendiente que no existe.
+- **Etiquetas cortas:** hasta 14 caracteres en `barras-h`, 4 o 5 en `barras` y
+  `linea` (`'2024'`, `'abr'`, `'may 26'`). Abreviar municipios (`'G. La Madrid'`,
+  `'T. de Febrero'`).
+- **Color:** el protagonista en `destacado` va en magenta y el resto en gris de
+  dato. Con `destacado: null` todas van del mismo color. Nunca un color por
+  barra. Con dos series, **la que es objeto del informe va primera** (magenta);
+  la de referencia, segunda (teal). Nunca más de dos series.
+- **Sin datos de fuente aproximada.** Si la página marca una serie como
+  reconstrucción visual, no entra en la ficha: usar solo los puntos precisos.
+
+Antes de dar por terminado el informe, abrir `/informes` y mirar la tarjeta al
+lado de las demás, en claro y en oscuro y a 390px.
 
 ---
 
