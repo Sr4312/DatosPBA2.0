@@ -13,6 +13,14 @@ export const SITE_DESC =
 
 export const INFORMES = [
   {
+    path: '/informes/stock-bovino-municipios-pba-2024',
+    titulo: 'Los quince municipios con más ganado bovino de la Provincia',
+    descripcion:
+      'Ayacucho, Olavarría y Azul encabezan el rodeo bonaerense desde 2017 y los quince primeros partidos reúnen el 35,5% del stock. La Provincia cerró 2024 con 19.419.086 cabezas, 1,1 millones menos que siete años atrás.',
+    tema: 'Agro',
+    fecha: '2026-09-08',
+  },
+  {
     path: '/informes/exportaciones-pba-junio-2026',
     titulo: 'Exportaciones de la Provincia de Buenos Aires',
     descripcion:
