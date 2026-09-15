@@ -9,17 +9,19 @@ para redes, reportes rápidos y un mapa municipal interactivo.
 Lema: "Análisis basado en evidencia".
 
 Este archivo describe QUÉ existe y CÓMO está armado el sitio.
-Para crear un informe nuevo, la guía es CLAUDE_CONTENIDO.md.
+Para crear un informe nuevo, la guía es el skill armado-contenido
+(.claude/armado-contenido/armado-contenido.md). El sistema de diseño vive en
+.claude/skills/design-system-datospba/skill.md.
 
 
 Stack
 -----
 · React 18 + Vite 5 - SPA sin SSR. Deploy automático en Vercel (push a main).
 · react-router-dom 6 - todas las rutas en src/App.jsx, páginas con lazy().
-· Tailwind CSS 3 - paleta `brand` (azules). Tipografía: Poppins en todo el
-  sitio (la clase `font-display` también resuelve a Poppins; no usar serifs).
+· Tailwind CSS 3 - tokens de color en src/index.css (--ink, --rule, --data-1..4).
+  Tipografía: Archivo, self-hosted vía @fontsource (la clase `font-display`
+  también resuelve a Archivo; no usar serifs).
 · Chart.js 4 + react-chartjs-2 - todos los gráficos.
-· framer-motion - animaciones vía LazyMotion; siempre importar `m`, no `motion`.
 · Leaflet - mapa municipal (MedidorMunicipal).
 · Supabase - contenido dinámico (ver sección Datos). Cliente en src/lib/supabase.js,
   credenciales en env: VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY.
@@ -41,7 +43,9 @@ components/
   MedidorMunicipal.jsx      mapa Leaflet de los 135 municipios; temas:
                             concejales, tasa vial, transparencia fiscal
                             (datos hardcodeados dentro del componente)
-  shared/                   EntryCard, FilterBar, HiloCard, ReporteCard, TickerBar
+  shared/                   Cifra (única representación de una cifra),
+                            InformeVisual (banda visual de la card de informe),
+                            EntryCard, FilterBar, HiloCard, ReporteCard, TickerBar
   ui/badge.jsx              badge genérico
   visualizaciones/VizCard.jsx  card de visualización (usada por InformeDetalle)
 lib/
@@ -71,23 +75,22 @@ Nav del header (Layout.jsx): Informes · Publicaciones (/hilos) ·
 
 Informes publicados (páginas estáticas)
 ----------------------------------------
-Cada informe es UN archivo JSX autocontenido en src/pages/ (define su paleta,
+Cada informe es UN archivo JSX autocontenido en src/pages/ (define sus
 componentes UI, datos y gráficos adentro; no comparten componentes entre sí,
-por diseño: se copia del informe de referencia y se adapta).
+por diseño, salvo Cifra). Los informes anteriores a julio de 2026 conservan
+restos del diseño viejo (componentes MC, Tag, secciones numeradas, paletas de
+acento por tema): no usarlos como referencia.
 
-| Slug                            | Archivo                         | Tema                     |
-|---------------------------------|---------------------------------|--------------------------|
-| kpmg-iibb-2025                  | InformeKPMGIIBB.jsx             | Presión fiscal IIBB      |
-| caf-estado-municipal-pba        | InformeCAFEstadoMunicipal.jsx   | Estado municipal (CAF)   |
-| renabap-pba-2026                | InformeRENABAP.jsx              | Barrios populares        |
-| salud-conurbano-pec-2026        | InformeSaludConurbano.jsx       | Salud en el conurbano    |
-| mineria-pba-2025                | InformeMineriaPBA.jsx           | Minería (ref. paleta dorada) |
-| medicamentos-tish-pba-2025      | InformeMedicamentosTISH.jsx     | Tasa TISH y medicamentos |
-| agroindustria-pba-2026          | InformeAgroindustriaPBA.jsx     | Agroindustria (ref. paleta azul) |
-| empleo-publico-pba-2026         | InformeEmpleoPblicoPBA.jsx      | Empleo público           |
-| homicidios-pba-2025             | InformeHomicidiosPBA.jsx        | Homicidios / seguridad   |
-| ranking-fiscal-provincial-2025  | InformeRankingFiscalPBA.jsx     | Ranking fiscal provincial|
-| presupuesto-genero-pba-2026     | InformePresupuestoGeneroPBA.jsx | Presupuesto y género     |
+La lista completa y ordenada vive en src/lib/informesRegistry.js, que es la
+fuente de verdad en build time para el sitemap, el RSS y las meta OG. Para no
+duplicar ese registro, acá va solo el recuento y las referencias de estilo:
+
+· 27 informes registrados, del 2026-04-07 al 2026-09-08.
+· Temas en uso: Agro, Economía, Estado, Fiscal, Hábitat, Industria,
+  Presupuesto, Producción, Salud, Seguridad, Trabajo.
+· Referencia de estilo vigente: InformeMercadoTrabajoGBA.jsx (la que nombra
+  el skill) y, para un ranking de municipios, InformeStockBovinoMunicipiosPBA.jsx
+  o InformeProduccionAgricolaPBA.jsx.
 
 
 Datos: Supabase
