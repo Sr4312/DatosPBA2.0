@@ -657,25 +657,36 @@ export default function InformeProduccionAgricolaPBA() {
 
       <Tesis />
 
-      {/* SOJA */}
+      {/* SOJA - texto y gráfico a dos columnas */}
       <div className="max-w-5xl mx-auto px-6 pb-10">
-        <SH title="Soja: el mayor volumen de la Provincia, con el noroeste al frente" />
-        <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-          La soja es el cultivo de mayor volumen de producción bonaerense: entre 2010/11 y 2024/25 la
-          Provincia acumuló 235.200.865 toneladas repartidas entre 103 municipios con registro. General
-          Villegas encabeza el ranking con 11,2 millones de toneladas, el 4,78% del total provincial,
-          seguido por Pergamino, 9 de Julio, Lincoln y Rivadavia. Los cinco primeros son partidos del
-          noroeste y todos tienen las 15 campañas completas.
-        </p>
-        <p className="text-base leading-relaxed" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-          El top 15 reúne el 43,14% de la producción provincial, una concentración moderada: el resto se
-          reparte entre un número amplio de municipios. Los rendimientos del ranking se mueven en una banda
-          ancha, de 2.160 kg/ha en Tandil a 3.671 kg/ha en Pergamino, lo que muestra que el volumen
-          acumulado depende tanto de la superficie sembrada como del rinde.
-        </p>
-        <DownloadableViz title="Soja - primeros 10 municipios productores, campañas 2010/11 a 2024/25" fuente={FUENTE}>
-          <ChartRanking cultivo="Soja" filas={SOJA} ventana={CULTIVOS.soja.ventana} />
-        </DownloadableViz>
+        <SH title="Cinco partidos del noroeste concentran el 18,6% de la soja bonaerense" />
+        {/* min-w-0 en las dos celdas: sin eso el canvas del gráfico fija el ancho
+           mínimo de la columna y la sección desborda el viewport al achicarlo. */}
+        <div className="grid lg:grid-cols-2 gap-x-10 items-start">
+          <div className="min-w-0">
+            <p className="text-base leading-relaxed mb-4" style={{ color: C.inkMid }}>
+              La soja mueve más volumen que ningún otro cultivo de la Provincia: 235.200.865 toneladas
+              entre 2010/11 y 2024/25, repartidas en 103 municipios con registro. General Villegas,
+              Pergamino, 9 de Julio, Lincoln y Rivadavia ocupan los cinco primeros lugares y suman
+              43,8 millones de toneladas entre ellos. Los cinco están en el noroeste.
+            </p>
+            <p className="text-base leading-relaxed mb-4" style={{ color: C.inkMid }}>
+              El top 15 reúne el 43,14% de la producción provincial. Es una concentración moderada: el
+              57% restante se reparte entre casi noventa municipios, sin que ninguno pese lo suficiente
+              como para entrar al cuadro.
+            </p>
+            <p className="text-base leading-relaxed" style={{ color: C.inkMid }}>
+              Los rindes del cuadro van de 2.160 kg/ha en Tandil a 3.671 kg/ha en Pergamino, una banda
+              de 70%. Pergamino produce menos que General Villegas con un rinde 30% mayor, así que lo
+              que ordena el ranking es la superficie sembrada antes que la productividad por hectárea.
+            </p>
+          </div>
+          <div className="min-w-0">
+            <DownloadableViz title="Soja - primeros 10 municipios productores, campañas 2010/11 a 2024/25" fuente={FUENTE}>
+              <ChartRanking cultivo="Soja" filas={SOJA} ventana={CULTIVOS.soja.ventana} />
+            </DownloadableViz>
+          </div>
+        </div>
         <TablaRanking filas={SOJA} titulo="Soja: top 15 municipios productores (2010/11 a 2024/25)" />
         <FichaTecnica items={fichaCultivo(CULTIVOS.soja.ventana)} />
       </div>
@@ -683,43 +694,47 @@ export default function InformeProduccionAgricolaPBA() {
       {/* SOJA POR TIPO DE OCUPACIÓN */}
       <div style={{ background: '#fff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 pb-10">
-          <SH title="Dentro de la soja conviven dos geografías distintas" />
-          <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            La apertura por tipo de ocupación separa dos cultivos que el agregado esconde. La soja de
-            primera repite el patrón general y la lideran los partidos del noroeste. La de segunda, que se
-            siembra después de cosechar un cultivo de invierno en el mismo ciclo, tiene su liderazgo en el
-            sudeste triguero: Lobería, Necochea y Tandil aparecen arriba, y son la huella del doble cultivo
-            trigo-soja en esa región.
+          <SH title="Lobería y Necochea son segundo y tercero en soja de segunda, y no entran al cuadro general" />
+          <TablaRanking filas={SOJA_PRIMERA} titulo="Soja de primera ocupación: top 10 municipios productores (2010/11 a 2024/25)" />
+          <TablaRanking filas={SOJA_SEGUNDA} titulo="Soja de segunda ocupación: top 10 municipios productores (2010/11 a 2024/25)" />
+          <FichaTecnica items={fichaCultivo(CULTIVOS.soja.ventana)} />
+          <p className="text-base leading-relaxed mt-6 mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+            Los dos cuadros ordenan partidos distintos. La soja de primera repite el podio del cultivo
+            entero, con General Villegas, Pergamino y 9 de Julio arriba. La de segunda se siembra
+            después de cosechar un cultivo de invierno en el mismo ciclo, y ahí aparecen Lobería,
+            Necochea y Tandil, que en el cuadro general no figuran o figuran al fondo.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5" style={{ maxWidth: 560 }}>
+          <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+            Esa segunda lista es el mapa del trigo. Son los mismos partidos del sudeste que encabezan
+            los rankings de invierno, sembrando soja sobre el rastrojo triguero. El rinde paga la
+            diferencia: la soja de segunda rinde 1.417 kg/ha en Necochea contra los 4.062 kg/ha de la
+            de primera en Rojas, menos de la mitad, porque entra tarde al ciclo.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" style={{ maxWidth: 560 }}>
             <CifraCard label="Lobería en soja de segunda" valor="3,51%" polaridad="neutro" periodo="segundo puesto; no entra al top 15 de soja total" />
             <CifraCard label="Rinde de la soja de segunda en Necochea" valor="1.417" unidad="kg/ha" polaridad="neutro" periodo="frente a 4.062 kg/ha de la de primera en Rojas" />
           </div>
-          <TablaRanking filas={SOJA_PRIMERA} titulo="Soja de primera ocupación: top 10 municipios productores (2010/11 a 2024/25)" />
-          <FichaTecnica items={fichaCultivo(CULTIVOS.soja.ventana)} />
-          <TablaRanking filas={SOJA_SEGUNDA} titulo="Soja de segunda ocupación: top 10 municipios productores (2010/11 a 2024/25)" />
-          <FichaTecnica items={fichaCultivo(CULTIVOS.soja.ventana)} />
         </div>
       </div>
 
       {/* MAÍZ */}
       <div className="max-w-5xl mx-auto px-6 pb-10">
-        <SH title="Maíz: la misma geografía que la soja, con rindes muy superiores" />
-        <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-          El maíz acumuló 189.477.904 toneladas entre 2010/11 y 2024/25, también con 103 municipios
-          productores. El ranking repite en gran medida el mapa de la soja: General Villegas vuelve a
-          encabezarlo, ahora con 10,8 millones de toneladas y el 5,68% del total, seguido por Trenque
-          Lauquen, Rivadavia, Pehuajó y Lincoln.
-        </p>
-        <p className="text-base leading-relaxed" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-          Lo que separa a los dos cultivos no es dónde se producen sino cuánto rinden: los promedios
-          ponderados del top 15 de maíz se mueven entre 6.197 y 9.070 kg/ha, más del doble que los de soja,
-          en línea con el mayor potencial de rinde del cultivo. La concentración es casi idéntica: 43,37%
-          contra 43,14%.
-        </p>
+        <SH title="El maíz rinde 9.070 kg/ha en Rojas, casi el triple que la soja en el mismo partido" />
         <DownloadableViz title="Maíz - primeros 10 municipios productores, campañas 2010/11 a 2024/25" fuente={FUENTE}>
           <ChartRanking cultivo="Maíz" filas={MAIZ} ventana={CULTIVOS.maiz.ventana} color={DATA[2]} />
         </DownloadableViz>
+        <p className="text-base leading-relaxed mt-5 mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          El maíz acumuló 189.477.904 toneladas en la misma ventana y con los mismos 103 municipios
+          productores. General Villegas vuelve a encabezar, ahora con 10,8 millones de toneladas y el
+          5,68% del total, y detrás se ordenan Trenque Lauquen, Rivadavia, Pehuajó y Lincoln. Es, con
+          matices de orden, el mismo mapa del cultivo anterior.
+        </p>
+        <p className="text-base leading-relaxed" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          La diferencia está en la hectárea. Los rindes del cuadro van de 6.197 kg/ha en Tres Arroyos a
+          9.070 kg/ha en Rojas, más del doble que los de soja en los mismos partidos. La concentración,
+          en cambio, casi no se mueve: 43,37% contra 43,14%. Dos cultivos con la misma geografía y
+          distinta productividad.
+        </p>
         <TablaRanking filas={MAIZ} titulo="Maíz: top 15 municipios productores (2010/11 a 2024/25)" />
         <FichaTecnica items={fichaCultivo(CULTIVOS.maiz.ventana)} />
       </div>
@@ -727,17 +742,18 @@ export default function InformeProduccionAgricolaPBA() {
       {/* TRIGO */}
       <div style={{ background: '#fff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 pb-10">
-          <SH title="Trigo: el eje se corre al sudeste y la concentración baja" />
+          <SH title="Tres Arroyos lidera el trigo con 6,4 millones de toneladas y General Villegas cae al séptimo puesto" />
           <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            Con 115.910.500 toneladas acumuladas entre 2011/12 y 2025/26, el trigo es el principal cultivo
-            de invierno de la Provincia y el primero cuyo mapa se corre del noroeste. Tres Arroyos lidera
-            con 6,4 millones de toneladas y el 5,49% del total provincial, seguido por Coronel Dorrego,
-            Coronel Suárez, Adolfo Alsina y Lobería: todos partidos del sudeste y el sur.
+            El trigo acumuló 115.910.500 toneladas entre 2011/12 y 2025/26 y es el primer cultivo del
+            informe cuyo mapa abandona el noroeste. Tres Arroyos encabeza con el 5,49% del total
+            provincial, y lo siguen Coronel Dorrego, Coronel Suárez, Adolfo Alsina y Lobería. Los cinco
+            están en el sudeste o el sur.
           </p>
           <p className="text-base leading-relaxed" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            Es además el cultivo menos concentrado de los siete: el top 15 explica el 42,77% de la
-            producción provincial. General Villegas, el primero de los rankings de verano, aparece acá
-            séptimo - una señal de que los partidos del noroeste también siembran trigo, pero sin dominar.
+            General Villegas, que gana los dos rankings de verano, acá queda séptimo con 3,06 millones
+            de toneladas. El noroeste siembra trigo, pero no manda. Es además el cultivo más repartido
+            de los siete: el top 15 explica el 42,77% de la producción y el resto se dispersa entre 88
+            municipios.
           </p>
           <DownloadableViz title="Trigo - primeros 10 municipios productores, campañas 2011/12 a 2025/26" fuente={FUENTE}>
             <ChartRanking cultivo="Trigo" filas={TRIGO} ventana={CULTIVOS.trigo.ventana} />
@@ -749,37 +765,33 @@ export default function InformeProduccionAgricolaPBA() {
 
       {/* TRIGO CANDEAL */}
       <div className="max-w-5xl mx-auto px-6 pb-10">
-        <SH title="El trigo candeal es otra cosa: un cuarto del total en un solo municipio" />
-        <p className="text-base leading-relaxed mb-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-          El candeal, destinado sobre todo a la industria de la pastificación, es de escala muy inferior al
-          trigo pan y está mucho más concentrado. Coronel Dorrego reúne por sí solo el 26,10% de la
-          producción provincial acumulada, seguido por Coronel Pringles (12,76%) y Tres Arroyos (9,98%):
-          entre tres municipios explican casi la mitad del candeal bonaerense. Solo 58 de los 135
-          municipios registraron producción en la ventana, contra 103 en trigo total.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5" style={{ maxWidth: 560 }}>
-          <CifraCard label="Coronel Dorrego en trigo candeal" valor="26,10%" polaridad="neutro" periodo="del total provincial acumulado" />
-          <CifraCard label="Municipios con producción de candeal" valor="58" unidad="de 135" polaridad="neutro" periodo="contra 103 en trigo total" />
-        </div>
+        <SH title="Coronel Dorrego, Coronel Pringles y Tres Arroyos hacen el 48,8% del trigo candeal" />
         <TablaRanking filas={TRIGO_CANDEAL} titulo="Trigo candeal: top 10 municipios productores (2011/12 a 2025/26)" />
         <FichaTecnica items={fichaCultivo(CULTIVOS.trigo.ventana)} />
+        <p className="text-base leading-relaxed mt-6" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          El candeal va casi entero a la industria de la pastificación y se comporta al revés que el
+          trigo pan. Coronel Dorrego solo reúne el 26,10% de la producción provincial, y con Coronel
+          Pringles y Tres Arroyos suman casi la mitad. Apenas 58 de los 135 municipios registraron
+          alguna producción en la ventana, contra 103 en trigo total. Donde el trigo pan se dispersa,
+          el candeal se agrupa en un puñado de partidos del sudeste.
+        </p>
       </div>
 
       {/* CEBADA */}
       <div style={{ background: '#fff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 pb-10">
-          <SH title="Cebada: el mapa del trigo, pero mucho más apretado" />
+          <SH title="Coronel Dorrego hace el 10,26% de la cebada, la porción más alta de cualquier municipio en cualquier cultivo" />
           <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            La cebada acumuló 42.091.337 toneladas entre 2016/17 y 2025/26 - una ventana de 10 campañas y no
-            de 15, por el corte metodológico que se detalla en la nota al pie - con 101 municipios
-            productores. Coronel Dorrego encabeza con 4,3 millones de toneladas y el 10,26% del total,
-            seguido por Tres Arroyos, Necochea, Lobería y Tandil.
+            La cebada acumuló 42.091.337 toneladas con 101 municipios productores. Coronel Dorrego
+            encabeza con 4,3 millones y Tres Arroyos, Necochea, Lobería y Tandil completan los cinco
+            primeros. Es, otra vez, el mapa del trigo.
           </p>
           <p className="text-base leading-relaxed" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            Su geografía coincide casi punto por punto con la del trigo, pero la concentración es de otro
-            orden: el top 15 acumula el 71,11% de la producción provincial, el valor más alto de los siete
-            cultivos. Parte de esa diferencia es real y parte se explica por la ventana más corta, así que
-            no conviene compararla en forma directa con el 42,77% del trigo.
+            La ventana de este cuadro es de 10 campañas y no de 15. La fuente dejó de publicar la
+            apertura entre cebada cervecera y forrajera desde 2016/17, y las dos series no se pueden
+            encadenar sin mezclar metodologías. Eso también infla la comparación: el top 15 se lleva el
+            71,11% de la producción, contra el 42,77% del trigo, pero una parte de esa distancia la
+            explica la ventana más corta. No son cifras directamente comparables.
           </p>
           <DownloadableViz title="Cebada - primeros 10 municipios productores, campañas 2016/17 a 2025/26" fuente={FUENTE}>
             <ChartRanking cultivo="Cebada" filas={CEBADA} ventana={CULTIVOS.cebada.ventana} color={DATA[2]} />
@@ -791,21 +803,18 @@ export default function InformeProduccionAgricolaPBA() {
 
       {/* GIRASOL */}
       <div className="max-w-5xl mx-auto px-6 pb-10">
-        <SH title="Girasol: el cultivo más concentrado, entre el sudeste y el oeste semiárido" />
-        <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-          Entre 2010/11 y 2024/25 el girasol sumó 29.714.845 toneladas con 102 municipios productores.
-          Necochea lidera con 1,99 millones de toneladas y el 6,72% del total, seguido de cerca por Tres
-          Arroyos y Lobería, los tres en el sudeste bonaerense.
-        </p>
-        <p className="text-base leading-relaxed" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-          Detrás aparecen Trenque Lauquen y Adolfo Alsina, ya en la región semiárida del oeste, donde el
-          girasol funciona como alternativa frente a cultivos de mayor requerimiento hídrico. Es el cultivo
-          con mayor concentración territorial de los siete sobre ventana completa de 15 campañas: el top 15
-          reúne el 60,96% de la producción provincial.
-        </p>
+        <SH title="El girasol junta el 60,96% en quince partidos, repartidos entre el sudeste y el oeste seco" />
         <DownloadableViz title="Girasol - primeros 10 municipios productores, campañas 2010/11 a 2024/25" fuente={FUENTE}>
           <ChartRanking cultivo="Girasol" filas={GIRASOL} ventana={CULTIVOS.girasol.ventana} />
         </DownloadableViz>
+        <p className="text-base leading-relaxed mt-5" style={{ color: C.inkMid, maxWidth: '72ch' }}>
+          El girasol sumó 29.714.845 toneladas con 102 municipios productores, y es el más concentrado
+          de los seis cultivos que corren sobre la ventana completa. Necochea, Tres Arroyos y Lobería
+          se llevan los tres primeros puestos desde el sudeste. Pero el cuarto y el quinto, Trenque
+          Lauquen y Adolfo Alsina, están en el oeste semiárido, donde el girasol reemplaza a cultivos
+          que piden más agua. Es el único cultivo del informe cuyo cuadro mezcla las dos regiones
+          arriba.
+        </p>
         <TablaRanking filas={GIRASOL} titulo="Girasol: top 15 municipios productores (2010/11 a 2024/25)" />
         <FichaTecnica items={fichaCultivo(CULTIVOS.girasol.ventana)} />
       </div>
@@ -813,12 +822,12 @@ export default function InformeProduccionAgricolaPBA() {
       {/* AVENA Y SORGO */}
       <div style={{ background: '#fff', borderTop: `1px solid ${C.rule}`, borderBottom: `1px solid ${C.rule}` }}>
         <div className="max-w-5xl mx-auto px-6 pb-10">
-          <SH title="Avena y sorgo: los dos cultivos chicos tienen sus propios mapas" />
+          <SH title="Tornquist, Puán y Saavedra hacen el 22,4% de la avena desde el sudoeste" />
           <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            La avena acumuló 6.779.572 toneladas entre 2011/12 y 2025/26 con 103 municipios productores. Su
-            foco no es el núcleo triguero del sudeste sino el sudoeste bonaerense: Tornquist, Puán y
-            Saavedra encabezan el ranking, una región de condiciones agroecológicas distintas. El top 15
-            concentra el 60,52%, casi tanto como el girasol.
+            La avena acumuló 6.779.572 toneladas con 103 municipios productores, y su cuadro no se
+            parece a ningún otro. No lo encabeza el núcleo triguero del sudeste sino el sudoeste:
+            Tornquist, Puán y Saavedra, tres partidos que en trigo aparecen lejos del podio o no
+            aparecen. El top 15 concentra el 60,52%, casi lo mismo que el girasol.
           </p>
           <DownloadableViz title="Avena - primeros 10 municipios productores, campañas 2011/12 a 2025/26" fuente={FUENTE}>
             <ChartRanking cultivo="Avena" filas={AVENA} ventana={CULTIVOS.avena.ventana} color={DATA[2]} />
@@ -826,11 +835,10 @@ export default function InformeProduccionAgricolaPBA() {
           <TablaRanking filas={AVENA} titulo="Avena: top 15 municipios productores (2011/12 a 2025/26)" />
           <FichaTecnica items={fichaCultivo(CULTIVOS.avena.ventana)} />
           <p className="text-base leading-relaxed mt-6 mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-            El sorgo es el de menor volumen absoluto de los siete: 6.118.411 toneladas entre 2010/11 y
-            2024/25, con 95 municipios productores, el universo más chico del informe. Cultivo de verano con
-            buena tolerancia a la menor disponibilidad hídrica, se concentra en el oeste y el noroeste:
-            Adolfo Alsina y Guaminí, sobre el límite con La Pampa, encabezan el ranking, seguidos por
-            Pergamino - que aporta además el mejor rinde del top 15, 6.370 kg/ha. El top 15 acumula el
+            El sorgo cierra el informe con 6.118.411 toneladas y 95 municipios productores, el universo
+            más chico de los siete cultivos. Adolfo Alsina y Guaminí lo encabezan desde el límite con
+            La Pampa, donde el cultivo aguanta la menor disponibilidad de agua mejor que el maíz.
+            Pergamino es tercero y firma el mejor rinde del cuadro, 6.370 kg/ha. El top 15 se lleva el
             49,57% de la producción provincial.
           </p>
           <DownloadableViz title="Sorgo - primeros 10 municipios productores, campañas 2010/11 a 2024/25" fuente={FUENTE}>
@@ -839,28 +847,6 @@ export default function InformeProduccionAgricolaPBA() {
           <TablaRanking filas={SORGO} titulo="Sorgo: top 15 municipios productores (2010/11 a 2024/25)" />
           <FichaTecnica items={fichaCultivo(CULTIVOS.sorgo.ventana)} />
         </div>
-      </div>
-
-      {/* CIERRE */}
-      <div className="max-w-5xl mx-auto px-6 pb-10">
-        <SH title="Qué queda del relevamiento" />
-        <p className="text-base leading-relaxed mb-3" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-          Quince años de datos confirman una geografía productiva estable y bien diferenciada. Los cultivos
-          de verano tienen su núcleo en el noroeste, con General Villegas, Pergamino, 9 de Julio, Lincoln,
-          Trenque Lauquen y Rivadavia repitiéndose entre los primeros puestos de soja y maíz. Los de
-          invierno y el girasol se concentran en el sudeste y el sur, con Tres Arroyos, Coronel Dorrego,
-          Coronel Suárez, Necochea, Lobería y Tandil como protagonistas recurrentes.
-        </p>
-        <p className="text-base leading-relaxed" style={{ color: C.inkMid, maxWidth: '72ch' }}>
-          Las aperturas por tipo de producción muestran que dentro de un mismo cultivo pueden convivir
-          patrones distintos: la soja de segunda pesa más en el sudeste que la de primera, y el candeal está
-          concentrado en un puñado de municipios donde el trigo pan está disperso. El nivel de concentración
-          es lo que más varía entre cultivos - alto en girasol (60,96%) y avena (60,52%), moderado en soja
-          (43,14%), maíz (43,37%) y trigo (42,77%) - y marca cuáles dependen de unos pocos partidos y cuáles
-          se reparten entre muchos. Un análisis complementario sobre la evolución interanual de superficie y
-          rendimiento en estos mismos municipios permitiría leer las tendencias recientes, que este corte
-          acumulado no captura.
-        </p>
       </div>
 
       {/* NOTA METODOLÓGICA */}
