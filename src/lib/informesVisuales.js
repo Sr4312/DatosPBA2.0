@@ -20,6 +20,18 @@
    se muestra sin banda visual. */
 
 export const INFORMES_VISUALES = {
+  '/informes/produccion-agricola-municipios-pba-2026': {
+    cifra: '11,2',
+    unidad: 'millones de toneladas',
+    periodo: '2010/11 - 2024/25',
+    fuente: 'Estimaciones Agrícolas',
+    hallazgo: 'General Villegas encabeza la soja bonaerense con 11,2 millones de toneladas acumuladas en quince campañas, el 4,78% del total provincial',
+    tipo: 'barras-h',
+    etiquetas: ['G. Villegas', 'Pergamino', '9 de Julio', 'Lincoln', 'Rivadavia'],
+    series: [{ nombre: 'Soja', valores: [11238868, 9893370, 8213484, 7481668, 6937766] }],
+    destacado: 0,
+  },
+
   '/informes/stock-bovino-municipios-pba-2024': {
     cifra: '19,4',
     unidad: 'millones de cabezas',

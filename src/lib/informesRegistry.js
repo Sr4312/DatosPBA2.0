@@ -21,6 +21,14 @@ export const INFORMES = [
     fecha: '2026-09-08',
   },
   {
+    path: '/informes/produccion-agricola-municipios-pba-2026',
+    titulo: 'Producción agrícola en la Provincia de Buenos Aires',
+    descripcion:
+      'Quince campañas de soja, maíz, trigo, cebada, girasol, avena y sorgo en los 135 municipios bonaerenses. General Villegas encabeza soja y maíz; Tres Arroyos, trigo; y Coronel Dorrego concentra el 26,1% del trigo candeal provincial.',
+    tema: 'Agro',
+    fecha: '2026-08-15',
+  },
+  {
     path: '/informes/exportaciones-pba-junio-2026',
     titulo: 'Exportaciones de la Provincia de Buenos Aires',
     descripcion:
