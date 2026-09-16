@@ -13,6 +13,14 @@ export const SITE_DESC =
 
 export const INFORMES = [
   {
+    path: '/informes/coyuntura-agropecuaria-pba-2trim-2026',
+    titulo: 'Coyuntura agropecuaria bonaerense, segundo trimestre de 2026',
+    descripcion:
+      'Las exportaciones bonaerenses de granos y carnes crecieron más de 25% en dólares en el primer semestre, mientras la faena bovina cayó 9,7% y el consumo de carne vacuna bajó a 45,1 kg por habitante.',
+    tema: 'Agro',
+    fecha: '2026-09-16',
+  },
+  {
     path: '/informes/stock-bovino-municipios-pba-2024',
     titulo: 'Los quince municipios con más ganado bovino de la Provincia',
     descripcion:

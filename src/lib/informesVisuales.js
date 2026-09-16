@@ -20,6 +20,18 @@
    se muestra sin banda visual. */
 
 export const INFORMES_VISUALES = {
+  '/informes/coyuntura-agropecuaria-pba-2trim-2026': {
+    cifra: '−11,3',
+    unidad: '% i.a. carne vacuna',
+    periodo: 'II trim. 2026',
+    fuente: 'DPE - CICCRA',
+    hallazgo: 'El consumo aparente de carne vacuna cayó 11,3% interanual en el segundo trimestre de 2026, mientras el de carne aviar subió 1,4% y el de carne porcina 7,9%',
+    tipo: 'barras',
+    etiquetas: ['Vacuna', 'Aviar', 'Porc.'],
+    series: [{ nombre: 'Consumo aparente, var. i.a.', valores: [-11.3, 1.4, 7.9] }],
+    destacado: 0,
+  },
+
   '/informes/produccion-agricola-municipios-pba-2026': {
     cifra: '11,2',
     unidad: 'millones de toneladas',
