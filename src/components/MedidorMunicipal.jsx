@@ -379,7 +379,11 @@ const THEMES = {
 
 /* Estilo de un partido según la temática activa y su estado */
 function styleFor(layer, t, state) {
-  if (state === 'selected') return THEMES[t]?.selected || THEMES.general.selected
+  /* En los mapas coloreados por dato, el elegido conserva su relleno y se marca con borde */
+  if (state === 'selected') {
+    if (THEMES[t]) return THEMES[t].selected
+    return { ...styleFor(layer, t, 'hover'), color: '#0F172A', weight: 3, opacity: 1 }
+  }
   if (t === 'gasto')         return secuencialStyle(layer._egData?.gasto_vecino_mes, CORTES_GASTO, state)
   if (t === 'concejales')    return secuencialStyle(layer._egData?.hcd_hab, CORTES_HCD, state)
   if (t === 'tasavial')      return tasaVialStyle(layer._tasaData, state)
@@ -403,7 +407,6 @@ const TEMAS = [
 /* ── Indicators per theme ───────────────────────────────────────────────── */
 const INDICATORS = {
   general: [
-    { key: 'urbano',                   label: 'Urbanización',           good: 'high' },
     { key: 'electricidad',             label: 'Electricidad',           good: 'high' },
     { key: 'agua_mejorada',            label: 'Agua mejorada',          good: 'high' },
     { key: 'saneamiento_mejorado',     label: 'Saneamiento',            good: 'high' },
@@ -422,7 +425,6 @@ const INDICATORS = {
     { key: 'fin_secundaria_adultos', label: 'Capital humano (secundaria)', good: 'high' },
     { key: 'tics_internet',   label: 'Conectividad productiva',      good: 'high' },
     { key: 'tics_celular',    label: 'Penetración móvil',            good: 'high' },
-    { key: 'urbano',          label: 'Urbanización',                 good: 'high' },
     { key: 'participacion_mujeres', label: 'Participación laboral fem.', good: 'high' },
   ],
   tasas: null,
@@ -449,27 +451,35 @@ function in1ToCode(in1) {
   return `ARG06${tail}${id4}`
 }
 
-function IndicatorBar({ ind, data }) {
-  const value = ind.derive ? ind.derive(data) : data[ind.key]
-  if (value == null) return null
-  const pct    = value * 100
-  const barPct = Math.min(pct, 100)
-  /* nivel → valoración según la dirección deseable del indicador */
-  const color  =
-    ind.good === 'high'
-      ? colorEscalaValoracion(pct > 70 ? 1 : pct > 40 ? 0.5 : 0)
-      : colorEscalaValoracion(pct < 10 ? 1 : pct < 25 ? 0.5 : 0)
+/* Barra horizontal con etiqueta y valor (panel del atlas) */
+function Barra({ label, valor, pct, color }) {
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex justify-between items-center">
-        <span className="text-xs text-slate-500">{ind.label}</span>
-        <span className="text-xs font-semibold text-slate-900">{pct.toFixed(1)}%</span>
+      <div className="flex justify-between items-baseline gap-3">
+        <span className="text-xs text-slate-500">{label}</span>
+        <span className="text-xs font-semibold text-slate-900 tabular-nums whitespace-nowrap">{valor}</span>
       </div>
-      <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-        <div className="h-full rounded-full transition-all duration-500" style={{ width: `${barPct}%`, backgroundColor: color }} />
+      <div className="h-1.5 bg-slate-100 overflow-hidden">
+        <div className="h-full" style={{ width: `${Math.max(0, Math.min(pct, 100))}%`, backgroundColor: color }} />
       </div>
     </div>
   )
+}
+
+function NotaFuente({ children }) {
+  return <p className="text-[11px] text-slate-500 leading-snug pt-3 mt-auto">{children}</p>
+}
+
+function IndicatorBar({ ind, data }) {
+  const value = ind.derive ? ind.derive(data) : data[ind.key]
+  if (value == null) return null
+  const pct = value * 100
+  /* nivel → valoración según la dirección deseable del indicador */
+  const color =
+    ind.good === 'high'
+      ? colorEscalaValoracion(pct > 70 ? 1 : pct > 40 ? 0.5 : 0)
+      : colorEscalaValoracion(pct < 10 ? 1 : pct < 25 ? 0.5 : 0)
+  return <Barra label={ind.label} valor={fmtPct1(value)} pct={pct} color={color} />
 }
 
 /* ── Ranking provincial por temática (estado por defecto del panel) ─────── */
@@ -572,7 +582,7 @@ function RankingLista({ titulo, rows }) {
 function RankingDefault({ tema }) {
   if (tema === 'economia') {
     return (
-      <div className="p-5 border-t-2 border-[#0F172A] flex-1 overflow-y-auto">
+      <div className="p-5 border-t-2 border-[#0F172A] flex-1 min-h-0 overflow-y-auto">
         <p className="text-label font-semibold uppercase tracking-wider text-slate-500 mb-3">
           Partidos por categoría productiva
         </p>
@@ -608,7 +618,7 @@ function RankingDefault({ tema }) {
   }
 
   return (
-    <div className="p-5 border-t-2 border-[#0F172A] flex-1 overflow-y-auto">
+    <div className="p-5 border-t-2 border-[#0F172A] flex-1 min-h-0 overflow-y-auto">
       <RankingLista titulo={ranking.titulo} rows={ranking.rows} />
       {ranking.extra && (
         <div className="mt-5">
@@ -661,11 +671,17 @@ function CifraCabecera({ valor, unidad, puesto, total }) {
   )
 }
 
-function FilaDato({ label, valor, color }) {
+/* envolver: para valores de texto largo, que pueden ocupar más de una línea */
+function FilaDato({ label, valor, color, envolver = false }) {
   return (
     <div className="flex justify-between items-baseline gap-3 py-2.5 border-b" style={{ borderColor: 'var(--rule)' }}>
-      <span className="text-xs text-slate-500">{label}</span>
-      <span className="text-sm font-semibold text-slate-900 tabular-nums text-right whitespace-nowrap" style={color ? { color } : undefined}>{valor}</span>
+      <span className="text-xs text-slate-500 shrink-0">{label}</span>
+      <span
+        className={`text-sm font-semibold text-slate-900 tabular-nums text-right ${envolver ? '' : 'whitespace-nowrap'}`}
+        style={color ? { color } : undefined}
+      >
+        {valor}
+      </span>
     </div>
   )
 }
@@ -717,13 +733,13 @@ export default function AtlasMunicipal() {
 
         const bounds = L.latLngBounds(L.latLng(-43.5, -65.5), L.latLng(-32.5, -55.5))
         map = L.map(mapRef.current, {
-          center: [-37.5, -61], zoom: 6, minZoom: 6, maxZoom: 9,
+          center: [-37.5, -61], zoom: 6, minZoom: 5, maxZoom: 10, zoomSnap: 0.25,
           maxBounds: bounds, maxBoundsViscosity: 1.0,
           zoomControl: true, attributionControl: false,
         })
         mapInstRef.current = map
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 15, opacity: 0.65, attribution: '&copy; OpenStreetMap' }).addTo(map)
+        /* Sin mapa base: fondo blanco y solo los límites de los partidos */
 
         /* La geometría entra por el pipeline de assets de Vite (?url): sale del
            build con hash de contenido, así que vercel.json la puede cachear como
@@ -771,6 +787,7 @@ export default function AtlasMunicipal() {
               selectedRef.current = layer
               if (prev && prev !== layer) prev.setStyle(styleFor(prev, t, 'default'))
               layer.setStyle(styleFor(layer, t, 'selected'))
+              layer.bringToFront()
 
               const muniData = layer._municipiosData
               setSelected({
@@ -780,13 +797,20 @@ export default function AtlasMunicipal() {
                 _tasa: layer._tasaData || null,
                 _transparencia: layer._transparenciaData || null,
                 _cadena: layer._cadenaCat || null,
-                _noData: (t === 'general' || t === 'produccion') && !muniData,
               })
             })
           },
         }).addTo(map)
 
         geoLayerRef.current = geoLayer
+        /* Encuadre a la provincia; se rehace si cambia el tamaño del contenedor */
+        const encuadrar = () => {
+          map.setMinZoom(0)
+          map.fitBounds(geoLayer.getBounds(), { padding: [12, 12] })
+          map.setMinZoom(map.getZoom())
+        }
+        encuadrar()
+        map.on('resize', encuadrar)
         setLoading(false)
       } catch {
         if (mounted) setError(true)
@@ -799,282 +823,236 @@ export default function AtlasMunicipal() {
 
   const indicators = INDICATORS[tema]
 
-  /* Panel content */
-  function PanelContent() {
-    if (!selected) {
-      return <RankingDefault tema={tema} />
-    }
+  /* ¿El partido elegido tiene dato para la temática activa? */
+  function tieneDato(sel) {
+    if (tema === 'general' || tema === 'produccion') return !!sel.codigo
+    if (tema === 'economia')      return !!sel._cadena
+    if (tema === 'tasavial')      return !!sel._tasa
+    if (tema === 'transparencia') return !!sel._transparencia
+    if (tema === 'gasto')         return sel._eg?.gasto_vecino_mes != null
+    if (tema === 'concejales')    return !!sel._eg
+    return false
+  }
 
-    if (selected._noData) {
+  function cerrarSeleccion() {
+    const prev = selectedRef.current
+    selectedRef.current = null
+    if (prev) prev.setStyle(styleFor(prev, temaRef.current, 'default'))
+    setSelected(null)
+  }
+
+  /* Encabezado: cifra principal según la temática */
+  function cabecera(sel) {
+    if (tema === 'general' || tema === 'produccion') {
+      const cifras = [
+        { valor: sel.poblacion,      unidad: 'habitantes' },
+        { valor: sel.hogares,        unidad: 'hogares' },
+        { valor: sel.superficie_km2, unidad: 'km²' },
+      ].filter(c => c.valor != null)
       return (
-        <div className="flex-1 flex flex-col items-center justify-center text-center gap-2 p-6">
-          <p className="text-base font-bold text-[#0F172A]">{selected.nombre}</p>
-          <p className="text-xs text-slate-500">Sin datos disponibles para este partido.</p>
+        <div className="flex flex-wrap gap-x-5 gap-y-2 mt-3">
+          {cifras.map(c => (
+            <div key={c.unidad}>
+              <p className="text-xl font-bold text-[#0F172A] leading-none tabular-nums">{c.valor.toLocaleString('es-AR')}</p>
+              <p className="text-xs text-slate-500 mt-1">{c.unidad}</p>
+            </div>
+          ))}
         </div>
       )
     }
-
-    return (
-      <div className="flex flex-col h-full overflow-hidden">
-        {/* Header */}
-        <div className="px-5 pt-5 pb-4 border-b border-slate-100 shrink-0">
-          <h3 className="text-lg font-bold text-[#0F172A] leading-tight">{selected.nombre}</h3>
-          {tema !== 'concejales' && tema !== 'gasto' && tema !== 'transparencia' && tema !== 'economia' && (
-            <div className="flex flex-wrap gap-4 mt-3">
-              {selected.poblacion && (
-                <div>
-                  <p className="text-xl font-bold text-brand-600 leading-none">{selected.poblacion.toLocaleString('es-AR')}</p>
-                  <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1">Habitantes</p>
-                </div>
-              )}
-              {selected.hogares && (
-                <div>
-                  <p className="text-xl font-bold text-brand-600 leading-none">{selected.hogares.toLocaleString('es-AR')}</p>
-                  <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1">Hogares</p>
-                </div>
-              )}
-              {selected.superficie_km2 != null && (
-                <div>
-                  <p className="text-xl font-bold text-brand-600 leading-none">{selected.superficie_km2.toLocaleString('es-AR')}</p>
-                  <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1">km²</p>
-                </div>
-              )}
-            </div>
-          )}
-          {tema === 'gasto' && selected._eg?.gasto_vecino_mes != null && (
-            <CifraCabecera
-              valor={fmtPesos(selected._eg.gasto_vecino_mes)}
-              unidad="por vecino, por mes"
-              {...puestoEG('gasto_vecino_mes', selected._eg.gasto_vecino_mes)}
-            />
-          )}
-          {tema === 'concejales' && selected._eg && (
-            <CifraCabecera
-              valor={fmtPesos(selected._eg.hcd_hab)}
-              unidad="por habitante, por año"
-              {...puestoEG('hcd_hab', selected._eg.hcd_hab)}
-            />
-          )}
-          {tema === 'transparencia' && selected._transparencia && (
-            <div className="flex flex-wrap items-center gap-3 mt-3">
-              <div>
-                <p className="text-2xl font-bold leading-none" style={{ color: transparenciaFill(selected._transparencia.indice) }}>
-                  {selected._transparencia.indice}
-                </p>
-                <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1">Índice (0–100)</p>
-              </div>
-              <span
-                className="text-xs font-semibold px-2.5 py-1 rounded-full text-white"
-                style={{ backgroundColor: CUMPLIMIENTO_COLORS[selected._transparencia.cumplimiento] }}
-              >
-                {selected._transparencia.cumplimiento}
-              </span>
-            </div>
-          )}
-          {tema === 'economia' && selected._cadena && (
-            <div className="mt-3">
-              <div className="flex flex-wrap items-center gap-3">
-                <span
-                  className="text-sm font-bold px-3 py-1 rounded-full text-white"
-                  style={{ backgroundColor: CADENA_CATEGORIAS[selected._cadena].color }}
-                >
-                  {CADENA_CATEGORIAS[selected._cadena].label}
-                </span>
-                <div>
-                  <p className="text-lg font-bold text-slate-900 leading-none">{CADENA_CATEGORIAS[selected._cadena].vab}</p>
-                  <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">del VAB provincial</p>
-                </div>
-              </div>
-              {selected.poblacion && (
-                <p className="text-xs text-slate-500 mt-2">{selected.poblacion.toLocaleString('es-AR')} habitantes</p>
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Tema label */}
-        <div className="px-5 pt-3 pb-1 shrink-0">
-          <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">
-            {TEMAS.find(t => t.id === tema)?.label}
+    if (tema === 'tasavial') {
+      const t = sel._tasa
+      return (
+        <div className="mt-3">
+          <p className="text-2xl font-bold text-[#0F172A] leading-none tabular-nums">
+            {t.tipo === 'pct' ? `${t.valor.toFixed(2).replace('.', ',')}%` : t.label}
+          </p>
+          <p className="text-xs text-slate-500 mt-1.5">
+            {t.tipo === 'pct' ? 'del precio por litro expendido' : 'monto fijo por litro'}
           </p>
         </div>
+      )
+    }
+    if (tema === 'transparencia') {
+      const d = sel._transparencia
+      return (
+        <div className="mt-3">
+          <p className="text-2xl font-bold text-[#0F172A] leading-none tabular-nums">
+            {d.indice}<span className="text-sm font-semibold text-slate-500"> / 100</span>
+          </p>
+          <p className="text-xs text-slate-500 mt-1.5 flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 shrink-0" style={{ backgroundColor: CUMPLIMIENTO_COLORS[d.cumplimiento] }} />
+            Cumplimiento {d.cumplimiento.toLowerCase()}
+          </p>
+        </div>
+      )
+    }
+    if (tema === 'economia') {
+      const c = CADENA_CATEGORIAS[sel._cadena]
+      return (
+        <div className="mt-3">
+          <p className="text-2xl font-bold text-[#0F172A] leading-none flex items-center gap-2">
+            <span className="w-3 h-3 shrink-0" style={{ backgroundColor: c.color }} />
+            {c.label}
+          </p>
+          <p className="text-xs text-slate-500 mt-1.5">
+            La categoría reúne el <span className="tabular-nums">{c.vab}</span> del valor agregado provincial
+          </p>
+        </div>
+      )
+    }
+    if (tema === 'gasto') {
+      return (
+        <CifraCabecera
+          valor={fmtPesos(sel._eg.gasto_vecino_mes)}
+          unidad="por vecino, por mes"
+          {...puestoEG('gasto_vecino_mes', sel._eg.gasto_vecino_mes)}
+        />
+      )
+    }
+    if (tema === 'concejales') {
+      return (
+        <CifraCabecera
+          valor={fmtPesos(sel._eg.hcd_hab)}
+          unidad="por habitante, por año"
+          {...puestoEG('hcd_hab', sel._eg.hcd_hab)}
+        />
+      )
+    }
+    return null
+  }
 
-        {/* Body */}
-        {indicators === 'tasa' ? (
-          <div className="flex-1 overflow-y-auto px-5 py-4">
-            {selected._tasa ? (
-              <div className="flex flex-col gap-4">
-                <div className="bg-slate-50 rounded-xl p-4 text-center">
-                  <p
-                    className="text-3xl font-bold leading-none tabular-nums"
-                    style={{ color: selected._tasa.tipo === 'pesos' ? 'var(--c-ink)' : 'var(--worse-text)' }}
-                  >
-                    {selected._tasa.tipo === 'pct'
-                      ? `${selected._tasa.valor.toFixed(2).replace('.', ',')}%`
-                      : selected._tasa.label}
-                  </p>
-                  <p className="text-[10px] text-slate-500 mt-2 uppercase tracking-wider">
-                    {selected._tasa.tipo === 'pct' ? 'por litro expendido' : 'fijo por litro (pesos)'}
-                  </p>
-                </div>
-                {selected._tasa.nota && (
-                  <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 leading-snug">
-                    {selected._tasa.nota}
-                  </p>
-                )}
-                {selected._tasa.tipo === 'pesos' && (
-                  <p className="text-xs text-slate-500 leading-relaxed">
-                    Tasa fija en pesos por litro. Su carga real varía según el precio del combustible.
-                  </p>
-                )}
-                <div className="pt-3 border-t border-slate-100">
-                  <a href="/informes/tasa-vial-municipios-pba-2025" className="text-xs font-medium text-brand-600 hover:text-brand-700 no-underline">
-                    Ver informe completo →
-                  </a>
-                </div>
-              </div>
-            ) : (
-              <p className="text-xs text-slate-500">Sin datos de tasa vial para este partido en el relevamiento 2025.</p>
-            )}
+  /* Cuerpo: detalle según la temática */
+  function cuerpo(sel) {
+    if (tema === 'general' || tema === 'produccion') {
+      return (
+        <div className="flex flex-col gap-3">
+          {indicators.map(ind => <IndicatorBar key={ind.key} ind={ind} data={sel} />)}
+          <NotaFuente>Fuente: CAF - Banco de Desarrollo de América Latina y el Caribe, en base al Censo 2022.</NotaFuente>
+        </div>
+      )
+    }
+    if (tema === 'tasavial') {
+      const t = sel._tasa
+      return (
+        <div className="flex flex-col">
+          {t.nota && <FilaDato label="Situación" valor={t.nota} envolver />}
+          {t.tipo === 'pesos' && (
+            <p className="text-xs text-slate-600 leading-relaxed py-2.5">
+              Tasa fija en pesos por litro. Su carga real varía según el precio del combustible.
+            </p>
+          )}
+          <a href="/informes/tasa-vial-municipios-pba-2025" className="text-xs font-medium text-[#2563EB] hover:underline mt-3 self-start">
+            Ver informe completo →
+          </a>
+          <NotaFuente>Fuente: Ministerio de Economía de la Nación, Subsecretaría de Coordinación Fiscal Provincial, mar. 2025.</NotaFuente>
+        </div>
+      )
+    }
+    if (tema === 'transparencia') {
+      const d = sel._transparencia
+      const rows = [
+        { label: 'Transparencia',                  value: d.transparencia,  max: 5  },
+        { label: 'Presupuesto',                    value: d.presupuesto,    max: 30 },
+        { label: 'Situación económico-financiera', value: d.sitEcFciera,    max: 35 },
+        { label: 'Ejecución trimestral',           value: d.ejecTrimestral, max: 10 },
+        { label: 'Gastos por finalidad y función', value: d.gastosFinFunc,  max: 10 },
+        { label: 'Deuda',                          value: d.deuda,          max: 10 },
+      ]
+      return (
+        <div className="flex flex-col gap-3">
+          {rows.map(r => (
+            <Barra
+              key={r.label}
+              label={r.label}
+              valor={<>{r.value}<span className="text-slate-500 font-normal"> / {r.max}</span></>}
+              pct={(r.value / r.max) * 100}
+              color={transparenciaFill((r.value / r.max) * 100)}
+            />
+          ))}
+          <NotaFuente>Puntaje por documento publicado. Fuente: ASAP, Filial Provincia de Buenos Aires.</NotaFuente>
+        </div>
+      )
+    }
+    if (tema === 'economia') {
+      const c = CADENA_CATEGORIAS[sel._cadena]
+      const tendencia = dir => (
+        <span style={{ color: getColorVariacion({ variacion: dir === 'up' ? 1 : -1, polaridad: 'mayor-es-mejor', texto: true }) }}>
+          {dir === 'up' ? '↑ Sobre el promedio' : '↓ Bajo el promedio'}
+        </span>
+      )
+      return (
+        <div className="flex flex-col">
+          <FilaDato label="Largo plazo (2016-2025)" valor={tendencia(c.largo)} />
+          <FilaDato label="Corto plazo (2025)" valor={tendencia(c.corto)} />
+          {sel.poblacion != null && <FilaDato label="Habitantes (Censo 2022)" valor={sel.poblacion.toLocaleString('es-AR')} />}
+          <p className="text-xs text-slate-600 leading-relaxed pt-3">{c.desc}</p>
+          <NotaFuente>Fuente: A. Lodola, "Cadenas productivas en los municipios de la Provincia de Buenos Aires 2016/2025", Comisión de Asuntos Municipales, Senado PBA.</NotaFuente>
+        </div>
+      )
+    }
+    if (tema === 'gasto') {
+      const d = sel._eg
+      return (
+        <div className="flex flex-col">
+          <FilaDato label="Gasto total 2026" valor={fmtMillones(d.gasto_total)} />
+          {sel.poblacion != null && <FilaDato label="Habitantes (Censo 2022)" valor={sel.poblacion.toLocaleString('es-AR')} />}
+          {d.personal_pct != null && (
+            <div className="py-2.5 border-b" style={{ borderColor: 'var(--rule)' }}>
+              <Barra label="Gasto en personal" valor={`${d.personal_pct}% del total`} pct={d.personal_pct} color="#0F172A" />
+            </div>
+          )}
+          {d.tipo_fuente && <FilaDato label="Documento de la ficha" valor={d.tipo_fuente} envolver />}
+          <NotaFuente>Gasto total dividido por la población del Censo 2022 y por 12 meses. Fuente: Fundación Libertad, "Ellos gastan" 2026.</NotaFuente>
+        </div>
+      )
+    }
+    if (tema === 'concejales') {
+      const d = sel._eg
+      return (
+        <div className="flex flex-col">
+          <FilaDato label="Presupuesto del Concejo 2026" valor={fmtMillones(d.hcd)} />
+          {d.aumento_hcd != null && (
+            <FilaDato
+              label="Variación contra 2025"
+              valor={`${flechaVariacion(d.aumento_hcd)} ${fmtVar(d.aumento_hcd)}`}
+              color={getColorVariacion({ variacion: d.aumento_hcd, polaridad: 'neutro', texto: true })}
+            />
+          )}
+          <FilaDato label="Concejales" valor={d.concejales} />
+          <FilaDato label="Costo mensual por concejal" valor={fmtMillones(d.costo_concejal_mes)} />
+          {d.hcd_pct_gasto != null && (
+            <FilaDato label="Peso en el gasto municipal" valor={`${d.hcd_pct_gasto.toLocaleString('es-AR')}%`} />
+          )}
+          <NotaFuente>Por habitante: presupuesto del Concejo dividido por la población del Censo 2022. El costo por concejal incluye todo el presupuesto del cuerpo, no solo dietas. Fuente: Fundación Libertad, "Ellos gastan" 2026.</NotaFuente>
+        </div>
+      )
+    }
+    return null
+  }
+
+  function renderPanel() {
+    if (!selected) return <RankingDefault tema={tema} />
+    const hay = tieneDato(selected)
+    return (
+      <div className="flex flex-col flex-1 min-h-0">
+        <div className="px-5 pt-4 pb-4 border-b shrink-0" style={{ borderColor: 'var(--rule)' }}>
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-xs text-slate-500">{TEMAS.find(t => t.id === tema)?.label}</p>
+            <button
+              type="button"
+              onClick={cerrarSeleccion}
+              className="text-xs font-medium text-slate-500 hover:text-[#0F172A] transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563EB]"
+            >
+              ← Ver ranking
+            </button>
           </div>
-        ) : indicators === 'transparencia' ? (
-          /* Transparencia fiscal detail */
-          <div className="flex-1 overflow-y-auto px-5 py-4">
-            {selected._transparencia ? (() => {
-              const d = selected._transparencia
-              const rows = [
-                { label: 'Transparencia',                 value: d.transparencia,  max: 5  },
-                { label: 'Presupuesto',                   value: d.presupuesto,    max: 30 },
-                { label: 'Situación económica financiera', value: d.sitEcFciera,    max: 35 },
-                { label: 'Ejecución trimestral',           value: d.ejecTrimestral, max: 10 },
-                { label: 'Gastos en función financiera',   value: d.gastosFinFunc,  max: 10 },
-                { label: 'Deuda',                          value: d.deuda,          max: 10 },
-              ]
-              return (
-                <div className="flex flex-col gap-3">
-                  {rows.map(r => (
-                    <div key={r.label} className="flex flex-col gap-1">
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-slate-500">{r.label}</span>
-                        <span className="text-xs font-semibold text-slate-900">{r.value}/{r.max}</span>
-                      </div>
-                      <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                        <div
-                          className="h-full rounded-full transition-all duration-500"
-                          style={{ width: `${(r.value / r.max) * 100}%`, backgroundColor: transparenciaFill((r.value / r.max) * 100) }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )
-            })() : (
-              <p className="text-xs text-slate-500">Sin datos de transparencia fiscal para este partido.</p>
-            )}
-          </div>
-        ) : indicators === 'economia' ? (
-          /* Economía municipal detail */
-          <div className="flex-1 overflow-y-auto px-5 py-4">
-            {selected._cadena ? (() => {
-              const c = CADENA_CATEGORIAS[selected._cadena]
-              const arrow = dir => (
-                <span
-                  className="text-xs font-semibold flex items-center gap-1"
-                  style={{ color: getColorVariacion({ variacion: dir === 'up' ? 1 : -1, polaridad: 'mayor-es-mejor', texto: true }) }}
-                >
-                  {dir === 'up' ? '↑ Por encima del promedio' : '↓ Por debajo del promedio'}
-                </span>
-              )
-              return (
-                <div className="flex flex-col gap-4">
-                  <div className="flex flex-col gap-2.5">
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="text-xs text-slate-500">Largo plazo (2016-2025)</span>
-                      {arrow(c.largo)}
-                    </div>
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="text-xs text-slate-500">Corto plazo (2025)</span>
-                      {arrow(c.corto)}
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">{c.desc}</p>
-                  <p className="text-[11px] text-slate-500 leading-snug border-t border-slate-100 pt-3">
-                    Fuente: "Cadenas Productivas en los Municipios de la Provincia de Buenos Aires 2016/2025" - A. Lodola, Comisión de Asuntos Municipales, Senado PBA.
-                  </p>
-                </div>
-              )
-            })() : (
-              <p className="text-xs text-slate-500">Sin datos de clasificación económica para este partido.</p>
-            )}
-          </div>
-        ) : indicators === 'gasto' ? (
-          /* Gasto por vecino detail */
-          <div className="flex-1 overflow-y-auto px-5 py-4">
-            {selected._eg?.gasto_total != null ? (() => {
-              const d = selected._eg
-              return (
-                <div className="flex flex-col">
-                  <FilaDato label="Gasto total 2026" valor={fmtMillones(d.gasto_total)} />
-                  <FilaDato label="Población (Censo 2022)" valor={selected.poblacion?.toLocaleString('es-AR') ?? 's/d'} />
-                  {d.personal_pct != null && (
-                    <div className="py-2.5 border-b" style={{ borderColor: 'var(--rule)' }}>
-                      <div className="flex justify-between items-baseline gap-3">
-                        <span className="text-xs text-slate-500">Gasto en personal</span>
-                        <span className="text-sm font-semibold text-slate-900 tabular-nums">{d.personal_pct}% del total</span>
-                      </div>
-                      <div className="h-1.5 bg-slate-100 mt-1.5 overflow-hidden">
-                        <div className="h-full" style={{ width: `${d.personal_pct}%`, backgroundColor: 'var(--data-4, #0F172A)' }} />
-                      </div>
-                    </div>
-                  )}
-                  <FilaDato label="Documento de la ficha" valor={d.tipo_fuente ?? 's/d'} />
-                  <p className="text-[11px] text-slate-500 leading-snug pt-3">
-                    Gasto total dividido por la población del Censo 2022 y por 12 meses. Fuente: Fundación Libertad, "Ellos gastan" 2026.
-                  </p>
-                </div>
-              )
-            })() : (
-              <p className="text-xs text-slate-500">
-                {selected._eg
-                  ? 'Este partido no tiene ficha de gasto en "Ellos gastan" 2026: solo figuran los datos de su Concejo Deliberante.'
-                  : 'Este partido no figura en el relevamiento "Ellos gastan" 2026.'}
-              </p>
-            )}
-          </div>
-        ) : indicators === 'custom' ? (
-          /* Concejales detail */
-          <div className="flex-1 overflow-y-auto px-5 py-4">
-            {selected._eg ? (() => {
-              const d = selected._eg
-              return (
-                <div className="flex flex-col">
-                  <FilaDato label="Presupuesto del Concejo 2026" valor={fmtMillones(d.hcd)} />
-                  {d.aumento_hcd != null && (
-                    <FilaDato
-                      label="Variación contra 2025"
-                      valor={`${flechaVariacion(d.aumento_hcd)} ${fmtVar(d.aumento_hcd)}`}
-                      color={getColorVariacion({ variacion: d.aumento_hcd, polaridad: 'neutro', texto: true })}
-                    />
-                  )}
-                  <FilaDato label="Concejales" valor={d.concejales} />
-                  <FilaDato label="Costo mensual por concejal" valor={fmtMillones(d.costo_concejal_mes)} />
-                  {d.hcd_pct_gasto != null && (
-                    <FilaDato label="Peso en el gasto municipal" valor={`${d.hcd_pct_gasto.toLocaleString('es-AR')}%`} />
-                  )}
-                  <p className="text-[11px] text-slate-500 leading-snug pt-3">
-                    Por habitante: presupuesto del Concejo dividido por la población del Censo 2022. El costo por concejal incluye todo el presupuesto del cuerpo, no solo dietas. Fuente: Fundación Libertad, "Ellos gastan" 2026.
-                  </p>
-                </div>
-              )
-            })() : (
-              <p className="text-xs text-slate-500">Este partido no figura en el relevamiento "Ellos gastan" 2026.</p>
-            )}
-          </div>
-        ) : (
-          <div className="flex-1 overflow-y-auto px-5 py-3 flex flex-col gap-3">
-            {indicators.map(ind => <IndicatorBar key={ind.key} ind={ind} data={selected} />)}
-          </div>
-        )}
+          <h3 className="text-lg font-bold text-[#0F172A] leading-tight mt-1">{selected.nombre}</h3>
+          {hay && cabecera(selected)}
+        </div>
+        <div className="flex-1 min-h-0 overflow-y-auto px-5 py-4">
+          {hay ? cuerpo(selected) : <p className="text-sm text-slate-600">No hay datos.</p>}
+        </div>
       </div>
     )
   }
@@ -1182,10 +1160,10 @@ export default function AtlasMunicipal() {
           )}
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-5 min-h-[400px] lg:min-h-[520px]">
+        <div className="flex flex-col lg:flex-row gap-5 lg:h-[560px]">
 
           {/* Map */}
-          <div className="flex-1 relative rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-50 min-h-[320px] sm:min-h-[500px]">
+          <div className="lg:flex-1 relative overflow-hidden border bg-white h-[380px] sm:h-[500px] lg:h-full" style={{ borderColor: 'var(--rule)', borderRadius: 2 }}>
             {loading && !error && (
               <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/80">
                 <span className="text-sm text-slate-500">Cargando mapa...</span>
@@ -1196,12 +1174,12 @@ export default function AtlasMunicipal() {
                 <span className="text-sm text-slate-500">No se pudo cargar el mapa.</span>
               </div>
             )}
-            <div ref={mapRef} className="w-full h-full min-h-[320px] sm:min-h-[500px]" />
+            <div ref={mapRef} className="atlas-map w-full h-full" />
           </div>
 
           {/* Panel */}
-          <div className="lg:w-80 shrink-0 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
-            <PanelContent />
+          <div className="lg:w-80 shrink-0 bg-white border flex flex-col lg:h-full lg:overflow-hidden" style={{ borderColor: 'var(--rule)', borderRadius: 2 }}>
+            {renderPanel()}
           </div>
 
         </div>
@@ -1216,8 +1194,9 @@ export default function AtlasMunicipal() {
           font-size: 12px;
           font-family: inherit;
           padding: 4px 10px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+          box-shadow: none;
         }
+        .atlas-map.leaflet-container { background: #fff; }
         .muni-tooltip::before { display: none; }
         .leaflet-tooltip-top.muni-tooltip::before { display: none; }
       `}</style>
