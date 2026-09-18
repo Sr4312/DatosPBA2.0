@@ -1,54 +1,45 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { MUNICIPIOS_DATA } from '@/lib/municipiosData'
-import { getColorVariacion, colorEscalaValoracion } from '@/lib/variacion'
+import { ELLOS_GASTAN_2026 } from '@/lib/ellosGastan2026'
+import { getColorVariacion, colorEscalaValoracion, flechaVariacion } from '@/lib/variacion'
 import 'leaflet/dist/leaflet.css'
 import partidosGeojsonUrl from '@/assets/partidos.geojson?url'
 
-/* ── Concejales data ────────────────────────────────────────────────────── */
-const CONCEJALES_RAW = [
-  { municipio: 'General Pueyrredón',  concejales: 24, presupuesto: 7268781224, por_concejal: 302865884, pct_total: 1.98, por_habitante: 10896 },
-  { municipio: 'Lomas de Zamora',     concejales: 24, presupuesto: 5951667942, por_concejal: 247986164, pct_total: 1.59, por_habitante: 8622  },
-  { municipio: 'Tigre',               concejales: 24, presupuesto: 5905089478, por_concejal: 246045395, pct_total: 1.43, por_habitante: 13212 },
-  { municipio: 'San Martín',          concejales: 24, presupuesto: 5538000000, por_concejal: 230750000, pct_total: 1.92, por_habitante: 12291 },
-  { municipio: 'San Isidro',          concejales: 24, presupuesto: 5354210655, por_concejal: 223092111, pct_total: 2.00, por_habitante: 18011 },
-  { municipio: 'Moreno',              concejales: 24, presupuesto: 5299731798, por_concejal: 220822158, pct_total: 1.61, por_habitante: 9191  },
-  { municipio: 'La Matanza',          concejales: 24, presupuesto: 5239562383, por_concejal: 218315099, pct_total: 1.76, por_habitante: 2846  },
-  { municipio: 'Vicente López',       concejales: 24, presupuesto: 4920032203, por_concejal: 205001342, pct_total: 1.65, por_habitante: 17430 },
-  { municipio: 'Avellaneda',          concejales: 24, presupuesto: 4321775857, por_concejal: 180073994, pct_total: 1.56, por_habitante: 11758 },
-  { municipio: 'La Plata',            concejales: 24, presupuesto: 3996257439, por_concejal: 166510727, pct_total: 1.32, por_habitante: 5200  },
-  { municipio: 'Bahía Blanca',        concejales: 24, presupuesto: 3793142327, por_concejal: 158047597, pct_total: 1.69, por_habitante: 11270 },
-  { municipio: 'Escobar',             concejales: 24, presupuesto: 3590787917, por_concejal: 149616163, pct_total: 1.66, por_habitante: 14002 },
-  { municipio: 'Malvinas Argentinas', concejales: 24, presupuesto: 3550000000, por_concejal: 147916667, pct_total: 1.31, por_habitante: 10123 },
-  { municipio: 'Quilmes',             concejales: 24, presupuesto: 3468913906, por_concejal: 144538079, pct_total: 1.33, por_habitante: 5477  },
-  { municipio: 'Almirante Brown',     concejales: 24, presupuesto: 3215060000, por_concejal: 133960833, pct_total: 1.35, por_habitante: 5497  },
-  { municipio: 'Tres de Febrero',     concejales: 24, presupuesto: 2384395484, por_concejal: 99349812,  pct_total: 1.96, por_habitante: 6547  },
-  { municipio: 'José Clemente Paz',   concejales: 24, presupuesto: 2730000000, por_concejal: 113750000, pct_total: 1.89, por_habitante: 8349  },
-  { municipio: 'Lanús',               concejales: 24, presupuesto: 2112134332, por_concejal: 113005597, pct_total: 1.46, por_habitante: 5880  },
-  { municipio: 'Florencio Varela',    concejales: 24, presupuesto: 1877888982, por_concejal: 78245374,  pct_total: 1.73, por_habitante: 3783  },
-  { municipio: 'San Miguel',          concejales: 24, presupuesto: 1895749944, por_concejal: 78989581,  pct_total: 1.04, por_habitante: 5765  },
-  { municipio: 'Berazategui',         concejales: 24, presupuesto: 1638114921, por_concejal: 68254788,  pct_total: 1.60, por_habitante: 4567  },
-  { municipio: 'Morón',               concejales: 24, presupuesto: 1272287898, por_concejal: 53011996,  pct_total: 1.34, por_habitante: 3842  },
-  { municipio: 'General Rodríguez',   concejales: 20, presupuesto: 2311000000, por_concejal: 115550000, pct_total: 2.66, por_habitante: 16106 },
-  { municipio: 'Luján',               concejales: 20, presupuesto: 1713576000, por_concejal: 85678800,  pct_total: 1.96, por_habitante: 15437 },
-  { municipio: 'Tandil',              concejales: 20, presupuesto: 1608910349, por_concejal: 80445517,  pct_total: 1.61, por_habitante: 11052 },
-  { municipio: 'Berisso',             concejales: 20, presupuesto: 1495441711, por_concejal: 74772086,  pct_total: 2.58, por_habitante: 14817 },
-  { municipio: 'Necochea',            concejales: 20, presupuesto: 1232144548, por_concejal: 61607227,  pct_total: 1.56, por_habitante: 12067 },
-  { municipio: 'Ituzaingó',           concejales: 20, presupuesto: 1157010458, por_concejal: 57850523,  pct_total: 1.77, por_habitante: 6420  },
-  { municipio: 'Olavarría',           concejales: 20, presupuesto: 1103050000, por_concejal: 55152500,  pct_total: 1.07, por_habitante: 8772  },
-  { municipio: 'San Nicolás',         concejales: 20, presupuesto: 742741567,  por_concejal: 37137078,  pct_total: 0.76, por_habitante: 4426  },
-  { municipio: 'Junín',               concejales: 20, presupuesto: 580007769,  por_concejal: 29000388,  pct_total: 1.21, por_habitante: 5588  },
-  { municipio: 'Maipú',               concejales: 12, presupuesto: 880515000,  por_concejal: 73376250,  pct_total: 1.09, por_habitante: 4013  },
-]
-
+/* ── Ellos gastan 2026 (Fundación Libertad): gasto municipal y Concejo ─── */
 function normName(str) {
-  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim()
+  return str.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim()
 }
 
-const CONCEJALES_DATA = {}
-CONCEJALES_RAW.forEach(d => { CONCEJALES_DATA[normName(d.municipio)] = d })
+const EG_BY_CODE = {}
+ELLOS_GASTAN_2026.forEach(d => { EG_BY_CODE[d.codigo] = d })
 
-const CONC_MIN = Math.min(...CONCEJALES_RAW.map(d => d.por_habitante))
-const CONC_MAX = Math.max(...CONCEJALES_RAW.map(d => d.por_habitante))
+/* Cortes por quintil: cada color agrupa un quinto de los partidos con dato.
+   Se redondean a miles para que la leyenda y el mapa usen el mismo número. */
+function quintiles(values) {
+  const v = [...values].sort((a, b) => a - b)
+  return [0.2, 0.4, 0.6, 0.8].map(q => Math.round(v[Math.floor(q * v.length)] / 1000) * 1000)
+}
+
+const CORTES_GASTO = quintiles(ELLOS_GASTAN_2026.filter(d => d.gasto_vecino_mes != null).map(d => d.gasto_vecino_mes))
+const CORTES_HCD   = quintiles(ELLOS_GASTAN_2026.filter(d => d.hcd_hab != null).map(d => d.hcd_hab))
+
+/* Rampa secuencial de --data-1: el gasto no tiene dirección deseable, así que
+   no se pinta con la escala de valoración. */
+const RAMPA_DATO = ['#FCE4EF', '#F5A9CB', '#EC6AA3', '#E11D74', '#9D1150']
+
+function claseCorte(valor, cortes) {
+  const i = cortes.findIndex(c => valor < c)
+  return i === -1 ? cortes.length : i
+}
+
+function secuencialStyle(valor, cortes, state) {
+  const w = state !== 'default' ? 1.5 : 0.6
+  if (valor == null) {
+    return { fillColor: '#cbd5e1', fillOpacity: 0.25, color: '#94a3b8', weight: 0.4, opacity: 0.6 }
+  }
+  const fo = state === 'hover' ? 0.95 : 0.85
+  return { fillColor: RAMPA_DATO[claseCorte(valor, cortes)], fillOpacity: fo, color: '#1e293b', weight: w, opacity: 0.75 }
+}
 
 /* ── Tasa Vial data ─────────────────────────────────────────────────────── */
 const TASA_VIAL_RAW = {
@@ -366,19 +357,6 @@ function tasaVialStyle(tasa, state) {
   return { fillColor: tasaFill(tasa.valor), fillOpacity: fo, color: '#1e293b', weight: w, opacity: 0.8 }
 }
 
-function concejalesStyle(porHabitante, state) {
-  const t = (porHabitante - CONC_MIN) / (CONC_MAX - CONC_MIN)
-  const fillOpacity = state === 'hover' ? 0.15 + t * 0.55 + 0.15 : 0.08 + t * 0.62
-  return {
-    fillColor: '#7b2d00',
-    fillOpacity: Math.min(fillOpacity, 0.85),
-    color: '#5c2000',
-    weight: state === 'hover' ? 1.2 : 0.8,
-    opacity: 0.8,
-  }
-}
-
-const HIDDEN_STYLE = { fillOpacity: 0, color: 'transparent', weight: 0, opacity: 0 }
 
 /* ── Theme configs ──────────────────────────────────────────────────────── */
 const THEMES = {
@@ -397,9 +375,17 @@ const THEMES = {
     hover:    { fillColor: '#7c3aed', fillOpacity: 0.38, color: '#6d28d9', weight: 1.2, opacity: 1   },
     selected: { fillColor: '#4c1d95', fillOpacity: 0.65, color: '#c4b5fd', weight: 2,   opacity: 1   },
   },
-  concejales: {
-    selected: { fillColor: '#5c2000', fillOpacity: 0.80, color: '#f97316', weight: 2, opacity: 1 },
-  },
+}
+
+/* Estilo de un partido según la temática activa y su estado */
+function styleFor(layer, t, state) {
+  if (state === 'selected') return THEMES[t]?.selected || THEMES.general.selected
+  if (t === 'gasto')         return secuencialStyle(layer._egData?.gasto_vecino_mes, CORTES_GASTO, state)
+  if (t === 'concejales')    return secuencialStyle(layer._egData?.hcd_hab, CORTES_HCD, state)
+  if (t === 'tasavial')      return tasaVialStyle(layer._tasaData, state)
+  if (t === 'transparencia') return transparenciaStyle(layer._transparenciaData, state)
+  if (t === 'economia')      return cadenaStyle(layer._cadenaCat, state)
+  return THEMES[t]?.[state] || THEMES.general[state]
 }
 
 /* ── Temáticas ──────────────────────────────────────────────────────────── */
@@ -410,6 +396,7 @@ const TEMAS = [
   { id: 'tasas',      label: 'Tasas municipales'   },
   { id: 'tasavial',   label: 'Tasa vial'           },
   { id: 'transparencia', label: 'Transparencia fiscal' },
+  { id: 'gasto',      label: 'Gasto por vecino'    },
   { id: 'concejales', label: 'Gasto concejales'    },
 ]
 
@@ -442,6 +429,7 @@ const INDICATORS = {
   tasavial: 'tasa',
   transparencia: 'transparencia',
   economia: 'economia',
+  gasto: 'gasto',
   concejales: 'custom',
 }
 
@@ -494,6 +482,21 @@ function displayName(key) {
 }
 
 const fmtPct1 = v => (v * 100).toLocaleString('es-AR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%'
+const fmtPesos = v => `$ ${Math.round(v).toLocaleString('es-AR')}`
+const fmtMillones = v => `$ ${v.toLocaleString('es-AR', { maximumFractionDigits: 1 })} millones`
+const fmtVar = v => `${v > 0 ? '+' : ''}${v.toLocaleString('es-AR')}%`
+const fmtMiles = v => (v / 1000).toLocaleString('es-AR')
+
+const topEG = (key, n) => ELLOS_GASTAN_2026
+  .filter(d => d[key] != null)
+  .sort((a, b) => b[key] - a[key])
+  .slice(0, n)
+
+/* Puesto de un partido en la provincia (1 = valor más alto) */
+function puestoEG(key, valor) {
+  const conDato = ELLOS_GASTAN_2026.filter(d => d[key] != null)
+  return { puesto: conDato.filter(d => d[key] > valor).length + 1, total: conDato.length }
+}
 
 const RANKINGS = {
   general: {
@@ -531,14 +534,39 @@ const RANKINGS = {
       .slice(0, 10)
       .map(d => ({ nombre: d.municipio, valor: `${d.indice}/100` })),
   },
-  concejales: {
-    titulo: 'Mayor gasto en concejales por habitante',
-    fuente: 'Fundación Libertad',
-    rows: [...CONCEJALES_RAW]
-      .sort((a, b) => b.por_habitante - a.por_habitante)
-      .slice(0, 10)
-      .map(d => ({ nombre: d.municipio, valor: `$ ${d.por_habitante.toLocaleString('es-AR')}` })),
+  gasto: {
+    titulo: 'Mayor gasto mensual por vecino',
+    fuente: 'Fundación Libertad, "Ellos gastan" 2026, y Censo 2022',
+    rows: topEG('gasto_vecino_mes', 10).map(d => ({ nombre: d.nombre, valor: fmtPesos(d.gasto_vecino_mes) })),
   },
+  concejales: {
+    titulo: 'Mayor costo del Concejo por habitante',
+    fuente: 'Fundación Libertad, "Ellos gastan" 2026, y Censo 2022',
+    rows: topEG('hcd_hab', 5).map(d => ({ nombre: d.nombre, valor: `${fmtPesos(d.hcd_hab)}/año` })),
+    extra: {
+      titulo: 'Mayor aumento del presupuesto 2026',
+      rows: topEG('aumento_hcd', 5).map(d => ({ nombre: d.nombre, valor: fmtVar(d.aumento_hcd) })),
+    },
+  },
+}
+
+function RankingLista({ titulo, rows }) {
+  return (
+    <>
+      <p className="text-label font-semibold uppercase tracking-wider text-slate-500 mb-3">
+        {titulo}
+      </p>
+      <ol className="flex flex-col">
+        {rows.map((r, i) => (
+          <li key={r.nombre} className="flex items-baseline gap-2.5 py-1.5 border-b" style={{ borderColor: 'var(--rule)' }}>
+            <span className="text-xs text-slate-400 tabular-nums w-4 shrink-0 text-right">{i + 1}</span>
+            <span className="text-xs text-slate-700 flex-1 min-w-0 truncate">{r.nombre}</span>
+            <span className="text-xs font-semibold text-slate-900 tabular-nums">{r.valor}</span>
+          </li>
+        ))}
+      </ol>
+    </>
+  )
 }
 
 function RankingDefault({ tema }) {
@@ -581,18 +609,12 @@ function RankingDefault({ tema }) {
 
   return (
     <div className="p-5 border-t-2 border-[#0F172A] flex-1 overflow-y-auto">
-      <p className="text-label font-semibold uppercase tracking-wider text-slate-500 mb-3">
-        {ranking.titulo}
-      </p>
-      <ol className="flex flex-col">
-        {ranking.rows.map((r, i) => (
-          <li key={r.nombre} className="flex items-baseline gap-2.5 py-1.5 border-b" style={{ borderColor: 'var(--rule)' }}>
-            <span className="text-xs text-slate-400 tabular-nums w-4 shrink-0 text-right">{i + 1}</span>
-            <span className="text-xs text-slate-700 flex-1 min-w-0 truncate">{r.nombre}</span>
-            <span className="text-xs font-semibold text-slate-900 tabular-nums">{r.valor}</span>
-          </li>
-        ))}
-      </ol>
+      <RankingLista titulo={ranking.titulo} rows={ranking.rows} />
+      {ranking.extra && (
+        <div className="mt-5">
+          <RankingLista titulo={ranking.extra.titulo} rows={ranking.extra.rows} />
+        </div>
+      )}
       <p className="text-caption text-slate-500 mt-3">
         Fuente: {ranking.fuente}. Hacé clic en un partido del mapa para ver su detalle.
       </p>
@@ -600,13 +622,50 @@ function RankingDefault({ tema }) {
   )
 }
 
-/* ── Concejales legend ──────────────────────────────────────────────────── */
-function ConcejalesLegend() {
+/* ── Leyenda por quintiles (gasto por vecino, costo del Concejo) ────────── */
+function LeyendaCortes({ cortes, unidad }) {
+  const tramos = RAMPA_DATO.map((color, i) => ({
+    color,
+    label: i === 0 ? `< ${fmtMiles(cortes[0])}`
+      : i === cortes.length ? `≥ ${fmtMiles(cortes[i - 1])}`
+      : `${fmtMiles(cortes[i - 1])}–${fmtMiles(cortes[i])}`,
+  }))
   return (
-    <div className="flex items-center gap-2 mt-3">
-      <span className="text-[10px] text-slate-500">Menos gasto</span>
-      <div className="flex-1 h-2 rounded-full" style={{ background: 'linear-gradient(to right, rgba(123,45,0,0.1), rgba(123,45,0,0.85))' }} />
-      <span className="text-[10px] text-slate-500">Más gasto</span>
+    <div className="mt-3">
+      <div className="flex flex-wrap items-start gap-x-1 gap-y-2">
+        {tramos.map(t => (
+          <div key={t.color} className="flex flex-col gap-1 w-16">
+            <span className="h-2.5 w-full" style={{ backgroundColor: t.color }} />
+            <span className="text-[10px] text-slate-500 tabular-nums">{t.label}</span>
+          </div>
+        ))}
+        <div className="flex flex-col gap-1 w-16">
+          <span className="h-2.5 w-full bg-slate-300 opacity-60" />
+          <span className="text-[10px] text-slate-500">Sin datos</span>
+        </div>
+      </div>
+      <p className="text-[10px] text-slate-500 mt-1">{unidad}. Cada color reúne un quinto de los partidos con dato.</p>
+    </div>
+  )
+}
+
+/* Cifra principal del partido en el encabezado del panel, con su puesto */
+function CifraCabecera({ valor, unidad, puesto, total }) {
+  return (
+    <div className="mt-3">
+      <p className="text-2xl font-bold text-[#0F172A] leading-none tabular-nums">{valor}</p>
+      <p className="text-xs text-slate-500 mt-1.5">
+        {unidad} · <span className="tabular-nums">puesto {puesto} de {total}</span>
+      </p>
+    </div>
+  )
+}
+
+function FilaDato({ label, valor, color }) {
+  return (
+    <div className="flex justify-between items-baseline gap-3 py-2.5 border-b" style={{ borderColor: 'var(--rule)' }}>
+      <span className="text-xs text-slate-500">{label}</span>
+      <span className="text-sm font-semibold text-slate-900 tabular-nums text-right whitespace-nowrap" style={color ? { color } : undefined}>{valor}</span>
     </div>
   )
 }
@@ -635,44 +694,14 @@ export default function AtlasMunicipal() {
     if (!geoLayerRef.current) return
     const t = temaRef.current
     geoLayerRef.current.eachLayer(layer => {
-      if (layer === selectedRef.current) {
-        layer.setStyle(THEMES[t]?.selected || THEMES.general.selected)
-        return
-      }
-      if (t === 'concejales') {
-        const cd = layer._concejalesData
-        layer.setStyle(cd ? concejalesStyle(cd.por_habitante, 'default') : HIDDEN_STYLE)
-      } else if (t === 'tasavial') {
-        layer.setStyle(tasaVialStyle(layer._tasaData, 'default'))
-      } else if (t === 'transparencia') {
-        layer.setStyle(transparenciaStyle(layer._transparenciaData, 'default'))
-      } else if (t === 'economia') {
-        layer.setStyle(cadenaStyle(layer._cadenaCat, 'default'))
-      } else {
-        layer.setStyle(THEMES[t]?.default || THEMES.general.default)
-      }
+      layer.setStyle(styleFor(layer, t, layer === selectedRef.current ? 'selected' : 'default'))
     })
   }, [])
 
   useEffect(() => {
     temaRef.current = tema
     // clear selection on tab switch
-    if (selectedRef.current) {
-      const t = tema
-      if (t === 'concejales') {
-        const cd = selectedRef.current._concejalesData
-        selectedRef.current.setStyle(cd ? concejalesStyle(cd.por_habitante, 'default') : HIDDEN_STYLE)
-      } else if (t === 'tasavial') {
-        selectedRef.current.setStyle(tasaVialStyle(selectedRef.current._tasaData, 'default'))
-      } else if (t === 'transparencia') {
-        selectedRef.current.setStyle(transparenciaStyle(selectedRef.current._transparenciaData, 'default'))
-      } else if (t === 'economia') {
-        selectedRef.current.setStyle(cadenaStyle(selectedRef.current._cadenaCat, 'default'))
-      } else {
-        selectedRef.current.setStyle(THEMES[t]?.default || THEMES.general.default)
-      }
-      selectedRef.current = null
-    }
+    selectedRef.current = null
     setSelected(null)
     updateStyles()
   }, [tema, updateStyles])
@@ -715,7 +744,7 @@ export default function AtlasMunicipal() {
             const codigo = in1 ? in1ToCode(in1) : null
 
             layer._municipiosData    = codigo ? dataByCode[codigo] : null
-            layer._concejalesData    = CONCEJALES_DATA[normName(name)] || null
+            layer._egData            = (codigo && EG_BY_CODE[codigo]) || null
             layer._tasaData          = getTasaVial(name)
             layer._transparenciaData = TRANSPARENCIA_DATA[normName(name)] || null
             layer._cadenaCat         = (codigo && CADENA_BY_CODE[codigo]) || CADENA_CAT[normName(name)] || null
@@ -725,74 +754,33 @@ export default function AtlasMunicipal() {
 
             layer.on('mouseover', e => {
               if (e.target === selectedRef.current) return
-              const t = temaRef.current
-              if (t === 'concejales') {
-                const cd = e.target._concejalesData
-                if (cd) e.target.setStyle(concejalesStyle(cd.por_habitante, 'hover'))
-              } else if (t === 'tasavial') {
-                e.target.setStyle(tasaVialStyle(e.target._tasaData, 'hover'))
-              } else if (t === 'transparencia') {
-                e.target.setStyle(transparenciaStyle(e.target._transparenciaData, 'hover'))
-              } else if (t === 'economia') {
-                e.target.setStyle(cadenaStyle(e.target._cadenaCat, 'hover'))
-              } else {
-                e.target.setStyle(THEMES[t]?.hover || THEMES.general.hover)
-              }
+              e.target.setStyle(styleFor(e.target, temaRef.current, 'hover'))
             })
 
             layer.on('mouseout', e => {
               if (e.target === selectedRef.current) return
-              const t = temaRef.current
-              if (t === 'concejales') {
-                const cd = e.target._concejalesData
-                e.target.setStyle(cd ? concejalesStyle(cd.por_habitante, 'default') : HIDDEN_STYLE)
-              } else if (t === 'tasavial') {
-                e.target.setStyle(tasaVialStyle(e.target._tasaData, 'default'))
-              } else if (t === 'transparencia') {
-                e.target.setStyle(transparenciaStyle(e.target._transparenciaData, 'default'))
-              } else if (t === 'economia') {
-                e.target.setStyle(cadenaStyle(e.target._cadenaCat, 'default'))
-              } else {
-                e.target.setStyle(THEMES[t]?.default || THEMES.general.default)
-              }
+              e.target.setStyle(styleFor(e.target, temaRef.current, 'default'))
             })
 
             layer.on('click', () => {
-              const t  = temaRef.current
-              const cd = layer._concejalesData
+              const t = temaRef.current
               // 'tasas' is a "próx." placeholder with no panel data — clicking would crash on indicators.map(null)
               if (t === 'tasas') return
-              // In concejales mode, ignore clicks on hidden municipalities
-              if (t === 'concejales' && !cd) return
 
-              if (selectedRef.current && selectedRef.current !== layer) {
-                const prev = selectedRef.current
-                const prevCd = prev._concejalesData
-                if (t === 'concejales') {
-                  prev.setStyle(prevCd ? concejalesStyle(prevCd.por_habitante, 'default') : HIDDEN_STYLE)
-                } else if (t === 'tasavial') {
-                  prev.setStyle(tasaVialStyle(prev._tasaData, 'default'))
-                } else if (t === 'transparencia') {
-                  prev.setStyle(transparenciaStyle(prev._transparenciaData, 'default'))
-                } else if (t === 'economia') {
-                  prev.setStyle(cadenaStyle(prev._cadenaCat, 'default'))
-                } else {
-                  prev.setStyle(THEMES[t]?.default || THEMES.general.default)
-                }
-              }
-
-              layer.setStyle(THEMES[t]?.selected || THEMES.general.selected)
+              const prev = selectedRef.current
               selectedRef.current = layer
+              if (prev && prev !== layer) prev.setStyle(styleFor(prev, t, 'default'))
+              layer.setStyle(styleFor(layer, t, 'selected'))
 
               const muniData = layer._municipiosData
               setSelected({
                 nombre: name,
                 ...(muniData || {}),
-                _concejales: cd || null,
+                _eg: layer._egData,
                 _tasa: layer._tasaData || null,
                 _transparencia: layer._transparenciaData || null,
                 _cadena: layer._cadenaCat || null,
-                _noData: t !== 'tasavial' && t !== 'transparencia' && t !== 'economia' && !muniData && !cd,
+                _noData: (t === 'general' || t === 'produccion') && !muniData,
               })
             })
           },
@@ -831,7 +819,7 @@ export default function AtlasMunicipal() {
         {/* Header */}
         <div className="px-5 pt-5 pb-4 border-b border-slate-100 shrink-0">
           <h3 className="text-lg font-bold text-[#0F172A] leading-tight">{selected.nombre}</h3>
-          {tema !== 'concejales' && tema !== 'transparencia' && tema !== 'economia' && (
+          {tema !== 'concejales' && tema !== 'gasto' && tema !== 'transparencia' && tema !== 'economia' && (
             <div className="flex flex-wrap gap-4 mt-3">
               {selected.poblacion && (
                 <div>
@@ -853,17 +841,19 @@ export default function AtlasMunicipal() {
               )}
             </div>
           )}
-          {tema === 'concejales' && selected._concejales && (
-            <div className="flex flex-wrap gap-4 mt-3">
-              <div>
-                <p className="text-xl font-bold text-orange-600 leading-none">{selected._concejales.concejales}</p>
-                <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1">Concejales</p>
-              </div>
-              <div>
-                <p className="text-xl font-bold text-orange-600 leading-none">{selected._concejales.pct_total}%</p>
-                <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-1">Del presupuesto</p>
-              </div>
-            </div>
+          {tema === 'gasto' && selected._eg?.gasto_vecino_mes != null && (
+            <CifraCabecera
+              valor={fmtPesos(selected._eg.gasto_vecino_mes)}
+              unidad="por vecino, por mes"
+              {...puestoEG('gasto_vecino_mes', selected._eg.gasto_vecino_mes)}
+            />
+          )}
+          {tema === 'concejales' && selected._eg && (
+            <CifraCabecera
+              valor={fmtPesos(selected._eg.hcd_hab)}
+              unidad="por habitante, por año"
+              {...puestoEG('hcd_hab', selected._eg.hcd_hab)}
+            />
           )}
           {tema === 'transparencia' && selected._transparencia && (
             <div className="flex flex-wrap items-center gap-3 mt-3">
@@ -1017,40 +1007,67 @@ export default function AtlasMunicipal() {
               <p className="text-xs text-slate-500">Sin datos de clasificación económica para este partido.</p>
             )}
           </div>
-        ) : indicators === 'custom' ? (
-          /* Concejales detail */
+        ) : indicators === 'gasto' ? (
+          /* Gasto por vecino detail */
           <div className="flex-1 overflow-y-auto px-5 py-4">
-            {selected._concejales ? (() => {
-              const cd = selected._concejales
-              const rows = [
-                { label: 'Presupuesto total concejo',  value: `$\u00A0${cd.presupuesto.toLocaleString('es-AR')}` },
-                { label: 'Gasto por concejal',         value: `$\u00A0${cd.por_concejal.toLocaleString('es-AR')}` },
-                { label: 'Gasto por habitante',        value: `$\u00A0${cd.por_habitante.toLocaleString('es-AR')}` },
-                { label: '% sobre presupuesto total',  value: `${cd.pct_total}%` },
-              ]
-              const t = (cd.por_habitante - CONC_MIN) / (CONC_MAX - CONC_MIN)
+            {selected._eg?.gasto_total != null ? (() => {
+              const d = selected._eg
               return (
-                <div className="flex flex-col gap-4">
-                  {rows.map(r => (
-                    <div key={r.label}>
-                      <p className="text-xs text-slate-500 mb-0.5">{r.label}</p>
-                      <p className="text-sm font-semibold text-slate-900">{r.value}</p>
+                <div className="flex flex-col">
+                  <FilaDato label="Gasto total 2026" valor={fmtMillones(d.gasto_total)} />
+                  <FilaDato label="Población (Censo 2022)" valor={selected.poblacion?.toLocaleString('es-AR') ?? 's/d'} />
+                  {d.personal_pct != null && (
+                    <div className="py-2.5 border-b" style={{ borderColor: 'var(--rule)' }}>
+                      <div className="flex justify-between items-baseline gap-3">
+                        <span className="text-xs text-slate-500">Gasto en personal</span>
+                        <span className="text-sm font-semibold text-slate-900 tabular-nums">{d.personal_pct}% del total</span>
+                      </div>
+                      <div className="h-1.5 bg-slate-100 mt-1.5 overflow-hidden">
+                        <div className="h-full" style={{ width: `${d.personal_pct}%`, backgroundColor: 'var(--data-4, #0F172A)' }} />
+                      </div>
                     </div>
-                  ))}
-                  <div className="pt-2 border-t border-slate-100">
-                    <p className="text-xs text-slate-500 mb-2">Gasto por habitante vs. provincia</p>
-                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full rounded-full transition-all duration-500" style={{ width: `${t * 100}%`, background: 'linear-gradient(to right, rgba(123,45,0,0.4), rgba(123,45,0,0.9))' }} />
-                    </div>
-                    <div className="flex justify-between mt-1">
-                      <span className="text-[10px] text-slate-500">${CONC_MIN.toLocaleString('es-AR')}</span>
-                      <span className="text-[10px] text-slate-500">${CONC_MAX.toLocaleString('es-AR')}</span>
-                    </div>
-                  </div>
+                  )}
+                  <FilaDato label="Documento de la ficha" valor={d.tipo_fuente ?? 's/d'} />
+                  <p className="text-[11px] text-slate-500 leading-snug pt-3">
+                    Gasto total dividido por la población del Censo 2022 y por 12 meses. Fuente: Fundación Libertad, "Ellos gastan" 2026.
+                  </p>
                 </div>
               )
             })() : (
-              <p className="text-xs text-slate-500">Sin datos de concejales para este partido.</p>
+              <p className="text-xs text-slate-500">
+                {selected._eg
+                  ? 'Este partido no tiene ficha de gasto en "Ellos gastan" 2026: solo figuran los datos de su Concejo Deliberante.'
+                  : 'Este partido no figura en el relevamiento "Ellos gastan" 2026.'}
+              </p>
+            )}
+          </div>
+        ) : indicators === 'custom' ? (
+          /* Concejales detail */
+          <div className="flex-1 overflow-y-auto px-5 py-4">
+            {selected._eg ? (() => {
+              const d = selected._eg
+              return (
+                <div className="flex flex-col">
+                  <FilaDato label="Presupuesto del Concejo 2026" valor={fmtMillones(d.hcd)} />
+                  {d.aumento_hcd != null && (
+                    <FilaDato
+                      label="Variación contra 2025"
+                      valor={`${flechaVariacion(d.aumento_hcd)} ${fmtVar(d.aumento_hcd)}`}
+                      color={getColorVariacion({ variacion: d.aumento_hcd, polaridad: 'neutro', texto: true })}
+                    />
+                  )}
+                  <FilaDato label="Concejales" valor={d.concejales} />
+                  <FilaDato label="Costo mensual por concejal" valor={fmtMillones(d.costo_concejal_mes)} />
+                  {d.hcd_pct_gasto != null && (
+                    <FilaDato label="Peso en el gasto municipal" valor={`${d.hcd_pct_gasto.toLocaleString('es-AR')}%`} />
+                  )}
+                  <p className="text-[11px] text-slate-500 leading-snug pt-3">
+                    Por habitante: presupuesto del Concejo dividido por la población del Censo 2022. El costo por concejal incluye todo el presupuesto del cuerpo, no solo dietas. Fuente: Fundación Libertad, "Ellos gastan" 2026.
+                  </p>
+                </div>
+              )
+            })() : (
+              <p className="text-xs text-slate-500">Este partido no figura en el relevamiento "Ellos gastan" 2026.</p>
             )}
           </div>
         ) : (
@@ -1147,11 +1164,19 @@ export default function AtlasMunicipal() {
               </p>
             </>
           )}
+          {tema === 'gasto' && (
+            <>
+              <LeyendaCortes cortes={CORTES_GASTO} unidad="Gasto municipal mensual por vecino, en miles de pesos" />
+              <p className="text-[11px] text-slate-500 mt-1.5">
+                Fuente: Fundación Libertad, "Ellos gastan" 2026 (fichas municipales), y población del Censo 2022. Presupuesto 2026.
+              </p>
+            </>
+          )}
           {tema === 'concejales' && (
             <>
-              <ConcejalesLegend />
-              <p className="text-[11px] text-slate-500 mt-2">
-                Fuente: Fundación Libertad
+              <LeyendaCortes cortes={CORTES_HCD} unidad="Presupuesto del Concejo Deliberante por habitante, en miles de pesos al año" />
+              <p className="text-[11px] text-slate-500 mt-1.5">
+                Fuente: Fundación Libertad, "Ellos gastan" 2026, y población del Censo 2022. Presupuesto 2026.
               </p>
             </>
           )}
