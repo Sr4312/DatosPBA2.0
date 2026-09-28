@@ -13,6 +13,14 @@ export const SITE_DESC =
 
 export const INFORMES = [
   {
+    path: '/informes/delito-snic-pba-2025',
+    titulo: 'Delito en la Provincia de Buenos Aires, 2025',
+    descripcion:
+      'La Provincia registró 775 víctimas de homicidio doloso en 2025, 5,5% menos que en 2024, pero la baja se concentró en el interior: en los 24 partidos del Conurbano los homicidios cayeron 1,6% y su tasa duplica la del resto de la provincia.',
+    tema: 'Seguridad',
+    fecha: '2026-09-28',
+  },
+  {
     path: '/informes/coyuntura-agropecuaria-pba-2trim-2026',
     titulo: 'Coyuntura agropecuaria bonaerense, segundo trimestre de 2026',
     descripcion:

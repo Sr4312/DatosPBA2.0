@@ -20,6 +20,18 @@
    se muestra sin banda visual. */
 
 export const INFORMES_VISUALES = {
+  '/informes/delito-snic-pba-2025': {
+    cifra: '−1,6',
+    unidad: '% homicidios en el Conurbano',
+    periodo: '2025 vs. 2024',
+    fuente: 'SNIC',
+    hallazgo: 'Las víctimas de homicidio doloso bajaron 1,6% en el Conurbano entre 2024 y 2025, contra 16,4% en el resto de la provincia y 5,5% en el total provincial',
+    tipo: 'barras',
+    etiquetas: ['GBA', 'Resto', 'PBA'],
+    series: [{ nombre: 'Víctimas, var. 2025/2024', valores: [-1.6, -16.4, -5.5] }],
+    destacado: 0,
+  },
+
   '/informes/coyuntura-agropecuaria-pba-2trim-2026': {
     cifra: '−11,3',
     unidad: '% i.a. carne vacuna',

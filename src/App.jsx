@@ -39,6 +39,7 @@ const InformeExportacionesPBA       = lazy(() => import('./pages/InformeExportac
 const InformeStockBovinoPBA         = lazy(() => import('./pages/InformeStockBovinoMunicipiosPBA'))
 const InformeProduccionAgricolaPBA  = lazy(() => import('./pages/InformeProduccionAgricolaPBA'))
 const InformeCoyunturaAgropecuariaPBA = lazy(() => import('./pages/InformeCoyunturaAgropecuariaPBA'))
+const InformeDelitoSNICPBA = lazy(() => import('./pages/InformeDelitoSNICPBA'))
 const Beta            = lazy(() => import('./pages/Beta'))
 const QuienesSomos    = lazy(() => import('./pages/QuienesSomos'))
 const Metodologia     = lazy(() => import('./pages/Metodologia'))
@@ -81,6 +82,7 @@ export default function App() {
             <Route path="informes/exportaciones-pba-junio-2026" element={<Suspense fallback={null}><InformeExportacionesPBA /></Suspense>} />
             <Route path="informes/stock-bovino-municipios-pba-2024" element={<Suspense fallback={null}><InformeStockBovinoPBA /></Suspense>} />
             <Route path="informes/produccion-agricola-municipios-pba-2026" element={<Suspense fallback={null}><InformeProduccionAgricolaPBA /></Suspense>} />
+            <Route path="informes/delito-snic-pba-2025" element={<Suspense fallback={null}><InformeDelitoSNICPBA /></Suspense>} />
             <Route path="informes/coyuntura-agropecuaria-pba-2trim-2026" element={<Suspense fallback={null}><InformeCoyunturaAgropecuariaPBA /></Suspense>} />
             <Route path="informes/:id" element={<Suspense fallback={null}><InformeDetalle /></Suspense>} />
             <Route path="datos" element={<Suspense fallback={null}><Datos /></Suspense>} />
